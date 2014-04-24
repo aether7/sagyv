@@ -1,6 +1,10 @@
 from django.db import models
 
-# Create your models here.
+class Trabajador(models.Model):
+    nombre = models.CharField(max_length=140)
+
+    def __unicode__(self):
+        return self.nombre
 
 class TipoEntrega(models.Model):
     nombre = models.CharField(max_length=140)
@@ -45,6 +49,7 @@ class Cupon(models.Model):
     zonal = models.ForeignKey(Comuna)
     cantidad_kilos = models.IntegerField()
     cliente = models.ForeignKey(Cliente)
+    trabajador = models.ForeignKey(Trabajador)
 
     def __unicode__(self):
         return str(self.numero_cupon) + " " + self.zonal.nombre
@@ -90,15 +95,9 @@ class CuotasBoleta(models.Model):
     def __unicode(self):
         return self.monto
 
-
-class Trabajador(models.Model):
-    nombre = models.CharField(max_length=140)
-
-    def __unicode__(self):
-        return self.nombre
-
 class CierreRepartidor(models.Model):
     chofer = models.ForeignKey(Trabajador)
     fecha = models.DateTimeField()
     oficina = models.IntegerField()
     terminal = models.IntegerField()
+    numero_cierre = models.IntegerField()
