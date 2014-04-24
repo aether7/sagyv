@@ -89,3 +89,16 @@ class CuotasBoleta(models.Model):
 
     def __unicode(self):
         return self.monto
+
+
+class Trabajador(models.Model):
+    nombre = models.CharField(max_length=140)
+
+    def __unicode__(self):
+        return self.nombre
+
+class CierreRepartidor(models.Model):
+    chofer = models.ForeignKey(Trabajador)
+    fecha = models.DateTimeField()
+    oficina = models.IntegerField()
+    terminal = models.IntegerField()
