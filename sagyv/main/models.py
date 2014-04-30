@@ -138,7 +138,18 @@ class DetalleDescuentoCierreRepartidor(models.Model):
 
 class DescuentoCliente(models.Model):
     nombre = models.ForeignKey(Cliente)
-    
+    tipo_descuento = models.CharField(max_length=2) #en mejora...
+    descuento = models.IntegerField()
+
+    def __unicode__(self):
+        return self.nombre
+
+
+class Proveedor(models.Model):
+    nombre = models.CharField()
+
+    def __unicode__(self):
+        return self.nombre
 
 
 class GuiaDespasho(models.Model):
@@ -147,8 +158,19 @@ class GuiaDespasho(models.Model):
     numero = models.IntegerField()
     fecha = models.DateField(auto_now_add=True)
     sub_total = models.IntegerField()
-    descuento_cliente = models.ForeignKey()
+    descuento_cliente = models.ForeignKey(DescuentoCliente)
+    proveedor = models.ForeignKey(Proveedor)
+
 
     def __unicode__(self):
         return self.numero
 
+
+class Vale(models.Model):
+    numero = models.IntegerField()
+    nombre_establecimito = models.CharField(max_length=140)
+    formato = models.ForeignKey(FormatoProducto)
+    guia_despasho = models.ForeignKey(GuiaDespasho)
+
+    def __unicode__(self):
+        return self.numero
