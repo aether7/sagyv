@@ -1,20 +1,8 @@
 from django.db import models
 
-class Trabajador(models.Model):
-    nombre = models.CharField(max_length=140)
-
-    def __unicode__(self):
-        return self.nombre
-
-class TipoEntrega(models.Model):
-    nombre = models.CharField(max_length=140)
-
-    def __unicode__(self):
-        return self.nombre
-
-
 class Region(models.Model):
     nombre = models.CharField(max_length=140)
+    orden = models.IntegerField()
 
     def __unicode__(self):
         return self.nombre
@@ -28,9 +16,59 @@ class Comuna(models.Model):
         return self.nombre
 
 
+class TipoProducto(models.Model):
+    nombre = models.CharField(max_length=140)
+
+    def __unicode__(self):
+        return self.nombre
+
+
+class Producto(models.Model):
+    codigo = models.IntegerField()
+    nombre = models.CharField(max_length=140)
+    peso = models.IntegerField(null=True)
+    tipo_producto = models.ForeignKey(TipoProducto)
+
+    def __unicode__(self):
+        return str(self.codigo) + " " +self.nombre
+
+
+class TipoTarjeta(models.Model):
+    nombre = models.CharField(max_length=140)
+
+    def __unicode__(self):
+        return self.nombre
+
+
+class TarjetaCredito(models.Model):
+    nombre = models.CharField(max_length=140)
+    codigo = models.CharField(max_length=140, null=True)
+    tipo_tarjeta = models.ForeignKey(TipoTarjeta)
+
+    def __unicode__(self):
+        return self.nombre + " " + self.codigo
+
+
+# Por Revisar
+
+
+class Trabajador(models.Model):
+    nombre = models.CharField(max_length=140)
+
+    def __unicode__(self):
+        return self.nombre
+
+
+class TipoEntrega(models.Model):
+    nombre = models.CharField(max_length=140)
+
+    def __unicode__(self):
+        return self.nombre
+
+
 class FormatoProducto(models.Model):
     nombre = models.CharField(max_length=140)
-    peso = IntegerField()
+    peso = models.IntegerField()
 
     def __unicode__(self):
         return self.nombre
@@ -101,7 +139,7 @@ class CierreRepartidor(models.Model):
     fecha = models.DateTimeField()
     correlativo_cierre = models.IntegerField()
     chofer = models.ForeignKey(Trabajador)
-    total_descuentos = IntegerField()
+    total_descuentos = models.IntegerField()
 
 
 class TargetaComercial(models.Model):
@@ -146,7 +184,7 @@ class DescuentoCliente(models.Model):
 
 
 class Proveedor(models.Model):
-    nombre = models.CharField()
+    nombre = models.CharField(max_length=140)
 
     def __unicode__(self):
         return self.nombre
