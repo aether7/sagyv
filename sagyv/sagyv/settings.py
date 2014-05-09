@@ -22,7 +22,7 @@ SECRET_KEY = '*k#9n$x8&_5s)p=p*rd2e5o*dv*3qp=nfq&5jilgq%w9otww)o'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-TEMPLATE_DEBUG = True
+TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = ["*"]
 
@@ -79,6 +79,29 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
+
+STATIC_URL = '/static/'
+MEDIA_URL = "/media/"
+
+STATIC_ROOT = "/home/rlay/webapps/andrea_static/"
+MEDIA_ROOT = "/home/rlay/webapps/andrea_media/"
+
+CSRF_COOKIE_NAME = "andreacsrftoken"
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static/'),
+)
+
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.CachedStaticFilesStorage'
+
+#SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST_USER = "rlaysystems@gmail.com"
+EMAIL_HOST_PASSWORD = "realreyes"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
 try:
     from .local_settings import *
