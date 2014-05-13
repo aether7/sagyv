@@ -110,7 +110,20 @@ class Cupon(models.Model):
         return str(self.numero_cupon)
 
 
+class DescuentoCliente(models.Model):
+    cliente = models.ForeignKey(Cliente)
+    tipo_descuento = models.CharField(Descuento)
+    monto_descuento = models.IntegerField()
 
+    def __unicode__(self):
+        return self.nombre
+
+
+class Descuento(models.Model):
+    nombre = models.CharField(max_length=140)
+
+    def __unicode__(self):
+        return self.nombre
 # Por Revisar
 
 """
@@ -203,7 +216,7 @@ class DetalleDescuentoCierreRepartidor(models.Model):
 
 class DescuentoCliente(models.Model):
     nombre = models.ForeignKey(Cliente)
-    tipo_descuento = models.CharField(max_length=2) #en mejora...
+    tipo_descuento = models.CharField(max_length=2)
     descuento = models.IntegerField()
 
     def __unicode__(self):

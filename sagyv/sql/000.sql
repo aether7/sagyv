@@ -48,6 +48,9 @@ INSERT INTO main_tarjetacredito(id, nombre, codigo, tipo_tarjeta_id) VALUES(10, 
 INSERT INTO main_tarjetacredito(id, nombre, codigo, tipo_tarjeta_id) VALUES(11, 'Johnson', null, 3);
 INSERT INTO main_tarjetacredito(id, nombre, codigo, tipo_tarjeta_id) VALUES(12, 'Dijon', null, 3);
 
+-- Descuento
+INSERT INTO main_descuento(id, nombre) VALUES(1, 'Efectivo')
+INSERT INTO main_descuento(id, nombre) VALUES(2, 'Porcentaje')
 
 -- regiones
 
