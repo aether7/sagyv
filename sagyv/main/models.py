@@ -49,9 +49,52 @@ class TarjetaCredito(models.Model):
         return self.nombre + " " + self.codigo
 
 
+class TipoPago(models.Model):
+    nombre = models.CharField(max_length=140)
+
+    def __unicode__(self):
+        return self.nombre
+
+
+class Cliente(models.Model):
+    nombre = models.CharField(max_length=140)
+    direccion = models.TextField()
+    telefono = models.CharField(max_length=140)
+    rut = models.CharField(max_length=140)
+    razon_social = models.CharField(max_length=140)
+    #condicion_comercial = models.
+
+    def __unicode__(self):
+        return self.nombre + " " + self.telefono
+
+
+class Terminal(models.Model):
+    codigo = models.CharField(max_length=140)
+
+    def __unicode__(self):
+        return self.codigo
+
+
+class Voucher(models.Model):
+    tipo_tarjeta = models.ForeignKey(TipoTarjeta, null=True)
+    tipo_pago = models.ForeignKey(TipoPago)
+    tipo_cuotas = models.CharField(max_length=140,null=True)
+    fecha = models.DateTimeField()
+    terminal = models.ForeignKey(Terminal)
+    numero_tarjeta = models.IntegerField(null=True)
+    numero_operacion = models.IntegerField()
+    codigo_autorizacion = models.IntegerField()
+    numero_cuotas = models.IntegerField(default=1)
+    monto = models.IntegerField()
+    cliente = models.ForeignKey(Cliente)
+
+    def __unicode__(self):
+        return self.monto
+
+
 # Por Revisar
 
-
+"""
 class Trabajador(models.Model):
     nombre = models.CharField(max_length=140)
 
@@ -73,16 +116,6 @@ class FormatoProducto(models.Model):
     def __unicode__(self):
         return self.nombre
 
-class Cliente(models.Model):
-    nombre = models.CharField(max_length=140)
-    direccion = models.TextField()
-    telefono = models.CharField(max_length=140)
-    rut = models.CharField(max_length=140)
-    razon_social = models.CharField(max_length=140)
-
-    def __unicode__(self):
-        return self.nombre + " " + self.telefono
-
 
 class Cupon(models.Model):
     fecha = models.DateField(auto_now_add=True)
@@ -93,13 +126,6 @@ class Cupon(models.Model):
 
     def __unicode__(self):
         return str(self.numero_cupon)
-
-
-class TipoPago(models.Model):
-    nombre = models.CharField(max_length=140)
-
-    def __unicode__(self):
-        return self.nombre
 
 
 class TipoTarjeta(models.Model):
@@ -212,3 +238,4 @@ class Vale(models.Model):
 
     def __unicode__(self):
         return self.numero
+"""
