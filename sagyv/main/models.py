@@ -127,7 +127,6 @@ class Voucher(models.Model):
     numero_cuotas = models.IntegerField(default=1)
     monto = models.IntegerField()
     cliente = models.ForeignKey(Cliente)
-    trabajador = models.ForeignKey(Trabajador)
 
     def __unicode__(self):
         return self.monto
@@ -137,6 +136,7 @@ class CuotaVoucher(models.Model):
     voucher = models.ForeignKey(Voucher)
     monto = models.IntegerField()
     pagado = models.NullBooleanField()
+    fecha = models.DateField(auto_now_add=True)
 
     def __unicode__(self):
         return self.monto

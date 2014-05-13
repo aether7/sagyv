@@ -36,6 +36,52 @@ class TarjetaCreditoAdmin(admin.ModelAdmin):
     list_editable = ("nombre", "codigo", "tipo_tarjeta")
     ordering = ("id",)
 
+class VehiculoAdmin(admin.ModelAdmin):
+    list_display = ("id","patente",)
+    list_editable = ("patente",)
+    ordering = ("id",)
+
+class TerminalAdmin(admin.ModelAdmin):
+    list_display = ("id","codigo","vehiculo")
+    list_editable = ("codigo","vehiculo")
+    ordering = ("id",)
+
+class TrabajadorAdmin(admin.ModelAdmin):
+    list_display = ("id","nombre",)
+    list_editable = ("nombre",)
+    ordering =("id",)
+
+class TrabajadorVehiculoAdmin(admin.ModelAdmin):
+    list_display = ("id", "trabajador", "vehiculo","fecha","activo")
+    list_editable = ("trabajador","vehiculo")
+    ordering = ("-id",)
+
+class TipoPagoAdmin(admin.ModelAdmin):
+    list_display = ("id","nombre")
+    list_editable = ("nombre",)
+    ordering = ("id",)
+
+class TipoDescuentoAdmin(admin.ModelAdmin):
+    list_display = ("id","tipo",)
+    list_editable = ("tipo",)
+    ordering = ("id",)
+
+class DescuentoCliente(admin.ModelAdmin):
+    list_display = ("id","monto_descuento","tipo_descuento",)
+    list_editable = ("monto_descuento", "tipo_descuento")
+    ordering = ("id",)
+
+class VoucherAdmin(admin.ModelAdmin):
+    list_display = ("id","tipo_tarjeta", "tipo_pago", "tipo_cuotas", "fecha", "terminal", "numero_tarjeta", "numero_operacion", "codigo_autorizacion", "numero_cuotas", "monto", "cliente")
+    list_editable = ("tipo_tarjeta", "tipo_pago", "tipo_cuotas", "fecha", "terminal", "numero_tarjeta", "numero_operacion", "codigo_autorizacion", "numero_cuotas", "monto", "cliente")
+    ordering = ("-id")
+
+class CuotaVoucherAdmin(admin.ModelAdmin):
+    list_display = ("id","voucher", "monto", "pagado",)
+    list_editable = ("voucher", "monto", "pagado")
+    ordering = ("-id")
+
+
 admin.site.register(Region, RegionAdmin)
 admin.site.register(Comuna, ComunaAdmin)
 admin.site.register(Cliente, ClienteAdmin)
@@ -43,3 +89,12 @@ admin.site.register(TipoProducto, TipoProductoAdmin)
 admin.site.register(Producto, ProductoAdmin)
 admin.site.register(TipoTarjeta, TipoTarjetaAdmin)
 admin.site.register(TarjetaCredito, TarjetaCreditoAdmin)
+admin.site.register(Vehiculo,VehiculoAdmin)
+admin.site.register(Trabajador,TrabajadorAdmin)
+admin.site.register(Terminal,TerminalAdmin)
+admin.site.register(TrabajadorVehiculo,TrabajadorVehiculoAdmin)
+admin.site.register(TipoPago,TipoPagoAdmin)
+admin.site.register(TipoDescuento,TipoDescuentoAdmin)
+admin.site.register(DescuentoCliente,DescuentoClienteAdmin)
+admin.site.register(Voucher,VoucherAdmin)
+admin.site.register(CuotaVoucher,CuotaVoucherAdmin)
