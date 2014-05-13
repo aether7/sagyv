@@ -16,6 +16,30 @@ class Comuna(models.Model):
         return self.nombre
 
 
+class Vehiculo(models.Model):
+    patente = models.CharField(max_length=140)
+
+    def __unicode__(self):
+        return self.patente
+
+
+class Trabajador(models.Model):
+    nombre = models.CharField(max_length=140)
+
+    def __unicode__(self):
+        return self.nombre
+
+
+class TrabajadorVehiculo(models.Model):
+    trabajador = models.ForeignKey(Trabajador)
+    vehiculo = models.ForeignKey(Vehiculo)
+    fecha = models.DateTimeField(auto_now_add=True)
+    activo = models.BooleanField(default=True)
+
+    def __unicode__(self):
+        return self.trabajador.nombre + ", " + self.vehiculo.patente
+
+
 class TipoProducto(models.Model):
     nombre = models.CharField(max_length=140)
 
@@ -56,12 +80,28 @@ class TipoPago(models.Model):
         return self.nombre
 
 
+class TipoDescuento(models.Model):
+    tipo = models.CharField(max_length=140)
+
+    def __unicode__(self):
+        return self.tipo
+
+
+class DescuentoCliente(models.Model):
+    monto_descuento = models.IntegerField()
+    tipo_descuento = models.ForeignKey(TipoDescuento)
+
+    def __unicode__(self):
+        return self.monto_descuento
+
+
 class Cliente(models.Model):
     giro = models.CharField(max_length=140)
     direccion = models.TextField()
     telefono = models.CharField(max_length=140)
     rut = models.CharField(max_length=140)
-    #condicion_comercial = models.
+    situacion_comercial = models.ForeignKey(DescuentoCliente)
+    credito = models.IntegerField(null=True)
 
     def __unicode__(self):
         return self.nombre + " " + self.telefono
@@ -69,6 +109,7 @@ class Cliente(models.Model):
 
 class Terminal(models.Model):
     codigo = models.CharField(max_length=140)
+    vehiculo = models.ForeignKey(Vehiculo)
 
     def __unicode__(self):
         return self.codigo
@@ -86,92 +127,33 @@ class Voucher(models.Model):
     numero_cuotas = models.IntegerField(default=1)
     monto = models.IntegerField()
     cliente = models.ForeignKey(Cliente)
-
-    def __unicode__(self):
-        return self.monto
-
-
-class Trabajador(models.Model):
-    nombre = models.CharField(max_length=140)
-
-    def __unicode__(self):
-        return self.nombre
-
-
-class Cupon(models.Model):
-    fecha = models.DateField(auto_now_add=True)
-    numero_cupon = models.IntegerField(unique=True)
-    cliente = models.ForeignKey(Cliente)
-    formato = models.ForeignKey(FormatoProducto)
     trabajador = models.ForeignKey(Trabajador)
 
     def __unicode__(self):
-        return str(self.numero_cupon)
+        return self.monto
 
 
-class DescuentoCliente(models.Model):
-    cliente = models.ForeignKey(Cliente)
-    tipo_descuento = models.CharField(Descuento)
-    monto_descuento = models.IntegerField()
-
-    def __unicode__(self):
-        return self.nombre
-
-
-class Descuento(models.Model):
-    nombre = models.CharField(max_length=140)
-
-    def __unicode__(self):
-        return self.nombre
-# Por Revisar
-
-"""
-class TipoEntrega(models.Model):
-    nombre = models.CharField(max_length=140)
-
-    def __unicode__(self):
-        return self.nombre
-
-
-class FormatoProducto(models.Model):
-    nombre = models.CharField(max_length=140)
-    peso = models.IntegerField()
-
-    def __unicode__(self):
-        return self.nombre
-
-
-class TipoTarjeta(models.Model):
-    nombre = models.CharField(max_length=140)
-    marca = models.CharField(max_length=140)
-
-    def __unicode__(self):
-        return self.nombre
-
-
-class BoletaPago(models.Model):
-    tipo_tarjeta = models.ForeignKey(TipoTarjeta, null=True)
-    tipo_pago = models.ForeignKey(TipoPago)
-    tipo_cuotas = models.CharField(max_length=140,null=True)
-    fecha = models.DateTimeField()
-    terminal = models.CharField(max_length=140)
-    numero_tarjeta = models.IntegerField(null=True)
-    numero_operacion = models.IntegerField()
-    codigo_autorizacion = models.IntegerField()
-    numero_cuotas = models.IntegerField(default=1)
+class CuotaVoucher(models.Model):
+    voucher = models.ForeignKey(Voucher)
     monto = models.IntegerField()
-
-    def __unicode__(self):
-        return ""
-
-
-class CuotasBoleta(models.Model):
-    boleta_pago = models.ForeignKey(BoletaPago)
-    monto = models.IntegerField()
+    pagado = models.NullBooleanField()
 
     def __unicode__(self):
         return self.monto
 
+
+class Cupon(models.Model):
+    numero_cupon = models.IntegerField()
+    fecha = models.DateField(auto_now_add=True)
+    cliente = models.ForeignKey(Cliente)
+    producto = models.ForeignKey(Producto)
+    trabajador = models.ForeignKey(Trabajador)
+
+    def __unicode__(self):
+        return self.numero_cupon
+
+
+"""
 
 class CierreRepartidor(models.Model):
     numero_cierre = models.IntegerField()
@@ -179,13 +161,6 @@ class CierreRepartidor(models.Model):
     correlativo_cierre = models.IntegerField()
     chofer = models.ForeignKey(Trabajador)
     total_descuentos = models.IntegerField()
-
-
-class TargetaComercial(models.Model):
-    nombre = models.CharField(max_length=140)
-
-    def __unicode__(self):
-        return self.nombre
 
 
 class TipoDescuento(models.Model):
@@ -212,14 +187,6 @@ class DetalleDescuentoCierreRepartidor(models.Model):
     def __unicode__(self):
         return ""
 
-
-class DescuentoCliente(models.Model):
-    nombre = models.ForeignKey(Cliente)
-    tipo_descuento = models.CharField(max_length=2)
-    descuento = models.IntegerField()
-
-    def __unicode__(self):
-        return self.nombre
 
 
 class Proveedor(models.Model):
