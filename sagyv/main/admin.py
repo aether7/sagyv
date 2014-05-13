@@ -66,7 +66,7 @@ class TipoDescuentoAdmin(admin.ModelAdmin):
     list_editable = ("tipo",)
     ordering = ("id",)
 
-class DescuentoCliente(admin.ModelAdmin):
+class DescuentoClienteAdmin(admin.ModelAdmin):
     list_display = ("id","monto_descuento","tipo_descuento",)
     list_editable = ("monto_descuento", "tipo_descuento")
     ordering = ("id",)
@@ -74,12 +74,12 @@ class DescuentoCliente(admin.ModelAdmin):
 class VoucherAdmin(admin.ModelAdmin):
     list_display = ("id","tipo_tarjeta", "tipo_pago", "tipo_cuotas", "fecha", "terminal", "numero_tarjeta", "numero_operacion", "codigo_autorizacion", "numero_cuotas", "monto", "cliente")
     list_editable = ("tipo_tarjeta", "tipo_pago", "tipo_cuotas", "fecha", "terminal", "numero_tarjeta", "numero_operacion", "codigo_autorizacion", "numero_cuotas", "monto", "cliente")
-    ordering = ("-id")
+    ordering = ("-id",)
 
 class CuotaVoucherAdmin(admin.ModelAdmin):
     list_display = ("id","voucher", "monto", "pagado",)
     list_editable = ("voucher", "monto", "pagado")
-    ordering = ("-id")
+    ordering = ("-id",)
 
 
 admin.site.register(Region, RegionAdmin)
