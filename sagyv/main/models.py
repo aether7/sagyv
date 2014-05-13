@@ -152,6 +152,31 @@ class Cupon(models.Model):
     def __unicode__(self):
         return self.numero_cupon
 
+#Cierre
+class VoucherCierre(models.Model):
+    fecha = models.Date(auto_now_add=True)
+    numero_cierre = models.IntegerField()
+    correlativo_cierre = models.IntegerField()
+    
+    ventas_total = models.IntegerField()
+    numero_ventas = models.IntegerField()
+    descuento_total = models.IntegerField()
+    numero_descuentos = models.IntegerField()
+
+    def __unicode__(self):
+        return self.numero_cierre + " (" + self.correlativo_cierre + ")"
+
+
+class DetalleVoucherCierreTargetas(models.Model):
+    voucher_cierre = models.ForeignKey(VoucherCierre)
+    targeta_comercial = models.ForeignKey(TarjetaCredito)
+    valor_total = models.IntegerField()
+    cantidad_total = models.IntegerField()
+
+    def __unicode__(self):
+        return self.valor_total
+
+
 
 """
 
