@@ -49,8 +49,8 @@ INSERT INTO main_tarjetacredito(id, nombre, codigo, tipo_tarjeta_id) VALUES(11, 
 INSERT INTO main_tarjetacredito(id, nombre, codigo, tipo_tarjeta_id) VALUES(12, 'Dijon', null, 3);
 
 -- Descuento
-INSERT INTO main_tipodescuento(id, nombre) VALUES(1, 'Fijo');
-INSERT INTO main_tipodescuento(id, nombre) VALUES(2, 'Porcentaje');
+INSERT INTO main_tipodescuento(id, tipo) VALUES(1, 'Fijo');
+INSERT INTO main_tipodescuento(id, tipo) VALUES(2, 'Porcentaje');
 
 -- regiones
 INSERT INTO main_region (id, nombre, orden) VALUES (1, 'Región de Tarapacá', 1);

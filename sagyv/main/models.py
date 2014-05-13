@@ -154,10 +154,10 @@ class Cupon(models.Model):
 
 #Cierre
 class VoucherCierre(models.Model):
-    fecha = models.Date(auto_now_add=True)
+    fecha = models.DateField(auto_now_add=True)
     numero_cierre = models.IntegerField()
     correlativo_cierre = models.IntegerField()
-    
+
     ventas_total = models.IntegerField()
     numero_ventas = models.IntegerField()
     descuento_total = models.IntegerField()
