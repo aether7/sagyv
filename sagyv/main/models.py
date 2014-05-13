@@ -92,26 +92,8 @@ class Voucher(models.Model):
         return self.monto
 
 
-# Por Revisar
-
-"""
 class Trabajador(models.Model):
     nombre = models.CharField(max_length=140)
-
-    def __unicode__(self):
-        return self.nombre
-
-
-class TipoEntrega(models.Model):
-    nombre = models.CharField(max_length=140)
-
-    def __unicode__(self):
-        return self.nombre
-
-
-class FormatoProducto(models.Model):
-    nombre = models.CharField(max_length=140)
-    peso = models.IntegerField()
 
     def __unicode__(self):
         return self.nombre
@@ -126,6 +108,25 @@ class Cupon(models.Model):
 
     def __unicode__(self):
         return str(self.numero_cupon)
+
+
+
+# Por Revisar
+
+"""
+class TipoEntrega(models.Model):
+    nombre = models.CharField(max_length=140)
+
+    def __unicode__(self):
+        return self.nombre
+
+
+class FormatoProducto(models.Model):
+    nombre = models.CharField(max_length=140)
+    peso = models.IntegerField()
+
+    def __unicode__(self):
+        return self.nombre
 
 
 class TipoTarjeta(models.Model):
