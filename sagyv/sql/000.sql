@@ -26,6 +26,10 @@ INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(15,
 INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(16, 3215, 'Aluminio', null, 3);
 INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(17, 3315, 'Fierro', null, 3);
 
+-- tipos de pago
+INSERT INTO main_tipopago(id, nombre) VALUES(1, 'Efectivo');
+INSERT INTO main_tipopago(id, nombre) VALUES(2, 'Voucher');
+
 
 -- tarjetas de credito
 
