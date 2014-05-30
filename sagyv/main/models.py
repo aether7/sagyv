@@ -114,6 +114,7 @@ class Terminal(models.Model):
     def __unicode__(self):
         return self.codigo
 
+#crear tabla procedencia
 
 class Venta(models.Model):
     numero_serie = models.IntegerField(null=True)

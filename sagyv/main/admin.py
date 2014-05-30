@@ -72,8 +72,8 @@ class DescuentoClienteAdmin(admin.ModelAdmin):
     ordering = ("id",)
 
 class VoucherAdmin(admin.ModelAdmin):
-    list_display = ("id","tipo_tarjeta", "tipo_pago", "tipo_cuotas", "fecha", "terminal", "numero_tarjeta", "numero_operacion", "codigo_autorizacion", "numero_cuotas", "monto", "cliente")
-    list_editable = ("tipo_tarjeta", "tipo_pago", "tipo_cuotas", "fecha", "terminal", "numero_tarjeta", "numero_operacion", "codigo_autorizacion", "numero_cuotas", "monto", "cliente")
+    list_display = ("id","tipo_tarjeta" , "tipo_cuotas", "terminal", "numero_tarjeta", "numero_operacion", "codigo_autorizacion", "numero_cuotas")
+    list_editable = ("tipo_tarjeta", "tipo_cuotas", "terminal", "numero_tarjeta", "numero_operacion", "codigo_autorizacion", "numero_cuotas")
     ordering = ("-id",)
 
 class CuotaVoucherAdmin(admin.ModelAdmin):

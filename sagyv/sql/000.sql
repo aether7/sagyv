@@ -10,26 +10,28 @@ INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(1, 
 INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(2, 1111, '11 kilos', 11, 1);
 INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(3, 1115, '15 kilos', 15, 1);
 INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(4, 1145, '45 kilos', 45, 1);
-INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(5, 1215, 'Autogas Aluminio', null, 1);
-INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(6, 1315, 'Autogas Fierro', null, 1);
+INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(5, 1215, 'Autogas Aluminio', 15, 1);
+INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(6, 1315, 'Autogas Fierro', 15, 1);
 
 INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(7, 1405, '5 kilos', 5, 2);
 INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(8, 1411, '11 kilos', 11, 2);
 INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(9, 1415, '15 kilos', 15, 2);
 INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(10, 1445, '45 kilos', 45, 2);
-INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(11, 1515, 'Butano', null, 2);
+INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(11, 1515, 'Butano', 15, 2);
 
 INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(12, 3105, '5 kilos', 5, 3);
 INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(13, 3111, '11 kilos', 11, 3);
 INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(14, 3115, '15 kilos', 15, 3);
 INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(15, 3145, '45 kilos', 45, 3);
-INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(16, 3215, 'Aluminio', null, 3);
-INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(17, 3315, 'Fierro', null, 3);
+INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(16, 3215, 'Aluminio', 15, 3);
+INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(17, 3315, 'Fierro', 15, 3);
 
 -- tipos de pago
 INSERT INTO main_tipopago(id, nombre) VALUES(1, 'Efectivo');
 INSERT INTO main_tipopago(id, nombre) VALUES(2, 'Voucher');
-
+INSERT INTO main_tipopago(id, nombre) VALUES(3, 'Cupón prepago');
+-- COLOCAR NOMBRE MAS SIGNIFICATIVO
+INSERT INTO main_tipopago(id, nombre) VALUES(4, 'Guía de despacho');
 
 -- tarjetas de credito
 
@@ -51,6 +53,8 @@ INSERT INTO main_tarjetacredito(id, nombre, codigo, tipo_tarjeta_id) VALUES(9, '
 INSERT INTO main_tarjetacredito(id, nombre, codigo, tipo_tarjeta_id) VALUES(10, 'Tricot', null, 3);
 INSERT INTO main_tarjetacredito(id, nombre, codigo, tipo_tarjeta_id) VALUES(11, 'Johnson', null, 3);
 INSERT INTO main_tarjetacredito(id, nombre, codigo, tipo_tarjeta_id) VALUES(12, 'Dijon', null, 3);
+INSERT INTO main_tarjetacredito(id, nombre, codigo, tipo_tarjeta_id) VALUES(13, 'Hites', null, 3);
+
 
 -- Descuento
 INSERT INTO main_tipodescuento(id, tipo) VALUES(1, 'Fijo');
