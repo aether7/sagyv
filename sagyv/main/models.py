@@ -16,6 +16,13 @@ class Comuna(models.Model):
         return self.nombre
 
 
+class Herramienta(models.Model):
+    nombre = models.CharField(max_length=140)
+
+    dif __unicode__(self):
+        return self.nombre
+
+
 class Vehiculo(models.Model):
     patente = models.CharField(max_length=140)
 
@@ -23,11 +30,52 @@ class Vehiculo(models.Model):
         return self.patente
 
 
-class Trabajador(models.Model):
+class Afp(models.Model):
     nombre = models.CharField(max_length=140)
 
     def __unicode__(self):
         return self.nombre
+ 
+
+class Salud(models.Model):
+    nombre = models.CharField(max_length=140)
+
+    def __unicode__(self):
+        return self.nombre
+
+
+class EstadoCivil(models.Model):
+    nombre = models.CharField(max_length=140)
+
+    def __unicode__(self):
+        return self.nombre
+
+
+class Trabajador(models.Model):
+    nombre = models.CharField(max_length=140)
+    apellido = models.CharField(max_length=140)
+    rut = models.IntegerField()
+    dv = models.CharField(max_length=1)
+    domicilio = models.CharField(max_length=140)
+    nacimiento = models.DateField()
+    fecha_inicio_contrato = models.DateField()
+    vigencia_licencia = models.DateField()
+    afp = models.ForeignKey(Afp)
+    salud = models.ForeignKey(Salud)
+    estado_civil = models.ForeignKey(EstadoCivil)
+    estado_vacaciones = models.BooleanField(default=True)
+
+    def __unicode__(self):
+        return self.nombre
+
+
+class CargaFamiliar(models.Model):
+    nombre = models.CharField(max_length=140, null=True)
+    edad = models.IntegerField()
+    trabajador = models.ForeignKey(Trabajador)
+
+    def __unicode__(self):
+        return self.edad
 
 
 class TrabajadorVehiculo(models.Model):
