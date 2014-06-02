@@ -18,16 +18,36 @@ class Comuna(models.Model):
 
 class Herramienta(models.Model):
     nombre = models.CharField(max_length=140)
+    stock = models.IntegerField()
 
-    dif __unicode__(self):
+    def __unicode__(self):
+        return self.nombre
+
+
+class Filtro(models.Model):
+    nombre = models.CharField(max_length=140)
+    km_cambio = models.IntegerField()
+
+    def __unicode__(self):
         return self.nombre
 
 
 class Vehiculo(models.Model):
     patente = models.CharField(max_length=140)
+    fecha_revision_tecnica = models.DateField()
+    km = models.IntegerField()
+    estado_sec = models.BooleanField(default=True)
+    estado_pago = models.BooleanField(default=True)
 
     def __unicode__(self):
         return self.patente
+
+
+class EstadoFiltro(models.Model):
+    patente = models.ForeignKey(Vehiculo)
+    filtro = models.ForeignKey(Filtro)
+    fecha_instalacion = models.DateField(auto_now_add=True)
+    km_instalacion = models.IntegerField()
 
 
 class Afp(models.Model):
@@ -66,7 +86,7 @@ class Trabajador(models.Model):
     estado_vacaciones = models.BooleanField(default=True)
 
     def __unicode__(self):
-        return self.nombre
+        return self.nombre + ' ' + self.apellido
 
 
 class CargaFamiliar(models.Model):
@@ -76,6 +96,16 @@ class CargaFamiliar(models.Model):
 
     def __unicode__(self):
         return self.edad
+
+
+class HerramientaTrabajador(models.Model):
+    trabajador = models.ForeignKey(Trabajador)
+    herramienta = models.ForeignKey(Herramienta)
+    fecha_entrega = models.DateField(auto_now_add=True)
+    fecha_retorno = models.DateField(null=True)
+
+    def __unicode__(self):
+        return self.herramienta.nombre
 
 
 class TrabajadorVehiculo(models.Model):
