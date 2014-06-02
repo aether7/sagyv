@@ -7,6 +7,9 @@ class Region(models.Model):
     def __unicode__(self):
         return self.nombre
 
+    class Meta:
+        verbose_name_plural = "regiones"
+
 
 class Comuna(models.Model):
     nombre = models.CharField(max_length=140)
@@ -28,6 +31,9 @@ class Trabajador(models.Model):
 
     def __unicode__(self):
         return self.nombre
+
+    class Meta:
+        verbose_name_plural = "trabajadores"
 
 
 class TrabajadorVehiculo(models.Model):
@@ -71,6 +77,9 @@ class TarjetaCredito(models.Model):
 
     def __unicode__(self):
         return self.nombre + " " + self.codigo
+
+    class Meta:
+        verbose_name_plural = "tarjetas credito"
 
 
 class TipoPago(models.Model):
