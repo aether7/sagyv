@@ -60,6 +60,28 @@ INSERT INTO main_tarjetacredito(id, nombre, codigo, tipo_tarjeta_id) VALUES(13, 
 INSERT INTO main_tipodescuento(id, tipo) VALUES(1, 'Fijo');
 INSERT INTO main_tipodescuento(id, tipo) VALUES(2, 'Porcentaje');
 
+
+-- AFPS
+INSERT INTO main_afp(id, nombre) VALUES(1, 'Bansander');
+INSERT INTO main_afp(id, nombre) VALUES(2, 'Cuprum');
+INSERT INTO main_afp(id, nombre) VALUES(3, 'Habitat');
+INSERT INTO main_afp(id, nombre) VALUES(4, 'Planvital');
+INSERT INTO main_afp(id, nombre) VALUES(5, 'Provida');
+INSERT INTO main_afp(id, nombre) VALUES(6, 'Santa María');
+INSERT INTO main_afp(id, nombre) VALUES(7, 'Modelo');
+
+-- sistemas de salud
+INSERT INTO main_sistemasalud(id, nombre) VALUES(1,'Isapre');
+INSERT INTO main_sistemasalud(id, nombre) VALUES(1,'Fonasa');
+
+-- Isapres
+INSERT INTO main_isapre(id, nombre) VALUES(1, 'Banmédica');
+INSERT INTO main_isapre(id, nombre) VALUES(2, 'Colmena');
+INSERT INTO main_isapre(id, nombre) VALUES(3, 'Consalud');
+INSERT INTO main_isapre(id, nombre) VALUES(4, 'Cruz Blanca');
+INSERT INTO main_isapre(id, nombre) VALUES(5, 'Más Vida');
+INSERT INTO main_isapre(id, nombre) VALUES(6, 'Vida Tres');
+
 -- regiones
 INSERT INTO main_region (id, nombre, orden) VALUES (1, 'Región de Tarapacá', 1);
 INSERT INTO main_region (id, nombre, orden) VALUES (2, 'Región de Antofagasta', 2);

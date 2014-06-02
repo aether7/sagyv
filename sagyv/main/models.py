@@ -58,9 +58,19 @@ class Afp(models.Model):
 
     def __unicode__(self):
         return self.nombre
- 
 
-class Salud(models.Model):
+
+class SistemaSalud(models.Model):
+    nombre = models.CharField(max_length=140)
+
+    def __unicode__(self):
+        return self.nombre
+
+    class Meta:
+        verbose_name_plural = "sistemas salud"
+
+
+class Isapre(models.Model):
     nombre = models.CharField(max_length=140)
 
     def __unicode__(self):
@@ -84,7 +94,7 @@ class Trabajador(models.Model):
     fecha_inicio_contrato = models.DateField()
     vigencia_licencia = models.DateField()
     afp = models.ForeignKey(Afp)
-    salud = models.ForeignKey(Salud)
+    sistema_salud = models.ForeignKey(SistemaSalud)
     estado_civil = models.ForeignKey(EstadoCivil)
     estado_vacaciones = models.BooleanField(default=True)
 
