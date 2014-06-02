@@ -47,10 +47,14 @@ class Vehiculo(models.Model):
 
 
 class EstadoFiltro(models.Model):
-    patente = models.ForeignKey(Vehiculo)
+    vehiculo = models.ForeignKey(Vehiculo)
     filtro = models.ForeignKey(Filtro)
     fecha_instalacion = models.DateField(auto_now_add=True)
     km_instalacion = models.IntegerField()
+    estado = models.BooleanField(default=True)
+
+    def __unicode__(self):
+        return self.estado
 
 
 class Afp(models.Model):
