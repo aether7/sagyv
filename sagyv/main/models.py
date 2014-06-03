@@ -59,7 +59,12 @@ class CambioFiltro(models.Model):
 
 class CambioAceite(models.Model):
     vehiculo = models.ForeignKey(Vehiculo)
+    fecha_instalacion = models.DateField(auto_now_add=True)
     km_cambio = models.IntegerField()
+    estado = models.BooleanField(default=True)
+
+    def __unicode__(self):
+        return self.estado
 
 
 class Afp(models.Model):
