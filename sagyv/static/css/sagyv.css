@@ -2,6 +2,7 @@ body{font-size:16px}
 #login{border:1px solid #00f;float:right;padding:3em;}
 #login #mensaje{padding:.5em}
 #login div:last-child{padding:1em 0}
+#main_content{clear:both}
 .box{box-sizing:border-box;display:inline-block;vertical-align:top}
 .center{text-align:center}
 .logo-index{display:inline-block}
