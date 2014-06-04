@@ -6,7 +6,7 @@ App.cookies = {};
 (function(){
     document.cookie.split(";").forEach(function(token){
         var tokens = token.split("=");
-        App.cookies[tokens[0]] = tokens[1];
+        App.cookies[tokens[0].trim()] = tokens[1];
     });
 
     $.ajaxSetup({

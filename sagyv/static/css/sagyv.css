@@ -5,4 +5,4 @@ body{font-size:16px}
 #main_content{clear:both}
 .box{box-sizing:border-box;display:inline-block;vertical-align:top}
 .center{text-align:center}
-.logo-index{display:inline-block}
+.logo-index{float:left}
