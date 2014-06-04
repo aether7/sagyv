@@ -240,13 +240,23 @@ class Terminal(models.Model):
         return self.codigo
 
 
-class HistoricoEstadoTerminal(models.Model):
+class HistorialEstadoTerminal(models.Model):
     terminal = models.ForeignKey(Terminal)
     estado = models.ForeignKey(EstadoTerminal)
     fecha = models.DateField(auto_now_add=True)
 
     def __unicode__(self):
         return self.terminal.codigo + "(" + self.estado + ") " + self.fecha
+
+
+class HistorialCambioVehiculo(models.Model):
+    terminal = models.ForeignKey(Terminal)
+    vehiculo = models.ForeignKey(Vehiculo)
+    fecha = models.DateField(auto_now_add=True)
+
+    def __unicode__(self):
+        return self.terminal.codigo + "(" + self.vehiculo.patente + ") " + self.fecha
+        
 
 #crear tabla procedencia
 
