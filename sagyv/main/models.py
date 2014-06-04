@@ -46,22 +46,46 @@ class Vehiculo(models.Model):
         return self.patente
 
 
-class CambioFiltro(models.Model):
+class PagoVehiculo(models.Model):
     vehiculo = models.ForeignKey(Vehiculo)
+    cantidad_cuotas = models.IntegerField()
+    valor_cuota = models.IntegerField()
+
+    def __unicode__(self):
+        return ""
+
+
+class PagoCuotaVehiculo(models.Model):
+    pagoVehiculo = models.ForeignKey(PagoVehiculo)
+    numero_cuota = models.IntegerField()
+    fecha = models.DateField(auto_now_add=True)
+
+    def __unicode__(self):
+        return ""
+
+
+class Mantencion(models.Model):
+    vehiculo = models.ForeignKey(Vehiculo)
+    fecha = models.DateField(auto_now_add=True)
+    km = models.IntegerField()
+    descripcion = models.CharField(max_length=500)
+
+    def __unicode__(self):
+        return self.fecha + ' : ' + self.vehiculo
+
+
+class CambioFiltro(models.Model):
+    mantencion = models.ForeignKey(Mantencion)
     filtro = models.ForeignKey(Filtro)
-    fecha_instalacion = models.DateField(auto_now_add=True)
     km_cambio = models.IntegerField()
-    estado = models.BooleanField(default=True)
 
     def __unicode__(self):
         return self.estado
 
 
 class CambioAceite(models.Model):
-    vehiculo = models.ForeignKey(Vehiculo)
-    fecha_instalacion = models.DateField(auto_now_add=True)
+    mantencion = models.ForeignKey(Mantencion)
     km_cambio = models.IntegerField()
-    estado = models.BooleanField(default=True)
 
     def __unicode__(self):
         return self.estado
@@ -218,12 +242,39 @@ class Cliente(models.Model):
         return self.nombre + " " + self.telefono
 
 
+class EstadoTerminal(models.Model):
+    nombre = models.CharField(max_length=140)
+
+    def __unicode__(self):
+        return self.nombre
+
+
 class Terminal(models.Model):
     codigo = models.CharField(max_length=140)
     vehiculo = models.ForeignKey(Vehiculo)
+    estado = models.ForeignKey(EstadoTerminal)
 
     def __unicode__(self):
         return self.codigo
+
+
+class HistorialEstadoTerminal(models.Model):
+    terminal = models.ForeignKey(Terminal)
+    estado = models.ForeignKey(EstadoTerminal)
+    fecha = models.DateField(auto_now_add=True)
+
+    def __unicode__(self):
+        return self.terminal.codigo + "(" + self.estado + ") " + self.fecha
+
+
+class HistorialCambioVehiculo(models.Model):
+    terminal = models.ForeignKey(Terminal)
+    vehiculo = models.ForeignKey(Vehiculo)
+    fecha = models.DateField(auto_now_add=True)
+
+    def __unicode__(self):
+        return self.terminal.codigo + "(" + self.vehiculo.p + ") " + self.fecha
+        
 
 #crear tabla procedencia
 
