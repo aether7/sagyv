@@ -239,6 +239,15 @@ class Terminal(models.Model):
     def __unicode__(self):
         return self.codigo
 
+
+class HistoricoEstadoTerminal(models.Model):
+    terminal = models.ForeignKey(Terminal)
+    estado = models.ForeignKey(EstadoTerminal)
+    fecha = models.DateField(auto_now_add=True)
+
+    def __unicode__(self):
+        return self.terminal.codigo + "(" + self.estado + ") " + self.fecha
+
 #crear tabla procedencia
 
 class Venta(models.Model):
