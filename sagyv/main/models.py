@@ -52,6 +52,9 @@ class Mantencion(models.Model):
     km = models.IntegerField()
     descripcion = models.CharField(max_length=500)
 
+    def __unicode__(self):
+        return self.fecha + ' : ' + self.vehiculo
+
 
 class CambioFiltro(models.Model):
     mantencion = models.ForeignKey(Mantencion)
