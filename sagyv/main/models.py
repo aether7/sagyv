@@ -221,9 +221,17 @@ class Cliente(models.Model):
         return self.nombre + " " + self.telefono
 
 
+class EstadoTerminal(models.Model):
+    nombre = models.CharField(max_length=140)
+
+    def __unicode__(self):
+        return self.nombre
+
+
 class Terminal(models.Model):
     codigo = models.CharField(max_length=140)
     vehiculo = models.ForeignKey(Vehiculo)
+    estado = models.ForeignKey(EstadoTerminal)
 
     def __unicode__(self):
         return self.codigo
