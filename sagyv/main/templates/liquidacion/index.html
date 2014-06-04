@@ -1,4 +1,67 @@
 {% extends "panel_control.html" %}
+{% load static %}
+
 {% block content %}
-    asdfasdfasdfasdfasdfasdasdfasdfasdf index de liquidacion
+    <section>
+        <input type="search" value="" placeholder="Nombre trabajador" />
+
+    </section>
+
+    <section class="container">
+        <article class="row">
+            <div class="col-md-3 list-group">
+                <a href="#" class="list-group-item">
+                    potatoes
+                    <span class="badge">14</span>
+                </a>
+                <a href="#" class="list-group-item">
+                    bananas
+                    <span class="badge">14</span>
+                </a>
+                <a href="#" class="list-group-item">
+                    soraka
+                    <span class="badge">14</span>
+                </a>
+                <a href="#" class="list-group-item">
+                    nose
+                    <span class="badge">14</span>
+                </a>
+                <a href="#" class="list-group-item">
+                    asdf
+                    <span class="badge">14</span>
+                </a>
+            </div>
+
+            <div class="col-md-3 list-group">
+                <a href="#" class="list-group-item">
+                    potatoes
+                    <span class="badge">14</span>
+                </a>
+                <a href="#" class="list-group-item">
+                    bananas
+                    <span class="badge">14</span>
+                </a>
+                <a href="#" class="list-group-item">
+                    soraka
+                    <span class="badge">14</span>
+                </a>
+                <a href="#" class="list-group-item">
+                    nose
+                    <span class="badge">14</span>
+                </a>
+                <a href="#" class="list-group-item">
+                    asdf
+                    <span class="badge">14</span>
+                </a>
+            </div>
+
+            <div class="col-md-4">
+                asdfasdfasdfasdfasdf
+            </div>
+        </article>
+    </section>
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'js/plugins/typeahead.min.js' %}"></script>
 {% endblock %}
