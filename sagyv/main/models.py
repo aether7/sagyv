@@ -46,6 +46,24 @@ class Vehiculo(models.Model):
         return self.patente
 
 
+class PagoVehiculo(models.Model):
+    vehiculo = models.ForeignKey(Vehiculo)
+    cantidad_cuotas = models.IntegerField()
+    valor_cuota = models.IntegerField()
+
+    def __unicode__(self):
+        return ""
+
+
+class PagoCuotaVehiculo(models.Model):
+    pagoVehiculo = models.ForeignKey(PagoVehiculo)
+    numero_cuota = models.IntegerField()
+    fecha = models.DateField(auto_now_add=True)
+
+    def __unicode__(self):
+        return ""
+
+
 class Mantencion(models.Model):
     vehiculo = models.ForeignKey(Vehiculo)
     fecha = models.DateField(auto_now_add=True)
@@ -255,7 +273,7 @@ class HistorialCambioVehiculo(models.Model):
     fecha = models.DateField(auto_now_add=True)
 
     def __unicode__(self):
-        return self.terminal.codigo + "(" + self.vehiculo.patente + ") " + self.fecha
+        return self.terminal.codigo + "(" + self.vehiculo.p + ") " + self.fecha
         
 
 #crear tabla procedencia
