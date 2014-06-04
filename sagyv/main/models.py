@@ -56,7 +56,6 @@ class Mantencion(models.Model):
 class CambioFiltro(models.Model):
     mantencion = models.ForeignKey(Mantencion)
     filtro = models.ForeignKey(Filtro)
-    fecha_instalacion = models.DateField(auto_now_add=True)
     km_cambio = models.IntegerField()
 
     def __unicode__(self):
@@ -65,9 +64,7 @@ class CambioFiltro(models.Model):
 
 class CambioAceite(models.Model):
     mantencion = models.ForeignKey(Mantencion)
-    fecha_instalacion = models.DateField(auto_now_add=True)
     km_cambio = models.IntegerField()
-    estado = models.BooleanField(default=True)
 
     def __unicode__(self):
         return self.estado
