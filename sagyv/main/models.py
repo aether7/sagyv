@@ -46,19 +46,25 @@ class Vehiculo(models.Model):
         return self.patente
 
 
-class CambioFiltro(models.Model):
+class Mantencion(models.Model):
     vehiculo = models.ForeignKey(Vehiculo)
+    fecha = models.DateField(auto_now_add=True)
+    km = models.IntegerField()
+    descripcion = models.CharField(max_length=500)
+
+
+class CambioFiltro(models.Model):
+    mantencion = models.ForeignKey(Mantencion)
     filtro = models.ForeignKey(Filtro)
     fecha_instalacion = models.DateField(auto_now_add=True)
     km_cambio = models.IntegerField()
-    estado = models.BooleanField(default=True)
 
     def __unicode__(self):
         return self.estado
 
 
 class CambioAceite(models.Model):
-    vehiculo = models.ForeignKey(Vehiculo)
+    mantencion = models.ForeignKey(Mantencion)
     fecha_instalacion = models.DateField(auto_now_add=True)
     km_cambio = models.IntegerField()
     estado = models.BooleanField(default=True)
