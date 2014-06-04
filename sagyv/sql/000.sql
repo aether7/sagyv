@@ -72,7 +72,7 @@ INSERT INTO main_afp(id, nombre) VALUES(7, 'Modelo');
 
 -- sistemas de salud
 INSERT INTO main_sistemasalud(id, nombre) VALUES(1,'Isapre');
-INSERT INTO main_sistemasalud(id, nombre) VALUES(1,'Fonasa');
+INSERT INTO main_sistemasalud(id, nombre) VALUES(2,'Fonasa');
 
 -- Isapres
 INSERT INTO main_isapre(id, nombre) VALUES(1, 'Banmédica');
