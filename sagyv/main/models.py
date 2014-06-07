@@ -127,14 +127,14 @@ class Trabajador(models.Model):
     apellido = models.CharField(max_length=140)
     rut = models.IntegerField()
     dv = models.CharField(max_length=1)
-    domicilio = models.CharField(max_length=140)
-    nacimiento = models.DateField()
-    fecha_inicio_contrato = models.DateField()
-    vigencia_licencia = models.DateField()
-    afp = models.ForeignKey(Afp)
-    sistema_salud = models.ForeignKey(SistemaSalud)
-    estado_civil = models.ForeignKey(EstadoCivil)
-    estado_vacaciones = models.BooleanField(default=True)
+    domicilio = models.CharField(max_length=140,null=True)
+    nacimiento = models.DateField(null=True)
+    fecha_inicio_contrato = models.DateField(null=True)
+    vigencia_licencia = models.DateField(null=True)
+    afp = models.ForeignKey(Afp,null=True,blank=True)
+    sistema_salud = models.ForeignKey(SistemaSalud,null=True,blank=True)
+    estado_civil = models.ForeignKey(EstadoCivil,null=True,blank=True)
+    estado_vacaciones = models.NullBooleanField()
 
     def __unicode__(self):
         return self.nombre + ' ' + self.apellido
@@ -274,7 +274,7 @@ class HistorialCambioVehiculo(models.Model):
 
     def __unicode__(self):
         return self.terminal.codigo + "(" + self.vehiculo.p + ") " + self.fecha
-        
+
 
 #crear tabla procedencia
 
