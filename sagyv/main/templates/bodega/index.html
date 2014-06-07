@@ -2,32 +2,32 @@
 {% block content %}
 <div class="panel panel-default">
 	<div class="panel-heading">
-		Guia de Despacho
+		Bodega
 	</div>
 	<table class="table center">
 		<tr>
 			<td>codigo</td>
-			<td>Nombre</td>
+			<td>Peso</td>
+			<td>Tipo</td>
 			<td>Stock</td>
-			<td>En Trancito</td>
-			<td>5</td>
 			<td>acciones</td>
 		</tr>
-		<tr>
-			<td>1105</td>
-			<td>5 kilos</td>
-			<td>100</td>
-			<td>29</td>
-			<td>5</td>
-			<td>
-				<button type="button" class="btn btn-xs" data-toggle="modal" data-target="#modal_add">
-  					<span class="glyphicon glyphicon-plus"></span>
-				</button>
-				<button type="button" class="btn btn-xs" data-toggle="modal" data-target="#modal_add">
-  					<span class="glyphicon glyphicon-edit"></span>
-				</button>
-			</td>
-		</tr>
+        {% for producto in productos  %}
+        <tr>
+            <td>{{producto.codigo}}</td>
+            <td>{{producto.peso}} Kilos</td>
+            <td>{{producto.tipo_producto.nombre}}</td>
+            <td></td>
+            <td>
+                <button type="button" class="btn btn-xs" data-toggle="modal" data-target="#modal_add">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </button>
+                <button type="button" class="btn btn-xs" data-toggle="modal" data-target="#modal_add">
+                    <span class="glyphicon glyphicon-edit"></span>
+                </button>
+            </td>
+        </tr>
+        {% endfor %}
 	</table>
 </div>
 
