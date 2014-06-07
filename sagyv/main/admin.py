@@ -47,8 +47,8 @@ class TerminalAdmin(admin.ModelAdmin):
     ordering = ("id",)
 
 class TrabajadorAdmin(admin.ModelAdmin):
-    list_display = ("id","nombre",)
-    list_editable = ("nombre",)
+    list_display = ("id","nombre", "apellido", "rut", "dv")
+    list_editable = ("nombre", "apellido")
     ordering =("id",)
 
 class TrabajadorVehiculoAdmin(admin.ModelAdmin):
