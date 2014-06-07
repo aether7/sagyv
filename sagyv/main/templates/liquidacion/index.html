@@ -2,9 +2,16 @@
 {% load static %}
 
 {% block content %}
-    <section>
-        <input type="search" value="" placeholder="Nombre trabajador" />
+    <section class="container">
+        <article>
+            <input type="search" value="" placeholder="Nombre trabajador" />
+            <button><span class="glyphicon glyphicon-search"></span></button>
+        </article>
 
+        <article>
+            <input type="text" value="" />
+            guia de despacho
+        </article>
     </section>
 
     <section class="container">
@@ -64,4 +71,7 @@
 
 {% block js %}
 <script src="{% static 'js/plugins/typeahead.min.js' %}"></script>
+<script>
+    App.emplados = [];
+</script>
 {% endblock %}
