@@ -30,6 +30,7 @@ INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(17,
 INSERT INTO main_tipopago(id, nombre) VALUES(1, 'Efectivo');
 INSERT INTO main_tipopago(id, nombre) VALUES(2, 'Voucher');
 INSERT INTO main_tipopago(id, nombre) VALUES(3, 'Cupón prepago');
+
 -- COLOCAR NOMBRE MAS SIGNIFICATIVO
 INSERT INTO main_tipopago(id, nombre) VALUES(4, 'Guía de despacho');
 
@@ -55,11 +56,9 @@ INSERT INTO main_tarjetacredito(id, nombre, codigo, tipo_tarjeta_id) VALUES(11, 
 INSERT INTO main_tarjetacredito(id, nombre, codigo, tipo_tarjeta_id) VALUES(12, 'Dijon', null, 3);
 INSERT INTO main_tarjetacredito(id, nombre, codigo, tipo_tarjeta_id) VALUES(13, 'Hites', null, 3);
 
-
 -- Descuento
 INSERT INTO main_tipodescuento(id, tipo) VALUES(1, 'Fijo');
 INSERT INTO main_tipodescuento(id, tipo) VALUES(2, 'Porcentaje');
-
 
 -- AFPS
 INSERT INTO main_afp(id, nombre) VALUES(1, 'Bansander');
@@ -82,6 +81,12 @@ INSERT INTO main_isapre(id, nombre) VALUES(4, 'Cruz Blanca');
 INSERT INTO main_isapre(id, nombre) VALUES(5, 'Más Vida');
 INSERT INTO main_isapre(id, nombre) VALUES(6, 'Vida Tres');
 
+-- Estados Civiles
+INSERT INTO main_estadocivil(id, nombre) VALUES(1, 'Soltero');
+INSERT INTO main_estadocivil(id, nombre) VALUES(2, 'Casado');
+INSERT INTO main_estadocivil(id, nombre) VALUES(3, 'Divorciado');
+INSERT INTO main_estadocivil(id, nombre) VALUES(4, 'Viudo');
+
 -- regiones
 INSERT INTO main_region (id, nombre, orden) VALUES (1, 'Región de Tarapacá', 1);
 INSERT INTO main_region (id, nombre, orden) VALUES (2, 'Región de Antofagasta', 2);
@@ -101,7 +106,6 @@ INSERT INTO main_region (id, nombre, orden) VALUES (15, 'Región de Arica y Pari
 
 
 -- comunas
-
 INSERT INTO main_comuna (id, region_id, nombre) VALUES (1101, 1, 'Iquique');
 INSERT INTO main_comuna (id, region_id, nombre) VALUES (1107, 1, 'Alto Hospicio');
 INSERT INTO main_comuna (id, region_id, nombre) VALUES (1401, 1, 'Pozo Almonte');
