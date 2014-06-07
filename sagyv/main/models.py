@@ -132,8 +132,8 @@ class Trabajador(models.Model):
     fecha_inicio_contrato = models.DateField(null=True)
     vigencia_licencia = models.DateField(null=True)
     afp = models.ForeignKey(Afp,null=True,blank=True)
-    sistema_salud = models.ForeignKey(SistemaSalud,null=True,blank=True)
-    estado_civil = models.ForeignKey(EstadoCivil,null=True,blank=True)
+    sistema_salud = models.ForeignKey(SistemaSalud,null=True,default=1)
+    estado_civil = models.ForeignKey(EstadoCivil,null=True,default=1)
     estado_vacaciones = models.NullBooleanField()
 
     def __unicode__(self):
