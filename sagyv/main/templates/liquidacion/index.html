@@ -3,18 +3,17 @@
 
 {% block content %}
     <section class="container">
-        <article>
-            <input type="search" value="" placeholder="Nombre trabajador" />
-            <button><span class="glyphicon glyphicon-search"></span></button>
+        <article class="pull-right">
+            Guía # : <input id="guia_despacho" type="text" value="" readonly />
         </article>
 
-        <article>
-            <input type="text" value="" />
-            guia de despacho
+        <article class="pull-right">
+            <input id="busca_trabajador" type="search" value="" placeholder="Nombre trabajador" />
+            <button><span class="glyphicon glyphicon-search"></span></button>
         </article>
     </section>
 
-    <section class="container">
+    <section class="container" style="margin-top:4em">
         <article class="row">
             <div class="col-md-3 list-group">
                 <a href="#" class="list-group-item">
@@ -71,15 +70,14 @@
 
 {% block js %}
 <script src="{% static 'js/plugins/typeahead.min.js' %}"></script>
+<script src="{% static 'js/controllers/liquidacion.js' %}"></script>
 <script>
-    var trabajador_json = null;
-    App.nombreEmpleados = [];
-    App.empleados = {};
+    App.liquidacionController = new App.Controllers.Liquidacion();
 
     {% for trabajador in trabajadores %}
-        App.nombreEmpleados.push("{{ trabajador.get_nombre_completo }}");
-        trabajador_json = JSON.parse("{{ trabajador.get_json }}".replace(/&quot;/g,'"'));
-        App.empleados["{{ trabajador.get_nombre_completo }}"] = trabajador_json;
+        App.liquidacionController.addTrabajador("{{ trabajador }}");
     {% endfor %}
+
+    App.liquidacionController.init();
 </script>
 {% endblock %}
