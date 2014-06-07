@@ -199,6 +199,7 @@ class Producto(models.Model):
     nombre = models.CharField(max_length=140)
     peso = models.IntegerField(null=True)
     tipo_producto = models.ForeignKey(TipoProducto)
+    stock = models.IntegerField(null=True)
 
     def __unicode__(self):
         return str(self.codigo) + " " +self.nombre
