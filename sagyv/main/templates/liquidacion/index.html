@@ -72,6 +72,14 @@
 {% block js %}
 <script src="{% static 'js/plugins/typeahead.min.js' %}"></script>
 <script>
-    App.emplados = [];
+    var trabajador_json = null;
+    App.nombreEmpleados = [];
+    App.empleados = {};
+
+    {% for trabajador in trabajadores %}
+        App.nombreEmpleados.push("{{ trabajador.get_nombre_completo }}");
+        trabajador_json = JSON.parse("{{ trabajador.get_json }}".replace(/&quot;/g,'"'));
+        App.empleados["{{ trabajador.get_nombre_completo }}"] = trabajador_json;
+    {% endfor %}
 </script>
 {% endblock %}

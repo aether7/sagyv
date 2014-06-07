@@ -10,4 +10,4 @@ class IndexView(TemplateView):
 
         return context
 
-index = TemplateView.as_view(template_name="liquidacion/index.html")
+index = IndexView.as_view()

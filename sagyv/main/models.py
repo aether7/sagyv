@@ -1,3 +1,4 @@
+import json
 from django.db import models
 
 class Region(models.Model):
@@ -127,14 +128,28 @@ class Trabajador(models.Model):
     apellido = models.CharField(max_length=140)
     rut = models.IntegerField()
     dv = models.CharField(max_length=1)
-    domicilio = models.CharField(max_length=140,null=True)
-    nacimiento = models.DateField(null=True)
-    fecha_inicio_contrato = models.DateField(null=True)
-    vigencia_licencia = models.DateField(null=True)
+    domicilio = models.CharField(max_length=140,null=True,blank=True)
+    nacimiento = models.DateField(null=True,blank=True)
+    fecha_inicio_contrato = models.DateField(null=True,blank=True)
+    vigencia_licencia = models.DateField(null=True,blank=True)
     afp = models.ForeignKey(Afp,null=True,blank=True)
     sistema_salud = models.ForeignKey(SistemaSalud,null=True,default=1)
     estado_civil = models.ForeignKey(EstadoCivil,null=True,default=1)
     estado_vacaciones = models.NullBooleanField()
+
+    def get_nombre_completo(self):
+        return self.nombre + " " + self.apellido
+
+    def get_json(self):
+        data = {
+            "id" : self.id,
+            "nombre" : self.nombre,
+            "apellido" : self.apellido,
+            "rut" : self.rut,
+            "dv" : self.dv
+        }
+
+        return json.dumps(data)
 
     def __unicode__(self):
         return self.nombre + ' ' + self.apellido
