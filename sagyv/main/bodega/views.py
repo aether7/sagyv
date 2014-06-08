@@ -9,4 +9,7 @@ class IndexView(TemplateView):
 		context["productos"] = Producto.objects.all()
 		return context
 
+def agregar_stock_compra(req):
+	return HttpResponse('hi')
+
 index = IndexView.as_view()

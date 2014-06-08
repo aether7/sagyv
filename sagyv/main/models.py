@@ -205,6 +205,21 @@ class Producto(models.Model):
         return str(self.codigo) + " " +self.nombre
 
 
+class TipoCambioStock(models.Model):
+    nombre = models.CharField(max_length=140)
+
+    def __unicode__(self):
+        return self.nombre
+
+class HistorialStock(models.Model):
+    producto = models.ForeignKey(Producto)
+    cantidad = models.IntegerField()
+    fecha = models.DateField(auto_now_add=True)
+
+    def __unicode__(self):
+        return ""
+
+
 class TipoTarjeta(models.Model):
     nombre = models.CharField(max_length=140)
 

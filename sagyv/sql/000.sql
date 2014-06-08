@@ -1,11 +1,14 @@
 -- tipos de productos
-
 INSERT INTO main_tipoproducto(id, nombre) VALUES(1, 'llenos normales');
 INSERT INTO main_tipoproducto(id, nombre) VALUES(2, 'llenos catalíticos');
 INSERT INTO main_tipoproducto(id, nombre) VALUES(3, 'garantías');
 
--- productos
+-- tipos de cambio en stock
+INSERT INTO main_tipocambiostock(id, nombre) VALUES(1, 'Compra');
+INSERT INTO main_tipocambiostock(id, nombre) VALUES(2, 'Venta');
+INSERT INTO main_tipocambiostock(id, nombre) VALUES(3, 'Carta Canje');
 
+-- productos
 INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(1, 1105, '5 kilos', 5, 1);
 INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(2, 1111, '11 kilos', 11, 1);
 INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(3, 1115, '15 kilos', 15, 1);
@@ -35,7 +38,6 @@ INSERT INTO main_tipopago(id, nombre) VALUES(3, 'Cupón prepago');
 INSERT INTO main_tipopago(id, nombre) VALUES(4, 'Guía de despacho');
 
 -- tarjetas de credito
-
 INSERT INTO main_tipotarjeta(id, nombre) VALUES(1, 'tarjeta crédito');
 INSERT INTO main_tipotarjeta(id, nombre) VALUES(2, 'tarjeta debito');
 INSERT INTO main_tipotarjeta(id, nombre) VALUES(3, 'tarjeta casa comercial');
