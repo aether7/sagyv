@@ -10,13 +10,15 @@ class IndexView(TemplateView):
 		context["productos"] = Producto.objects.all()
 		return context
 
-def agregar_stock_compra(req):
+def update_stock_producto(req):
 	id_producto = req.POST.get("id")
 	num_factura = req.POST.get("num_fact")
 	stock_entra = req.POST.get("agregar_stock")
-
-	accion = TipoCambioStock.objects.get(pk = 1)
+	tipo_accion = req.POST.get("accion")
+	
+	accion = TipoCambioStock.objects.get(pk = tipo_accion)
 	producto = Producto.objects.get(pk = id_producto)
+	old_stock = producto.stock
 
 	hsp = HistorialStock()
 	hsp.producto = producto
@@ -24,12 +26,11 @@ def agregar_stock_compra(req):
 	hsp.factura = num_factura
 	hsp.save()
 
-	if producto.stock is None:
-		old_stock = 0
-	else:
-		old_stock = producto.stock
+	if tipo_accion == "1":
+		new_stock = int(old_stock) + int(stock_entra)
 	
-	new_stock = int(old_stock) + int(stock_entra)
+	if tipo_accion == "2":
+		new_stock = int(old_stock) - int(stock_entra)
 
 	producto.stock = new_stock
 	producto.save()
