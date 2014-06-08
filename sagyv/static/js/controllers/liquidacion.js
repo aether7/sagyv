@@ -6,6 +6,10 @@ App.Controllers.Liquidacion = function(){
 App.Controllers.Liquidacion.prototype = {
     constructor: App.Controllers.Liquidacion,
     init: function(){
+        this.sugerirEmpleados();
+    },
+
+    sugerirEmpleados: function(){
         var _this = this,
             empleadosSuggest;
 
