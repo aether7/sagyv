@@ -15,7 +15,7 @@ def update_stock_producto(req):
 	num_factura = req.POST.get("num_fact")
 	stock_entra = req.POST.get("agregar_stock")
 	tipo_accion = req.POST.get("accion")
-	
+
 	accion = TipoCambioStock.objects.get(pk = tipo_accion)
 	producto = Producto.objects.get(pk = id_producto)
 	old_stock = producto.stock
@@ -28,9 +28,8 @@ def update_stock_producto(req):
 
 	if tipo_accion == "1":
 		new_stock = int(old_stock) + int(stock_entra)
-	
-	if tipo_accion == "2":
-		new_stock = int(old_stock) - int(stock_entra)
+	elif tipo_accion == "2":
+		new_stock = int(old_stock) + int(stock_entra)
 
 	producto.stock = new_stock
 	producto.save()
