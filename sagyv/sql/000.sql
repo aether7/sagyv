@@ -9,25 +9,25 @@ INSERT INTO main_tipocambiostock(id, nombre) VALUES(2, 'Venta');
 INSERT INTO main_tipocambiostock(id, nombre) VALUES(3, 'Carta Canje');
 
 -- productos
-INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(1, 1105, '5 kilos', 5, 1);
-INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(2, 1111, '11 kilos', 11, 1);
-INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(3, 1115, '15 kilos', 15, 1);
-INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(4, 1145, '45 kilos', 45, 1);
-INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(5, 1215, 'Autogas Aluminio', 15, 1);
-INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(6, 1315, 'Autogas Fierro', 15, 1);
+INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id, stock) VALUES(1, 1105, '5 kilos', 5, 1, 0);
+INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id, stock) VALUES(2, 1111, '11 kilos', 11, 1, 0);
+INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id, stock) VALUES(3, 1115, '15 kilos', 15, 1, 0);
+INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id, stock) VALUES(4, 1145, '45 kilos', 45, 1, 0);
+INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id, stock) VALUES(5, 1215, 'Autogas Aluminio', 15, 1, 0);
+INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id, stock) VALUES(6, 1315, 'Autogas Fierro', 15, 1, 0);
 
-INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(7, 1405, '5 kilos', 5, 2);
-INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(8, 1411, '11 kilos', 11, 2);
-INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(9, 1415, '15 kilos', 15, 2);
-INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(10, 1445, '45 kilos', 45, 2);
-INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(11, 1515, 'Butano', 15, 2);
+INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id, stock) VALUES(7, 1405, '5 kilos', 5, 2, 0);
+INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id, stock) VALUES(8, 1411, '11 kilos', 11, 2, 0);
+INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id, stock) VALUES(9, 1415, '15 kilos', 15, 2, 0);
+INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id, stock) VALUES(10, 1445, '45 kilos', 45, 2, 0);
+INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id, stock) VALUES(11, 1515, 'Butano', 15, 2, 0);
 
-INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(12, 3105, '5 kilos', 5, 3);
-INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(13, 3111, '11 kilos', 11, 3);
-INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(14, 3115, '15 kilos', 15, 3);
-INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(15, 3145, '45 kilos', 45, 3);
-INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(16, 3215, 'Aluminio', 15, 3);
-INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id) VALUES(17, 3315, 'Fierro', 15, 3);
+INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id, stock) VALUES(12, 3105, '5 kilos', 5, 3, 0);
+INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id, stock) VALUES(13, 3111, '11 kilos', 11, 3, 0);
+INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id, stock) VALUES(14, 3115, '15 kilos', 15, 3, 0);
+INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id, stock) VALUES(15, 3145, '45 kilos', 45, 3, 0);
+INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id, stock) VALUES(16, 3215, 'Aluminio', 15, 3, 0);
+INSERT INTO main_producto(id, codigo, nombre, peso, tipo_producto_id, stock) VALUES(17, 3315, 'Fierro', 15, 3, 0);
 
 -- tipos de pago
 INSERT INTO main_tipopago(id, nombre) VALUES(1, 'Efectivo');

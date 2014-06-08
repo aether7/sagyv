@@ -199,7 +199,7 @@ class Producto(models.Model):
     nombre = models.CharField(max_length=140)
     peso = models.IntegerField(null=True)
     tipo_producto = models.ForeignKey(TipoProducto)
-    stock = models.IntegerField(null=True)
+    stock = models.IntegerField(default=0)
 
     def __unicode__(self):
         return str(self.codigo) + " " +self.nombre
@@ -214,6 +214,7 @@ class TipoCambioStock(models.Model):
 class HistorialStock(models.Model):
     producto = models.ForeignKey(Producto)
     cantidad = models.IntegerField()
+    factura = models.IntegerField()
     fecha = models.DateField(auto_now_add=True)
 
     def __unicode__(self):

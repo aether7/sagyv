@@ -34,11 +34,9 @@ App.Controllers.Bodega.prototype = {
 		}
 
 		if(valido){
-			$.post("/bodega/agregar_stock_compra/",{"id":id, "num_fact":num_fact.val(), "agregar_stock":agregar_stock.val()}, function(data){
-				alert(data);
-				
+			$.post("/panel-control/bodega/agregar_stock_compra/",{"id":id, "num_fact":num_fact.val(), "agregar_stock":agregar_stock.val()}, function(data){
 				setTimeout(function(){
-					$("#stock_"+id).text(agregar_stock.val());
+					$("#stock_"+id).text(data);
 					$("#"+type_).modal('toggle');
 				},2000);
 			})

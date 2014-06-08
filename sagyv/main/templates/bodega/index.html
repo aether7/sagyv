@@ -18,7 +18,7 @@
             <td>{{producto.codigo}}</td>
             <td>{{producto.peso}} Kilos</td>
             <td>{{producto.tipo_producto.nombre}}</td>
-            <td id="stock_{{producto.id}}"></td>
+            <td id="stock_{{producto.id}}">{{producto.stock}}</td>
             <td>
                 <button type="button" class="btn btn-xs" data-toggle="modal" onclick="App.BodegaController.showModal('modal_add',{{producto.id}});">
                     <span class="glyphicon glyphicon-plus"></span>
