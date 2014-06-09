@@ -7,6 +7,7 @@ App.Controllers.Liquidacion.prototype = {
     constructor: App.Controllers.Liquidacion,
     init: function(){
         this.sugerirEmpleados();
+        this.crearBalances();
     },
 
     sugerirEmpleados: function(){
@@ -34,6 +35,10 @@ App.Controllers.Liquidacion.prototype = {
         $("#busca_trabajador").on("typeahead:selected",function(){
             _this.seleccionarTrabajador($(this).val());
         });
+    },
+
+    crearBalances: function(){
+
     },
 
     addTrabajador: function(trabajador){

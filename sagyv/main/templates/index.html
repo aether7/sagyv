@@ -10,6 +10,7 @@
 
 <aside id="login">
     <form id="f_login" action="{% url 'login' %}" method="post" role="form">
+        {% csrf_token %}
         <div id="mensaje"></div>
         <div class="form-group">
             <label class="control-label" for="usuario">Usuario:</label>
