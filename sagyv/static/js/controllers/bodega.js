@@ -5,7 +5,7 @@ App.Controllers.Bodega = function(){
 App.Controllers.Bodega.prototype = {
 	constructor: App.Controllers.Bodega,
 	init: function(){
-	
+
 	},
 
 	showModal: function(type_,id){
@@ -33,7 +33,7 @@ App.Controllers.Bodega.prototype = {
 		}
 
 		if(valido){
-			$.post("/panel-control/bodega/update_stock_producto/",{"id":id, "num_fact":num_fact.val(), "agregar_stock":agregar_stock.val(), "accion":1}, function(data){
+			$.post($("#f_add").attr("action"),{"id":id, "num_fact":num_fact.val(), "agregar_stock":agregar_stock.val(), "accion":1}, function(data){
 				setTimeout(function(){
 					$("#stock_"+id).text(data);
 					$("#"+type_).modal('toggle');
@@ -41,13 +41,13 @@ App.Controllers.Bodega.prototype = {
 			})
 		}
 	},
-	
+
 	venta : function(type_){
 		var num_fact = $("#factura_edit"),
 		agregar_stock = $("#cantidad_edit"),
 		id = $("#modal_edit_id").val(),
 		valido = true;
-		
+
 		num_fact.parent().removeClass("has-error");
 		agregar_stock.parent().removeClass("has-error");
 
@@ -62,7 +62,7 @@ App.Controllers.Bodega.prototype = {
 		}
 
 		if(valido){
-			$.post("/panel-control/bodega/update_stock_producto/",{"id":id, "num_fact":num_fact.val(), "agregar_stock":agregar_stock.val(), "accion":2}, function(data){
+			$.post($("#f_edit").attr("action"),{"id":id, "num_fact":num_fact.val(), "agregar_stock":agregar_stock.val(), "accion":2}, function(data){
 				setTimeout(function(){
 					$("#stock_"+id).text(data);
 					$("#"+type_).modal('toggle');
