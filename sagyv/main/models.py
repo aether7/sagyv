@@ -382,3 +382,12 @@ class DetalleCierre(models.Model):
 
     def get_valor_total(self):
         return self.valor_venta - self.valor_anuladas
+
+
+class PrecioProducto(models.Model):
+    producto = models.ForeignKey(Producto)
+    precio = models.IntegerField(null=True)
+    fecha = models.DateField(auto_now_add=True)
+
+    def __unicode__(self):
+        return str(self.precio)
