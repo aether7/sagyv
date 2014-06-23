@@ -1,73 +1,78 @@
 App.Controllers.Bodega = function(){
-
-}
+    this.AGREGAR = 1;
+    this.VENDER = 2;
+    this.modo = null;
+    this.mensaje = $("#mensaje");
+    this.numFact = $("#factura_add");
+    this.agregarStock = $("#cantidad_add");
+    this.id = null;
+};
 
 App.Controllers.Bodega.prototype = {
-	constructor: App.Controllers.Bodega,
-	init: function(){
+    constructor: App.Controllers.Bodega,
+    init: function(){
 
-	},
+    },
 
-	showModal: function(type_,id){
-		$("#"+type_+"_id").val(id);
-		$("#"+type_).modal('toggle');
-	},
+    showModal: function(id, modo){
+        this.modo = modo;
 
-	adquisicion : function(type_){
-		var num_fact = $("#factura_add"),
-		agregar_stock = $("#cantidad_add"),
-		id = $("#modal_add_id").val(),
-		valido = true;
+        $(".has-error").removeClass("has-error");
+        $(".help-block").text("");
 
-		num_fact.parent().removeClass("has-error");
-		agregar_stock.parent().removeClass("has-error");
+        $("#modal_add_id").val(id);
+        $("#modal_add").modal('toggle');
 
-		if(num_fact.val().trim() === "" || isNaN(num_fact.val())){
-			valido = false;
-			num_fact.parent().addClass("has-error");
-		}
+        $("#f_add").get(0).reset();
+    },
 
-		if(agregar_stock.val().trim() === "" || isNaN(agregar_stock.val())){
-			valido = false;
-			agregar_stock.parent().addClass("has-error");
-		}
+    accion: function(){
+        var json, valido = true;
+        this.id = $("#modal_add_id").val();
 
-		if(valido){
-			$.post($("#f_add").attr("action"),{"id":id, "num_fact":num_fact.val(), "agregar_stock":agregar_stock.val(), "accion":1}, function(data){
-				setTimeout(function(){
-					$("#stock_"+id).text(data);
-					$("#"+type_).modal('toggle');
-				},2000);
-			})
-		}
-	},
+        $(".has-error").removeClass("has-error");
 
-	venta : function(type_){
-		var num_fact = $("#factura_edit"),
-		agregar_stock = $("#cantidad_edit"),
-		id = $("#modal_edit_id").val(),
-		valido = true;
+        if(this.numFact.val().trim() === "" || isNaN(this.numFact.val())){
+            valido = false;
+            this.numFact.siblings("span.help-block").text("Campo obligatorio");
+            this.numFact.parent().addClass("has-error");
+        }
 
-		num_fact.parent().removeClass("has-error");
-		agregar_stock.parent().removeClass("has-error");
+        if(this.agregarStock.val().trim() === "" || isNaN(this.agregarStock.val())){
+            valido = false;
+            this.agregarStock.siblings("span.help-block").text("Campo obligatorio");
+            this.agregarStock.parent().addClass("has-error");
+        }
 
-		if(num_fact.val().trim() === "" || isNaN(num_fact.val())){
-			valido = false;
-			num_fact.parent().addClass("has-error");
-		}
+        if(!valido){
+            return;
+        }
 
-		if(agregar_stock.val().trim() === "" || isNaN(agregar_stock.val())){
-			valido = false;
-			agregar_stock.parent().addClass("has-error");
-		}
+        $("#ajax_load").css("visibility","visible");
 
-		if(valido){
-			$.post($("#f_edit").attr("action"),{"id":id, "num_fact":num_fact.val(), "agregar_stock":agregar_stock.val(), "accion":2}, function(data){
-				setTimeout(function(){
-					$("#stock_"+id).text(data);
-					$("#"+type_).modal('toggle');
-				},2000);
-			})
-		}
-	}
+        json = {
+            id : this.id,
+            num_fact : this.numFact.val(),
+            agregar_stock : this.agregarStock.val(),
+            accion : this.modo
+        };
+
+        $.post($("#f_add").attr("action"), json, this.procesarData());
+    },
+
+    procesarData: function(id){
+        var _this = this;
+
+        return function(data){
+            _this.mensaje.addClass("alert-success").show().text("Los cambios han sido guardados exitosamente");
+
+            $("#ajax_load").css("visibility","hidden");
+            $("#stock_" + _this.id).text(data);
+            $("#modal_add").modal('toggle');
+
+            setTimeout(function(){
+                _this.mensaje.removeClass("alert-success").hide().text("");
+            },2500);
+        };
+    }
 }

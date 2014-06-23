@@ -1,10 +1,12 @@
 {% extends "panel_control.html" %}
 {% load static %}
 {% block content %}
+
+<div id="mensaje" class="center alert" style="display:none"></div>
+
 <div class="panel panel-default">
-	<div class="panel-heading">
-		Bodega
-	</div>
+	<div class="panel-heading">Bodega</div>
+
 	<table class="table center">
 		<tr>
 			<td>codigo</td>
@@ -15,15 +17,17 @@
 		</tr>
         {% for producto in productos  %}
         <tr>
-            <td>{{producto.codigo}}</td>
-            <td>{{producto.peso}} Kilos</td>
-            <td>{{producto.tipo_producto.nombre}}</td>
-            <td id="stock_{{producto.id}}">{{producto.stock}}</td>
+            <td>{{ producto.codigo }}</td>
+            <td>{{ producto.peso }} Kilos</td>
+            <td>{{ producto.tipo_producto.nombre }}</td>
+            <td id="stock_{{ producto.id }}">{{ producto.stock }}</td>
             <td>
-                <button type="button" class="btn btn-xs" data-toggle="modal" onclick="App.BodegaController.showModal('modal_add',{{producto.id}});">
+                <button type="button" class="btn btn-xs" data-toggle="modal"
+                    onclick="App.bodegaController.showModal({{ producto.id }}, 1);">
                     <span class="glyphicon glyphicon-plus"></span>
                 </button>
-                <button type="button" class="btn btn-xs" data-toggle="modal" onclick="App.BodegaController.showModal('modal_edit',{{producto.id}});">
+                <button type="button" class="btn btn-xs" data-toggle="modal"
+                    onclick="App.bodegaController.showModal({{ producto.id }}, 2);">
                     <span class="glyphicon glyphicon-edit"></span>
                 </button>
             </td>
@@ -32,70 +36,13 @@
 	</table>
 </div>
 
-<div id="modal_add" class="modal fade">
-    <form id="f_add" action="{% url 'update_stock_producto' %}" method="post">
-    {% csrf_token %}
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Compra de producto</h4>
-            </div>
-            <div class="modal-body">
-                <div id="mensaje"></div>
-                <input id="modal_add_id" type="hidden">
-                <div class="input-group input-group-sm">
-                    <span class="input-group-addon">factura</span>
-                    <input id="factura_add" type="text" class="form-control" placeholder="" />
-                </div>
-                <div class="input-group input-group-sm">
-                    <span class="input-group-addon">Cantidad</span>
-                    <input id="cantidad_add" type="text" class="form-control" placeholder="" />
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="App.BodegaController.adquisicion('modal_add');">Save changes</button>
-            </div>
-        </div>
-    </div>
-    </form>
-</div>
+{% include "components/modal_bodega.html" with modo="add"  %}
 
-<div id="modal_edit" class="modal fade">
-    <form id="f_edit" action="{% url 'update_stock_producto' %}" method="post">
-    {% csrf_token %}
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Venta de producto</h4>
-            </div>
-            <div class="modal-body">
-                <div id="mensaje"></div>
-                <input id="modal_edit_id" type="hidden">
-                <div class="input-group input-group-sm">
-                    <span class="input-group-addon">factura</span>
-                    <input id="factura_edit" type="text" class="form-control" placeholder="">
-                </div>
-                <div class="input-group input-group-sm">
-                    <span class="input-group-addon">Cantidad</span>
-                    <input id="cantidad_edit" type="text" class="form-control" placeholder="">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="App.BodegaController.venta('modal_edit');">Save changes</button>
-            </div>
-        </div>
-    </div>
-    </form>
-</div>
 {% endblock %}
 {% block js %}
 <script src="{% static 'js/controllers/bodega.js' %}"></script>
 <script>
-    App.BodegaController = new App.Controllers.Bodega();
-    App.BodegaController.init();
+    App.bodegaController = new App.Controllers.Bodega();
+    App.bodegaController.init();
 </script>
 {% endblock %}
