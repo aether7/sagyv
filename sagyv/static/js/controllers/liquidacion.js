@@ -10,6 +10,40 @@ App.Controllers.Liquidacion.prototype = {
         this.crearBalances();
     },
 
+    showModal: function(id){
+        $("#cantidad").val('');
+        $("#id_obj").val(id);
+        $("#modal").modal('toggle');
+    },
+
+    guardar: function(){
+        var cantidad = parseInt($("#cantidad").val().trim()), 
+            id = $("#id_obj").val(), 
+            flag = true,
+            total = parseInt($("#id_initial_"+id).text()), // - parseInt($("#id_gastado_" + id).text());
+            cantidadActual = parseInt($("#id_actual_"+id).text())
+        
+        if( isNaN(cantidad) ){
+            flag = false;
+            msj_error = "Ingrese un numero";
+        }
+        
+        if( ( total < cantidad) && flag ){
+            flag = false;
+            msj_error = "La cantidad es muy alta";
+        }
+        cantidadActual = cantidad + cantidadActual;
+        resta = total - cantidadActual;
+            
+        if(flag){
+            $("#id_actual_" + id).text(cantidadActual);
+            $("#id_gastado_" + id).text(total - cantidadActual);
+            $("#modal").modal('toggle');
+        }else{
+            alert(msj_error);
+        }
+    },
+
     sugerirEmpleados: function(){
         var _this = this,
             empleadosSuggest;

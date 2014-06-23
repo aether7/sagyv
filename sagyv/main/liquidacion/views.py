@@ -1,6 +1,6 @@
 import json
 from django.views.generic import TemplateView,View
-from main.models import Trabajador
+from main.models import Trabajador, Producto
 
 class IndexView(TemplateView):
     template_name = "liquidacion/index.html"
@@ -17,6 +17,7 @@ class IndexView(TemplateView):
                 "nombre_completo" : trabajador.get_nombre_completo()
             }))
 
+        context["productos"] = Producto.objects.all()
         return context
 
 index = IndexView.as_view()
