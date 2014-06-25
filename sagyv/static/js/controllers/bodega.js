@@ -5,6 +5,7 @@ App.Controllers.Bodega = function(){
     this.mensaje = $("#mensaje");
     this.numFact = $("#factura_add");
     this.agregarStock = $("#cantidad_add");
+    this.tituloModal = $("#titulo_modal");
     this.id = null;
 };
 
@@ -15,7 +16,16 @@ App.Controllers.Bodega.prototype = {
     },
 
     showModal: function(id, modo){
+        var textoModal = null;
         this.modo = modo;
+
+        if(this.modo === this.AGREGAR){
+            textoModal = "Compra de producto";
+        }else if(this.modo === this.VENDER){
+            textoModal = "Venta de producto";
+        }
+
+        this.tituloModal.text(textoModal);
 
         $(".has-error").removeClass("has-error");
         $(".help-block").text("");
