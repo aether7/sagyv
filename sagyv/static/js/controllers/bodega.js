@@ -6,6 +6,7 @@ App.Controllers.Bodega = function(){
     this.numFact = $("#factura_add");
     this.agregarStock = $("#cantidad_add");
     this.tituloModal = $("#titulo_modal");
+    this.cantidadActual = null;
     this.id = null;
 };
 
@@ -26,6 +27,7 @@ App.Controllers.Bodega.prototype = {
         }
 
         this.tituloModal.text(textoModal);
+        this.cantidadActual = parseInt($("#stock_" + id).text());
 
         $(".has-error").removeClass("has-error");
         $(".help-block").text("");
@@ -37,7 +39,9 @@ App.Controllers.Bodega.prototype = {
     },
 
     accion: function(){
-        var json, valido = true;
+        var json,
+            cantidad = this.agregarStock.val(),
+            valido = true;
         this.id = $("#modal_add_id").val();
 
         $(".has-error").removeClass("has-error");
@@ -46,11 +50,23 @@ App.Controllers.Bodega.prototype = {
             valido = false;
             this.numFact.siblings("span.help-block").text("Campo obligatorio");
             this.numFact.parent().addClass("has-error");
+        }else if( parseInt(this.numFact.val()) <= 0 ){
+            valido = false;
+            this.numFact.siblings("span.help-block").text("El numero de factura no puede ser menor que 1");
+            this.numFact.parent().addClass("has-error");
         }
 
-        if(this.agregarStock.val().trim() === "" || isNaN(this.agregarStock.val())){
+        if(cantidad.trim() === "" || isNaN(cantidad)){
             valido = false;
             this.agregarStock.siblings("span.help-block").text("Campo obligatorio");
+            this.agregarStock.parent().addClass("has-error");
+        }else if( parseInt(this.agregarStock.val()) <= 0 ){
+            valido = false;
+            this.agregarStock.siblings("span.help-block").text("El stock a ingresar no puede ser menor a 1");
+            this.agregarStock.parent().addClass("has-error");
+        }else if(parseInt(cantidad) > this.cantidadActual && this.modo === this.VENDER){
+            valido = false;
+            this.agregarStock.siblings("span.help-block").text("La cantidad a quitar es mayor que el monto actual");
             this.agregarStock.parent().addClass("has-error");
         }
 
