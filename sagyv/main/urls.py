@@ -7,5 +7,6 @@ urlpatterns = patterns("main.views",
 urlpatterns += patterns("",
     url(r"^liquidacion/",include("main.liquidacion.urls")),
     url(r"^bodega/",include("main.bodega.urls")),
-    url(R"^cliente/",include("main.cliente.urls")),
+    url(r"^cliente/",include("main.cliente.urls")),
+    url(r"^vehiculos/",include("main.vehiculos.urls")),
 )
