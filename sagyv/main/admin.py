@@ -22,7 +22,7 @@ class TipoProductoAdmin(admin.ModelAdmin):
     ordering = ("id",)
 
 class ProductoAdmin(admin.ModelAdmin):
-    list_display = ("id", "codigo", "nombre", "peso", "tipo_producto",)
+    list_display = ("id", "codigo", "nombre", "peso", "tipo_producto", "stock",)
     list_editable = ("codigo", "nombre", "peso", "tipo_producto",)
     ordering = ("id",)
 

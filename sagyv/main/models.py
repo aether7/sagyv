@@ -204,6 +204,15 @@ class Producto(models.Model):
     def __unicode__(self):
         return str(self.codigo) + " " +self.nombre
 
+    def get_precio_producto(self):
+        ultimo_precio = PrecioProducto.objects.filter(producto_id=self.id).order_by("-fecha")
+        precio = 0
+
+        if len(ultimo_precio) >= 1:
+            precio = ultimo_precio[0].precio
+
+        return str(precio)
+
 
 class TipoCambioStock(models.Model):
     nombre = models.CharField(max_length=140)

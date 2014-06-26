@@ -12,6 +12,7 @@ App.Controllers.Bodega = function(){
 
 App.Controllers.Bodega.prototype = {
     constructor: App.Controllers.Bodega,
+
     init: function(){
 
     },
@@ -42,11 +43,12 @@ App.Controllers.Bodega.prototype = {
         var json,
             cantidad = this.agregarStock.val(),
             valido = true;
+
         this.id = $("#modal_add_id").val();
 
         $(".has-error").removeClass("has-error");
 
-        if(this.numFact.val().trim() === "" || isNaN(this.numFact.val())){
+        if(!type.isNumber(parseInt(this.numFact.val()))){
             valido = false;
             this.numFact.siblings("span.help-block").text("Campo obligatorio");
             this.numFact.parent().addClass("has-error");
@@ -56,7 +58,7 @@ App.Controllers.Bodega.prototype = {
             this.numFact.parent().addClass("has-error");
         }
 
-        if(cantidad.trim() === "" || isNaN(cantidad)){
+        if(!type.isNumber(parseInt(cantidad))){
             valido = false;
             this.agregarStock.siblings("span.help-block").text("Campo obligatorio");
             this.agregarStock.parent().addClass("has-error");

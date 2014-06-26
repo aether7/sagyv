@@ -13,6 +13,7 @@
 			<td>Peso</td>
 			<td>Tipo</td>
 			<td>Stock</td>
+            <td>Precio actual</td>
 			<td>acciones</td>
 		</tr>
         {% for producto in productos  %}
@@ -21,14 +22,20 @@
             <td>{{ producto.peso }} Kilos</td>
             <td>{{ producto.tipo_producto.nombre }}</td>
             <td id="stock_{{ producto.id }}">{{ producto.stock }}</td>
+            <td>$ {{ producto.get_precio_producto }}</td>
             <td>
                 <button type="button" class="btn btn-xs" data-toggle="modal"
                     onclick="App.bodegaController.showModal({{ producto.id }}, 1);">
                     <span class="glyphicon glyphicon-plus" title="agregar stock"></span>
                 </button>
+
                 <button type="button" class="btn btn-xs" data-toggle="modal"
                     onclick="App.bodegaController.showModal({{ producto.id }}, 2);">
-                    <span class="glyphicon glyphicon-edit" title="retirar stock"></span>
+                    <span class="glyphicon glyphicon-minus" title="retirar stock"></span>
+                </button>
+
+                 <button type="button" class="btn btn-xs" data-toggle="modal">
+                    <span class="glyphicon glyphicon-usd" title="actualizar precio"></span>
                 </button>
             </td>
         </tr>
@@ -37,6 +44,8 @@
 </div>
 
 {% include "components/modal_bodega.html" with modo="add"  %}
+
+
 
 {% endblock %}
 {% block js %}

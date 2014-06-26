@@ -19,3 +19,44 @@ App.cookies = {};
         }
     });
 })();
+
+
+(function(context){
+"use strict";
+
+var paramTypes = [
+    "Null", "Undefined", "Array",
+    "Object", "Number", "Boolean",
+    "RegExp", "Function", "Element",
+    "NaN", "Infinity", "Date"
+];
+
+function type(obj){
+    var str = {}.toString.call(obj),
+        argType = str.match(/\[object (\w*?)\]/)[1].toLowerCase();
+
+    if(obj && (obj.nodeType === 1 || obj.nodeType === 9)){
+        return "element";
+    }
+
+    if(argType === "number"){
+        if(isNaN(obj)){
+            return "nan";
+        }else if(!isFinite(obj)){
+            return "infinity";
+        }
+    }
+
+    return argType;
+}
+
+for(var i = 0; i < paramTypes.length; i++){
+    type["is" + paramTypes[i]] = (function(i){
+        return function(obj){
+            return type(obj) === paramTypes[i].toLowerCase();
+        };
+    })(i);
+}
+
+window.type = type;
+})(window);
