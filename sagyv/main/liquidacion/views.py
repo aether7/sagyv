@@ -20,4 +20,29 @@ class IndexView(TemplateView):
         context["productos"] = Producto.objects.all()
         return context
 
+
+class ValanceLiquidacionView(View):
+    
+    def post(self, req):
+        guia_despacho = req.POST.get('guia_despacho')
+        id_trabajador = req.POST.get('id_trabajador')
+        productos_json = req.POST.get('productos')
+
+        #######################################
+        # productos:[{id:10, cantidad:11},..] #
+        #######################################
+        productos = json.loads(productos_json)
+        valor_total = 0
+
+        for producto in productos:
+            obj_producto = Producto.objects.get(pk = producto.id)
+            precio = obj_producto.get_precio_producto()
+            valor_tmp = precio * producto.cantidad
+            valor_total += valor_tmp
+
+        dato = {'valor':valor_total}
+        return HttpResponse(json.dumps(dato), content_type="application/json");
+
+
 index = IndexView.as_view()
+valance_liquidacion = ValanceLiquidacionView()
