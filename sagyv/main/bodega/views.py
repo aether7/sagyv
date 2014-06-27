@@ -12,6 +12,7 @@ class IndexView(TemplateView):
 
 
 class UpdateStockProductoView(View):
+
     def POST(self,req):
         id_producto = req.POST.get("id")
         num_factura = req.POST.get("num_fact")
