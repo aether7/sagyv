@@ -46,4 +46,4 @@ class UpdatePrecioProductoView(View):
 
 index = IndexView.as_view()
 update_stock_producto = UpdateStockProductoView.as_view()
-update_precio_producto = UpdatePrecioProducto.as_view()
+update_precio_producto = UpdatePrecioProductoView.as_view()
