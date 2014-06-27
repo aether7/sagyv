@@ -21,7 +21,7 @@ class IndexView(TemplateView):
         return context
 
 
-class ValanceLiquidacionView(View):
+class balanceLiquidacionView(View):
     
     def post(self, req):
         guia_despacho = req.POST.get('guia_despacho')
@@ -45,4 +45,4 @@ class ValanceLiquidacionView(View):
 
 
 index = IndexView.as_view()
-valance_liquidacion = ValanceLiquidacionView()
+balance_liquidacion = balanceLiquidacionView()
