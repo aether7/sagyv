@@ -39,11 +39,9 @@ class BalanceLiquidacionView(View):
             producto = Producto.objects.get(pk = obj["id"])
             precio = producto.get_precio_producto()
             valor_tmp = precio * int(obj["cantidad"])
-            valor_total += int(valor_tmp)
+            valor_total += valor_tmp
 
         dato = {'valor': valor_total}
-
-        print "VALOR TOTAL " + str(valor_total)
 
         return HttpResponse(json.dumps(dato), content_type="application/json");
 
