@@ -12,7 +12,7 @@ class IndexView(TemplateView):
 
 
 class UpdateStockProductoView(View):
-    def POST(self,req):
+    def post(self,req):
         id_producto = req.POST.get("id")
         num_factura = req.POST.get("num_fact")
         stock_entra = req.POST.get("agregar_stock")
@@ -40,7 +40,7 @@ class UpdateStockProductoView(View):
 
 
 class UpdatePrecioProductoView(View):
-    def POST(req):
+    def post(self,req):
         id_producto = req.POST.get('id')
         precio = req.POST.get('precio')
 
