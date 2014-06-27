@@ -1,6 +1,6 @@
 from django.views.generic import TemplateView,View
 from django.http import HttpResponse
-from main.models import Producto, TipoCambioStock, HistorialStock
+from main.models import Producto, TipoCambioStock, HistorialStock, PrecioProducto
 
 class IndexView(TemplateView):
     template_name = "bodega/index.html"
@@ -41,7 +41,17 @@ class UpdateStockProductoView(View):
 
 class UpdatePrecioProductoView(View):
     def POST(req):
-        return HttpResponse("asdfasdf")
+        id_producto = req.POST.get('id')
+        precio = req.POST.get('precio')
+
+        producto = Producto.objects.get(pk = id_producto)
+
+        pp = PrecioProducto()
+        pp.producto = producto
+        pp.precio = precio
+        pp.save()
+
+        return HttpResponse(precio);
 
 
 index = IndexView.as_view()
