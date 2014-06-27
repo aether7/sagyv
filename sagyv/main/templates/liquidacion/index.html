@@ -18,7 +18,7 @@
 
             <div id="stock_inicial" class="col-md-4 list-group">
                 {% for producto in productos %}
-                    <a href="#" class="list-group-item" data-cantidad="{{producto.stock}}">
+                    <a href="javascript:;" class="list-group-item" data-cantidad="{{producto.stock}}">
                         {{ producto.codigo }} - {{ producto.tipo_producto.nombre }} ({{ producto.peso }} Kg)
                         <span class="badge" id="id_initial_{{producto.id}}">{{producto.stock}}</span>
                     </a>
@@ -27,7 +27,7 @@
 
             <div id="stock_actual" class="col-md-4 list-group">
                 {% for producto in productos %}
-                    <a href="#" class="list-group-item"
+                    <a href="javascript:;" class="list-group-item"
                         onclick="App.liquidacionController.showModal({{producto.id}})" data-cantidad="0">
                         {{ producto.codigo }} - {{ producto.tipo_producto.nombre }} ({{ producto.peso}} Kg)
                         <span class="badge" id="id_actual_{{producto.id}}">0</span>
@@ -37,7 +37,7 @@
 
             <div id="stock_gastado" class="col-md-4">
                 {% for producto in productos %}
-                    <a href="#" class="list-group-item" data-cantidad="0">
+                    <a href="javascript:;" class="list-group-item" data-cantidad="0">
                         {{ producto.codigo }} - {{ producto.tipo_producto.nombre }} ({{ producto.peso }} Kg)
                         <span class="badge" id="id_gastado_{{producto.id}}">0</span>
                     </a>
@@ -49,22 +49,23 @@
             <button class="btn btn-primary">Guardar Liquidación</button>
         </article>
     </section>
-<!--upgrade post -->
+
     <div id="modal" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Some Tittle</h4>
+                    <h4 class="modal-title">Cantidad utilizada</h4>
                 </div>
+
                 <div class="modal-body">
-                    <input type="hidden" id="id_obj" />
                     <div class="form-group">
                         <label class="control-label" for="cantidad">Cantidad:</label>
                         <input id="cantidad" type="text" class="form-control" />
                         <span class="help-block"></span>
                     </div>
                 </div>
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                     <button type="button" class="btn btn-primary"
