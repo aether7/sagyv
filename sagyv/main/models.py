@@ -205,7 +205,7 @@ class Producto(models.Model):
         return str(self.codigo) + " " +self.nombre
 
     def get_precio_producto(self):
-        ultimo_precio = PrecioProducto.objects.filter(producto_id=self.id).order_by("-fecha")
+        ultimo_precio = PrecioProducto.objects.filter(producto_id=self.id).order_by("-id")
         precio = 0
 
         if len(ultimo_precio) >= 1:
@@ -400,3 +400,12 @@ class PrecioProducto(models.Model):
 
     def __unicode__(self):
         return str(self.precio)
+
+
+class StockVehiculo(models.Model):
+    vehiculo = models.ForeignKey(Vehiculo)
+    producto = models.ForeignKey(Producto)
+    cantidad = models.IntegerField(null=True)
+
+    def __unicode__(self):
+        return str(self.vehiculo.patente) + " -> (cod " + (self.producto.codigo) + ": " + str(self.cantidad) + ")"
