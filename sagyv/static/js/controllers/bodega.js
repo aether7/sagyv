@@ -146,6 +146,7 @@ App.Controllers.Bodega.prototype = {
         var _this = this;
 
         return function(data){
+        	console.log(data);
             $("#precio_" + _this.id).text(_this.precio.val());
             $("#modal_precio").modal("toggle");
             _this.agregarMensaje("Precio actualizado");

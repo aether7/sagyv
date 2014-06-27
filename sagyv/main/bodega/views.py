@@ -1,3 +1,4 @@
+import json
 from django.views.generic import TemplateView,View
 from django.http import HttpResponse
 from main.models import Producto, TipoCambioStock, HistorialStock, PrecioProducto
@@ -50,8 +51,10 @@ class UpdatePrecioProductoView(View):
         pp.producto = producto
         pp.precio = precio
         pp.save()
-
-        return HttpResponse(precio);
+        dato = {"precio": precio}
+        
+        json.dumps(dato)
+        return HttpResponse(dato, content_type="application/json");
 
 
 index = IndexView.as_view()
