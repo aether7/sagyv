@@ -128,5 +128,9 @@ App.Controllers.Liquidacion.prototype = {
                 cantidad : parseInt(this.dataset.cantidad)
             });
         });
+
+        $.post($("#balance_liquidacion").val(), json, function(data){
+            console.log(data);
+        });
     }
 };
