@@ -8,6 +8,16 @@ App.Controllers.Liquidacion = function(){
 App.Controllers.Liquidacion.prototype = {
     constructor: App.Controllers.Liquidacion,
     init: function(){
+        var _this = this;
+
+        $("#btn_guardar_liquidacion").on("click",function(){
+            _this.guardarLiquidacion();
+        });
+
+        $("#btn_actualizar_venta").on("click",function(){
+            _this.actualizarVenta();
+        });
+
         this.sugerirEmpleados();
         this.crearBalances();
     },
@@ -21,7 +31,7 @@ App.Controllers.Liquidacion.prototype = {
         $("#modal").modal("toggle");
     },
 
-    guardar: function(){
+    actualizarVenta: function(){
         var valido = true,
             inicial = parseInt($("#id_initial_" + this.id).text()),
             actual = $("#id_actual_" + this.id),
@@ -45,8 +55,13 @@ App.Controllers.Liquidacion.prototype = {
             return;
         }
 
+        actual.parent().
+            data("cantidad",this.cantidad.val()).
+            attr("data-cantidad", this.cantidad.val());
+
         actual.text(this.cantidad.val());
-        $("#id_gastado_" + this.id).text(inicial - cantidad);
+
+        $("#id_gastado_" + this.id).text(inicial - cantidad).data("cantidad");
         $("#modal").modal("toggle");
     },
 
@@ -92,8 +107,26 @@ App.Controllers.Liquidacion.prototype = {
         this.empleados.forEach(function(trabajador){
             if(trabajador.nombre_completo === nombreTrabajador){
                 _this.empleadoElegido = trabajador;
-                $("#guia_despacho").val(_.random(1000,3500));
             }
+        });
+    },
+
+    guardarLiquidacion: function(){
+        var json = {
+            guia_despacho : parseInt($("#guia_despacho").val()),
+            id_trabajador : this.empleadoElegido.id,
+            productos : []
+        };
+
+        $("[data-producto=true]").each(function(){
+            if(parseInt(this.dataset.cantidad) < 1){
+                return;
+            }
+
+            json.productos.push({
+                id : parseInt(this.dataset.id),
+                cantidad : parseInt(this.dataset.cantidad)
+            });
         });
     }
 };

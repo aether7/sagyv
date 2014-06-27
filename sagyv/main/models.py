@@ -400,3 +400,12 @@ class PrecioProducto(models.Model):
 
     def __unicode__(self):
         return str(self.precio)
+
+
+class StockVehiculo(models.Model):
+    vehiculo = models.ForeignKey(Vehiculo)
+    producto = models.ForeignKey(Producto)
+    cantidad = models.IntegerField(null=True)
+
+    def __unicode__(self):
+        return str(self.vehiculo.patente) + " -> (cod " + (self.producto.codigo) + ": " + str(self.cantidad) + ")"

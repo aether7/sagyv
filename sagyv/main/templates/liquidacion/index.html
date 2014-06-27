@@ -4,12 +4,12 @@
 {% block content %}
     <section class="container">
         <article class="pull-right">
-            Guía # : <input id="guia_despacho" type="text" value="" readonly />
+            Guía # : <input id="guia_despacho" type="text" value="" />
         </article>
 
         <article class="pull-right">
             <input id="busca_trabajador" type="search" value="" placeholder="Nombre trabajador" />
-            <button><span class="glyphicon glyphicon-search"></span></button>
+            <span class="glyphicon glyphicon-search"></span>
         </article>
     </section>
 
@@ -20,7 +20,7 @@
                 {% for producto in productos %}
                     <a href="javascript:;" class="list-group-item" data-cantidad="{{producto.stock}}">
                         {{ producto.codigo }} - {{ producto.tipo_producto.nombre }} ({{ producto.peso }} Kg)
-                        <span class="badge" id="id_initial_{{producto.id}}">{{producto.stock}}</span>
+                        <span class="badge" id="id_initial_{{producto.id}}">{{ producto.stock }}</span>
                     </a>
                 {% endfor %}
             </div>
@@ -28,9 +28,10 @@
             <div id="stock_actual" class="col-md-4 list-group">
                 {% for producto in productos %}
                     <a href="javascript:;" class="list-group-item"
-                        onclick="App.liquidacionController.showModal({{producto.id}})" data-cantidad="0">
-                        {{ producto.codigo }} - {{ producto.tipo_producto.nombre }} ({{ producto.peso}} Kg)
-                        <span class="badge" id="id_actual_{{producto.id}}">0</span>
+                        onclick="App.liquidacionController.showModal({{ producto.id }})"
+                        data-cantidad="0" data-id="{{ producto.id }}" data-producto="true">
+                        {{ producto.codigo }} - {{ producto.tipo_producto.nombre }} ({{ producto.peso }} Kg)
+                        <span class="badge" id="id_actual_{{ producto.id }}">0</span>
                     </a>
                 {% endfor %}
             </div>
@@ -39,14 +40,14 @@
                 {% for producto in productos %}
                     <a href="javascript:;" class="list-group-item" data-cantidad="0">
                         {{ producto.codigo }} - {{ producto.tipo_producto.nombre }} ({{ producto.peso }} Kg)
-                        <span class="badge" id="id_gastado_{{producto.id}}">0</span>
+                        <span class="badge" id="id_gastado_{{ producto.id }}">0</span>
                     </a>
                 {% endfor %}
             </div>
         </article>
 
         <article class="row center">
-            <button class="btn btn-primary">Guardar Liquidación</button>
+            <button id="btn_guardar_liquidacion" class="btn btn-primary">Guardar Liquidación</button>
         </article>
     </section>
 
@@ -68,8 +69,7 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary"
-                        onclick="App.liquidacionController.guardar();">Guardar</button>
+                    <button id="btn_actualizar_venta" type="button" class="btn btn-primary">Guardar</button>
                 </div>
             </div>
         </div>
