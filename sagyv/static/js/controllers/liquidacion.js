@@ -132,7 +132,7 @@ App.Controllers.Liquidacion.prototype = {
         json.productos = JSON.stringify(json.productos);
 
         $.post($("#balance_liquidacion").val(), json, function(data){
-            console.log(data);
+            alert("el monto total a cobrar es : " + data.valor);
         });
     }
 };
