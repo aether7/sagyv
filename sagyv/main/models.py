@@ -211,7 +211,7 @@ class Producto(models.Model):
         if len(ultimo_precio) >= 1:
             precio = ultimo_precio[0].precio
 
-        return str(precio)
+        return precio
 
 
 class TipoCambioStock(models.Model):

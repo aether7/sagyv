@@ -1,5 +1,5 @@
 import json
-from django.http.response import HttpResponse
+from django.http import HttpResponse
 from django.views.generic import TemplateView,View
 from main.models import Trabajador, Producto
 
@@ -23,7 +23,6 @@ class IndexView(TemplateView):
 
 
 class BalanceLiquidacionView(View):
-    
     def post(self, req):
 
         guia_despacho = req.POST.get('guia_despacho')
@@ -36,16 +35,16 @@ class BalanceLiquidacionView(View):
         productos = json.loads(productos_json)
         valor_total = 0
 
-        for producto in productos:
-
-            obj_producto = Producto.objects.get(pk = producto.id)
-            precio = obj_producto.get_precio_producto()
-            valor_tmp = precio * producto.cantidad
+        for obj in productos:
+            producto = Producto.objects.get(pk = obj["id"])
+            precio = producto.get_precio_producto()
+            valor_tmp = precio * int(obj["cantidad"])
             valor_total += valor_tmp
 
-        dato = {'valor':valor_total}
-        return HttpResponse(json.dumps(dato), content_type="application/json")
+        dato = {'valor': valor_total}
+
+        return HttpResponse(json.dumps(dato), content_type="application/json");
 
 
 index = IndexView.as_view()
-balance_liquidacion = BalanceLiquidacionView()
+balance_liquidacion = BalanceLiquidacionView.as_view()

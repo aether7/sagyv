@@ -2,6 +2,8 @@
 {% load static %}
 
 {% block content %}
+    <input id="balance_liquidacion" type="hidden" value="{% url 'balance_liquidacion' %}" />
+
     <section class="container">
         <article class="pull-right">
             Guía # : <input id="guia_despacho" type="text" value="" />

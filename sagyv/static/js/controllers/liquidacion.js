@@ -128,5 +128,11 @@ App.Controllers.Liquidacion.prototype = {
                 cantidad : parseInt(this.dataset.cantidad)
             });
         });
+
+        json.productos = JSON.stringify(json.productos);
+
+        $.post($("#balance_liquidacion").val(), json, function(data){
+            alert("el monto total a cobrar es : " + data.valor);
+        });
     }
 };
