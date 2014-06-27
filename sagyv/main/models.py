@@ -205,7 +205,7 @@ class Producto(models.Model):
         return str(self.codigo) + " " +self.nombre
 
     def get_precio_producto(self):
-        ultimo_precio = PrecioProducto.objects.filter(producto_id=self.id).order_by("-fecha")
+        ultimo_precio = PrecioProducto.objects.filter(producto_id=self.id).order_by("-id")
         precio = 0
 
         if len(ultimo_precio) >= 1:
