@@ -19,7 +19,7 @@
             <div id="stock_inicial" class="col-md-4 list-group">
                 {% for producto in productos %}
                     <a href="#" class="list-group-item" data-cantidad="{{producto.stock}}">
-                        {{producto.tipo_producto.nombre}} ({{producto.codigo}} - {{producto.peso}} Kilos)
+                        {{ producto.codigo }} - {{ producto.tipo_producto.nombre }} ({{ producto.peso }} Kg)
                         <span class="badge" id="id_initial_{{producto.id}}">{{producto.stock}}</span>
                     </a>
                 {% endfor %}
@@ -27,8 +27,9 @@
 
             <div id="stock_actual" class="col-md-4 list-group">
                 {% for producto in productos %}
-                    <a href="#" class="list-group-item" onclick="App.liquidacionController.showModal({{producto.id}})" data-cantidad="0">
-                        {{producto.tipo_producto.nombre}} ({{producto.codigo}} - {{producto.peso}} Kilos)
+                    <a href="#" class="list-group-item"
+                        onclick="App.liquidacionController.showModal({{producto.id}})" data-cantidad="0">
+                        {{ producto.codigo }} - {{ producto.tipo_producto.nombre }} ({{ producto.peso}} Kg)
                         <span class="badge" id="id_actual_{{producto.id}}">0</span>
                     </a>
                 {% endfor %}
@@ -37,7 +38,7 @@
             <div id="stock_gastado" class="col-md-4">
                 {% for producto in productos %}
                     <a href="#" class="list-group-item" data-cantidad="0">
-                        {{producto.tipo_producto.nombre}} ({{producto.codigo}} - {{producto.peso}} Kilos)
+                        {{ producto.codigo }} - {{ producto.tipo_producto.nombre }} ({{ producto.peso }} Kg)
                         <span class="badge" id="id_gastado_{{producto.id}}">0</span>
                     </a>
                 {% endfor %}
