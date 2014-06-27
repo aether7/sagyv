@@ -51,10 +51,10 @@ class UpdatePrecioProductoView(View):
         pp.producto = producto
         pp.precio = precio
         pp.save()
-        dato = {"precio": precio}
-        
-        json.dumps(dato)
-        return HttpResponse(dato, content_type="application/json");
+
+        dato = { "status": "ok" }
+
+        return HttpResponse(json.dumps(dato), content_type="application/json");
 
 
 index = IndexView.as_view()
