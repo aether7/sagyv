@@ -24,14 +24,9 @@ class IndexView(TemplateView):
 
 class BalanceLiquidacionView(View):
     def post(self, req):
-
         guia_despacho = req.POST.get('guia_despacho')
         id_trabajador = req.POST.get('id_trabajador')
         productos_json = req.POST.get('productos')
-
-        #######################################
-        # productos:[{id:10, cantidad:11},..] #
-        #######################################
         productos = json.loads(productos_json)
         valor_total = 0
 
@@ -41,9 +36,9 @@ class BalanceLiquidacionView(View):
             valor_tmp = precio * int(obj["cantidad"])
             valor_total += valor_tmp
 
-        dato = {'valor': valor_total}
+        dato = { 'valor': valor_total }
 
-        return HttpResponse(json.dumps(dato), content_type="application/json");
+        return HttpResponse(json.dumps(dato), content_type="application/json")
 
 
 index = IndexView.as_view()
