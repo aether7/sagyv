@@ -13,6 +13,13 @@
 			<td>rut</td>
 			<td>acciones</td>
 		</tr>
+		{% for vehiculo in vehiculos %}
+			<tr>
+				<td>{{vehiculo.patente}}</td>
+				<td>{{vehiculo.km}}</td>
+				<td>acciones</td>
+			</tr>
+		{% endfor %}
 	</table>
 </div>
 {% endblock %}
