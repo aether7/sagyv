@@ -42,8 +42,4 @@ class BalanceLiquidacionView(View):
 
 
 index = IndexView.as_view()
-<<<<<<< HEAD
-balance_liquidacion = balanceLiquidacionView.as_view()
-=======
 balance_liquidacion = BalanceLiquidacionView.as_view()
->>>>>>> 0c1e224e2a31f15014b2a25958a5e84ab176f42e
