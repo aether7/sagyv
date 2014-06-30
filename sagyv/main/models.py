@@ -37,6 +37,7 @@ class Filtro(models.Model):
 
 
 class Vehiculo(models.Model):
+    numero = models.IntegerField()
     patente = models.CharField(max_length=140)
     fecha_revision_tecnica = models.DateField()
     km = models.IntegerField()
