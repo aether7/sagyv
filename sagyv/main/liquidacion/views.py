@@ -45,4 +45,4 @@ class balanceLiquidacionView(View):
 
 
 index = IndexView.as_view()
-balance_liquidacion = balanceLiquidacionView()
+balance_liquidacion = balanceLiquidacionView.as_view()
