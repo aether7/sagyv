@@ -1,5 +1,28 @@
 {% extends "panel_control.html" %}
+{% load static %}
 
 {% block content %}
-    oaaaaaaa
+    <div class="panel panel-default">
+    <div class="panel-heading">
+        Bodega
+        <a href="#"  class="btn btn-default btn-sm"  role="button">
+            <span class="glyphicon glyphicon-plus"></span>
+        </a> 
+    </div>
+    <table class="table center">
+        <tr>
+            <td>Patente</td>
+            <td>Kilometrage</td>
+            <td>acciones</td>
+        </tr>
+        {% for vehiculo in vehiculos %}
+            <tr>
+                <td>{{vehiculo.patente}}</td>
+                <td>{{vehiculo.km}}</td>
+                <td>acciones</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+</div>
 {% endblock %}
