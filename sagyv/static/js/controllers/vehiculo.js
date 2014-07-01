@@ -60,8 +60,10 @@ App.Controllers.Vehiculo.prototype = {
                 valido = false;
                 kilometraje.siblings("span.help-block").text("Ingrese kilometraje numérico");
                 kilometraje.parent().addClass("has-error");
-            }else{
+            }else if(parseInt(kilometraje.val()) < 0){
                 valido = false;
+                kilometraje.siblings("span.help-block").text("El kilometraje debe ser un número positivo");
+                kilometraje.parent().addClass("has-error");
             }
 
             if(!valido){
