@@ -4,10 +4,10 @@
 {% block content %}
 <h1 class="center">Vehículos</h1>
 
-<div id="mensaje" class="alert alert-success center">SDFASDFADS</div>
+<div id="mensaje" class="alert alert-success center" style="visibility:hidden"></div>
 <button id="btn_nuevo_vehiculo" class="btn btn-primary">Nuevo</button>
 
-<table class="table table-stripeds">
+<table id="lista_vehiculos" class="table table-stripeds">
     <thead>
         <tr>
             <th>Número</th>
@@ -117,7 +117,27 @@
 {% endblock %}
 
 {% block js %}
+<script src="{% static 'js/vendor/handlebars.min.js' %}"></script>
 <script src="{% static 'js/controllers/vehiculo.js' %}"></script>
+<script id="tmpl_nuevo_vehiculo" type="x-template/javascript">
+{% verbatim %}
+    <tr>
+        <td>{{ numero }}</td>
+        <td>{{ patente }}</td>
+        <td>{{ km }}</td>
+        <td>{{ fecha_revision_tecnica }}</td>
+        <td>{{ estado_sec }}</td>
+        <td>{{ estado_pago }}</td>
+        <td>{{ nombre_chofer }}</td>
+        <td>
+            <a href="#" style="display:block">Anexar chofer</a>
+            <a href="#" style="display:block">Editar vehiculo</a>
+            <a href="#" style="display:block">Agregar stock</a>
+            <a href="#" style="display:block">Generar mantención</a>
+        </td>
+    </tr>
+{% endverbatim %}
+</script>
 <script>
     App.vehiculoController = new App.Controllers.Vehiculo();
     App.vehiculoController.init();
