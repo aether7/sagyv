@@ -18,17 +18,19 @@ class AgregarNuevoVehiculoView(View):
     def post(self, request):
         numero = request.POST.get("numero")
         patente = request.POST.get("patente")
+        revision_tecnica = request.POST.get("revision_tecnica")
         chofer = request.POST.get("chofer")
 
-        vehiculo = self.__crear_nuevo_vehiculo(numero, patente, chofer)
+        vehiculo = self.__crear_nuevo_vehiculo(numero, patente, revision_tecnica, chofer)
         data = { "status" : "ok", "id_vehiculo" : vehiculo.id }
 
         return HttpResponse(json.dumps(data),content_type="application/json")
 
-    def __crear_nuevo_vehiculo(self, numero, patente, chofer):
+    def __crear_nuevo_vehiculo(self, numero, patente, revision_tecnica, chofer):
         vehiculo = Vehiculo()
         vehiculo.numero = numero
         vehiculo.patente = patente
+        vehiculo.fecha_revision_tecnica = revision_tecnica
         vehiculo.save()
 
         if chofer is not None and chofer != "":
