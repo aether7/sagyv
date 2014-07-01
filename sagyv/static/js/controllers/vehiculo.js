@@ -44,7 +44,7 @@ App.Controllers.Vehiculo.prototype = {
                 numero.parent().addClass("has-error");
             }
 
-            if(!/^[A-z]{4}\d{2}$/.test(patente.val())){
+            if(!/^[A-z]{4}\d{2}$/.test(patente.val()) && !/^[A-z]{2}\d{4}$/.test(patente.val())){
                 valido = false;
                 patente.siblings("span.help-block").text("Ingrese patente válida");
                 patente.parent().addClass("has-error");
