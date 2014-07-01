@@ -17,19 +17,27 @@ class VehiculoList(ListView):
 
 class AgregarNuevoVehiculoView(View):
     def post(self, request):
-        numero = request.POST.get("numero")
-        patente = request.POST.get("patente")
-        chofer = request.POST.get("chofer")
+        numero = request.POST.get('numero')
+        patente = request.POST.get('patente')
+        revision_tecnica = request.POST.get('revision_tecnica')
+        kilometraje = request.POST.get('kilometraje')
+        estado_sec = request.POST.get('estado_sec')
+        estado_pago = request.POST.get('estado_pago')
+        chofer = request.POST.get('chofer')
 
-        vehiculo = self.__crear_nuevo_vehiculo(numero, patente, chofer)
+        vehiculo = self.__crear_nuevo_vehiculo(numero, patente, revision_tecnica, kilometraje, estado_sec, estado_pago, chofer)
         data = { "status" : "ok", "id_vehiculo" : vehiculo.id }
 
         return HttpResponse(json.dumps(data),content_type="application/json")
 
-    def __crear_nuevo_vehiculo(self, numero, patente, chofer):
+    def __crear_nuevo_vehiculo(self, numero, patente, revision_tecnica, kilometraje, estado_sec, estado_pago, chofer):
         vehiculo = Vehiculo()
         vehiculo.numero = numero
         vehiculo.patente = patente
+        vehiculo.revision_tecnica = revision_tecnica
+        vehiculo.kilometraje = kilometraje
+        vehiculo.estado_sec = estado_sec
+        vehiculo.estado_pago = estado_pago
         vehiculo.save()
 
         if chofer is not None and chofer != "":
@@ -43,3 +51,5 @@ class AgregarNuevoVehiculoView(View):
 
 index = VehiculoList.as_view()
 agregar_nuevo_vehiculo = AgregarNuevoVehiculoView.as_view()
+
+numero, patente, revision_tecnica, kilometraje, estado_sec, estado_pago
