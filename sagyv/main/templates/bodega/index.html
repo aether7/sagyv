@@ -53,41 +53,7 @@
 </div>
 
 {% include "components/modal_bodega.html" with modo="add"  %}
-
-
-<div id="modal_precio" class="modal fade">
-    <form id="f_precio" action="{% url 'update_precio_producto' %}" method="post">
-    {% csrf_token %}
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4>Precio Producto</h4>
-            </div>
-
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="precio_fecha" class="control-label">Fecha:</label>
-                    <input type="text" value="{% now 'd/m/Y' %}" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="precio_update " class="control-label">Precio:</label>
-                    <input id="precio_update" class="form-control" type="text" value="" />
-                    <span class="help-block"></span>
-                </div>
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary"
-                    onclick="App.bodegaController.actualizarPrecio()">Guardar</button>
-            </div>
-        </div>
-    </div>
-    </form>
-</div>
-
-
+{% include "components/modal_precio.html" %}
 
 {% endblock %}
 {% block js %}
