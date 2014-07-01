@@ -26,9 +26,11 @@ class AgregarNuevoVehiculoView(View):
         chofer = request.POST.get('chofer')
 
         vehiculo = self.__crear_nuevo_vehiculo(numero, patente, revision_tecnica, kilometraje, estado_sec, estado_pago, chofer)
+
         data = { "status" : "ok", "id_vehiculo" : vehiculo.id }
 
         return HttpResponse(json.dumps(data),content_type="application/json")
+
 
     def __crear_nuevo_vehiculo(self, numero, patente, revision_tecnica, kilometraje, estado_sec, estado_pago, chofer):
         vehiculo = Vehiculo()
