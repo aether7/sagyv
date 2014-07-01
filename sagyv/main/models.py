@@ -47,12 +47,11 @@ class Vehiculo(models.Model):
     def get_ultimo_chofer(self):
         trabajador_vehiculo = TrabajadorVehiculo.objects.filter(vehiculo_id = self.id, activo = True)
 
-        print dir(trabajador_vehiculo)
-
         if len(trabajador_vehiculo) == 0:
             return "No anexado"
         else:
-            return trabajador_vehiculo.trabajador.get_nombre_completo()
+            print trabajador_vehiculo
+            return trabajador_vehiculo[0].trabajador.get_nombre_completo()
 
     def __unicode__(self):
         return self.patente
