@@ -1,16 +1,25 @@
 import json
 from django.views.generic import TemplateView,View
 from django.http import HttpResponse
-from main.models import Producto, TipoCambioStock, HistorialStock, PrecioProducto
+from main.models import Producto, TipoCambioStock, HistorialStock, PrecioProducto, StockVehiculo
 
 class IndexView(TemplateView):
     template_name = "bodega/index.html"
 
     def get_context_data(self, **kwargs):
         context = super(IndexView, self).get_context_data(**kwargs)
-        context["productos"] = Producto.objects.all()
+        context["productos"] = self.get_productos()
+        context["productos_transito"] = self.get_productos_transito()
+        print context["productos_transito"]
         return context
 
+    def get_productos(self):
+        productos =  Producto.objects.all()
+        return productos
+
+    def get_productos_transito(self):
+        en_trancito = StockVehiculo.stockManager.get_stock()
+        return en_trancito
 
 class UpdateStockProductoView(View):
     def post(self,req):
