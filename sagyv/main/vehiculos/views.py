@@ -1,5 +1,6 @@
 import json
 from django.http import HttpResponse
+from datetime import datetime
 from django.views.generic import View, TemplateView, ListView
 from main.models import Vehiculo, Trabajador, TrabajadorVehiculo
 
@@ -19,11 +20,20 @@ class AgregarNuevoVehiculoView(View):
     def post(self, request):
         self.numero = request.POST.get('numero')
         self.patente = request.POST.get('patente')
-        self.revision_tecnica = request.POST.get('revision_tecnica')
+        fecha = request.POST.get('revision_tecnica')
+        fecha = fecha.split('-')
+        mes = int(fecha[1])
+        
+        if(mes < 10):
+            mes = fecha[1].replace('0','')
+
+        self.revision_tecnica = datetime(int(fecha[0]), int(mes), int(fecha[2]))
+
         self.kilometraje = request.POST.get('kilometraje')
         self.estado_sec = request.POST.get('estado_sec')
         self.estado_pago = request.POST.get('estado_pago')
         self.chofer = request.POST.get('chofer')
+
 
         vehiculo = self.__crear_nuevo_vehiculo()
 
@@ -36,13 +46,13 @@ class AgregarNuevoVehiculoView(View):
         vehiculo = Vehiculo()
         vehiculo.numero = self.numero
         vehiculo.patente = self.patente
-        vehiculo.revision_tecnica = self.revision_tecnica
-        vehiculo.kilometraje = self.kilometraje
+        vehiculo.fecha_revision_tecnica = self.revision_tecnica
+        vehiculo.km = self.kilometraje
         vehiculo.estado_sec = self.estado_sec
         vehiculo.estado_pago = self.estado_pago
         vehiculo.save()
 
-        if chofer is not None and chofer != "":
+        if self.chofer is not None and self.chofer != "":
             trabajador = Trabajador.objects.get(pk = self.chofer)
             trabajador_vehiculo = TrabajadorVehiculo()
             trabajador_vehiculo.trabajador = trabajador
@@ -53,5 +63,3 @@ class AgregarNuevoVehiculoView(View):
 
 index = VehiculoList.as_view()
 agregar_nuevo_vehiculo = AgregarNuevoVehiculoView.as_view()
-
-numero, patente, revision_tecnica, kilometraje, estado_sec, estado_pago
