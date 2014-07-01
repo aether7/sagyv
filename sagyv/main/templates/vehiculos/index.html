@@ -4,6 +4,7 @@
 {% block content %}
 <h1 class="center">Vehículos</h1>
 
+<div id="mensaje" class="alert alert-success center">SDFASDFADS</div>
 <button id="btn_nuevo_vehiculo" class="btn btn-primary">Nuevo</button>
 
 <table class="table table-stripeds">
@@ -29,7 +30,12 @@
             <td>{{ vehiculo.estado_sec }}</td>
             <td>{{ vehiculo.estado_pago }}</td>
             <td>{{ vehiculo.get_ultimo_chofer }}</td>
-            <td>sadfasdsafadsf</td>
+            <td>
+                <a href="#" style="display:block">Anexar chofer</a>
+                <a href="#" style="display:block">Editar vehiculo</a>
+                <a href="#" style="display:block">Agregar stock</a>
+                <a href="#" style="display:block">Generar mantención</a>
+            </td>
         </tr>
         {% endfor %}
     </tbody>

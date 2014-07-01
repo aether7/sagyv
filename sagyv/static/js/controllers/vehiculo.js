@@ -82,6 +82,7 @@ App.Controllers.Vehiculo.prototype = {
 
             $.post($("#f_nuevo_vehiculo").attr("action"), json, function(data){
                 console.log(data);
+                _this.mostrar("modal_nuevo_vehiculo");
             });
         };
     }
