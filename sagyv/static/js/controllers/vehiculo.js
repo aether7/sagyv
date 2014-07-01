@@ -22,6 +22,15 @@ App.Controllers.Vehiculo.prototype = {
         }
     },
 
+    enviarMensaje: function(mensaje){
+        var $mensaje = $("#mensaje");
+        $mensaje.css("visibility","visible").text(mensaje);
+
+        setTimeout(function(){
+            $mensaje.css("visibility","hidden").text("");
+        },2500);
+    },
+
     validarNuevoVehiculo: function(){
         var _this = this,
             numero = $("#numero_vehiculo_nuevo"),
@@ -81,9 +90,25 @@ App.Controllers.Vehiculo.prototype = {
             };
 
             $.post($("#f_nuevo_vehiculo").attr("action"), json, function(data){
-                console.log(data);
                 _this.mostrar("modal_nuevo_vehiculo");
+                _this.enviarMensaje("El vehículo se ha registrado exitosamente");
+                _this.generarVehiculoLista(json);
             });
         };
+    },
+
+    generarVehiculoLista: function(json){
+        var lista = $("#lista_vehiculos tbody"),
+            template = $("#tmpl_nuevo_vehiculo").html();
+
+        lista.append(Handlebars.compile(template)({
+            numero : json.numero,
+            patente : json.patente,
+            km : json.kilometraje,
+            fecha_revision_tecnica : json.revision_tecnica,
+            estado_sec : json.estado_sec,
+            estado_pago : json.estado_pago,
+            nombre_chofer : json.chofer
+        }));
     }
 };

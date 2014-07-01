@@ -7,6 +7,7 @@ from main.models import Vehiculo, Trabajador, TrabajadorVehiculo
 class VehiculoList(ListView):
     model = Vehiculo
     template_name = "vehiculos/index.html"
+    queryset = Vehiculo.objects.all().order_by("numero")
 
     def get_context_data(self, *args, **kwargs):
         context_data = super(VehiculoList, self).get_context_data(*args, **kwargs)
@@ -23,7 +24,7 @@ class AgregarNuevoVehiculoView(View):
         fecha = request.POST.get('revision_tecnica')
         fecha = fecha.split('-')
         mes = int(fecha[1])
-        
+
         if(mes < 10):
             mes = fecha[1].replace('0','')
 
