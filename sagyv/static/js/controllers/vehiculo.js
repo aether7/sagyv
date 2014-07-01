@@ -22,6 +22,7 @@ App.Controllers.Vehiculo.prototype = {
 
             _this.id = id;
             _this.mostrar("modal_" + accion,"f_" + accion);
+            _this[accion]();
         });
     },
 
@@ -31,6 +32,11 @@ App.Controllers.Vehiculo.prototype = {
         if(reseteo){
             $("#" + reseteo).get(0).reset();
         }
+    },
+
+    anexar: function(){
+        console.log(this.id);
+        console.log("terrible de pollo norman");
     },
 
     enviarMensaje: function(mensaje){
