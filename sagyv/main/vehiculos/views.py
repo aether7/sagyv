@@ -17,33 +17,33 @@ class VehiculoList(ListView):
 
 class AgregarNuevoVehiculoView(View):
     def post(self, request):
-        numero = request.POST.get('numero')
-        patente = request.POST.get('patente')
-        revision_tecnica = request.POST.get('revision_tecnica')
-        kilometraje = request.POST.get('kilometraje')
-        estado_sec = request.POST.get('estado_sec')
-        estado_pago = request.POST.get('estado_pago')
-        chofer = request.POST.get('chofer')
+        self.numero = request.POST.get('numero')
+        self.patente = request.POST.get('patente')
+        self.revision_tecnica = request.POST.get('revision_tecnica')
+        self.kilometraje = request.POST.get('kilometraje')
+        self.estado_sec = request.POST.get('estado_sec')
+        self.estado_pago = request.POST.get('estado_pago')
+        self.chofer = request.POST.get('chofer')
 
-        vehiculo = self.__crear_nuevo_vehiculo(numero, patente, revision_tecnica, kilometraje, estado_sec, estado_pago, chofer)
+        vehiculo = self.__crear_nuevo_vehiculo()
 
         data = { "status" : "ok", "id_vehiculo" : vehiculo.id }
 
         return HttpResponse(json.dumps(data),content_type="application/json")
 
 
-    def __crear_nuevo_vehiculo(self, numero, patente, revision_tecnica, kilometraje, estado_sec, estado_pago, chofer):
+    def __crear_nuevo_vehiculo(self):
         vehiculo = Vehiculo()
-        vehiculo.numero = numero
-        vehiculo.patente = patente
-        vehiculo.revision_tecnica = revision_tecnica
-        vehiculo.kilometraje = kilometraje
-        vehiculo.estado_sec = estado_sec
-        vehiculo.estado_pago = estado_pago
+        vehiculo.numero = self.numero
+        vehiculo.patente = self.patente
+        vehiculo.revision_tecnica = self.revision_tecnica
+        vehiculo.kilometraje = self.kilometraje
+        vehiculo.estado_sec = self.estado_sec
+        vehiculo.estado_pago = self.estado_pago
         vehiculo.save()
 
         if chofer is not None and chofer != "":
-            trabajador = Trabajador.objects.get(pk = chofer)
+            trabajador = Trabajador.objects.get(pk = self.chofer)
             trabajador_vehiculo = TrabajadorVehiculo()
             trabajador_vehiculo.trabajador = trabajador
             trabajador_vehiculo.vehiculo = vehiculo
