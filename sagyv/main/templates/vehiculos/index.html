@@ -11,6 +11,10 @@
         <tr>
             <th>Número</th>
             <th>Patente</th>
+            <th>Kilometraje</th>
+            <th>Fecha revisión técnica</th>
+            <th>Estado Sec</th>
+            <th>Estado Pago</th>
             <th>Chofer</th>
             <th>Acciones</th>
         </tr>
@@ -18,10 +22,14 @@
     <tbody>
         {% for vehiculo in object_list %}
         <tr>
-            <td>a</td>
-            <td>s</td>
-            <td>d</td>
-            <td>f</td>
+            <td>{{ vehiculo.numero }}</td>
+            <td>{{ vehiculo.patente }}</td>
+            <td>{{ vehiculo.km }}</td>
+            <td>{{ vehiculo.fecha_revision_tecnica }}</td>
+            <td>{{ vehiculo.estado_sec }}</td>
+            <td>{{ vehiculo.estado_pago }}</td>
+            <td>{{ vehiculo.get_ultimo_chofer }}</td>
+            <td>sadfasdsafadsf</td>
         </tr>
         {% endfor %}
     </tbody>
@@ -73,7 +81,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="estado_pago_vehiculo_nuevo" class="control-label"></label>
+                    <label for="estado_pago_vehiculo_nuevo" class="control-label">Estado pago:</label>
                     <select name="estado_pago_vehiculo_nuevo" id="estado_pago_vehiculo_nuevo">
                         <option value="1">SI</option>
                         <option value="0">NO</option>
