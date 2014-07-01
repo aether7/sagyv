@@ -1,6 +1,7 @@
 App.Controllers.Vehiculo = function(){
     this.btnNuevoVehiculo = $("#btn_nuevo_vehiculo");
     this.btnGuardarNuevoVehiculo = $("#btn_guardar_nuevo_vehiculo");
+    this.id = null;
 };
 
 App.Controllers.Vehiculo.prototype = {
@@ -13,10 +14,20 @@ App.Controllers.Vehiculo.prototype = {
         });
 
         this.btnGuardarNuevoVehiculo.on("click", this.validarNuevoVehiculo());
+
+        $(".btn-acciones").on("click",function(evt){
+            evt.preventDefault();
+            var accion = $(this).data("accion"),
+                id = $(this).data("id");
+
+            _this.id = id;
+            _this.mostrar("modal_" + accion,"f_" + accion);
+        });
     },
 
     mostrar: function(id,reseteo){
         $("#" + id).modal("toggle");
+
         if(reseteo){
             $("#" + reseteo).get(0).reset();
         }
@@ -92,6 +103,8 @@ App.Controllers.Vehiculo.prototype = {
             $.post($("#f_nuevo_vehiculo").attr("action"), json, function(data){
                 _this.mostrar("modal_nuevo_vehiculo");
                 _this.enviarMensaje("El vehículo se ha registrado exitosamente");
+                json.id = data.id_vehiculo;
+
                 _this.generarVehiculoLista(json);
             });
         };
@@ -99,16 +112,18 @@ App.Controllers.Vehiculo.prototype = {
 
     generarVehiculoLista: function(json){
         var lista = $("#lista_vehiculos tbody"),
-            template = $("#tmpl_nuevo_vehiculo").html();
+            template = $("#tmpl_nuevo_vehiculo").html(),
+            render = Handlebars.compile(template);
 
-        lista.append(Handlebars.compile(template)({
+        lista.append(render({
             numero : json.numero,
             patente : json.patente,
             km : json.kilometraje,
             fecha_revision_tecnica : json.revision_tecnica,
             estado_sec : json.estado_sec,
             estado_pago : json.estado_pago,
-            nombre_chofer : json.chofer
+            nombre_chofer : json.chofer,
+            id : json.id
         }));
     }
 };
