@@ -22,21 +22,7 @@
     </thead>
     <tbody>
         {% for vehiculo in object_list %}
-        <tr>
-            <td>{{ vehiculo.numero }}</td>
-            <td>{{ vehiculo.patente }}</td>
-            <td>{{ vehiculo.km }}</td>
-            <td>{{ vehiculo.fecha_revision_tecnica }}</td>
-            <td>{{ vehiculo.estado_sec }}</td>
-            <td>{{ vehiculo.estado_pago }}</td>
-            <td>{{ vehiculo.get_ultimo_chofer }}</td>
-            <td>
-                <a href="#" data-id="{{ vehiculo.id }}" data-accion="anexar" class="block btn-acciones">Anexar chofer</a>
-                <a href="#" data-id="{{ vehiculo.id }}" data-accion="editar" class="block btn-acciones">Editar vehiculo</a>
-                <a href="#" data-id="{{ vehiculo.id }}" data-accion="stock" class="block btn-acciones">Agregar stock</a>
-                <a href="#" data-id="{{ vehiculo.id }}" data-accion="mantencion" class="block btn-acciones">Generar mantención</a>
-            </td>
-        </tr>
+        {% include "vehiculos/vehiculo_item_component.html" %}
         {% endfor %}
     </tbody>
 </table>
@@ -182,23 +168,7 @@
 <script src="{% static 'js/vendor/handlebars.min.js' %}"></script>
 <script src="{% static 'js/controllers/vehiculo.js' %}"></script>
 <script id="tmpl_nuevo_vehiculo" type="x-template/javascript">
-{% verbatim %}
-    <tr>
-        <td>{{ numero }}</td>
-        <td>{{ patente }}</td>
-        <td>{{ km }}</td>
-        <td>{{ fecha_revision_tecnica }}</td>
-        <td>{{ estado_sec }}</td>
-        <td>{{ estado_pago }}</td>
-        <td>{{ nombre_chofer }}</td>
-        <td>
-            <a href="#" data-id="{{ id }}" data-accion="anexar" class="block btn-acciones">Anexar chofer</a>
-            <a href="#" data-id="{{ id }}" data-accion="editar" class="block btn-acciones">Editar vehiculo</a>
-            <a href="#" data-id="{{ id }}" data-accion="stock" class="block btn-acciones">Agregar stock</a>
-            <a href="#" data-id="{{ id }}" data-accion="mantencion" class="block btn-acciones">Generar mantención</a>
-        </td>
-    </tr>
-{% endverbatim %}
+    {% include "vehiculos/vehiculo_item_escape_component.html" %}
 </script>
 <script>
     App.vehiculoController = new App.Controllers.Vehiculo();

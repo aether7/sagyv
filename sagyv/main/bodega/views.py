@@ -38,10 +38,12 @@ class UpdateStockProductoView(View):
         hsp.factura = num_factura
         hsp.save()
 
+        new_stock = int(old_stock)
+
         if tipo_accion == "1":
-            new_stock = int(old_stock) + int(stock_entra)
+            new_stock += int(stock_entra)
         elif tipo_accion == "2":
-            new_stock = int(old_stock) - int(stock_entra)
+            new_stock -= int(stock_entra)
 
         producto.stock = new_stock
         producto.save()

@@ -35,8 +35,6 @@ App.Controllers.Vehiculo.prototype = {
     },
 
     anexar: function(){
-        console.log(this.id);
-        console.log("terrible de pollo norman");
     },
 
     enviarMensaje: function(mensaje){
@@ -119,17 +117,18 @@ App.Controllers.Vehiculo.prototype = {
     generarVehiculoLista: function(json){
         var lista = $("#lista_vehiculos tbody"),
             template = $("#tmpl_nuevo_vehiculo").html(),
-            render = Handlebars.compile(template);
+            render = Handlebars.compile(template),
+            vehiculo = {};
 
-        lista.append(render({
-            numero : json.numero,
-            patente : json.patente,
-            km : json.kilometraje,
-            fecha_revision_tecnica : json.revision_tecnica,
-            estado_sec : json.estado_sec,
-            estado_pago : json.estado_pago,
-            nombre_chofer : json.chofer,
-            id : json.id
-        }));
+        vehiculo.id = json.id;
+        vehiculo.numero = json.numero;
+        vehiculo.patente = json.patente;
+        vehiculo.km = json.kilometraje;
+        vehiculo.fecha_revision_tecnica = json.revision_tecnica;
+        vehiculo.estado_sec = json.estado_sec;
+        vehiculo.estado_pago = json.estado_pago;
+        vehiculo.get_ultimo_chofer = json.chofer;
+
+        lista.append(render({ vehiculo : vehiculo }));
     }
 };
