@@ -1,28 +1,6 @@
 import json
 from django.db import models
-from django.db import connection
-
-class StockManager(models.Manager):
-    def get_stock(self):
-        query = connection.cursor()
-        query.execute("""
-            SELECT mp.codigo, 
-                    mp.peso, 
-                    msv.producto_id,
-                    mtp.nombre,
-                    SUM(msv.cantidad) as cantidad
-            FROM main_stockvehiculo msv
-            JOIN main_producto mp ON(msv.producto_id = mp.id)
-            JOIN main_tipoproducto mtp ON(mp.tipo_producto_id = mtp.id)
-            group by producto_id;   
-            """)
-
-        resultado = []
-        for row in query.fetchall():
-            p = self.model(codigo=row[0], peso=row[1], producto_id=row[2], nombre=row[3])
-            p.cantidad = row[4]
-            resultado.append(p)
-        return resultado
+from main.managers import StockManager
 
 class Region(models.Model):
     nombre = models.CharField(max_length=140)
