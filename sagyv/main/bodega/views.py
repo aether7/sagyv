@@ -10,7 +10,6 @@ class IndexView(TemplateView):
         context = super(IndexView, self).get_context_data(**kwargs)
         context["productos"] = self.get_productos()
         context["productos_transito"] = self.get_productos_transito()
-        print context["productos_transito"]
         return context
 
     def get_productos(self):
