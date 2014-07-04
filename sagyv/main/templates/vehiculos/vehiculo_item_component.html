@@ -1,0 +1,19 @@
+<tr id="vehiculo_{{ vehiculo.id }}">
+    <td data-numero="{{ vehiculo.numero }}">{{ vehiculo.numero }}</td>
+    <td data-patente="{{ vehiculo.patente }}">{{ vehiculo.patente }}</td>
+    <td data-km="{{ vehiculo.km }}">{{ vehiculo.km }}</td>
+    <td data-fecha-revision-tecnica="{{ vehiculo.fecha_revision_tecnica }}">{{ vehiculo.fecha_revision_tecnica }}</td>
+    <td data-estado-sec="{{ vehiculo.estado_sec }}">{{ vehiculo.estado_sec }}</td>
+    <td data-estado-pago="{{ vehiculo.estado_pago }}">{{ vehiculo.estado_pago }}</td>
+    <td data-nombre-chofer="{{ vehiculo.get_ultimo_chofer }}">{{ vehiculo.get_ultimo_chofer }}</td>
+    <td>
+        <a href="#" data-id="{{ vehiculo.id }}"
+            data-accion="anexar" class="block btn-acciones">Anexar chofer</a>
+        <a href="#" data-id="{{ vehiculo.id }}"
+            data-accion="editar" class="block btn-acciones">Editar vehiculo</a>
+        <a href="#" data-id="{{ vehiculo.id }}"
+            data-accion="stock" class="block btn-acciones">Agregar stock</a>
+        <a href="#" data-id="{{ vehiculo.id }}"
+            data-accion="mantencion" class="block btn-acciones">Generar mantención</a>
+    </td>
+</tr>

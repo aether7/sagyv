@@ -1,5 +1,6 @@
 import json
 from django.db import models
+from main.managers import StockManager
 
 class Region(models.Model):
     nombre = models.CharField(max_length=140)
@@ -37,11 +38,21 @@ class Filtro(models.Model):
 
 
 class Vehiculo(models.Model):
+    numero = models.IntegerField()
     patente = models.CharField(max_length=140)
     fecha_revision_tecnica = models.DateField()
     km = models.IntegerField()
     estado_sec = models.BooleanField(default=True)
     estado_pago = models.BooleanField(default=True)
+
+    def get_ultimo_chofer(self):
+        trabajador_vehiculo = TrabajadorVehiculo.objects.filter(vehiculo_id = self.id, activo = True)
+
+        if len(trabajador_vehiculo) == 0:
+            return "No anexado"
+        else:
+            print trabajador_vehiculo
+            return trabajador_vehiculo[0].trabajador.get_nombre_completo()
 
     def __unicode__(self):
         return self.patente
@@ -406,6 +417,8 @@ class StockVehiculo(models.Model):
     vehiculo = models.ForeignKey(Vehiculo)
     producto = models.ForeignKey(Producto)
     cantidad = models.IntegerField(null=True)
+    stockManager = StockManager()
 
     def __unicode__(self):
         return str(self.vehiculo.patente) + " -> (cod " + (self.producto.codigo) + ": " + str(self.cantidad) + ")"
+

@@ -1,19 +1,27 @@
+import json
 from django.views.generic import TemplateView,View
 from django.http import HttpResponse
-from main.models import Producto, TipoCambioStock, HistorialStock
+from main.models import Producto, TipoCambioStock, HistorialStock, PrecioProducto, StockVehiculo
 
 class IndexView(TemplateView):
     template_name = "bodega/index.html"
 
     def get_context_data(self, **kwargs):
         context = super(IndexView, self).get_context_data(**kwargs)
-        context["productos"] = Producto.objects.all()
+        context["productos"] = self.get_productos()
+        context["productos_transito"] = self.get_productos_transito()
         return context
 
+    def get_productos(self):
+        productos =  Producto.objects.all()
+        return productos
+
+    def get_productos_transito(self):
+        en_trancito = StockVehiculo.stockManager.get_stock()
+        return en_trancito
 
 class UpdateStockProductoView(View):
-
-    def POST(self,req):
+    def post(self,req):
         id_producto = req.POST.get("id")
         num_factura = req.POST.get("num_fact")
         stock_entra = req.POST.get("agregar_stock")
@@ -29,10 +37,12 @@ class UpdateStockProductoView(View):
         hsp.factura = num_factura
         hsp.save()
 
+        new_stock = int(old_stock)
+
         if tipo_accion == "1":
-            new_stock = int(old_stock) + int(stock_entra)
+            new_stock += int(stock_entra)
         elif tipo_accion == "2":
-            new_stock = int(old_stock) - int(stock_entra)
+            new_stock -= int(stock_entra)
 
         producto.stock = new_stock
         producto.save()
@@ -41,8 +51,20 @@ class UpdateStockProductoView(View):
 
 
 class UpdatePrecioProductoView(View):
-    def POST(req):
-        return HttpResponse("asdfasdf")
+    def post(self,req):
+        id_producto = req.POST.get('id')
+        precio = req.POST.get('precio')
+
+        producto = Producto.objects.get(pk = id_producto)
+
+        pp = PrecioProducto()
+        pp.producto = producto
+        pp.precio = precio
+        pp.save()
+
+        dato = { "status": "ok" }
+
+        return HttpResponse(json.dumps(dato), content_type="application/json");
 
 
 index = IndexView.as_view()

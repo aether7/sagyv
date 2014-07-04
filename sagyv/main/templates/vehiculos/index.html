@@ -1,5 +1,177 @@
 {% extends "panel_control.html" %}
+{% load static %}
 
 {% block content %}
-    oaaaaaaa
+<h1 class="center">Vehículos</h1>
+
+<div id="mensaje" class="alert alert-success center" style="visibility:hidden"></div>
+<button id="btn_nuevo_vehiculo" class="btn btn-primary">Nuevo</button>
+
+<table id="lista_vehiculos" class="table table-stripeds">
+    <thead>
+        <tr>
+            <th>Número</th>
+            <th>Patente</th>
+            <th>Kilometraje</th>
+            <th>Fecha revisión técnica</th>
+            <th>Estado Sec</th>
+            <th>Estado Pago</th>
+            <th>Chofer</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for vehiculo in object_list %}
+        {% include "vehiculos/vehiculo_item_component.html" %}
+        {% endfor %}
+    </tbody>
+</table>
+
+<div id="modal_nuevo_vehiculo" class="modal fade">
+    <form id="f_nuevo_vehiculo" action="{% url 'agregar_nuevo_vehiculo' %}" method="post">
+    {% csrf_token %}
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4>Nuevo vehiculo</h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="numero_vehiculo_nuevo" class="control-label">Número:</label>
+                    <input id="numero_vehiculo_nuevo" name="numero_vehiculo_nuevo"
+                        type="text" value="" class="form-control" />
+                    <span class="help-block"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="patente_vehiculo_nuevo " class="control-label">Patente:</label>
+                    <input id="patente_vehiculo_nuevo" class="form-control" type="text" value="" />
+                    <span class="help-block"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="revision_tecnica_vehiculo_nuevo" class="control-label">Fecha revisión técnica:</label>
+                    <input id="revision_tecnica_vehiculo_nuevo" type="date" class="form-control" value="" />
+                    <span class="help-block"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="kilometraje_vehiculo_nuevo" class="control-label">Kilometraje:</label>
+                    <input id="kilometraje_vehiculo_nuevo" class="form-control" type="text" value="" />
+                    <span class="help-block"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="estado_sec_vehiculo_nuevo" class="control-label">Estado Sec:</label>
+                    <select name="estado_sec_vehiculo_nuevo" id="estado_sec_vehiculo_nuevo" class="form-control">
+                        <option value="1">SI</option>
+                        <option value="0">NO</option>
+                    </select>
+                    <span class="help-block"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="estado_pago_vehiculo_nuevo" class="control-label">Estado pago:</label>
+                    <select name="estado_pago_vehiculo_nuevo" id="estado_pago_vehiculo_nuevo">
+                        <option value="1">SI</option>
+                        <option value="0">NO</option>
+                    </select>
+                    <span class="help-block"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="chofer_vehiculo_nuevo" class="control-label">Chofer:</label>
+                    <select name="chofer_vehiculo_nuevo" id="chofer_vehiculo_nuevo">
+                        <option value="">...</option>
+                        {% for trabajador in trabajadores %}
+                        <option value="{{ trabajador.id }}">{{ trabajador.get_nombre_completo }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button id="btn_guardar_nuevo_vehiculo" type="button" class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+    </form>
+</div>
+
+<div id="modal_anexar" class="modal fade">
+    <form id="f_anexar" action="" method="post">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4>Anexar chofer</h4>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="anexar_vehiculo">Vehículo:</label>
+                        <input id="anexar_vehiculo" type="text" value="" readonly />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="anexar_chofer">Chofer:</label>
+                        <select name="anexar_chofer" id="anexar_chofer">
+                            <option value="">...</option>
+                            {% for trabajador in trabajadores %}
+                                <option value="{{ trabajador.id }}">{{ trabajador.get_nombre_completo }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="anexar_fecha">Fecha:</label>
+                        <input id="anexar_fecha" type="date" value="" />
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button id="btn_anexar" type="button" class="btn btn-primary">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div id="modal_editar" class="modal fade">
+    <form id="f_editar" action="" method="post">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4></h4>
+                </div>
+
+                <div class="modal-body">
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button id="btn_editar" type="button" class="btn btn-primary">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'js/vendor/handlebars.min.js' %}"></script>
+<script src="{% static 'js/controllers/vehiculo.js' %}"></script>
+<script id="tmpl_nuevo_vehiculo" type="x-template/javascript">
+    {% include "vehiculos/vehiculo_item_escape_component.html" %}
+</script>
+<script>
+    App.vehiculoController = new App.Controllers.Vehiculo();
+    App.vehiculoController.init();
+</script>
 {% endblock %}

@@ -20,7 +20,6 @@ App.cookies = {};
     });
 })();
 
-
 (function(context){
 "use strict";
 

@@ -4,90 +4,24 @@
 
 <div id="mensaje" class="center alert" style="display:none"></div>
 
-<div class="panel panel-default">
-	<div class="panel-heading">Bodega</div>
+<ul class="nav nav-tabs" role="tablist" id="myTab">
+    <li class="active"><a href="#bodega" role="tab" data-toggle="tab">Bodega</a></li>
+    <li><a href="#transito" role="tab" data-toggle="tab">En transito</a></li>
+</ul>
 
-	<table class="table center">
-		<tr>
-			<td>codigo</td>
-			<td>Peso</td>
-			<td>Tipo</td>
-			<td>Stock</td>
-            <td>Precio actual</td>
-			<td>acciones</td>
-		</tr>
-        {% for producto in productos  %}
-        <tr>
-            <td>{{ producto.codigo }}</td>
-            <td>{{ producto.peso }} Kilos</td>
-            <td>{{ producto.tipo_producto.nombre }}</td>
-            <td>
-                <span id="stock_{{ producto.id }}">
-                    {{ producto.stock }}
-                </span>
-            </td>
-            <td>
-                $ <span id="precio_{{ producto.id }}">
-                    {{ producto.get_precio_producto }}
-                </span>
-            </td>
-            <td>
-                <button type="button" class="btn btn-xs" data-toggle="modal"
-                    onclick="App.bodegaController.showModal('stock', {{ producto.id }}, 1);">
-                    <span class="glyphicon glyphicon-plus" title="agregar stock"></span>
-                </button>
-
-                <button type="button" class="btn btn-xs" data-toggle="modal"
-                    onclick="App.bodegaController.showModal('stock', {{ producto.id }}, 2);">
-                    <span class="glyphicon glyphicon-minus" title="retirar stock"></span>
-                </button>
-
-                 <button type="button" class="btn btn-xs" data-toggle="modal"
-                    onclick="App.bodegaController.showModal('precio', {{ producto.id }})">
-                    <span class="glyphicon glyphicon-usd" title="actualizar precio"></span>
-                </button>
-            </td>
-        </tr>
-        {% endfor %}
-	</table>
+<div class="tab-content">
+    <div class="tab-pane active" id="bodega">
+        {% include "components/productos_bodega.html" %}
+    </div>
+    <div class="tab-pane" id="transito">
+        {% include "components/productos_bodega_transito.html" %}
+    </div>
 </div>
+
+
 
 {% include "components/modal_bodega.html" with modo="add"  %}
-
-
-<div id="modal_precio" class="modal fade">
-    <form id="f_precio" action="{% url 'update_precio_producto' %}" method="post">
-    {% csrf_token %}
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4>Precio Producto</h4>
-            </div>
-
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="precio_fecha" class="control-label">Fecha:</label>
-                    <input type="text" value="{% now 'd/m/Y' %}" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="precio_update " class="control-label">Precio:</label>
-                    <input id="precio_update" class="form-control" type="text" value="" />
-                    <span class="help-block"></span>
-                </div>
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary"
-                    onclick="App.bodegaController.actualizarPrecio()">Guardar</button>
-            </div>
-        </div>
-    </div>
-    </form>
-</div>
-
-
+{% include "components/modal_precio.html" %}
 
 {% endblock %}
 {% block js %}
@@ -95,5 +29,12 @@
 <script>
     App.bodegaController = new App.Controllers.Bodega();
     App.bodegaController.init();
+
+    //tab control
+    $('#bodega_tab a').click(function (e) {
+        e.preventDefault()
+        $(this).tab('show')
+    })
+
 </script>
 {% endblock %}
