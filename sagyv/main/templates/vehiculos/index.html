@@ -74,7 +74,7 @@
 
                 <div class="form-group">
                     <label for="estado_pago_vehiculo_nuevo" class="control-label">Estado pago:</label>
-                    <select name="estado_pago_vehiculo_nuevo" id="estado_pago_vehiculo_nuevo">
+                    <select name="estado_pago_vehiculo_nuevo" id="estado_pago_vehiculo_nuevo" class="form-control">
                         <option value="1">SI</option>
                         <option value="0">NO</option>
                     </select>
@@ -83,7 +83,7 @@
 
                 <div class="form-group">
                     <label for="chofer_vehiculo_nuevo" class="control-label">Chofer:</label>
-                    <select name="chofer_vehiculo_nuevo" id="chofer_vehiculo_nuevo">
+                    <select name="chofer_vehiculo_nuevo" id="chofer_vehiculo_nuevo" class="form-control">
                         <option value="">...</option>
                         {% for trabajador in trabajadores %}
                         <option value="{{ trabajador.id }}">{{ trabajador.get_nombre_completo }}</option>
@@ -112,13 +112,13 @@
 
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="anexar_vehiculo">Vehículo:</label>
-                        <input id="anexar_vehiculo" type="text" value="" readonly />
+                        <label for="anexar_vehiculo" class="control-label">Vehículo:</label>
+                        <input id="anexar_vehiculo" type="text" value="" readonly class="form-control" />
                     </div>
 
                     <div class="form-group">
-                        <label for="anexar_chofer">Chofer:</label>
-                        <select name="anexar_chofer" id="anexar_chofer">
+                        <label for="anexar_chofer" class="control-label">Chofer:</label>
+                        <select name="anexar_chofer" id="anexar_chofer" class="form-control">
                             <option value="">...</option>
                             {% for trabajador in trabajadores %}
                                 <option value="{{ trabajador.id }}">{{ trabajador.get_nombre_completo }}</option>
@@ -127,8 +127,8 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="anexar_fecha">Fecha:</label>
-                        <input id="anexar_fecha" type="date" value="" />
+                        <label for="anexar_fecha" class="control-label">Fecha:</label>
+                        <input id="anexar_fecha" type="date" value="" class="form-control" />
                     </div>
                 </div>
 
