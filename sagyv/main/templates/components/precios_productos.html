@@ -3,10 +3,12 @@
         {% for producto in productos %}
             <div class="form-group">
                 <label for="producto_precio_{{ producto.id }}"
-                    class="control-label">{{ producto.codigo }} - {{ producto.tipo_producto.nombre }}:</label>
+                    class="control-label col-sm-2">{{ producto.codigo }}:</label>
 
-                <input id="producto_precio_{{ producto.id }}" class="form-control"
-                    type="text" value="{{ producto.get_precio_producto }}" />
+                <div class="col-sm-10">
+                    <input id="producto_precio_{{ producto.id }}" class="form-control"
+                        type="text" value="{{ producto.get_precio_producto }}" />
+                </div>
             </div>
         {% endfor %}
 
