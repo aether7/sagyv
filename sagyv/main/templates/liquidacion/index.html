@@ -55,7 +55,8 @@
                         <tr>
                             <th>Código</th>
                             <th>Cantidad en tránsito</th>
-                            <th>Vendidos</th>
+                            <th>LLenos</th>
+                            <th>Vacíos</th>
                             <th>Stock</th>
                         </tr>
                     </thead>
@@ -65,7 +66,8 @@
                         <tr>
                             <td>{{ producto.codigo }}</td>
                             <td>{{ producto.stock }}</td>
-                            <td><input type="text" value="" placeholder="cantidad vendida" /></td>
+                            <td><input type="text" value="" placeholder="cantidad llena" /></td>
+                            <td><input type="text" value="" placeholder="cantidad vacíos" /></td>
                             <td><span>3</span></td>
                         </tr>
                         {% endif %}
