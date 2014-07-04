@@ -54,17 +54,21 @@
                     <thead>
                         <tr>
                             <th>Código</th>
-                            <th>Cantidad en guía(anterior)</th>
-                            <th>Venta</th>
+                            <th>Cantidad en tránsito</th>
+                            <th>Vendidos</th>
+                            <th>Stock</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for producto in productos %}
+                        {% if producto.stock > 0 %}
                         <tr>
                             <td>{{ producto.codigo }}</td>
                             <td>{{ producto.stock }}</td>
                             <td><input type="text" value="" placeholder="cantidad vendida" /></td>
+                            <td><span>3</span></td>
                         </tr>
+                        {% endif %}
                         {% endfor %}
                     </tbody>
                 </table>
@@ -72,7 +76,7 @@
         </section>
 
         <article class="row center">
-            <button id="btn_guardar_liquidacion" class="btn btn-primary">Guardar Liquidación</button>
+            <button id="btn_guardar_liquidacion" class="btn btn-primary">Guardar</button>
         </article>
     </section>
 
