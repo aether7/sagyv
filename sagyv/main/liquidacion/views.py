@@ -43,7 +43,7 @@ class BalanceLiquidacionView(View):
 
         dato = {'valor': valor_total}
 
-        return HttpResponse(json.dumps(dato), content_type="application/json");
+        return HttpResponse(json.dumps(dato), content_type="application/json")
 
 
 index = IndexView.as_view()
