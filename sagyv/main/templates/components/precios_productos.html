@@ -1,4 +1,4 @@
-<div class="panel panel-default">
+<!--div class="panel panel-default">
     <form id="f_precio_masivo" action="" method="post" role="form" class="form-horizontal" style="width:70%;margin:auto">
         {% for producto in productos %}
             <div class="form-group">
@@ -16,4 +16,23 @@
             <button class="btn btn-primary">Guardar</button>
         </div>
     </form>
-</div>
+</div-->
+
+<table class="table center">
+    <tr>
+        <td>codigo</td>
+        <td>precio</td>
+        <td>nuevo precio</td>
+    </tr>
+    {% for producto in productos %}
+        <tr>
+            <td>{{producto.codigo}}</td>
+            <td>{{producto.get_precio_producto}}</td>
+            <td>
+                <input id="producto_precio_{{ producto.id }}" class="form-control"
+                        type="text" value="{{ producto.get_precio_producto }}" />
+            </td>
+        </tr>
+    {% endfor %}
+
+</table>
