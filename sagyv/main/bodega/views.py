@@ -52,18 +52,20 @@ class UpdateStockProductoView(View):
 
 class UpdatePrecioProductoView(View):
     def post(self,req):
-        id_producto = req.POST.get('id')
-        precio = req.POST.get('precio')
+        cambios = req.POST.get('data')
+        
+        listaPrecios = json.loads(cambios)
 
-        producto = Producto.objects.get(pk = id_producto)
+        for precio in listaPrecios:
+            producto = Producto.objects.get(pk = precio.id)
 
-        pp = PrecioProducto()
-        pp.producto = producto
-        pp.precio = precio
-        pp.save()
+            pp = PrecioProducto()
+            pp.producto = producto
+            pp.precio = precio
+            pp.save()
 
+        
         dato = { "status": "ok" }
-
         return HttpResponse(json.dumps(dato), content_type="application/json");
 
 
