@@ -1,6 +1,8 @@
 App.Controllers.Bodega = function(){
     this.AGREGAR = 1;
     this.VENDER = 2;
+    this.UP = 38;
+    this.DOWN = 40;
     this.modo = null;
     this.mensaje = $("#mensaje");
     this.numFact = $("#factura_add");
@@ -15,7 +17,24 @@ App.Controllers.Bodega.prototype = {
     constructor: App.Controllers.Bodega,
 
     init: function(){
+        var _this = this;
 
+        $("#bodega_tab a").on("click", function(evt){
+            evt.preventDefault();
+            $(this).tab("show");
+        });
+
+        $("[data-columna]").on("keyup",function(evt){
+            var numeroActual = parseInt($(this).data("columna"));
+
+            if(evt.which === _this.UP && numeroActual > 1){
+                numeroActual--;
+            }else if(evt.which === _this.DOWN){
+                numeroActual++;
+            }
+
+            $("[data-columna={0}]".format(numeroActual)).trigger("focus");
+        });
     },
 
     showModal: function(ventana, id, modo){

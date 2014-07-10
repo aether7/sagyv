@@ -33,11 +33,6 @@
                     onclick="App.bodegaController.showModal('stock', {{ producto.id }}, 2);">
                     <span class="glyphicon glyphicon-minus" title="retirar stock"></span>
                 </button>
-
-                 <button type="button" class="btn btn-xs" data-toggle="modal"
-                    onclick="App.bodegaController.showModal('precio', {{ producto.id }})">
-                    <span class="glyphicon glyphicon-usd" title="actualizar precio"></span>
-                </button>
             </td>
         </tr>
         {% endfor %}

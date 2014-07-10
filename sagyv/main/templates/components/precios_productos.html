@@ -1,38 +1,30 @@
-<!--div class="panel panel-default">
-    <form id="f_precio_masivo" action="" method="post" role="form" class="form-horizontal" style="width:70%;margin:auto">
-        {% for producto in productos %}
-            <div class="form-group">
-                <label for="producto_precio_{{ producto.id }}"
-                    class="control-label col-sm-2">{{ producto.codigo }}:</label>
-
-                <div class="col-sm-10">
-                    <input id="producto_precio_{{ producto.id }}" class="form-control"
-                        type="text" value="{{ producto.get_precio_producto }}" />
-                </div>
-            </div>
-        {% endfor %}
-
-        <div class="form-group center">
-            <button class="btn btn-primary">Guardar</button>
-        </div>
-    </form>
-</div-->
-
-<table class="table center">
-    <tr>
-        <td>codigo</td>
-        <td>precio</td>
-        <td>nuevo precio</td>
-    </tr>
-    {% for producto in productos %}
-        <tr>
-            <td>{{producto.codigo}}</td>
-            <td>{{producto.get_precio_producto}}</td>
-            <td>
-                <input id="producto_precio_{{ producto.id }}" class="form-control"
-                        type="text" value="{{ producto.get_precio_producto }}" />
-            </td>
-        </tr>
-    {% endfor %}
-
-</table>
+<div class="panel panel-default" style="padding:2em">
+<form id="f_precio_masivo" action="" method="post" role="form" class="w70 auto-margin">
+    <table id="tabla_precios" class="table table-hover">
+        <thead>
+            <tr>
+                <tr>
+                    <th>Codigo</th>
+                    <th>Precio actual</th>
+                    <th>Precio nuevo</th>
+                </tr>
+            </tr>
+        </thead>
+        <tbody>
+            {% for producto in productos %}
+            <tr>
+                <td>{{ producto.codigo }}</td>
+                <td>{{ producto.get_precio_producto }}</td>
+                <td>
+                    <input id="producto_precio_{{ producto.id }}" type="text"
+                        value="" data-columna="{{ forloop.counter }}" />
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="form-group center">
+        <button class="btn btn-primary">Guardar</button>
+    </div>
+</form>
+</div>
