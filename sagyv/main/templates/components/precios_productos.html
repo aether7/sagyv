@@ -14,7 +14,7 @@
             {% for producto in productos %}
             <tr>
                 <td>{{ producto.codigo }}</td>
-                <td data-actual="true">$ <span>{{ producto.get_precio_producto }}</span></td>
+                <td>$ <span data-actual="true">{{ producto.get_precio_producto }}</span></td>
                 <td>
                     <input id="producto_precio_{{ producto.id }}" type="text"
                         value="" data-columna="{{ forloop.counter }}" data-id="{{ producto.id }}" />

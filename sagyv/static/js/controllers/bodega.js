@@ -24,41 +24,59 @@ App.Controllers.Bodega.prototype = {
             $(this).tab("show");
         });
 
-        $("[data-columna]").on("keyup",function(evt){
+        $("[data-columna]").on("keyup",this.moverInputs());
+        $("#f_precio_masivo").on("submit",this.actualizarPrecios());
+    },
+
+    moverInputs: function(){
+        return function(evt){
             var numeroActual = parseInt($(this).data("columna"));
 
-            if(evt.which === _this.UP && numeroActual > 1){
+            if(evt.which === this.UP && numeroActual > 1){
                 numeroActual--;
-            }else if(evt.which === _this.DOWN){
+            }else if(evt.which === this.DOWN){
                 numeroActual++;
             }
 
             $("[data-columna={0}]".format(numeroActual)).trigger("focus");
-        });
+        };
+    },
 
-        $("#f_precio_masivo").on("submit", function(evt){
+    actualizarPrecios: function(){
+        var _this = this;
+
+        return function(evt){
             evt.preventDefault();
-
-            var json = [];
+            var datos, precios = [];
 
             $("[data-columna]").each(function(){
                 var valor = $(this).val(),
                     id = $(this).data("id");
 
-                if(!valor){
+                if(!valor || !type.isNumber(parseInt(valor))){
                     return;
                 }
 
-                json.push({
+                precios.push({
                     id : id,
                     valor : valor
                 });
             });
 
-            $.post($(this).attr("action"),{ precios : JSON.stringify(json) }, function(data){
-                console.log(data);
+            datos = { precios : JSON.stringify(precios) };
+
+            $.post($(this).attr("action"), datos, function(data){
+                $("[data-columna]").each(function(){
+                    var valorActual = $(this).val() || 0,
+                        valorAnterior = $(this).closest("tr").find("span[data-actual=true]");
+
+                    valorAnterior.text(valorActual);
+                });
+
+                _this.agregarMensaje("Los precios han sido actualizados exitosamente");
+                $("#f_precio_masivo").get(0).reset();
             });
-        });
+        };
     },
 
     showModal: function(ventana, id, modo){
@@ -203,4 +221,4 @@ App.Controllers.Bodega.prototype = {
             _this.mensaje.removeClass("alert-success").hide().text("");
         },2500);
     }
-}
+};
