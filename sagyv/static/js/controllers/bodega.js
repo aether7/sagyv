@@ -73,7 +73,12 @@ App.Controllers.Bodega.prototype = {
             $.post($(this).attr("action"), datos, function(data){
                 $("[data-columna]").each(function(){
                     var valorActual = $(this).val() || 0,
-                        valorAnterior = $(this).closest("tr").find("span[data-actual=true]");
+                        valorAnterior = $(this).closest("tr").find("span[data-actual=true]"),
+                        id = $(this).data("id");
+
+                    if(valorActual){
+                        $("#precio_{0}".format(id)).text(valorActual);
+                    }
 
                     valorAnterior.text(valorActual);
                 });
