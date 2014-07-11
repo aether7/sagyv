@@ -29,13 +29,18 @@ App.Controllers.Bodega.prototype = {
     },
 
     moverInputs: function(){
-        return function(evt){
-            var numeroActual = parseInt($(this).data("columna"));
+        var _this = this;
 
-            if(evt.which === this.UP && numeroActual > 1){
+        return function(evt){
+            var valor, numeroActual = parseInt($(this).data("columna"));
+
+            if(evt.which === _this.UP && numeroActual > 1){
                 numeroActual--;
-            }else if(evt.which === this.DOWN){
+            }else if(evt.which === _this.DOWN){
                 numeroActual++;
+            }else{
+                valor = $(this).val().replace(/\D/gi, "");
+                $(this).val(valor);
             }
 
             $("[data-columna={0}]".format(numeroActual)).trigger("focus");
