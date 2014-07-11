@@ -35,6 +35,30 @@ App.Controllers.Bodega.prototype = {
 
             $("[data-columna={0}]".format(numeroActual)).trigger("focus");
         });
+
+        $("#f_precio_masivo").on("submit", function(evt){
+            evt.preventDefault();
+
+            var json = [];
+
+            $("[data-columna]").each(function(){
+                var valor = $(this).val(),
+                    id = $(this).data("id");
+
+                if(!valor){
+                    return;
+                }
+
+                json.push({
+                    id : id,
+                    valor : valor
+                });
+            });
+
+            $.post($(this).attr("action"),{ precios : JSON.stringify(json) }, function(data){
+                console.log(data);
+            });
+        });
     },
 
     showModal: function(ventana, id, modo){

@@ -1,5 +1,5 @@
 <div class="panel panel-default" style="padding:2em">
-<form id="f_precio_masivo" action="" method="post" role="form" class="w70 auto-margin">
+<form id="f_precio_masivo" action="{% url 'update_precio_producto' %}" method="post" role="form" class="w70 auto-margin">
     <table id="tabla_precios" class="table table-hover">
         <thead>
             <tr>
@@ -14,10 +14,10 @@
             {% for producto in productos %}
             <tr>
                 <td>{{ producto.codigo }}</td>
-                <td>{{ producto.get_precio_producto }}</td>
+                <td data-actual="true">$ <span>{{ producto.get_precio_producto }}</span></td>
                 <td>
                     <input id="producto_precio_{{ producto.id }}" type="text"
-                        value="" data-columna="{{ forloop.counter }}" />
+                        value="" data-columna="{{ forloop.counter }}" data-id="{{ producto.id }}" />
                 </td>
             </tr>
             {% endfor %}
