@@ -1,3 +1,26 @@
 <div class="panel panel-default">
-    es la suma de la bodega y de lo que hay en trasito por item
+    <table class="table center">
+        <tr>
+            <td>Código</td>
+            <td>Peso</td>
+            <td>Stock</td>
+            <td>Vehiculos</td>
+        </tr>
+        {% for producto in total_stock  %}
+        <tr>
+            <td>{{ producto.codigo }}</td>
+            <td>{{ producto.peso }} Kilos</td>
+            <td>
+                <span id="stock_{{ producto.id }}">
+                    {{ producto.cantidad }}
+                </span>
+            </td>
+            <td>
+               somewhere
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
 </div>
+
+
