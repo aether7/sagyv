@@ -33,12 +33,12 @@ class ObtenerClienteView(View):
 class CrearClienteView(View):
 
     def post(self, req):
-        giro = req.POST.get('')
-        direccion = req.POST.get('')
-        telefono = req.POST.get('')
-        rut = req.POST.get('')
-        situacion_comercial = req.POST.get('')
-        credito = req.POST.get('')
+        giro = req.POST.get('giro')
+        direccion = req.POST.get('direccion')
+        telefono = req.POST.get('telefono')
+        rut = req.POST.get('rut')
+        situacion_comercial = req.POST.get('situacion_comercial')
+        credito = req.POST.get('credito')
 
         if self.validar_cliente(rut):
             if situacion_comercial != '':
