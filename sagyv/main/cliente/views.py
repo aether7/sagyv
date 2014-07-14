@@ -16,19 +16,21 @@ class ObtenerClienteView(View):
     def get(self, req, id_cliente):
         cliente = Cliente.objects.get(pk = id_cliente)
 
-        dato = {'id': cliente.id,
-                'giro':cliente.giro,
-                'direccion':cliente.direccion,
-                'telefono':cliente.telefono,
-                'rut':cliente.rut,
-                'situacion_comercial':cliente.situacion_comercial,
-                'credito':cliente.credito}
+        dato = {
+            'id' : cliente.id,
+            'giro' : cliente.giro,
+            'direccion' : cliente.direccion,
+            'telefono' : cliente.telefono,
+            'rut' : cliente.rut,
+            'situacion_comercial' : cliente.situacion_comercial,
+            'credito' : cliente.credito
+        }
 
-        pass
+        return HttpResponse(json.dumps(dato),content_type="application/json")
 
 
 class CrearClienteView(View):
-	
+
     def post(self, req):
         giro = req.POST.get('')
         direccion = req.POST.get('')
@@ -37,12 +39,9 @@ class CrearClienteView(View):
         situacion_comercial = req.POST.get('')
         credito = req.POST.get('')
 
-        if(self.validarCliente(rut)):
-            if situacion_comercial != '' :
+        if self.validar_cliente(rut):
+            if situacion_comercial != '':
                 sc = DescuentoCliente.objects.get(pk = situacion_comercial)
-
-            if credito == '':
-                credito = False
 
             cliente = Cliente()
             cliente.giro = giro
@@ -50,7 +49,7 @@ class CrearClienteView(View):
             cliente.telefono = telefono
             cliente.rut = rut
             cliente.situacion_comercial = sc
-            cliente.credito = credito
+            cliente.credito = credito != "" and True or False
             cliente.save()
 
             dato = { "status": "ok" }
@@ -60,34 +59,32 @@ class CrearClienteView(View):
 
         return HttpResponse(json.dumps(dato), content_type="application/json")
 
-    def validarCliente(rut):
-        flag = True
+    def validar_cliente(self, rut):
+        existe = True
+
         try:
             cliente_existe = Cliente.objects.get(rut = rut)
-            flag = False
-
+            existe = False
         except cliente_existe.DoesNotExist:
-            flag = True
+            existe = True
 
-        return flag
-        
+        return existe
+
 
 class ModificarClienteView(View):
-    
+
     def post(self,req):
         pass
 
 
 class CrearSituacionComercialView(View):
-	
+
     def post(self, req):
 		pass
 
 
 index = IndexView.as_view()
-
 obtener_cliente = ObtenerClienteView.as_view()
 crear_cliente = CrearClienteView.as_view()
 modificar_cliente = ModificarClienteView.as_view()
-
 crear_situacion_comercial = CrearSituacionComercialView.as_view()
