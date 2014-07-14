@@ -89,5 +89,9 @@ App.Controllers.Cliente.prototype = {
             situacion_comercial : sitComercial.val(),
             credito : credito.is(":checked")
         };
+
+        $.post($("#f_crear_cliente").attr("action"), json, function(data){
+            console.log(data);
+        });
     }
 };
