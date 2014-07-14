@@ -10,24 +10,12 @@ class IndexView(TemplateView):
 		context["clientes"] = Cliente.objects.all()
 		return context
 
-class ClienteExisteView(View):
-
-    def post(self, req):
-        rut = req.POST.get('rut')
-
-        try:
-            cliente_existe = Cliente.objects.get(rut = rut)
-            dato = { "status": "error", "status_message": "El cliente ya existe." }
-        except cliente_existe.DoesNotExist:
-            dato = { "status": "ok" }
-
-        return HttpResponse(json.dumps(dato), content_type="application/json");
-
 
 class ObtenerClienteView(View):
 
     def get(self, req, id_cliente):
-        id_cliente = id_cliente
+
+
         pass
 
 
@@ -41,14 +29,33 @@ class CrearClienteView(View):
         situacion_comercial = req.POST.get('')
         credito = req.POST.get('')
 
-        cliente = Cliente()
-        cliente.giro = giro
-        cliente.direccion = direccion
-        cliente.telefono = telefono
-        cliente.rut = rut
-        cliente.situacion_comercial = situacion_comercial
-        cliente.credito = credito
-        cliente.save()
+        if(self.validarCliente(rut)):
+            cliente = Cliente()
+            cliente.giro = giro
+            cliente.direccion = direccion
+            cliente.telefono = telefono
+            cliente.rut = rut
+            cliente.situacion_comercial = situacion_comercial
+            cliente.credito = credito
+            cliente.save()
+
+            dato = { "status": "ok" }
+
+        else:
+            dato = { "status": "error", "status_message": "El cliente ya existe." }
+
+        return HttpResponse(json.dumps(dato), content_type="application/json")
+
+    def validarCliente(rut):
+        flag = True
+        try:
+            cliente_existe = Cliente.objects.get(rut = rut)
+            flag = False
+
+        except cliente_existe.DoesNotExist:
+            flag = True
+
+        return flag
         
 
 class ModificarClienteView(View):
@@ -66,7 +73,6 @@ class CrearSituacionComercialView(View):
 index = IndexView.as_view()
 
 obtener_cliente = ObtenerClienteView.as_view()
-cliente_existe = ClienteExisteView.as_view()
 crear_cliente = CrearClienteView.as_view()
 modificar_cliente = ModificarClienteView.as_view()
 
