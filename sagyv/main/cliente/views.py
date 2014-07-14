@@ -3,12 +3,12 @@ from django.http import HttpResponse
 from main.models import Cliente, DescuentoCliente
 
 class IndexView(TemplateView):
-	template_name = "cliente/index.html"
+    template_name = "cliente/index.html"
 
-	def get_context_data(self, **kwargs):
-		context = super(IndexView, self).get_context_data(**kwargs)
-		context["clientes"] = Cliente.objects.all()
-		return context
+    def get_context_data(self, **kwargs):
+        context = super(IndexView, self).get_context_data(**kwargs)
+        context["clientes"] = Cliente.objects.all()
+        return context
 
 
 class ObtenerClienteView(View):
@@ -80,7 +80,7 @@ class ModificarClienteView(View):
 class CrearSituacionComercialView(View):
 
     def post(self, req):
-		pass
+        pass
 
 
 index = IndexView.as_view()
