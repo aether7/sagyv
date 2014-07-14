@@ -31,7 +31,10 @@ class CrearClienteView(View):
 
         if(self.validarCliente(rut)):
             if situacion_comercial != '' :
-                sc = DescuentoCliente.objects.get(pk = situacion_comercial) 
+                sc = DescuentoCliente.objects.get(pk = situacion_comercial)
+
+            if credito == '':
+                credito = False
 
             cliente = Cliente()
             cliente.giro = giro
