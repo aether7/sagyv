@@ -1,7 +1,7 @@
 {% load static %}
 
 <div id="modal_add" class="modal fade">
-    <form id="f_add" action="{% url 'update_stock_producto' %}" method="post">
+    <form id="f_add" action="{% url 'bodega:update_stock' %}" method="post">
     {% csrf_token %}
     <div class="modal-dialog">
         <div class="modal-content">

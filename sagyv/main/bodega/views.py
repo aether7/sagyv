@@ -79,5 +79,5 @@ class UpdatePrecioProductoView(View):
 		return HttpResponse(json.dumps(dato), content_type="application/json");
 
 index = IndexView.as_view()
-update_stock_producto = UpdateStockProductoView.as_view()
-update_precio_producto = UpdatePrecioProductoView.as_view()
+update_stock = UpdateStockProductoView.as_view()
+update_precio = UpdatePrecioProductoView.as_view()
