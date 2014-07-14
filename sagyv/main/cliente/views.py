@@ -24,6 +24,13 @@ class ClienteExisteView(View):
         return HttpResponse(json.dumps(dato), content_type="application/json");
 
 
+class ObtenerClienteView(View):
+
+    def get(self, req, id_cliente):
+        id_cliente = id_cliente
+        pass
+
+
 class CrearClienteView(View):
 	
     def post(self, req):
@@ -58,6 +65,7 @@ class CrearSituacionComercialView(View):
 
 index = IndexView.as_view()
 
+obtener_cliente = ObtenerClienteView.as_view()
 cliente_existe = ClienteExisteView.as_view()
 crear_cliente = CrearClienteView.as_view()
 modificar_cliente = ModificarClienteView.as_view()
