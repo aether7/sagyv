@@ -27,7 +27,7 @@
 				<h4 class="modal-title">Agregar nuevo cliente</h4>
 			</div>
 			<div class="modal-body">
-				<form id="f_agregar_cliente" action="{% url 'crear_cliente' %}" method="post">
+				<form id="f_agregar_cliente" action="{% url 'cliente:crear' %}" method="post">
 					<div class="form-group">
 						<label for="nombre_add" class="control-label">Nombre</label>
 						<input id="nombre_add" class="form-control" type="text" value="" />
