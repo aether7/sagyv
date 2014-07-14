@@ -34,24 +34,15 @@ class CrearClienteView(View):
         situacion_comercial = req.POST.get('')
         credito = req.POST.get('')
 
-        try:
-            cliente_existe = Cliente.objects.get(rut = rut)
-            
+        cliente = Cliente()
+        cliente.giro = giro
+        cliente.direccion = direccion
+        cliente.telefono = telefono
+        cliente.rut = rut
+        cliente.situacion_comercial = situacion_comercial
+        cliente.credito = credito
+        cliente.save()
         
-        except cliente_existe.DoesNotExist:
-            cliente = Cliente()
-            cliente.giro = giro
-            cliente.direccion = direccion
-            cliente.telefono = telefono
-            cliente.rut = rut
-            cliente.situacion_comercial = situacion_comercial
-            cliente.credito = credito
-            cliente.save()
-        
-        
-
-        
-
 
 class ModificarClienteView(View):
     
