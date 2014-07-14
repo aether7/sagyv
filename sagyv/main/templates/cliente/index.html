@@ -61,7 +61,11 @@
 					<div class="form-group">
 						<label for="sit_comercial_add" class="control-label">Situación comercial</label>
 						<select name="sit_comercial_add" id="sit_comercial_add" class="form-control">
-							<option value="">...</option>
+							{% for situacion in situaciones %}
+							<option value="{{situacion.id}}">
+								{{situacion.monto_descuento}}
+							</option>
+							{% endfor%}
 						</select>
 						<span class="help-block"></span>
 					</div>
