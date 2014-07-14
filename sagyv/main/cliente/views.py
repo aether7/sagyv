@@ -1,6 +1,6 @@
 from django.views.generic import TemplateView,View
 from django.http import HttpResponse
-from main.models import Cliente
+from main.models import Cliente, DescuentoCliente
 
 class IndexView(TemplateView):
 	template_name = "cliente/index.html"
@@ -30,12 +30,15 @@ class CrearClienteView(View):
         credito = req.POST.get('')
 
         if(self.validarCliente(rut)):
+            if situacion_comercial != '' :
+                sc = DescuentoCliente.objects.get(pk = situacion_comercial) 
+
             cliente = Cliente()
             cliente.giro = giro
             cliente.direccion = direccion
             cliente.telefono = telefono
             cliente.rut = rut
-            cliente.situacion_comercial = situacion_comercial
+            cliente.situacion_comercial = sc
             cliente.credito = credito
             cliente.save()
 
