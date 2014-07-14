@@ -1,18 +1,175 @@
 {% extends "panel_control.html" %}
+{% load static %}
+
 {% block content %}
-<div class="panel panel-default">
-	<div class="panel-heading">
-		Clientes
-		<a href="#"  class="btn btn-default btn-sm"  role="button">
-			<span class="glyphicon glyphicon-plus"></span>
-		</a> 
-	</div>
-	<table class="table center">
+
+<button id="btn_agregar" class="btn btn-default">Agregar</button>
+
+<table class="table table-stripped">
+	<thead>
 		<tr>
-			<td>Giro</td>
-			<td>rut</td>
-			<td>acciones</td>
+			<th>Nombre completo</th>
+			<th>Rut</th>
+			<th>Situacion comercial</th>
+			<th>Acciones</th>
 		</tr>
-	</table>
+	</thead>
+</table>
+
+<div id="modal_agregar" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button class="close">
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only">Close</span>
+				</button>
+				<h4 class="modal-title">Agregar nuevo cliente</h4>
+			</div>
+			<div class="modal-body">
+				<form id="f_agregar_cliente" action="{% url 'crear_cliente' %}" method="post">
+					<div class="form-group">
+						<label for="nombre_add" class="control-label">Nombre</label>
+						<input id="nombre_add" class="form-control" type="text" value="" />
+						<span class="help-block"></span>
+					</div>
+
+					<div class="form-group">
+						<label for="giro_add" class="control-label">Giro</label>
+						<input id="giro_add" class="form-control" type="text" value="" />
+						<span class="help-block"></span>
+					</div>
+
+					<div class="form-group">
+						<label for="direccion_add" class="control-label">Dirección</label>
+						<input id="direccion_add" type="text" class="form-control" value="" />
+						<span class="help-block"></span>
+					</div>
+
+					<div class="form-group">
+						<label for="telefono_add" class="control-label">Teléfono</label>
+						<input id="telefono_add" type="text" class="form-control" value="" />
+						<span class="help-block"></span>
+					</div>
+
+					<div class="form-group">
+						<label for="rut_add" class="control-label">Rut</label>
+						<input id="rut_add" type="text" class="form-control" value="" />
+						<span class="help-block"></span>
+					</div>
+
+					<div class="form-group">
+						<label for="sit_comercial_add" class="control-label">Situación comercial</label>
+						<select name="sit_comercial_add" id="sit_comercial_add" class="form-control">
+							<option value="">...</option>
+						</select>
+						<span class="help-block"></span>
+					</div>
+
+					<div class="checkbox">
+						<label for="credito_add">
+							<input id="credito_add" type="checkbox" value="1" />
+							<span>Crédito</span>
+						</label>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+				<button id="btn_guardar_add" class="btn btn-primary">Guardar</button>
+			</div>
+		</div>
+	</div>
 </div>
+
+<div class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button class="close">
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only">Close</span>
+				</button>
+				<h4 class="modal-title">Título</h4>
+			</div>
+			<div class="modal-body">
+				asdfasdf
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+				<button class="btn btn-primary">Guardar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button class="close">
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only">Close</span>
+				</button>
+				<h4 class="modal-title">Título</h4>
+			</div>
+			<div class="modal-body">
+				asdfasdf
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+				<button class="btn btn-primary">Guardar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button class="close">
+					<span aria-hidden="true">&times;</span>
+					<span class="sr-only">Close</span>
+				</button>
+				<h4 class="modal-title">Título</h4>
+			</div>
+			<div class="modal-body">
+				asdfasdf
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+				<button class="btn btn-primary">Guardar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--
+<div class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">Modal title</h4>
+      </div>
+      <div class="modal-body">
+        <p>One fine body&hellip;</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+-->
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'js/controllers/cliente.js' %}"></script>
+<script>
+	App.clienteController = new App.Controllers.Cliente();
+	App.clienteController.init();
+</script>
 {% endblock %}
