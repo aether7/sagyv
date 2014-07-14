@@ -68,11 +68,11 @@ class UpdatePrecioProductoView(View):
 
 		for precio in listaPrecios:
 			producto = Producto.objects.get(pk = precio.id)
-
-			pp = PrecioProducto()
-			pp.producto = producto
-			pp.precio = precio
-			pp.save()
+			if(precio != ''):
+				pp = PrecioProducto()
+				pp.producto = producto
+				pp.precio = precio
+				pp.save()
 
 
 		dato = { "status": "ok" }

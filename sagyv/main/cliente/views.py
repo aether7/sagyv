@@ -14,7 +14,15 @@ class IndexView(TemplateView):
 class ObtenerClienteView(View):
 
     def get(self, req, id_cliente):
+        cliente = Cliente.objects.get(pk = id_cliente)
 
+        dato = {'id': cliente.id,
+                'giro':cliente.giro,
+                'direccion':cliente.direccion,
+                'telefono':cliente.telefono,
+                'rut':cliente.rut,
+                'situacion_comercial':cliente.situacion_comercial,
+                'credito':cliente.credito}
 
         pass
 
