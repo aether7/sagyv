@@ -7,7 +7,7 @@
 
 <button id="btn_agregar" class="btn btn-default">Agregar</button>
 
-<table class="table table-stripped">
+<table id="tabla_clientes" class="table table-stripped">
 	<thead>
 		<tr>
 			<th>Giro</th>
@@ -226,8 +226,12 @@
 {% endblock %}
 
 {% block js %}
+<script src="{% static 'js/vendor/handlebars.min.js' %}"></script>
 <script src="{% static 'js/plugins/jquery.rut.min.js' %}"></script>
 <script src="{% static 'js/controllers/cliente.js' %}"></script>
+<script id="tpl_nuevo_cliente" type="text/x-template">
+	{% include "cliente/nuevo_cliente_component.html" %}
+</script>
 <script>
 	App.clienteController = new App.Controllers.Cliente();
 	App.clienteController.setClienteUrl("{% url 'cliente:obtener' 0 %}");

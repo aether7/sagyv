@@ -54,8 +54,7 @@ class CrearClienteView(View):
             cliente.credito = credito != "" and True or False
             cliente.save()
 
-            dato = { "status": "ok" }
-
+            dato = { "status": "ok", "id" : cliente.id }
         else:
             dato = { "status": "error", "status_message": "El cliente ya existe." }
 
@@ -84,10 +83,10 @@ class ModificarClienteView(View):
         credito = req.POST.get('credito')
 
         cliente = Cliente.objects.get(pk = id_cliente)
-        
+
         if( cliente.giro != giro ):
             cliente.giro = giro
-        
+
         if( cliente.direccion != direccion ):
             cliente.direccion = direccion
 
@@ -97,9 +96,9 @@ class ModificarClienteView(View):
         if( cliente.situacion_comercial.id != situacion_comercial ):
             sc = DescuentoCliente.objects.get(pk = situacion_comercial)
             cliente.situacion_comercial = sc
-        
+
         cliente.credito = credito != "" and True or False
-        
+
         cliente.save()
 
         dato = { "status": "ok" }

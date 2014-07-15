@@ -40,6 +40,16 @@ App.Controllers.Cliente.prototype = {
 
         $.get(this.clienteUrl.replace("0", id),function(data){
             console.log(data);
+
+            $("#giro_update").val(data.giro);
+            $("#direccion_update").val(data.direccion);
+            $("#telefono_update").val(data.telefono);
+            $("#rut_update").val(data.rut);
+            $("#sit_comercial_update").val(data.situacion_comercial);
+
+            if(data.credito){
+                $("#credito_update").get(0).checked = true;
+            }
         });
     },
 
@@ -72,10 +82,35 @@ App.Controllers.Cliente.prototype = {
         };
 
         $.post($("#f_agregar_cliente").attr("action"), json, function(data){
+            json.id = data.id;
+
             $("#modal_agregar").modal("hide");
+            _this.procesarAgregar(json);
             _this.agregarMensaje("El cliente fue ingresado exitosamente");
             console.log(data);
         });
+    },
+
+    procesarAgregar: function(data){
+        var html,
+            situacionComercial,
+            template = $("#tpl_nuevo_cliente").html(),
+            render = Handlebars.compile(template);
+
+        if(data.situacion_comercial == 1){
+            situacionComercial = "Sin descuento";
+        }else{
+            situacionComercial = data.situacion_comercial;
+        }
+
+        html = render({
+            giro : data.giro,
+            rut : data.rut,
+            situacion_comercial : situacionComercial,
+            id : data.id
+        });
+
+        $("#tabla_clientes tbody").append(html);
     },
 
     guardarUpdate: function(){
