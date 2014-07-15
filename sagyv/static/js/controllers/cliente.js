@@ -147,13 +147,9 @@ App.Controllers.Cliente.prototype = {
 
         valido = this.validarCampos(giro, direccion, telefono, rut);
 
-        console.log(1);
-
         if(!valido){
             return;
         }
-
-        console.log(2);
 
         json = {
             nombre : nombre.val(),
@@ -162,7 +158,8 @@ App.Controllers.Cliente.prototype = {
             telefono : telefono.val(),
             rut : rut.val(),
             situacion_comercial : sitComercial.val(),
-            credito : credito.is(":checked")
+            credito : credito.is(":checked"),
+            id : this.idCliente
         };
 
         $.post($("#f_editar_cliente").attr("action"), json, function(data){
