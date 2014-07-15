@@ -4,6 +4,7 @@ App.Controllers.Cliente = function(){
     this.btnGuardarUpdate = $("#btn_guardar_update");
     this.mensaje = $("#mensaje");
     this.clienteUrl = null;
+    this.eliminarUrl = null;
     this.idCliente = null;
 };
 
@@ -21,9 +22,15 @@ App.Controllers.Cliente.prototype = {
             _this.guardarAdd();
         });
 
-        $("a[data-accion=editar]").on("click",function(){
+        $("a[data-accion=editar]").on("click",function(evt){
+            evt.preventDefault();
             _this.mostrarModal("editar");
             _this.cargarCliente($(this).data("id"));
+        });
+
+        $("a[data-accion=eliminar]").on("click",function(evt){
+            evt.preventDefault();
+            _this.eliminarCliente($(this).data("id"));
         });
     },
 
@@ -50,6 +57,19 @@ App.Controllers.Cliente.prototype = {
             if(data.credito){
                 $("#credito_update").get(0).checked = true;
             }
+        });
+    },
+
+    eliminarCliente: function(id){
+        this.id = id;
+
+        if(!confirm("Esta acción eliminará al cliente, ¿ desea continuar ?")){
+            return;
+        }
+
+        $.post(this.eliminarUrl, { id_cliente : id }, function(data){
+            console.log(data);
+            $("a[data-id={0}][data-accion=editar]".format(id)).closest("tr").remove();
         });
     },
 
@@ -87,7 +107,6 @@ App.Controllers.Cliente.prototype = {
             $("#modal_agregar").modal("hide");
             _this.procesarAgregar(json);
             _this.agregarMensaje("El cliente fue ingresado exitosamente");
-            console.log(data);
         });
     },
 
@@ -144,7 +163,6 @@ App.Controllers.Cliente.prototype = {
         $.post($("#f_agregar_cliente").attr("action"), json, function(data){
             $("#modal_editar").modal("hide");
             _this.agregarMensaje("El cliente fue ingresado exitosamente");
-            console.log(data);
         });
     },
 
@@ -199,5 +217,9 @@ App.Controllers.Cliente.prototype = {
 
     setClienteUrl: function(clienteUrl){
         this.clienteUrl = clienteUrl;
+    },
+
+    setEliminarUrl: function(eliminarUrl){
+        this.eliminarUrl = eliminarUrl;
     }
 };

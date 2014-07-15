@@ -31,7 +31,7 @@
 			</td>
 			<td>
 				<a href="#" data-accion="editar" data-id="{{ cliente.id }}">Editar</a>
-				<a href="#">Eliminar</a>
+				<a href="#" data-accion="eliminar" data-id="{{ cliente.id }}">Eliminar</a>
 			</td>
 		</tr>
 		{% endfor %}
@@ -235,6 +235,7 @@
 <script>
 	App.clienteController = new App.Controllers.Cliente();
 	App.clienteController.setClienteUrl("{% url 'cliente:obtener' 0 %}");
+	App.clienteController.setEliminarUrl("{% url 'cliente:eliminar' %}");
 	App.clienteController.init();
 </script>
 {% endblock %}
