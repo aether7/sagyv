@@ -1,3 +1,4 @@
+import json
 from django.views.generic import TemplateView,View
 from django.http import HttpResponse
 from main.models import Cliente, DescuentoCliente
@@ -66,7 +67,7 @@ class CrearClienteView(View):
         try:
             cliente_existe = Cliente.objects.get(rut = dni)
             existe = False
-        except cliente_existe.DoesNotExist:
+        except Cliente.DoesNotExist:
             existe = True
 
         return existe
