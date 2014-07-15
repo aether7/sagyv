@@ -3,6 +3,9 @@ App.Controllers = {};
 App.Models = {};
 App.cookies = {};
 
+
+// funciones varias
+
 (function(){
     document.cookie.split(";").forEach(function(token){
         var tokens = token.split("=");
@@ -59,3 +62,21 @@ for(var i = 0; i < paramTypes.length; i++){
 
 window.type = type;
 })(window);
+
+(function(){
+    String.prototype.trim = function(){
+        return this.replace(/^\s+|\s+$/gi, "");
+    };
+
+    String.prototype.format = function(){
+        var args = Array.prototype.slice.apply(arguments),
+            s = this,
+            i = 0;
+
+        for(i = 0;i < args.length; i++){
+            s = s.replace(new RegExp("\\{\\s?" + i + "\s?\\}","g"),args[i]);
+        }
+
+        return s;
+    };
+})();

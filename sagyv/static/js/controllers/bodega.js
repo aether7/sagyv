@@ -1,6 +1,8 @@
 App.Controllers.Bodega = function(){
     this.AGREGAR = 1;
     this.VENDER = 2;
+    this.UP = 38;
+    this.DOWN = 40;
     this.modo = null;
     this.mensaje = $("#mensaje");
     this.numFact = $("#factura_add");
@@ -15,7 +17,76 @@ App.Controllers.Bodega.prototype = {
     constructor: App.Controllers.Bodega,
 
     init: function(){
+        var _this = this;
 
+        $("#bodega_tab a").on("click", function(evt){
+            evt.preventDefault();
+            $(this).tab("show");
+        });
+
+        $("[data-columna]").on("keyup",this.moverInputs());
+        $("#f_precio_masivo").on("submit",this.actualizarPrecios());
+    },
+
+    moverInputs: function(){
+        var _this = this;
+
+        return function(evt){
+            var valor, numeroActual = parseInt($(this).data("columna"));
+
+            if(evt.which === _this.UP && numeroActual > 1){
+                numeroActual--;
+            }else if(evt.which === _this.DOWN){
+                numeroActual++;
+            }else{
+                valor = $(this).val().replace(/\D/gi, "");
+                $(this).val(valor);
+            }
+
+            $("[data-columna={0}]".format(numeroActual)).trigger("focus");
+        };
+    },
+
+    actualizarPrecios: function(){
+        var _this = this;
+
+        return function(evt){
+            evt.preventDefault();
+            var datos, precios = [];
+
+            $("[data-columna]").each(function(){
+                var valor = $(this).val(),
+                    id = $(this).data("id");
+
+                if(!valor || !type.isNumber(parseInt(valor))){
+                    return;
+                }
+
+                precios.push({
+                    id : id,
+                    valor : valor
+                });
+            });
+
+            datos = { precios : JSON.stringify(precios) };
+
+            $.post($(this).attr("action"), datos, function(data){
+                $("[data-columna]").each(function(){
+                    var valorActual = $(this).val() || 0,
+                        valorAnterior = $(this).closest("tr").find("span[data-actual=true]"),
+                        id = $(this).data("id");
+
+                    if(valorActual){
+                        $("#precio_{0}".format(id)).text(valorActual);
+                    }
+
+                    valorAnterior.text(valorActual);
+                });
+
+                _this.agregarMensaje("Los precios han sido actualizados exitosamente");
+                $("#f_precio_masivo").get(0).reset();
+            });
+        };
     },
 
     showModal: function(ventana, id, modo){
@@ -160,4 +231,4 @@ App.Controllers.Bodega.prototype = {
             _this.mensaje.removeClass("alert-success").hide().text("");
         },2500);
     }
-}
+};

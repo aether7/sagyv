@@ -15,6 +15,9 @@ body
 #main_content
     clear both
 
+.auto-margin
+    margin auto
+
 .box
     box-sizing border-box
     display inline-block
@@ -28,3 +31,6 @@ body
 
 .logo-index
     float left
+
+for num in (5..95)
+    s(".w%s{width:%s%}", num, num)

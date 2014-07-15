@@ -420,5 +420,4 @@ class StockVehiculo(models.Model):
     stockManager = StockManager()
 
     def __unicode__(self):
-        return str(self.vehiculo.patente) + " -> (cod " + (self.producto.codigo) + ": " + str(self.cantidad) + ")"
-
+        return str(self.vehiculo.patente) + " -> (cod " + str(self.producto.codigo) + ": " + str(self.cantidad) + ")"

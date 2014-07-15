@@ -1,7 +1,7 @@
 from django.conf.urls import patterns,url
 
 urlpatterns = patterns("main.bodega.views",
-    url(r"^$","index",name="bodega"),
-    url(r"^update_stock_producto/$", "update_stock_producto", name="update_stock_producto"),
-    url(r"^update_precio_producto/$", "update_precio_producto", name="update_precio_producto"),
+    url(r"^$","index",name="index"),
+    url(r"^update\-stock/$", "update_stock", name="update_stock"),
+    url(r"^update\-precio/$", "update_precio", name="update_precio"),
 )

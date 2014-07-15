@@ -1,5 +1,5 @@
 <div id="modal_precio" class="modal fade">
-    <form id="f_precio" action="{% url 'update_precio_producto' %}" method="post">
+    <form id="f_precio" action="{% url 'bodega:update_precio' %}" method="post">
     {% csrf_token %}
     <div class="modal-dialog">
         <div class="modal-content">
