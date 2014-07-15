@@ -35,13 +35,13 @@ class StockManager(models.Manager):
             SELECT  mp.codigo,
                     mp.peso,
                     mtp.nombre,
-                    (SELECT cantidad  FROM main_stockvehiculo WHERE producto_id = mp.id) as cantidad,
-                    mp.stock as stock
+                    mp.stock as stock,
+                    (SELECT cantidad  FROM main_stockvehiculo WHERE producto_id = mp.id) as cantidad
 
             FROM main_producto mp
 
             INNER JOIN main_tipoproducto mtp ON(mp.tipo_producto_id = mtp.id)
-            GROUP BY mp.codigo, mp.peso,  mtp.nombre;
+            GROUP BY mp.codigo, mp.peso,  mtp.nombre, mp.stock
         """
 
 		query = connection.cursor()
@@ -55,10 +55,10 @@ class StockManager(models.Manager):
 			p.peso = row[1]
 			p.nombre = row[2]
 
-			if row[3]:
-				p.cantidad = row[3] +row[4]
+			if row[4]:
+				p.cantidad = (row[3] +row[4]) or 0
 			else:
-				p.cantidad = row[3]
+				p.cantidad = (row[4]) or 0
 
 			resultado.append(p)
 
