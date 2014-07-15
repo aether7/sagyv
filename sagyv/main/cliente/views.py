@@ -9,7 +9,7 @@ class IndexView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(IndexView, self).get_context_data(**kwargs)
         context["clientes"] = Cliente.objects.all()
-        context["situaciones"] = DescuentoCliente.objects.all()
+        context["situaciones_comerciales"] = DescuentoCliente.objects.all()
         return context
 
 
