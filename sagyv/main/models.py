@@ -278,6 +278,9 @@ class DescuentoCliente(models.Model):
     monto_descuento = models.IntegerField()
     tipo_descuento = models.ForeignKey(TipoDescuento)
 
+    def es_cliente_sin_descuento(self):
+        return self.tipo_descuento.id == 1
+
     def __unicode__(self):
         return unicode(str(self.monto_descuento))
 
