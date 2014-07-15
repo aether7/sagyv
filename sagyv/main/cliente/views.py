@@ -94,7 +94,7 @@ class ModificarClienteView(View):
         if( cliente.telefono != telefono ):
             cliente.telefono = telefono
 
-        if( cliente.situacion_comercial.id != situacion_comercial )
+        if( cliente.situacion_comercial.id != situacion_comercial ):
             sc = DescuentoCliente.objects.get(pk = situacion_comercial)
             cliente.situacion_comercial = sc
         
