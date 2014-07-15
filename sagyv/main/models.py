@@ -20,7 +20,6 @@ class Comuna(models.Model):
     def __unicode__(self):
         return self.nombre
 
-
 class Herramienta(models.Model):
     nombre = models.CharField(max_length=140)
     stock = models.IntegerField()
@@ -211,6 +210,7 @@ class Producto(models.Model):
     peso = models.IntegerField(null=True)
     tipo_producto = models.ForeignKey(TipoProducto)
     stock = models.IntegerField(default=0)
+    orden =  models.IntegerField(default=0)
 
     def __unicode__(self):
         return str(self.codigo) + " " +self.nombre
@@ -411,7 +411,6 @@ class PrecioProducto(models.Model):
 
     def __unicode__(self):
         return str(self.precio)
-
 
 class StockVehiculo(models.Model):
     vehiculo = models.ForeignKey(Vehiculo)
