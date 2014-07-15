@@ -102,7 +102,8 @@ class ModificarClienteView(View):
         
         cliente.save()
 
-
+        dato = { "status": "ok" }
+        return HttpResponse(json.dumps(dato), content_type="application/json")
 
 
 class CrearSituacionComercialView(View):
