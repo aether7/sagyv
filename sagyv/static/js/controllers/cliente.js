@@ -22,13 +22,17 @@ App.Controllers.Cliente.prototype = {
             _this.guardarAdd();
         });
 
-        $("a[data-accion=editar]").on("click",function(evt){
+        this.btnGuardarUpdate.on("click", function(){
+            _this.guardarUpdate();
+        });
+
+        $("#tabla_clientes").on("click","a[data-accion=editar]",function(evt){
             evt.preventDefault();
             _this.mostrarModal("editar");
             _this.cargarCliente($(this).data("id"));
         });
 
-        $("a[data-accion=eliminar]").on("click",function(evt){
+        $("#tabla_clientes").on("click","a[data-accion=eliminar]",function(evt){
             evt.preventDefault();
             _this.eliminarCliente($(this).data("id"));
         });
@@ -131,21 +135,25 @@ App.Controllers.Cliente.prototype = {
 
     guardarUpdate: function(){
         var json,
-            nombre = $("#nombre_add"),
-            giro = $("#giro_add"),
-            direccion = $("#direccion_add"),
-            telefono = $("#telefono_add"),
-            rut = $("#rut_add"),
-            sitComercial = $("#sit_comercial_add"),
-            credito = $("#credito_add"),
+            nombre = $("#nombre_update"),
+            giro = $("#giro_update"),
+            direccion = $("#direccion_update"),
+            telefono = $("#telefono_update"),
+            rut = $("#rut_update"),
+            sitComercial = $("#sit_comercial_update"),
+            credito = $("#credito_update"),
             valido = true,
             _this = this;
 
         valido = this.validarCampos(giro, direccion, telefono, rut);
 
+        console.log(1);
+
         if(!valido){
             return;
         }
+
+        console.log(2);
 
         json = {
             nombre : nombre.val(),
@@ -157,9 +165,9 @@ App.Controllers.Cliente.prototype = {
             credito : credito.is(":checked")
         };
 
-        $.post($("#f_agregar_cliente").attr("action"), json, function(data){
+        $.post($("#f_editar_cliente").attr("action"), json, function(data){
             $("#modal_editar").modal("hide");
-            _this.agregarMensaje("El cliente fue ingresado exitosamente");
+            _this.agregarMensaje("El cliente fue actualizado exitosamente");
         });
     },
 

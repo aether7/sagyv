@@ -12,6 +12,7 @@
 		<tr>
 			<th>Giro</th>
 			<th>Rut</th>
+			<th>Telefono</th>
 			<th>Situacion comercial</th>
 			<th>Acciones</th>
 		</tr>
@@ -21,6 +22,7 @@
 		<tr>
 			<td>{{ cliente.giro }}</td>
 			<td>{{ cliente.rut }}</td>
+			<td>{{ cliente.telefono }}</td>
 			<td>
 				{% if cliente.situacion_comercial.es_cliente_sin_descuento %}
 					Sin descuento
