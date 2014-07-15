@@ -127,6 +127,7 @@ App.Controllers.Cliente.prototype = {
             giro : data.giro,
             rut : data.rut,
             situacion_comercial : situacionComercial,
+            telefono : data.telefono,
             id : data.id
         });
 
@@ -159,12 +160,18 @@ App.Controllers.Cliente.prototype = {
             rut : rut.val(),
             situacion_comercial : sitComercial.val(),
             credito : credito.is(":checked"),
-            id : this.idCliente
+            id_cliente : this.idCliente
         };
 
         $.post($("#f_editar_cliente").attr("action"), json, function(data){
             $("#modal_editar").modal("hide");
             _this.agregarMensaje("El cliente fue actualizado exitosamente");
+
+            var tr = $("a[data-id={0}][data-accion=editar]".format(_this.idCliente)).closest("tr");
+
+            tr.find("[data-columna=giro]").text(json.giro);
+            tr.find("[data-columna=telefono]").text(json.telefono);
+            tr.find("[data-columna=situacion_comercial]").text(json.situacion_comercial);
         });
     },
 
