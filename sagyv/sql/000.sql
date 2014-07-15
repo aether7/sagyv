@@ -89,6 +89,9 @@ INSERT INTO main_estadocivil(id, nombre) VALUES(2, 'Casado');
 INSERT INTO main_estadocivil(id, nombre) VALUES(3, 'Divorciado');
 INSERT INTO main_estadocivil(id, nombre) VALUES(4, 'Viudo');
 
+-- Situaciones comerciales
+INSERT INTO main_descuentocliente(monto_descuento, tipo_descuento_id) VALUES(0, 1);
+
 -- regiones
 INSERT INTO main_region (id, nombre, orden) VALUES (1, 'Región de Tarapacá', 1);
 INSERT INTO main_region (id, nombre, orden) VALUES (2, 'Región de Antofagasta', 2);

@@ -1,6 +1,11 @@
 App.Controllers.Cliente = function(){
     this.btnAgregar = $("#btn_agregar");
     this.btnGuardarAdd = $("#btn_guardar_add");
+    this.btnGuardarUpdate = $("#btn_guardar_update");
+    this.mensaje = $("#mensaje");
+    this.clienteUrl = null;
+    this.eliminarUrl = null;
+    this.idCliente = null;
 };
 
 App.Controllers.Cliente.prototype = {
@@ -16,6 +21,21 @@ App.Controllers.Cliente.prototype = {
         this.btnGuardarAdd.on("click", function(){
             _this.guardarAdd();
         });
+
+        this.btnGuardarUpdate.on("click", function(){
+            _this.guardarUpdate();
+        });
+
+        $("#tabla_clientes").on("click","a[data-accion=editar]",function(evt){
+            evt.preventDefault();
+            _this.mostrarModal("editar");
+            _this.cargarCliente($(this).data("id"));
+        });
+
+        $("#tabla_clientes").on("click","a[data-accion=eliminar]",function(evt){
+            evt.preventDefault();
+            _this.eliminarCliente($(this).data("id"));
+        });
     },
 
     mostrarModal: function(id){
@@ -24,6 +44,34 @@ App.Controllers.Cliente.prototype = {
         $modal.find("form").get(0).reset();
         $(".has-error").removeClass("has-error");
         $(".help-block").text("");
+    },
+
+    cargarCliente: function(id){
+        this.idCliente = id;
+
+        $.get(this.clienteUrl.replace("0", id),function(data){
+            $("#giro_update").val(data.giro);
+            $("#direccion_update").val(data.direccion);
+            $("#telefono_update").val(data.telefono);
+            $("#rut_update").val(data.rut);
+            $("#sit_comercial_update").val(data.situacion_comercial);
+
+            if(data.credito){
+                $("#credito_update").get(0).checked = true;
+            }
+        });
+    },
+
+    eliminarCliente: function(id){
+        this.id = id;
+
+        if(!confirm("Esta acción eliminará al cliente, ¿ desea continuar ?")){
+            return;
+        }
+
+        $.post(this.eliminarUrl, { id_cliente : id }, function(data){
+            $("a[data-id={0}][data-accion=editar]".format(id)).closest("tr").remove();
+        });
     },
 
     guardarAdd: function(){
@@ -35,16 +83,96 @@ App.Controllers.Cliente.prototype = {
             rut = $("#rut_add"),
             sitComercial = $("#sit_comercial_add"),
             credito = $("#credito_add"),
-            valido = true;
+            valido = true,
+            _this = this;
+
+        valido = this.validarCampos(giro, direccion, telefono, rut);
+
+        if(!valido){
+            return;
+        }
+
+        json = {
+            nombre : nombre.val(),
+            giro : giro.val(),
+            direccion : direccion.val(),
+            telefono : telefono.val(),
+            rut : rut.val(),
+            situacion_comercial : sitComercial.val(),
+            credito : credito.is(":checked")
+        };
+
+        $.post($("#f_agregar_cliente").attr("action"), json, function(data){
+            json.id = data.id;
+
+            $("#modal_agregar").modal("hide");
+            _this.procesarAgregar(json);
+            _this.agregarMensaje("El cliente fue ingresado exitosamente");
+        });
+    },
+
+    procesarAgregar: function(data){
+        var html,
+            situacionComercial,
+            template = $("#tpl_nuevo_cliente").html(),
+            render = Handlebars.compile(template);
+
+        if(data.situacion_comercial == 1){
+            situacionComercial = "Sin descuento";
+        }else{
+            situacionComercial = data.situacion_comercial;
+        }
+
+        html = render({
+            giro : data.giro,
+            rut : data.rut,
+            situacion_comercial : situacionComercial,
+            id : data.id
+        });
+
+        $("#tabla_clientes tbody").append(html);
+    },
+
+    guardarUpdate: function(){
+        var json,
+            nombre = $("#nombre_update"),
+            giro = $("#giro_update"),
+            direccion = $("#direccion_update"),
+            telefono = $("#telefono_update"),
+            rut = $("#rut_update"),
+            sitComercial = $("#sit_comercial_update"),
+            credito = $("#credito_update"),
+            valido = true,
+            _this = this;
+
+        valido = this.validarCampos(giro, direccion, telefono, rut);
+
+        if(!valido){
+            return;
+        }
+
+        json = {
+            nombre : nombre.val(),
+            giro : giro.val(),
+            direccion : direccion.val(),
+            telefono : telefono.val(),
+            rut : rut.val(),
+            situacion_comercial : sitComercial.val(),
+            credito : credito.is(":checked"),
+            id : this.idCliente
+        };
+
+        $.post($("#f_editar_cliente").attr("action"), json, function(data){
+            $("#modal_editar").modal("hide");
+            _this.agregarMensaje("El cliente fue actualizado exitosamente");
+        });
+    },
+
+    validarCampos: function(giro, direccion, telefono, rut){
+        var valido = true;
 
         $(".has-error").removeClass("has-error");
         $(".help-block").text("");
-
-        if(nombre.val().trim() === ""){
-            valido = false;
-            nombre.siblings("span").text("Campo obligatorio");
-            nombre.parent().addClass("has-error");
-        }
 
         if(giro.val().trim() === ""){
             valido = false;
@@ -62,36 +190,38 @@ App.Controllers.Cliente.prototype = {
             valido = false;
             telefono.siblings("span").text("Campo obligatorio");
             telefono.parent().addClass("has-error");
+        }else if(!type.isNumber(parseInt(telefono.val()))){
+            valido = false;
+            telefono.siblings("span").text("Debe ingresar número de teléfono válido");
         }
 
         if(rut.val().trim() === ""){
             valido = false;
             rut.siblings("span").text("Campo obligatorio");
             rut.parent().addClass("has-error");
-        }
-
-        if(sitComercial.val() === ""){
+        }else if(!$.Rut.validar(rut.val())){
             valido = false;
-            sitComercial.siblings("span").text("Campo obligatorio");
-            sitComercial.parent().addClass("has-error");
+            rut.siblings("span").text("El rut es incorrecto");
+            rut.parent().addClass("has-error");
         }
 
-        if(!valido){
-            return;
-        }
+        return valido;
+    },
 
-        json = {
-            nombre : nombre.val(),
-            giro : giro.val(),
-            direccion : direccion.val(),
-            telefono : telefono.val(),
-            rut : rut.val(),
-            situacion_comercial : sitComercial.val(),
-            credito : credito.is(":checked")
-        };
+    agregarMensaje: function(mensaje){
+        var _this = this;
+        this.mensaje.addClass("alert-success").show().text(mensaje);
 
-        $.post($("#f_agregar_cliente").attr("action"), json, function(data){
-            console.log(data);
-        });
+        setTimeout(function(){
+            _this.mensaje.removeClass("alert-success").hide().text("");
+        },2500);
+    },
+
+    setClienteUrl: function(clienteUrl){
+        this.clienteUrl = clienteUrl;
+    },
+
+    setEliminarUrl: function(eliminarUrl){
+        this.eliminarUrl = eliminarUrl;
     }
 };
