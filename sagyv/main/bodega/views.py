@@ -58,6 +58,7 @@ class UpdateStockProductoView(View):
 
         return HttpResponse(new_stock)
 
+
 class UpdatePrecioProductoView(View):
 
     def post(self,req):
@@ -73,7 +74,8 @@ class UpdatePrecioProductoView(View):
             precio_producto.save()
 
         dato = { "status": "ok" }
-        return HttpResponse(json.dumps(dato), content_type="application/json");
+        return HttpResponse(json.dumps(dato), content_type="application/json")
+
 
 index = IndexView.as_view()
 update_stock = UpdateStockProductoView.as_view()

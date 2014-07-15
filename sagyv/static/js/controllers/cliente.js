@@ -36,6 +36,14 @@ App.Controllers.Cliente.prototype = {
             evt.preventDefault();
             _this.eliminarCliente($(this).data("id"));
         });
+
+        $("#sit_comercial_add").on("change",function(){
+            if($(this).val() === "otro"){
+                $("#nueva_situacion_add").removeClass("hidden");
+            }else{
+                $("#nueva_situacion_add").addClass("hidden");
+            }
+        });
     },
 
     mostrarModal: function(id){
@@ -76,7 +84,6 @@ App.Controllers.Cliente.prototype = {
 
     guardarAdd: function(){
         var json,
-            nombre = $("#nombre_add"),
             giro = $("#giro_add"),
             direccion = $("#direccion_add"),
             telefono = $("#telefono_add"),
@@ -93,13 +100,14 @@ App.Controllers.Cliente.prototype = {
         }
 
         json = {
-            nombre : nombre.val(),
             giro : giro.val(),
             direccion : direccion.val(),
             telefono : telefono.val(),
             rut : rut.val(),
             situacion_comercial : sitComercial.val(),
-            credito : credito.is(":checked")
+            credito : credito.is(":checked"),
+            cantidad : $("#numero_add").val(),
+            tipo : $("#tipo_add").val()
         };
 
         $.post($("#f_agregar_cliente").attr("action"), json, function(data){
@@ -108,6 +116,10 @@ App.Controllers.Cliente.prototype = {
             $("#modal_agregar").modal("hide");
             _this.procesarAgregar(json);
             _this.agregarMensaje("El cliente fue ingresado exitosamente");
+
+            var str = "<option value='{0}'>{1}</option>";
+            str = str.format(data.situacion_comercial.id, data.situacion_comercial.tipo);
+            $(str).insertBefore("#sit_comercial_add option:last");
         });
     },
 

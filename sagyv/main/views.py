@@ -32,7 +32,6 @@ class LoginView(View):
         return HttpResponse(json.dumps(respuesta),content_type="application/json")
 
 
-
 class LogoutView(View):
     def get(self, request):
         log_out(request)

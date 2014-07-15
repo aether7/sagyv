@@ -8,222 +8,242 @@
 <button id="btn_agregar" class="btn btn-default">Agregar</button>
 
 <table id="tabla_clientes" class="table table-striped">
-	<thead>
-		<tr>
-			<th>Giro</th>
-			<th>Rut</th>
-			<th>Telefono</th>
-			<th>Situacion comercial</th>
-			<th>Acciones</th>
-		</tr>
-	</thead>
-	<tbody>
-		{% for cliente in clientes %}
-		<tr>
-			<td data-columna="giro">{{ cliente.giro }}</td>
-			<td>{{ cliente.rut }}</td>
-			<td data-columna="telefono">{{ cliente.telefono }}</td>
-			<td data-columna="situacion_comercial">
-				{% if cliente.situacion_comercial.es_cliente_sin_descuento %}
-					Sin descuento
-				{% else %}
-					{{ cliente.situacion_comercial.monto_descuento }}
-					{{ cliente.situacion_comercial.tipo_descuento.tipo }}
-				{% endif %}
-			</td>
-			<td>
-				<a href="#" data-accion="editar" data-id="{{ cliente.id }}">Editar</a>
-				<a href="#" data-accion="eliminar" data-id="{{ cliente.id }}">Eliminar</a>
-			</td>
-		</tr>
-		{% endfor %}
-	</tbody>
+    <thead>
+        <tr>
+            <th>Giro</th>
+            <th>Rut</th>
+            <th>Telefono</th>
+            <th>Situacion comercial</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for cliente in clientes %}
+        <tr>
+            <td data-columna="giro">{{ cliente.giro }}</td>
+            <td>{{ cliente.rut }}</td>
+            <td data-columna="telefono">{{ cliente.telefono }}</td>
+            <td data-columna="situacion_comercial">
+                {% if cliente.situacion_comercial.es_cliente_sin_descuento %}
+                    Sin descuento
+                {% else %}
+                    {{ cliente.situacion_comercial.monto_descuento }}
+                    {{ cliente.situacion_comercial.tipo_descuento.tipo }}
+                {% endif %}
+            </td>
+            <td>
+                <a href="#" data-accion="editar" data-id="{{ cliente.id }}">Editar</a>
+                <a href="#" data-accion="eliminar" data-id="{{ cliente.id }}">Eliminar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
 </table>
 
 <div id="modal_agregar" class="modal fade">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button class="close">
-					<span aria-hidden="true">&times;</span>
-					<span class="sr-only">Close</span>
-				</button>
-				<h4 class="modal-title">Agregar nuevo cliente</h4>
-			</div>
-			<div class="modal-body">
-				<form id="f_agregar_cliente" action="{% url 'cliente:crear' %}" method="post">
-					{% csrf_token %}
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title">Agregar nuevo cliente</h4>
+            </div>
+            <div class="modal-body">
+                <form id="f_agregar_cliente" action="{% url 'cliente:crear' %}" method="post">
+                    {% csrf_token %}
 
-					<div class="form-group">
-						<label for="giro_add" class="control-label">Giro</label>
-						<input id="giro_add" class="form-control" type="text" value="" />
-						<span class="help-block"></span>
-					</div>
+                    <div class="form-group">
+                        <label for="giro_add" class="control-label">Giro</label>
+                        <input id="giro_add" class="form-control" type="text" value="" />
+                        <span class="help-block"></span>
+                    </div>
 
-					<div class="form-group">
-						<label for="direccion_add" class="control-label">Dirección</label>
-						<input id="direccion_add" type="text" class="form-control" value="" />
-						<span class="help-block"></span>
-					</div>
+                    <div class="form-group">
+                        <label for="direccion_add" class="control-label">Dirección</label>
+                        <input id="direccion_add" type="text" class="form-control" value="" />
+                        <span class="help-block"></span>
+                    </div>
 
-					<div class="form-group">
-						<label for="telefono_add" class="control-label">Teléfono</label>
-						<input id="telefono_add" type="text" class="form-control" value="" />
-						<span class="help-block"></span>
-					</div>
+                    <div class="form-group">
+                        <label for="telefono_add" class="control-label">Teléfono</label>
+                        <input id="telefono_add" type="text" class="form-control" value="" />
+                        <span class="help-block"></span>
+                    </div>
 
-					<div class="form-group">
-						<label for="rut_add" class="control-label">Rut</label>
-						<input id="rut_add" type="text" class="form-control" value="" />
-						<span class="help-block"></span>
-					</div>
+                    <div class="form-group">
+                        <label for="rut_add" class="control-label">Rut</label>
+                        <input id="rut_add" type="text" class="form-control" value="" />
+                        <span class="help-block"></span>
+                    </div>
 
-					<div class="form-group">
-						<label for="sit_comercial_add" class="control-label">Situación comercial</label>
-						<select name="sit_comercial_add" id="sit_comercial_add" class="form-control">
-							{% for situacion in situaciones_comerciales %}
-							<option value="{{ situacion.id }}">
-								{% if situacion.tipo_descuento.id == 1 %}
-									$
-								{% elif situacion.tipo_descuento.id == 2 %}
-									%
-								{% endif %}
+                    <div class="form-group">
+                        <label for="sit_comercial_add" class="control-label">Situación comercial</label>
+                        <select name="sit_comercial_add" id="sit_comercial_add" class="form-control">
+                            {% for situacion in situaciones_comerciales %}
+                            <option value="{{ situacion.id }}">
+                                {% if situacion.tipo_descuento.id == 1 %}
+                                    $
+                                {% elif situacion.tipo_descuento.id == 2 %}
+                                    %
+                                {% endif %}
 
-								{{ situacion.monto_descuento }}
-							</option>
-							{% endfor%}
-						</select>
-						<span class="help-block"></span>
-					</div>
+                                {{ situacion.monto_descuento }}
+                            </option>
+                            {% endfor%}
+                            <option value="otro">Otro...</option>
+                        </select>
+                        <span class="help-block"></span>
+                    </div>
 
-					<div class="checkbox">
-						<label for="credito_add">
-							<input id="credito_add" type="checkbox" value="1" />
-							<span>Crédito</span>
-						</label>
-					</div>
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button class="btn btn-default" data-dismiss="modal">Cancelar</button>
-				<button id="btn_guardar_add" class="btn btn-primary">Guardar</button>
-			</div>
-		</div>
-	</div>
+                    <div id="nueva_situacion_add" class="form-group row hidden">
+                        <div class="col-xs-3">
+                            <label for="numero_add" class="control-label">Cantidad:</label>
+                        </div>
+                        <div class="col-xs-3">
+                            <input id="numero_add" class="form-control" type="text" value="" />
+                        </div>
+                        <div class="col-xs-3">
+                            <label for="tipo_add" class="control-label">Tipo</label>
+                        </div>
+                        <div class="col-xs-3">
+                            <select name="tipo_add" id="tipo_add" class="form-control">
+                            {% for tipo_descuento in tipos_descuento %}
+                                <option value="{{ tipo_descuento.id }}">{{ tipo_descuento.tipo }}</option>
+                            {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="checkbox">
+                        <label for="credito_add">
+                            <input id="credito_add" type="checkbox" value="1" />
+                            <span>Crédito</span>
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button id="btn_guardar_add" class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div id="modal_editar" class="modal fade">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button class="close">
-					<span aria-hidden="true">&times;</span>
-					<span class="sr-only">Close</span>
-				</button>
-				<h4 class="modal-title">Editar Cliente</h4>
-			</div>
-			<div class="modal-body">
-				<form id="f_editar_cliente" action="{% url 'cliente:modificar' %}" method="post">
-					{% csrf_token %}
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title">Editar Cliente</h4>
+            </div>
+            <div class="modal-body">
+                <form id="f_editar_cliente" action="{% url 'cliente:modificar' %}" method="post">
+                    {% csrf_token %}
 
-					<div class="form-group">
-						<label for="giro_update" class="control-label">Giro</label>
-						<input id="giro_update" class="form-control" type="text" value="" />
-						<span class="help-block"></span>
-					</div>
+                    <div class="form-group">
+                        <label for="giro_update" class="control-label">Giro</label>
+                        <input id="giro_update" class="form-control" type="text" value="" />
+                        <span class="help-block"></span>
+                    </div>
 
-					<div class="form-group">
-						<label for="direccion_update" class="control-label">Dirección</label>
-						<input id="direccion_update" type="text" class="form-control" value="" />
-						<span class="help-block"></span>
-					</div>
+                    <div class="form-group">
+                        <label for="direccion_update" class="control-label">Dirección</label>
+                        <input id="direccion_update" type="text" class="form-control" value="" />
+                        <span class="help-block"></span>
+                    </div>
 
-					<div class="form-group">
-						<label for="telefono_update" class="control-label">Teléfono</label>
-						<input id="telefono_update" type="text" class="form-control" value="" />
-						<span class="help-block"></span>
-					</div>
+                    <div class="form-group">
+                        <label for="telefono_update" class="control-label">Teléfono</label>
+                        <input id="telefono_update" type="text" class="form-control" value="" />
+                        <span class="help-block"></span>
+                    </div>
 
-					<div class="form-group">
-						<label for="rut_update" class="control-label">Rut</label>
-						<input id="rut_update" type="text" class="form-control" value="" />
-						<span class="help-block"></span>
-					</div>
+                    <div class="form-group">
+                        <label for="rut_update" class="control-label">Rut</label>
+                        <input id="rut_update" type="text" class="form-control" value="" />
+                        <span class="help-block"></span>
+                    </div>
 
-					<div class="form-group">
-						<label for="sit_comercial_update" class="control-label">Situación comercial</label>
-						<select name="sit_comercial_update" id="sit_comercial_update" class="form-control">
-							{% for situacion in situaciones_comerciales %}
-							<option value="{{ situacion.id }}">
-								{% if situacion.tipo_descuento.id == 1 %}
-									$
-								{% elif situacion.tipo_descuento.id == 2 %}
-									%
-								{% endif %}
+                    <div class="form-group">
+                        <label for="sit_comercial_update" class="control-label">Situación comercial</label>
+                        <select name="sit_comercial_update" id="sit_comercial_update" class="form-control">
+                            {% for situacion in situaciones_comerciales %}
+                            <option value="{{ situacion.id }}">
+                                {% if situacion.tipo_descuento.id == 1 %}
+                                    $
+                                {% elif situacion.tipo_descuento.id == 2 %}
+                                    %
+                                {% endif %}
 
-								{{ situacion.monto_descuento }}
-							</option>
-							{% endfor%}
-						</select>
-						<span class="help-block"></span>
-					</div>
+                                {{ situacion.monto_descuento }}
+                            </option>
+                            {% endfor%}
+                        </select>
+                        <span class="help-block"></span>
+                    </div>
 
-					<div class="checkbox">
-						<label for="credito_update">
-							<input id="credito_update" type="checkbox" value="1" />
-							<span>Crédito</span>
-						</label>
-					</div>
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button class="btn btn-default" data-dismiss="modal">Cancelar</button>
-				<button id="btn_guardar_update" class="btn btn-primary">Guardar</button>
-			</div>
-		</div>
-	</div>
+                    <div class="checkbox">
+                        <label for="credito_update">
+                            <input id="credito_update" type="checkbox" value="1" />
+                            <span>Crédito</span>
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button id="btn_guardar_update" class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="modal fade">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button class="close">
-					<span aria-hidden="true">&times;</span>
-					<span class="sr-only">Close</span>
-				</button>
-				<h4 class="modal-title">Título</h4>
-			</div>
-			<div class="modal-body">
-				asdfasdf
-			</div>
-			<div class="modal-footer">
-				<button class="btn btn-default" data-dismiss="modal">Cancelar</button>
-				<button class="btn btn-primary">Guardar</button>
-			</div>
-		</div>
-	</div>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title">Título</h4>
+            </div>
+            <div class="modal-body">
+                asdfasdf
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="modal fade">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button class="close">
-					<span aria-hidden="true">&times;</span>
-					<span class="sr-only">Close</span>
-				</button>
-				<h4 class="modal-title">Título</h4>
-			</div>
-			<div class="modal-body">
-				asdfasdf
-			</div>
-			<div class="modal-footer">
-				<button class="btn btn-default" data-dismiss="modal">Cancelar</button>
-				<button class="btn btn-primary">Guardar</button>
-			</div>
-		</div>
-	</div>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title">Título</h4>
+            </div>
+            <div class="modal-body">
+                asdfasdf
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
 
@@ -232,12 +252,12 @@
 <script src="{% static 'js/plugins/jquery.rut.min.js' %}"></script>
 <script src="{% static 'js/controllers/cliente.js' %}"></script>
 <script id="tpl_nuevo_cliente" type="text/x-template">
-	{% include "cliente/nuevo_cliente_component.html" %}
+    {% include "cliente/nuevo_cliente_component.html" %}
 </script>
 <script>
-	App.clienteController = new App.Controllers.Cliente();
-	App.clienteController.setClienteUrl("{% url 'cliente:obtener' 0 %}");
-	App.clienteController.setEliminarUrl("{% url 'cliente:eliminar' %}");
-	App.clienteController.init();
+    App.clienteController = new App.Controllers.Cliente();
+    App.clienteController.setClienteUrl("{% url 'cliente:obtener' 0 %}");
+    App.clienteController.setEliminarUrl("{% url 'cliente:eliminar' %}");
+    App.clienteController.init();
 </script>
 {% endblock %}

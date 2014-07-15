@@ -65,7 +65,9 @@ class StockManager(models.Manager):
 
 		return resultado
 
-class Stock():
+
+class Stock(object):
+
 	def __init__(self):
 		self.codigo = 0
 		self.peso = 0

@@ -1,7 +1,8 @@
 import json
+from django.db import transaction
 from django.views.generic import TemplateView,View
 from django.http import HttpResponse
-from main.models import Cliente, DescuentoCliente
+from main.models import Cliente, DescuentoCliente, TipoDescuento
 
 class IndexView(TemplateView):
     template_name = "cliente/index.html"
@@ -9,7 +10,9 @@ class IndexView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(IndexView, self).get_context_data(**kwargs)
         context["clientes"] = Cliente.objects.all()
+        context["tipos_descuento"] = TipoDescuento.objects.all()
         context["situaciones_comerciales"] = DescuentoCliente.objects.all()
+
         return context
 
 
@@ -32,7 +35,7 @@ class ObtenerClienteView(View):
 
 
 class CrearClienteView(View):
-
+    @transaction.commit_on_success
     def post(self, req):
         giro = req.POST.get('giro')
         direccion = req.POST.get('direccion')
@@ -40,6 +43,11 @@ class CrearClienteView(View):
         rut = req.POST.get('rut')
         situacion_comercial = req.POST.get('situacion_comercial')
         credito = req.POST.get('credito')
+
+        if situacion_comercial == "otro":
+            cantidad = req.POST.get("cantidad")
+            tipo = req.POST.get("tipo")
+            situacion_comercial = self.crear_nueva_situacion(cantidad, tipo)
 
         if self.validar_cliente(rut):
             if situacion_comercial != '':
@@ -54,11 +62,28 @@ class CrearClienteView(View):
             cliente.credito = credito != "" and True or False
             cliente.save()
 
-            dato = { "status": "ok", "id" : cliente.id }
+            dato = {
+                "status": "ok",
+                "id" : cliente.id,
+                "situacion_comercial" : {
+                    "id" : sc.id,
+                    "tipo" : sc.tipo_descuento.tipo
+                }
+            }
         else:
             dato = { "status": "error", "status_message": "El cliente ya existe." }
 
         return HttpResponse(json.dumps(dato), content_type="application/json")
+
+    def crear_nueva_situacion(self, cantidad, tipo_id):
+        descuento_tipo = TipoDescuento.objects.get(pk = int(tipo_id))
+
+        descuento_cliente = DescuentoCliente()
+        descuento_cliente.monto_descuento = cantidad
+        descuento_cliente.tipo_descuento = descuento_tipo
+        descuento_cliente.save()
+
+        return descuento_cliente.id
 
     def validar_cliente(self, dni):
         existe = True
@@ -74,6 +99,7 @@ class CrearClienteView(View):
 
 class ModificarClienteView(View):
 
+    @transaction.commit_on_success
     def post(self,req):
         id_cliente = req.POST.get('id_cliente')
         giro = req.POST.get('giro')
@@ -107,6 +133,7 @@ class ModificarClienteView(View):
 
 class EliminarClienteView(View):
 
+    @transaction.commit_on_success
     def post(self,req):
         id_cliente = req.POST.get('id_cliente')
         cliente = Cliente.objects.get(pk = id_cliente)
