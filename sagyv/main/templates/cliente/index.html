@@ -21,7 +21,14 @@
 		<tr>
 			<td>{{ cliente.giro }}</td>
 			<td>{{ cliente.rut }}</td>
-			<td>{{ cliente.situacion_comercial }}</td>
+			<td>
+				{% if cliente.situacion_comercial.es_cliente_sin_descuento %}
+					Sin descuento
+				{% else %}
+					{{ cliente.situacion_comercial.monto_descuento }}
+					{{ cliente.situacion_comercial.tipo_descuento.tipo }}
+				{% endif %}
+			</td>
 			<td>
 				<a href="#" data-accion="editar" data-id="{{ cliente.id }}">Editar</a>
 				<a href="#">Eliminar</a>

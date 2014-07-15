@@ -38,7 +38,7 @@ App.Controllers.Cliente.prototype = {
     cargarCliente: function(id){
         this.idCliente = id;
 
-        $.get(this.clienteUrl,function(data){
+        $.get(this.clienteUrl.replace("0", id),function(data){
             console.log(data);
         });
     },
@@ -52,7 +52,8 @@ App.Controllers.Cliente.prototype = {
             rut = $("#rut_add"),
             sitComercial = $("#sit_comercial_add"),
             credito = $("#credito_add"),
-            valido = true;
+            valido = true,
+            _this = this;
 
         valido = this.validarCampos(giro, direccion, telefono, rut);
 
@@ -71,6 +72,8 @@ App.Controllers.Cliente.prototype = {
         };
 
         $.post($("#f_agregar_cliente").attr("action"), json, function(data){
+            $("#modal_agregar").modal("hide");
+            _this.agregarMensaje("El cliente fue ingresado exitosamente");
             console.log(data);
         });
     },
@@ -84,7 +87,8 @@ App.Controllers.Cliente.prototype = {
             rut = $("#rut_add"),
             sitComercial = $("#sit_comercial_add"),
             credito = $("#credito_add"),
-            valido = true;
+            valido = true,
+            _this = this;
 
         valido = this.validarCampos(giro, direccion, telefono, rut);
 
@@ -103,6 +107,8 @@ App.Controllers.Cliente.prototype = {
         };
 
         $.post($("#f_agregar_cliente").attr("action"), json, function(data){
+            $("#modal_editar").modal("hide");
+            _this.agregarMensaje("El cliente fue ingresado exitosamente");
             console.log(data);
         });
     },
