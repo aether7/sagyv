@@ -106,6 +106,13 @@ class ModificarClienteView(View):
         return HttpResponse(json.dumps(dato), content_type="application/json")
 
 
+class EliminarClienteView(View):
+
+    def post(self,req):
+        id_cliente = req.POST.get('id_cliente')
+        pass
+
+        
 class CrearSituacionComercialView(View):
 
     def post(self, req):
