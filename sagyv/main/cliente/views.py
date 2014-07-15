@@ -76,7 +76,33 @@ class CrearClienteView(View):
 class ModificarClienteView(View):
 
     def post(self,req):
-        pass
+        id_cliente = req.POST.get('id_cliente')
+        giro = req.POST.get('giro')
+        direccion = req.POST.get('direccion')
+        telefono = req.POST.get('telefono')
+        situacion_comercial = req.POST.get('situacion_comercial')
+        credito = req.POST.get('credito')
+
+        cliente = Cliente.objects.get(pk = id_cliente)
+        
+        if( cliente.giro != giro ):
+            cliente.giro = giro
+        
+        if( cliente.direccion != direccion ):
+            cliente.direccion = direccion
+
+        if( cliente.telefono != telefono ):
+            cliente.telefono = telefono
+
+        if( cliente.situacion_comercial.id != situacion_comercial )
+            sc = DescuentoCliente.objects.get(pk = situacion_comercial)
+            cliente.situacion_comercial = sc
+        
+        cliente.credito = credito != "" and True or False
+        
+        cliente.save()
+
+
 
 
 class CrearSituacionComercialView(View):
