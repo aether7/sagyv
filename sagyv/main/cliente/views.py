@@ -24,7 +24,7 @@ class ObtenerClienteView(View):
             'direccion' : cliente.direccion,
             'telefono' : cliente.telefono,
             'rut' : cliente.rut,
-            'situacion_comercial' : cliente.situacion_comercial,
+            'situacion_comercial' : cliente.situacion_comercial.id,
             'credito' : cliente.credito
         }
 
@@ -112,7 +112,7 @@ class EliminarClienteView(View):
         id_cliente = req.POST.get('id_cliente')
         pass
 
-        
+
 class CrearSituacionComercialView(View):
 
     def post(self, req):
