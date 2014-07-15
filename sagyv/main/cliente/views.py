@@ -60,11 +60,11 @@ class CrearClienteView(View):
 
         return HttpResponse(json.dumps(dato), content_type="application/json")
 
-    def validar_cliente(self, rut):
+    def validar_cliente(self, dni):
         existe = True
 
         try:
-            cliente_existe = Cliente.objects.get(rut = rut)
+            cliente_existe = Cliente.objects.get(rut = dni)
             existe = False
         except cliente_existe.DoesNotExist:
             existe = True
