@@ -90,7 +90,7 @@ App.Controllers.Cliente.prototype = {
             credito : credito.is(":checked")
         };
 
-        $.post($("#f_crear_cliente").attr("action"), json, function(data){
+        $.post($("#f_agregar_cliente").attr("action"), json, function(data){
             console.log(data);
         });
     }
