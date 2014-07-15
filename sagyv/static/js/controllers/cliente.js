@@ -46,8 +46,6 @@ App.Controllers.Cliente.prototype = {
         this.idCliente = id;
 
         $.get(this.clienteUrl.replace("0", id),function(data){
-            console.log(data);
-
             $("#giro_update").val(data.giro);
             $("#direccion_update").val(data.direccion);
             $("#telefono_update").val(data.telefono);
@@ -68,7 +66,6 @@ App.Controllers.Cliente.prototype = {
         }
 
         $.post(this.eliminarUrl, { id_cliente : id }, function(data){
-            console.log(data);
             $("a[data-id={0}][data-accion=editar]".format(id)).closest("tr").remove();
         });
     },
