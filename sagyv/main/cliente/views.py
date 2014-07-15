@@ -110,7 +110,11 @@ class EliminarClienteView(View):
 
     def post(self,req):
         id_cliente = req.POST.get('id_cliente')
-        pass
+        cliente = Cliente.objects.get(pk = id_cliente)
+        cliente.delete()
+
+        dato = { "status": "ok" }
+        return HttpResponse(json.dumps(dato), content_type="application/json")
 
 
 class CrearSituacionComercialView(View):
@@ -123,4 +127,5 @@ index = IndexView.as_view()
 obtener_cliente = ObtenerClienteView.as_view()
 crear_cliente = CrearClienteView.as_view()
 modificar_cliente = ModificarClienteView.as_view()
+eliminar_cliente = EliminarClienteView.as_view()
 crear_situacion_comercial = CrearSituacionComercialView.as_view()
