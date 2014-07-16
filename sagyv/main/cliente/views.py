@@ -143,15 +143,54 @@ class EliminarClienteView(View):
         return HttpResponse(json.dumps(dato), content_type="application/json")
 
 
+class ObtenerSituacionComercialView(View):
+
+    def get(self, req, id_situacion):
+        sc = DescuentoCliente.objects.get(pk = id_situacion)
+        dato = {
+            'id': sc.id,
+            'monto_descuento': sc.monto_descuento,
+            'tipo_descuento': sc.tipo_descuento
+        }
+        return HttpResponse(json.dumps(dato),content_type="application/json")
+
+
 class CrearSituacionComercialView(View):
 
     def post(self, req):
-        pass
+        tipo = req.POST.get('tipo')
+        valor = req.POST.get('valor')
 
+        td = TipoDescuento.objects.get(pk = tipo)
+        descuento_cliente = DescuentoCliente()
+        descuento_cliente.tipo_descuento = td
+        descuento_cliente.monto_descuento = valor
+        descuento_cliente.save()
+
+
+class ModificarSituacionComercialView(View):
+
+    def post(self, req):
+        id_situacion = req.POST.get('id_situacion')
+        monto_nuevo = req.POST.get('valor')
+        tipo = req.POST.get('tipo')
+
+        situacion_comercial = DescuentoCliente.objects.get(pk = id_situacion)
+
+        if(tipo != situacion_comercial.tipo_descuento.id):
+            td = TipoDescuento.objects.get(pk = tipo)
+            situacion_comercial.tipo_descuento = td
+        
+        situacion_comercial.monto_descuento = monto_nuevo
+        situacion_comercial.save()
+        
 
 index = IndexView.as_view()
 obtener_cliente = ObtenerClienteView.as_view()
 crear_cliente = CrearClienteView.as_view()
 modificar_cliente = ModificarClienteView.as_view()
 eliminar_cliente = EliminarClienteView.as_view()
+
+obtener_situacion_comercial = ObtenerSituacionComercialView.as_view()
 crear_situacion_comercial = CrearSituacionComercialView.as_view()
+modificar_situacion_comercial = ModificarSituacionComercialView.as_view()
