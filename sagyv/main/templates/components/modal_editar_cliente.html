@@ -1,0 +1,71 @@
+<div id="modal_editar" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title">Editar Cliente</h4>
+            </div>
+            <div class="modal-body">
+                <form id="f_editar_cliente" action="{% url 'cliente:modificar' %}" method="post">
+                    {% csrf_token %}
+
+                    <div class="form-group">
+                        <label for="giro_update" class="control-label">Giro</label>
+                        <input id="giro_update" class="form-control" type="text" value="" />
+                        <span class="help-block"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="direccion_update" class="control-label">Dirección</label>
+                        <input id="direccion_update" type="text" class="form-control" value="" />
+                        <span class="help-block"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="telefono_update" class="control-label">Teléfono</label>
+                        <input id="telefono_update" type="text" class="form-control" value="" />
+                        <span class="help-block"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="rut_update" class="control-label">Rut</label>
+                        <input id="rut_update" type="text" class="form-control" value="" />
+                        <span class="help-block"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sit_comercial_update" class="control-label">Situación comercial</label>
+                        <select name="sit_comercial_update" id="sit_comercial_update" class="form-control">
+                            {% for situacion in situaciones_comerciales %}
+                            <option value="{{ situacion.id }}">
+                                {% if situacion.tipo_descuento.id == 1 %}
+                                    $
+                                {% elif situacion.tipo_descuento.id == 2 %}
+                                    %
+                                {% endif %}
+
+                                {{ situacion.monto_descuento }}
+                            </option>
+                            {% endfor%}
+                        </select>
+                        <span class="help-block"></span>
+                    </div>
+
+                    <div class="checkbox">
+                        <label for="credito_update">
+                            <input id="credito_update" type="checkbox" value="1" />
+                            <span>Crédito</span>
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button id="btn_guardar_update" class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
