@@ -28,7 +28,7 @@
 </table>
 
 <div id="modal_nuevo_vehiculo" class="modal fade">
-    <form id="f_nuevo_vehiculo" action="{% url 'agregar_nuevo_vehiculo' %}" method="post">
+    <form id="f_nuevo_vehiculo" action="{% url 'vehiculos:agregar_nuevo_vehiculo' %}" method="post">
     {% csrf_token %}
     <div class="modal-dialog">
         <div class="modal-content">
@@ -102,7 +102,8 @@
 </div>
 
 <div id="modal_anexar" class="modal fade">
-    <form id="f_anexar" action="" method="post">
+    <form id="f_anexar" action="{% url 'vehiculos:anexar_vehiculo' %}" method="post">
+        {% csrf_token %}
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -114,6 +115,7 @@
                     <div class="form-group">
                         <label for="anexar_vehiculo" class="control-label">Vehículo:</label>
                         <input id="anexar_vehiculo" type="text" value="" readonly class="form-control" />
+                        <span class="help-block"></span>
                     </div>
 
                     <div class="form-group">
@@ -124,11 +126,13 @@
                                 <option value="{{ trabajador.id }}">{{ trabajador.get_nombre_completo }}</option>
                             {% endfor %}
                         </select>
+                        <span class="help-block"></span>
                     </div>
 
                     <div class="form-group">
                         <label for="anexar_fecha" class="control-label">Fecha:</label>
-                        <input id="anexar_fecha" type="date" value="" class="form-control" />
+                        <input id="anexar_fecha" type="date" value="" class="form-control" min="{% now 'Y-m-d' %}" />
+                        <span class="help-block"></span>
                     </div>
                 </div>
 
@@ -172,6 +176,7 @@
 </script>
 <script>
     App.vehiculoController = new App.Controllers.Vehiculo();
+    App.vehiculoController.urlVehiculo = "{% url 'vehiculos:obtener' %}";
     App.vehiculoController.init();
 </script>
 {% endblock %}

@@ -1,6 +1,7 @@
 App.Controllers.Vehiculo = function(){
     this.btnNuevoVehiculo = $("#btn_nuevo_vehiculo");
     this.btnGuardarNuevoVehiculo = $("#btn_guardar_nuevo_vehiculo");
+    this.urlVehiculo = null;
     this.id = null;
 };
 
@@ -24,6 +25,11 @@ App.Controllers.Vehiculo.prototype = {
             _this.mostrar("modal_" + accion,"f_" + accion);
             _this[accion]();
         });
+
+        $("#btn_anexar").on("click", function(evt){
+            evt.preventDefault();
+            _this.guardarAnexar();
+        });
     },
 
     mostrar: function(id,reseteo){
@@ -35,6 +41,47 @@ App.Controllers.Vehiculo.prototype = {
     },
 
     anexar: function(){
+        $.get(this.urlVehiculo,{ id_vehiculo : this.id }, function(data){
+            $("#anexar_vehiculo").val(data.numero).data("id", data.id);
+        });
+    },
+
+    guardarAnexar: function(){
+        var json,
+            valido = true,
+            vehiculo = $("#anexar_vehiculo"),
+            chofer = $("#anexar_chofer"),
+            fecha = $("#anexar_fecha");
+
+        $(".has-error").removeClass("has-error");
+        $("span.help-block").text("");
+
+        if(chofer.val() === ""){
+            valido = false;
+            chofer.siblings("span").text("campo obligatorio");
+            chofer.parent().addClass("has-error");
+        }
+
+        if(fecha.val() === ""){
+            valido = false;
+            fecha.siblings("span").text("campo obligatorio");
+            fecha.parent().addClass("has-error");
+        }
+
+        if(!valido){
+            return;
+        }
+
+        json = {
+            id : vehiculo.data("id"),
+            chofer : parseInt(chofer.val()),
+            fecha : fecha.val()
+        };
+
+        $.post($("#f_anexar").attr("action"), json, function(data){
+            console.log("psh psh psh");
+            console.log(data);
+        });
     },
 
     enviarMensaje: function(mensaje){
