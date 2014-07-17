@@ -80,6 +80,12 @@ App.Controllers.Vehiculo.prototype = {
         };
 
         $.post($("#f_anexar").attr("action"), json, function(data){
+            var trVehiculo,
+                optChofer = $("#anexar_chofer option:selected");
+
+            trVehiculo = $("#vehiculo_" + _this.id).find("data-nombre-chofer={0}".format(optChofer.text()));
+
+
             console.log("psh psh psh");
             console.log(data);
         });
