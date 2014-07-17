@@ -6,6 +6,10 @@ App.Controllers.Cliente = function(){
     this.clienteUrl = null;
     this.eliminarUrl = null;
     this.idCliente = null;
+
+    this.btnAgregarSituacion = $("#btn_agregar_situacion");
+    this.situacionUrl = null;
+    this.crearSituacionlUrl = null;
 };
 
 App.Controllers.Cliente.prototype = {
@@ -16,6 +20,10 @@ App.Controllers.Cliente.prototype = {
 
         this.btnAgregar.on("click",function(){
             _this.mostrarModal("agregar");
+        });
+
+        this.btnAgregarSituacion.on("click",function(){
+            _this.mostrarModal("agregar_situacion");
         });
 
         this.btnGuardarAdd.on("click", function(){
