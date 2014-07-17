@@ -237,6 +237,59 @@ App.Controllers.Vehiculo.prototype = {
     },
 
     guardarEdicionVehiculo:function(){
-        alert("wololo");
+        var numero = $("#numero_vehiculo_editar"),
+            patente = $("#patente_vehiculo_editar"),
+            fecha = $("#revision_tecnica_vehiculo_editar"),
+            km = $("#kilometraje_vehiculo_editar"),
+            sec = $("#estado_sec_vehiculo_editar"),
+            estado_pago = $("#estado_pago_vehiculo_editar"),
+            id_chofer = $("#chofer_vehiculo_editar")
+            _this = this;
+
+    }
+
+    validarCampoEdicionVehiculo: function(numero, patente, fechaRev, kilometraje, ){
+        var valido = true;
+        $(".has-error").removeClass("has-error");
+        $(".help-block").text("");
+
+        if(!type.isNumber(parseInt(numero.val()))){
+            valido = false;
+            numero.siblings("span.help-block").text("Ingrese número válido");
+            numero.parent().addClass("has-error");
+        }else if(_this.estaRepetidoVehiculo("numero", numero.val())){
+            valido = false;
+            numero.siblings("span.help-block").text("El número de vehículo ya está siendo utilizado");
+            numero.parent().addClass("has-error");
+        }
+
+        if(!/^[A-z]{4}\d{2}$/.test(patente.val()) && !/^[A-z]{2}\d{4}$/.test(patente.val())){
+            valido = false;
+            patente.siblings("span.help-block").text("Ingrese patente válida");
+            patente.parent().addClass("has-error");
+        }else if(_this.estaRepetidoVehiculo("patente", patente.val())){
+            valido = false;
+            patente.siblings("span.help-block").text("La patente ya está siendo utilizada");
+            patente.parent().addClass("has-error");
+        }
+
+        if(!/^\d{4}-\d{2}-\d{2}$/.test(fechaRev.val())){
+            valido = false;
+            fechaRev.siblings("span.help-block").text("Ingrese fecha válida");
+            fechaRev.parent().addClass("has-error");
+        }
+
+        if(!type.isNumber(parseInt(kilometraje.val()))){
+            valido = false;
+            kilometraje.siblings("span.help-block").text("Ingrese kilometraje numérico");
+            kilometraje.parent().addClass("has-error");
+        }else if(parseInt(kilometraje.val()) < 0){
+            valido = false;
+            kilometraje.siblings("span.help-block").text("El kilometraje debe ser un número positivo");
+            kilometraje.parent().addClass("has-error");
+        }
+
+        return valido;
+
     }
 };
