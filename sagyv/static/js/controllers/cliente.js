@@ -139,7 +139,7 @@ App.Controllers.Cliente.prototype = {
             json.id = data.id;
 
             $("#modal_agregar").modal("hide");
-            _this.procesarAgregar(json);
+            _this.procesarAgregar(data);
             _this.agregarMensaje("El cliente fue ingresado exitosamente");
 
             var str = "<option value='{0}'>{1}</option>";
@@ -163,7 +163,7 @@ App.Controllers.Cliente.prototype = {
         html = render({
             giro : data.giro,
             rut : data.rut,
-            situacion_comercial : situacionComercial,
+            situacion_comercial :data.situacion_comercial_text,
             telefono : data.telefono,
             id : data.id
         });

@@ -45,6 +45,8 @@ class CrearClienteView(View):
         situacion_comercial = req.POST.get('situacion_comercial')
         credito = req.POST.get('credito')
 
+        rut = rut.replace('.', '');
+
         if situacion_comercial == "otro":
             cantidad = req.POST.get("cantidad")
             tipo = req.POST.get("tipo")
@@ -66,6 +68,10 @@ class CrearClienteView(View):
             dato = {
                 "status": "ok",
                 "id" : cliente.id,
+                "giro" : cliente.giro,
+                "rut" : cliente.rut,
+                "situacion_comercial_text" : str(sc.monto_descuento)+' '+sc.tipo_descuento.tipo,
+                "telefono" : cliente.telefono,
                 "situacion_comercial" : {
                     "id" : sc.id,
                     "tipo" : sc.tipo_descuento.tipo
