@@ -2,6 +2,7 @@ App.Controllers.Vehiculo = function(){
     this.btnNuevoVehiculo = $("#btn_nuevo_vehiculo");
     this.btnGuardarNuevoVehiculo = $("#btn_guardar_nuevo_vehiculo");
     this.urlVehiculo = null;
+    this.vehiculos = [];
     this.id = null;
 };
 
@@ -28,6 +29,13 @@ App.Controllers.Vehiculo.prototype = {
         $("#btn_anexar").on("click", function(evt){
             evt.preventDefault();
             _this.guardarAnexar();
+        });
+    },
+
+    agregarVehiculo: function(vehiculoNumero, vehiculoPatente){
+        this.vehiculos.push({
+            numero : vehiculoNumero,
+            patente : vehiculoPatente
         });
     },
 
@@ -79,14 +87,24 @@ App.Controllers.Vehiculo.prototype = {
         };
 
         $.post($("#f_anexar").attr("action"), json, function(data){
-            var trVehiculo,
-                optChofer = $("#anexar_chofer option:selected");
+            var tdChofer,
+                mensaje = "El conductor {0} ha sido anexado exitosamente al vehiculo {1}";
 
-            trVehiculo = $("#vehiculo_" + _this.id).find("data-nombre-chofer={0}".format(optChofer.text()));
-
-
-            console.log("psh psh psh");
             console.log(data);
+            console.log("#vehiculo_" + _this.id);
+            console.log("[data-nombre-chofer='{0}']".format(data.nombre_chofer));
+
+            tdChofer = $("#vehiculo_" + _this.id).find("[data-nombre-chofer]");
+
+            console.log(tdChofer.get(0));
+
+            tdChofer.data("nombreChofer", data.nombre_chofer).attr("data-nombre-chofer", data.nombre_chofer);
+            tdChofer.text(data.nombre_chofer);
+
+            mensaje = mensaje.format(data.nombre_chofer, data.numero_vehiculo);
+            _this.enviarMensaje(mensaje);
+
+            $("#modal_anexar").modal("hide");
         });
     },
 
@@ -119,11 +137,19 @@ App.Controllers.Vehiculo.prototype = {
                 valido = false;
                 numero.siblings("span.help-block").text("Ingrese número válido");
                 numero.parent().addClass("has-error");
+            }else if(_this.estaRepetidoVehiculo("numero", numero.val())){
+                valido = false;
+                numero.siblings("span.help-block").text("El número de vehículo ya está siendo utilizado");
+                numero.parent().addClass("has-error");
             }
 
             if(!/^[A-z]{4}\d{2}$/.test(patente.val()) && !/^[A-z]{2}\d{4}$/.test(patente.val())){
                 valido = false;
                 patente.siblings("span.help-block").text("Ingrese patente válida");
+                patente.parent().addClass("has-error");
+            }else if(_this.estaRepetidoVehiculo("patente", patente.val())){
+                valido = false;
+                patente.siblings("span.help-block").text("La patente ya está siendo utilizada");
                 patente.parent().addClass("has-error");
             }
 
@@ -165,6 +191,18 @@ App.Controllers.Vehiculo.prototype = {
                 _this.generarVehiculoLista(json);
             });
         };
+    },
+
+    estaRepetidoVehiculo: function(tipo, valor){
+        var repetido = false;
+
+        this.vehiculos.forEach(function(elem){
+            if(elem[tipo] == valor){
+                repetido = true;
+            }
+        });
+
+        return repetido;
     },
 
     generarVehiculoLista: function(json){

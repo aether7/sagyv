@@ -10,13 +10,13 @@ from django.views.generic import View, TemplateView, ListView
 from main.models import Vehiculo, Trabajador, TrabajadorVehiculo
 
 class VehiculoList(ListView):
+    context_object_name = "vehiculos"
     model = Vehiculo
     template_name = "vehiculos/index.html"
     queryset = Vehiculo.objects.all().order_by("numero")
 
     def get_context_data(self, *args, **kwargs):
         context_data = super(VehiculoList, self).get_context_data(*args, **kwargs)
-        context_data["vehiculos"] = Vehiculo.objects.all()
         context_data["trabajadores"] = Trabajador.objects.all().order_by("id")
 
         return context_data
@@ -110,19 +110,26 @@ class AnexarVehiculoView(View):
         trabajador_vehiculo.fecha = self.get_fecha(fecha)
         trabajador_vehiculo.save()
 
-        data = { "status" : "ok" }
+        data = {
+            "status" : "ok",
+            "nombre_chofer" : chofer.get_nombre_completo(),
+            "numero_vehiculo" : vehiculo.numero
+        }
 
         return HttpResponse(json.dumps(data), mimetype="application/json")
 
     def actualizar_estado_vehiculos(self, id, chofer):
-        vehiculos_antiguos = TrabajadorVehiculo.objects.filter(Q(id = id, activo = True) |
-            Q(trabajador = chofer, activo = True))
+        vehiculos_antiguos = TrabajadorVehiculo.objects.filter(id = id)
 
-        for vehiculo_antiguo in vehiculos_antiguos:
-            vehiculo_antiguo.activo = False
-            vehiculo_antiguo.save()
+        for va in vehiculos_antiguos:
+            va.activo = False
+            va.save()
 
-        vehiculos_antiguos = TrabajadorVehiculo
+        choferes_antiguos = TrabajadorVehiculo.objects.filter(trabajador = chofer)
+
+        for ca in choferes_antiguos:
+            ca.activo = False
+            ca.save()
 
     def get_fecha(self, fecha):
         aux = fecha.split("-")

@@ -60,23 +60,23 @@ for(var i = 0; i < paramTypes.length; i++){
     })(i);
 }
 
-window.type = type;
+context.type = type;
 })(window);
 
 (function(){
-    String.prototype.trim = function(){
-        return this.replace(/^\s+|\s+$/gi, "");
-    };
+String.prototype.trim = function(){
+    return this.replace(/^\s+|\s+$/gi, "");
+};
 
-    String.prototype.format = function(){
-        var args = Array.prototype.slice.apply(arguments),
-            s = this,
-            i = 0;
+String.prototype.format = function(){
+    var args = Array.prototype.slice.apply(arguments),
+        s = this,
+        i = 0;
 
-        for(i = 0;i < args.length; i++){
-            s = s.replace(new RegExp("\\{\\s?" + i + "\s?\\}","g"),args[i]);
-        }
+    for(i = 0;i < args.length; i++){
+        s = s.replace(new RegExp("\\{\\s?" + i + "\s?\\}","g"),args[i]);
+    }
 
-        return s;
-    };
+    return s;
+};
 })();
