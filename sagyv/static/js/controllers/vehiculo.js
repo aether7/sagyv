@@ -127,7 +127,8 @@ App.Controllers.Vehiculo.prototype = {
 
         return function(){
             var json, valido = true;
-            
+
+            valido = _this.validarCampo(numero, patente, fechaRev, kilometraje, estadoSec, estadoPago, chofer);
 
             if(!valido){
                 return;
@@ -220,10 +221,11 @@ App.Controllers.Vehiculo.prototype = {
             id_chofer = $("#chofer_vehiculo_editar")
             _this = this;
 
-    }
+    },
 
-    validarCampo: function(numero, patente, fechaRev, kilometraje, ){
+    validarCampo: function(numero, patente, fechaRev, kilometraje, estadoSec, estadoPago, chofer){
         var valido = true;
+
         $(".has-error").removeClass("has-error");
         $(".help-block").text("");
 
@@ -231,7 +233,7 @@ App.Controllers.Vehiculo.prototype = {
             valido = false;
             numero.siblings("span.help-block").text("Ingrese número válido");
             numero.parent().addClass("has-error");
-        }else if(_this.estaRepetidoVehiculo("numero", numero.val())){
+        }else if(this.estaRepetidoVehiculo("numero", numero.val())){
             valido = false;
             numero.siblings("span.help-block").text("El número de vehículo ya está siendo utilizado");
             numero.parent().addClass("has-error");
@@ -241,7 +243,7 @@ App.Controllers.Vehiculo.prototype = {
             valido = false;
             patente.siblings("span.help-block").text("Ingrese patente válida");
             patente.parent().addClass("has-error");
-        }else if(_this.estaRepetidoVehiculo("patente", patente.val())){
+        }else if(this.estaRepetidoVehiculo("patente", patente.val())){
             valido = false;
             patente.siblings("span.help-block").text("La patente ya está siendo utilizada");
             patente.parent().addClass("has-error");
