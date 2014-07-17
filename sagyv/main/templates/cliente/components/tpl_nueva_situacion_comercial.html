@@ -1,11 +1,9 @@
 {% verbatim %}
 <tr>
-    <td data-columna="id_situacion">{{ id }}</td>
-    <td data-columna="tipo_descuento">{{tipo_descuento}}</td>
-    <td data-columna="descuento">{{descuento}}</td>
+    <td data-columna="tipo_descuento">{{ tipo_descuento }}</td>
+    <td data-columna="descuento">{{ descuento }}</td>
     <td>
         <a href="#" data-accion="editar" data-id="{{ id }}">Editar</a>
-        <a href="#" data-accion="eliminar" data-id="{{ id }}">Eliminar</a>
     </td>
 </tr>
 {% endverbatim %}

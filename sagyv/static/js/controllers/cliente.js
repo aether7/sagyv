@@ -53,7 +53,6 @@ App.Controllers.Cliente.prototype = {
         $("#tabla_s_comerciales").on("click","a[data-accion=editar]",function(evt){
             evt.preventDefault();
             _this.mostrarModal("editar_situacion");
-            alert($(this).data("id"));
             _this.cargarSituacion($(this).data("id"));
         });
 
@@ -237,6 +236,7 @@ App.Controllers.Cliente.prototype = {
         }else if(!type.isNumber(parseInt(telefono.val()))){
             valido = false;
             telefono.siblings("span").text("Debe ingresar número de teléfono válido");
+            telefono.parent().addClass("has-error");
         }
 
         if(rut.val().trim() === ""){
@@ -272,29 +272,15 @@ App.Controllers.Cliente.prototype = {
     //situacion comercial
     guardarSituacion: function(){
         var json,
-        tipo = $("#sit_tipo_add"),
-        valor = $("#descuento_add"),
-        valido = true,
-        _this = this;
+            valido,
+            tipo = $("#sit_tipo_add"),
+            valor = $("#descuento_add"),
+            _this = this;
 
         $(".has-error").removeClass("has-error");
         $(".help-block").text("");
 
-        if(tipo.val().trim() == ""){
-            valido = false;
-            tipo.siblings("span").text("Campo obligatorio");
-            tipo.parent().addClass("has-error");
-        }
-
-        if(isNaN(valor.val())){
-            valido = false;
-            valor.siblings("span").text("Ingrese un numero");
-            valor.parent().addClass("has-error");
-        }else if(valor.val().trim() === ""){
-            valido = false;
-            valor.siblings("span").text("Campo obligatorio");
-            valor.parent().addClass("has-error");
-        }
+        valido = this.validarSituacion(valor, tipo);
 
         if(!valido){
             return
@@ -306,11 +292,12 @@ App.Controllers.Cliente.prototype = {
         };
 
         $.post($("#f_agregar_situacion").attr("action"), json, function(data){
+            var str = "<option value='{0}'>{1}</option>";
+
             $("#modal_agregar_situacion").modal("hide");
             _this.agregarMensaje("La situacion comercial fue ingresado exitosamente");
             _this.procesarAgregarSituacion(data);
 
-            var str = "<option value='{0}'>{1}</option>";
             if(data.tipo_int == 1){
                 textSupport = "$ "+data.valor;
             }else{
@@ -320,6 +307,35 @@ App.Controllers.Cliente.prototype = {
             $(str).insertBefore("#sit_comercial_add option:last");
 
         });
+    },
+
+    validarSituacion: function(valor, tipo){
+        var valido = true;
+
+        $(".has-error").removeClass("has-error");
+        $(".help-block").text("");
+
+        if(valor.val().trim() === ""){
+            valido = false;
+            valor.siblings("span").text("Campo obligatorio");
+            valor.parent().addClass("has-error");
+        }else if(!type.isNumber(parseInt(valor.val()))){
+            valido = false;
+            valor.siblings("span").text("Debe ser un número");
+            valor.parent().addClass("has-error");
+        }else if(parseInt(valor.val()) < 1){
+            valido = false;
+            valor.siblings("span").text("Debe ingresar un monto mayor a 1");
+            valor.parent().addClass("has-error");
+        }
+
+        if(tipo.val().trim() == ""){
+            valido = false;
+            tipo.siblings("span").text("Campo obligatorio");
+            tipo.parent().addClass("has-error");
+        }
+
+        return valido;
     },
 
     procesarAgregarSituacion: function(data){
@@ -338,13 +354,13 @@ App.Controllers.Cliente.prototype = {
     },
 
     cargarSituacion: function(id){
+        var url = this.situacionUrl.replace("0", id);
         this.idSituacion = id;
-        alert(this.situacionUrl);
-        $.get(this.situacionUrl.replace("0", id),function(data){
+
+        $.get(url, function(data){
             $("#descuento_edit").val(data.monto_descuento);
             $("#sit_tipo_edit").val(data.tipo_descuento);
         });
-
     },
 
     setSituacionUrl: function(situacionUrl){
@@ -353,29 +369,12 @@ App.Controllers.Cliente.prototype = {
 
     guardarUpdateSituacion:function(){
         var json,
-        tipo = $("#sit_tipo_edit"),
-        valor = $("#descuento_edit"),
-        valido = true,
-        _this = this;
+            valido,
+            tipo = $("#sit_tipo_edit"),
+            valor = $("#descuento_edit"),
+            _this = this;
 
-        $(".has-error").removeClass("has-error");
-        $(".help-block").text("");
-
-        if(tipo.val().trim() == ""){
-            valido = false;
-            tipo.siblings("span").text("Campo obligatorio");
-            tipo.parent().addClass("has-error");
-        }
-
-        if(isNaN(valor.val())){
-            valido = false;
-            valor.siblings("span").text("Ingrese un numero");
-            valor.parent().addClass("has-error");
-        }else if(valor.val().trim() === ""){
-            valido = false;
-            valor.siblings("span").text("Campo obligatorio");
-            valor.parent().addClass("has-error");
-        }
+        valido = this.validarSituacion(valor, tipo);
 
         if(!valido){
             return
@@ -393,7 +392,6 @@ App.Controllers.Cliente.prototype = {
 
             var tr = $("a[data-id={0}][data-accion=editar]".format(_this.idSituacion)).closest("tr");
 
-            tr.find("[data-columna=id_situacion]").text(json.id_situacion);
             tr.find("[data-columna=tipo_descuento]").text(json.tipo);
             tr.find("[data-columna=descuento]").text(json.valor);
         });
