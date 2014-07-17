@@ -8,6 +8,7 @@ App.Controllers.Cliente = function(){
     this.idCliente = null;
 
     this.btnAgregarSituacion = $("#btn_agregar_situacion");
+    this.btnGuardarSituacion = $("#btn_guardar_situacion");
     this.situacionUrl = null;
     this.crearSituacionlUrl = null;
 };
@@ -29,6 +30,10 @@ App.Controllers.Cliente.prototype = {
         this.btnGuardarAdd.on("click", function(){
             _this.guardarAdd();
         });
+
+        this.btnGuardarSituacion.on("click", function(){
+            _this.guardarSituacion();
+        })
 
         this.btnGuardarUpdate.on("click", function(){
             _this.guardarUpdate();
@@ -250,5 +255,16 @@ App.Controllers.Cliente.prototype = {
 
     setEliminarUrl: function(eliminarUrl){
         this.eliminarUrl = eliminarUrl;
+    },
+
+    //situacion comercial
+
+    guardarSituacion: function(){
+        var json,
+        tipo = $("#sit_tipo_add"),
+        valor = $("#descuento_add"),
+        _this = this;
+
+        alert(valor.val());
     }
 };
