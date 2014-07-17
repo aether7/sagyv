@@ -133,6 +133,20 @@ class AnexarVehiculoView(View):
 
         return nueva_fecha
 
+
+class ModificarView(View):
+
+    def post(self, req):
+        id_vehiculo = req.POST.get('id_vehiculo')
+        fecha_revision_tecnica = req.POST.get('fecha_revision_tecnica')
+        estado_sec = req.POST.get('estado_sec')
+        estado_pago = req.POST.get('estado_pago')
+        id_chofer = req.POST.get('id_chofer')
+
+        vehiculo = Vehiculo.objects.get(pk = id_vehiculo)
+
+        
+
 index = VehiculoList.as_view()
 agregar_nuevo_vehiculo = AgregarNuevoVehiculoView.as_view()
 anexar_vehiculo = AnexarVehiculoView.as_view()
