@@ -48,6 +48,7 @@ App.Controllers.Vehiculo.prototype = {
 
     guardarAnexar: function(){
         var json,
+            _this = this,
             valido = true,
             vehiculo = $("#anexar_vehiculo"),
             chofer = $("#anexar_chofer"),

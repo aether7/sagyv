@@ -18,19 +18,20 @@
 
 <div class="tab-content">
     <div class="tab-pane active" id="clientes">
-        {% include "components/lista_clientes.html" %}
+        {% include "cliente/components/lista_clientes.html" %}
     </div>
 
     <div class="tab-pane" id="scomerciales">
-        {% include "components/lista_situaciones_comerciales.html" %}
+        {% include "cliente/components/lista_situaciones_comerciales.html" %}
     </div>
 </div>
 
 <!-- modals -->
-{% include "components/modal_nuevo_cliente.html" %}
-{% include "components/modal_editar_cliente.html" %}
-{% include "components/modal_nueva_situacion_comercial.html"%}
-{% include "components/modal_editar_situacion_comercial.html"%}
+{% include "cliente/components/modal_nuevo_cliente.html" %}
+{% include "cliente/components/modal_editar_cliente.html" %}
+
+{% include "cliente/components/modal_nueva_situacion_comercial.html"%}
+{% include "cliente/components/modal_editar_situacion_comercial.html"%}
 
 {% endblock %}
 
@@ -39,10 +40,10 @@
 <script src="{% static 'js/plugins/jquery.rut.min.js' %}"></script>
 <script src="{% static 'js/controllers/cliente.js' %}"></script>
 <script id="tpl_nuevo_cliente" type="text/x-template">
-    {% include "cliente/nuevo_cliente_component.html" %}
+    {% include "cliente/components/nuevo_cliente.html" %}
 </script>
 <script id="tpl_nueva_situacion" type="text/x-template">
-    {% include "cliente/nuevo_situacion_comercial_component.html" %}
+    {% include "cliente/components/nuevo_situacion_comercial.html" %}
 </script>
 <script>
     App.clienteController = new App.Controllers.Cliente();
