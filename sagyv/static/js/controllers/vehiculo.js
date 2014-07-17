@@ -221,17 +221,29 @@ App.Controllers.Vehiculo.prototype = {
         lista.append(render({ vehiculo : vehiculo }));
     },
 
-    editar_vehiculo: function(id_vehiculo){
+    editar: function(id_vehiculo){
         var url = this.urlVehiculo.replace("0", id_vehiculo);
         this.idVehiculo = id_vehiculo;
 
         $.get(url, function(data){
+            var fecha = data.fecha_revision_tecnica.split("-");
+
+            if(parseInt(fecha[1]) < 10){
+                fecha[1] = "0" + fecha[1];
+            }
+
+            if(parseInt(fecha[2]) < 10){
+                fecha[2] = "0" + fecha[2];
+            }
+
+            fecha = fecha.join("-");
+
             $("#numero_vehiculo_editar").val(data.numero);
             $("#patente_vehiculo_editar").val(data.patente);
-            $("#revision_tecnica_vehiculo_editar").val(data.fecha_revision_tecnica);
+            $("#revision_tecnica_vehiculo_editar").val(fecha);
             $("#kilometraje_vehiculo_editar").val(data.km);
-            $("#estado_sec_vehiculo_editar").val((data.estado_sec)? 1:2);
-            $("#estado_pago_vehiculo_editar").val((data.estado_pago)?1:2);
+            $("#estado_sec_vehiculo_editar").val(data.estado_sec?1:2);
+            $("#estado_pago_vehiculo_editar").val(data.estado_pago?1:2);
             $("#chofer_vehiculo_editar").val(data.chofer);
         });
     },
