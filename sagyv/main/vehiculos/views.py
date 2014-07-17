@@ -145,21 +145,22 @@ class ModificarView(View):
 
         vehiculo = Vehiculo.objects.get(pk = id_vehiculo)
         chofer_actual = vehiculo.get_ultimo_chofer_id()
+        print "===="+chofer_actual
         
         vehiculo.fecha_revision_tecnica = self.get_fecha(fecha_revision_tecnica)
         vehiculo.estado_sec = estado_sec
         vehiculo.estado_pago = estado_pago
         vehiculo.save()
         
-        if(chofer_actual != id_chofer):
-            chofer = Trabajador.objects.get(pk = id_chofer)
-            
+        if(chofer_actual.id != id_chofer):
+            chofer = Trabajador.objects.get(pk = int(id_chofer))
+
             self.actualizar_estado_vehiculos(vehiculo, chofer)
             trabajador_vehiculo = TrabajadorVehiculo()
             trabajador_vehiculo.vehiculo = vehiculo
             trabajador_vehiculo.trabajador = chofer
             trabajador_vehiculo.activo = True
-            trabajador_vehiculo.fecha = self.get_fecha(fecha)
+            trabajador_vehiculo.fecha = self.get_fecha(fecha_revision_tecnica)
             trabajador_vehiculo.save()
 
     @transaction.commit_on_success

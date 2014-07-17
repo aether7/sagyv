@@ -57,7 +57,7 @@ class Vehiculo(models.Model):
         trabajador_vehiculo = TrabajadorVehiculo.objects.filter(vehiculo_id = self.id, activo = True)
 
         if len(trabajador_vehiculo) == 0:
-            return "No anexado"
+            return 0
         else:
             print trabajador_vehiculo
             return trabajador_vehiculo[0].trabajador.id
