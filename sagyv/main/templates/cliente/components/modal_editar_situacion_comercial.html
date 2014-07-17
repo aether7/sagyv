@@ -9,16 +9,17 @@
                 <h4 class="modal-title">Editar Situacion Comercial</h4>
             </div>
             <div class="modal-body">
-                <!-- -->
                 <form id="f_modificar_situacion" action="{% url 'cliente:modificar_situacion_comercial' %}" method="post">
                     {% csrf_token %}
+
                     <div class="form-group">
-                        <label for="descuento_edit">Monto Descuento</label>
+                        <label for="descuento_edit" class="control-label">Monto Descuento</label>
                         <input id="descuento_edit" class="form-control" type="text" value="" />
                         <span class="help-block"></spam>
                     </div>
+
                     <div class="form-group">
-                        <label for="sit_tipo_edit">Tipo Descuento</label>
+                        <label for="sit_tipo_edit" class="control-label">Tipo Descuento</label>
                         <select name="sit_tipo_edit" id="sit_tipo_edit" class="form-control">
                             <option value="">---</option>
                             <option value="1">Descuento Fijo</option>
@@ -27,7 +28,6 @@
                         <span class="help-block"></spam>
                     </div>
                 </form>
-                <!-- -->
             </div>
             <div class="modal-footer">
                 <button class="btn btn-default" data-dismiss="modal">Cancelar</button>

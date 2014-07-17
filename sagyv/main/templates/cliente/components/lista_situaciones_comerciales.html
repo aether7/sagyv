@@ -1,7 +1,6 @@
 <table id="tabla_s_comerciales" class="table table-striped">
     <thead>
         <tr>
-            <th>ID</th>
             <th>Tipo</th>
             <th>Valor</th>
             <th>Accion</th>
@@ -10,12 +9,10 @@
     <tbody>
         {% for cs in situaciones_comerciales %}
         <tr>
-            <td data-columna="id_situacion">{{ cs.id }}</td>
-            <td data-columna="tipo_descuento">{{cs.tipo_descuento.tipo}}</td>
-            <td data-columna="descuento">{{cs.monto_descuento}}</td>
+            <td data-columna="tipo_descuento">{{ cs.tipo_descuento.tipo }}</td>
+            <td data-columna="descuento">{{ cs.monto_descuento }}</td>
             <td>
                 <a href="#" data-accion="editar" data-id="{{ cs.id }}">Editar</a>
-                <a href="#" data-accion="eliminar" data-id="{{ cs.id }}">Eliminar</a>
             </td>
         </tr>
         {% endfor %}
