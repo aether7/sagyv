@@ -56,6 +56,7 @@
                             <option value="1">Descuento Fijo</option>
                             <option value="2">Descuento Porcentual</option>
                         </select>
+                        <span class="help-block"></spam>
                     </div>
                 </form>
                 <!-- -->
@@ -96,6 +97,9 @@
 <script src="{% static 'js/controllers/cliente.js' %}"></script>
 <script id="tpl_nuevo_cliente" type="text/x-template">
     {% include "cliente/nuevo_cliente_component.html" %}
+</script>
+<script id="tpl_nueva_situacion" type="text/x-template">
+    {% include "cliente/nuevo_situacion_comercial_component.html" %}
 </script>
 <script>
     App.clienteController = new App.Controllers.Cliente();

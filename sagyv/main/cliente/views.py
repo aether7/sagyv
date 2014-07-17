@@ -168,6 +168,15 @@ class CrearSituacionComercialView(View):
         descuento_cliente.monto_descuento = valor
         descuento_cliente.save()
 
+        dato = {
+            "status": "ok",
+            'id_situacion' : descuento_cliente.id,
+            'valor': descuento_cliente.monto_descuento,
+            'tipo':descuento_cliente.tipo_descuento.tipo,
+            'tipo_int':descuento_cliente.tipo_descuento.id
+        }
+
+        return HttpResponse(json.dumps(dato),content_type="application/json")
 
 class ModificarSituacionComercialView(View):
 

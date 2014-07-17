@@ -258,13 +258,70 @@ App.Controllers.Cliente.prototype = {
     },
 
     //situacion comercial
-
     guardarSituacion: function(){
         var json,
         tipo = $("#sit_tipo_add"),
         valor = $("#descuento_add"),
+        valido = true,
         _this = this;
 
-        alert(valor.val());
+        $(".has-error").removeClass("has-error");
+        $(".help-block").text("");
+
+        if(tipo.val().trim() == ""){
+            valido = false;
+            tipo.siblings("span").text("Campo obligatorio");
+            tipo.parent().addClass("has-error");
+        }
+
+        if(isNaN(valor.val())){
+            valido = false;
+            valor.siblings("span").text("Ingrese un numero");
+            valor.parent().addClass("has-error");
+        }else if(valor.val().trim() === ""){
+            valido = false;
+            valor.siblings("span").text("Campo obligatorio");
+            valor.parent().addClass("has-error");
+        }
+
+        if(!valido){
+            return
+        }
+
+        json = {
+            tipo : tipo.val(),
+            valor : valor.val()
+        };
+
+        $.post($("#f_agregar_situacion").attr("action"), json, function(data){
+            $("#modal_agregar_situacion").modal("hide");
+            _this.agregarMensaje("La situacion comercial fue ingresado exitosamente");
+            _this.procesarAgregarSituacion(data);
+
+            var str = "<option value='{0}'>{1}</option>";
+            if(data.tipo_int == 1){
+                textSupport = "$ "+data.valor;
+            }else{
+                textSupport = "% "+data.valor;
+            }
+            str = str.format(data.id_situacion, textSupport);
+            $(str).insertBefore("#sit_comercial_add option:last");
+            
+        });
+    },
+
+    procesarAgregarSituacion: function(data){
+        var html,
+            situacionComercial,
+            template = $("#tpl_nueva_situacion").html(),
+            render = Handlebars.compile(template);
+
+        html = render({
+            tipo_descuento : data.tipo,
+            descuento : data.valor,
+            id : data.id_situacion
+        });
+
+        $("#tabla_s_comerciales tbody").append(html);
     }
 };
