@@ -92,7 +92,6 @@ class ObtenerView(View):
 
 class AnexarVehiculoView(View):
 
-    @transaction.commit_on_success
     def post(self, req):
         id = int(req.POST.get("id"))
         chofer_id = int(req.POST.get("chofer"))
@@ -101,7 +100,7 @@ class AnexarVehiculoView(View):
         vehiculo = Vehiculo.objects.get(pk = id)
         chofer = Trabajador.objects.get(pk = chofer_id)
 
-        self.actualizar_estado_vehiculos(id, chofer)
+        self.actualizar_estado_vehiculos(vehiculo, chofer)
 
         trabajador_vehiculo = TrabajadorVehiculo()
         trabajador_vehiculo.vehiculo = vehiculo
@@ -118,18 +117,14 @@ class AnexarVehiculoView(View):
 
         return HttpResponse(json.dumps(data), mimetype="application/json")
 
-    def actualizar_estado_vehiculos(self, id, chofer):
-        vehiculos_antiguos = TrabajadorVehiculo.objects.filter(id = id)
+    @transaction.commit_on_success
+    def actualizar_estado_vehiculos(self, vehiculo, chofer):
+        vehiculos_antiguos = TrabajadorVehiculo.objects.filter(Q(vehiculo = vehiculo, activo = True) |
+            Q(trabajador = chofer, activo = True))
 
-        for va in vehiculos_antiguos:
-            va.activo = False
-            va.save()
-
-        choferes_antiguos = TrabajadorVehiculo.objects.filter(trabajador = chofer)
-
-        for ca in choferes_antiguos:
-            ca.activo = False
-            ca.save()
+        for vehiculo_antiguo in vehiculos_antiguos:
+            vehiculo_antiguo.activo = False
+            vehiculo_antiguo.save()
 
     def get_fecha(self, fecha):
         aux = fecha.split("-")
