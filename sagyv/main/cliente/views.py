@@ -35,6 +35,7 @@ class ObtenerClienteView(View):
 
 
 class CrearClienteView(View):
+
     @transaction.commit_on_success
     def post(self, req):
         giro = req.POST.get('giro')
