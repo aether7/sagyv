@@ -1,6 +1,7 @@
 App.Controllers.Vehiculo = function(){
     this.btnNuevoVehiculo = $("#btn_nuevo_vehiculo");
     this.btnGuardarNuevoVehiculo = $("#btn_guardar_nuevo_vehiculo");
+    this.btnGuardarEdicionVehiculo = $("#btn_editar_vehiculo");
     this.urlVehiculo = null;
     this.vehiculos = [];
     this.id = null;
@@ -17,6 +18,9 @@ App.Controllers.Vehiculo.prototype = {
         });
 
         this.btnGuardarNuevoVehiculo.on("click", this.validarNuevoVehiculo());
+        this.btnGuardarEdicionVehiculo.on("click", function(){
+            _this.guardarEdicionVehiculo()
+        });
 
         $(".btn-acciones").on("click",function(evt){
             evt.preventDefault();
@@ -228,8 +232,11 @@ App.Controllers.Vehiculo.prototype = {
             $("#kilometraje_vehiculo_editar").val(data.km);
             $("#estado_sec_vehiculo_editar").val((data.estado_sec)? 1:2);
             $("#estado_pago_vehiculo_editar").val((data.estado_pago)?1:2);
-            //$("#chofer_vehiculo_editar").val(data.);
-        })
-        
+            $("#chofer_vehiculo_editar").val(data.chofer);
+        });
+    },
+
+    guardarEdicionVehiculo:function(){
+        alert("wololo");
     }
 };

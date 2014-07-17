@@ -80,7 +80,8 @@ class ObtenerView(View):
             "fecha_revision_tecnica" : self.convertir_fecha_json(vehiculo.fecha_revision_tecnica),
             "km" : vehiculo.km,
             "estado_sec" : vehiculo.estado_sec,
-            "estado_pago" : vehiculo.estado_pago
+            "estado_pago" : vehiculo.estado_pago,
+            "chofer" : vehiculo.get_ultimo_chofer_id()
         }
 
         return HttpResponse(json.dumps(data), content_type="application/json")
