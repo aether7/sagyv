@@ -207,9 +207,9 @@ App.Controllers.Cliente.prototype = {
 
             var tr = $("a[data-id={0}][data-accion=editar]".format(_this.idCliente)).closest("tr");
 
-            tr.find("[data-columna=giro]").text(json.giro);
-            tr.find("[data-columna=telefono]").text(json.telefono);
-            tr.find("[data-columna=situacion_comercial]").text(json.situacion_comercial);
+            tr.find("[data-columna=giro]").text(data.giro);
+            tr.find("[data-columna=telefono]").text(data.telefono);
+            tr.find("[data-columna=situacion_comercial]").text(data.situacion_comercial);
         });
     },
 

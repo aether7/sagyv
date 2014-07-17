@@ -128,7 +128,12 @@ class ModificarClienteView(View):
 
         cliente.save()
 
-        dato = { "status": "ok" }
+        dato = { 
+            "status": "ok",
+            "giro": cliente.giro,
+            "telefono": cliente.telefono,
+            "situacion_comercial" : str(sc.monto_descuento)+' '+sc.tipo_descuento.tipo
+        }
         return HttpResponse(json.dumps(dato), content_type="application/json")
 
 
@@ -199,7 +204,7 @@ class ModificarSituacionComercialView(View):
             'id_situacion' : descuento_cliente.id,
             'valor': descuento_cliente.monto_descuento,
             'tipo':descuento_cliente.tipo_descuento.tipo,
-            'tipo_int':descuento_cliente.tipo_descuento.id
+            'tipo_int': descuento_cliente.tipo_descuento.id
         }
 
         return HttpResponse(json.dumps(dato),content_type="application/json")
