@@ -91,14 +91,7 @@ App.Controllers.Vehiculo.prototype = {
             var tdChofer,
                 mensaje = "El conductor {0} ha sido anexado exitosamente al vehiculo {1}";
 
-            console.log(data);
-            console.log("#vehiculo_" + _this.id);
-            console.log("[data-nombre-chofer='{0}']".format(data.nombre_chofer));
-
             tdChofer = $("#vehiculo_" + _this.id).find("[data-nombre-chofer]");
-
-            console.log(tdChofer.get(0));
-
             tdChofer.data("nombreChofer", data.nombre_chofer).attr("data-nombre-chofer", data.nombre_chofer);
             tdChofer.text(data.nombre_chofer);
 
