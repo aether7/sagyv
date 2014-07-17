@@ -217,10 +217,28 @@ App.Controllers.Vehiculo.prototype = {
             fecha = $("#revision_tecnica_vehiculo_editar"),
             km = $("#kilometraje_vehiculo_editar"),
             sec = $("#estado_sec_vehiculo_editar"),
-            estado_pago = $("#estado_pago_vehiculo_editar"),
-            id_chofer = $("#chofer_vehiculo_editar")
+            estadoPago = $("#estado_pago_vehiculo_editar"),
+            idChofer = $("#chofer_vehiculo_editar")
             _this = this;
 
+        valido = this.validarCampo(numero, patente, fecha, km, sec, estadoPago, idChofer);
+
+        if(!valido){
+            return;
+        }
+
+        json = {
+            id_vehiculo : this.id,
+            fecha_revision_tecnica : fecha.val(),
+            estado_sec : sec.val(),
+            estado_pago : estadoPago.val(),
+            id_chofer : idChofer.val()
+        };
+
+        $.post($("#f_editar").attr("action"), json, function(data){
+            console.log(data);
+            _this.enviarMensaje("El vehiculo {0} se ha editado exitosamente".format(numero.val()));
+        });
     },
 
     validarCampo: function(numero, patente, fechaRev, kilometraje, estadoSec, estadoPago, chofer){
