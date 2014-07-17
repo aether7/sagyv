@@ -144,10 +144,43 @@ class ModificarView(View):
         id_chofer = req.POST.get('id_chofer')
 
         vehiculo = Vehiculo.objects.get(pk = id_vehiculo)
-
+        chofer_actual = vehiculo.get_ultimo_chofer_id()
         
+        vehiculo.fecha_revision_tecnica = fecha_revision_tecnica
+        vehiculo.estado_sec = estado_sec
+        vehiculo.estado_pago = estado_pago
+        vehiculo.save()
+        
+        if(chofer_actual != id_chofer):
+            chofer = Trabajador.objects.get(pk = id_chofer)
+            
+            self.actualizar_estado_vehiculos(vehiculo, chofer)
+            trabajador_vehiculo = TrabajadorVehiculo()
+            trabajador_vehiculo.vehiculo = vehiculo
+            trabajador_vehiculo.trabajador = chofer
+            trabajador_vehiculo.activo = True
+            trabajador_vehiculo.fecha = self.get_fecha(fecha)
+            trabajador_vehiculo.save()
+
+    @transaction.commit_on_success
+    def actualizar_estado_vehiculos(self, vehiculo, chofer):
+        vehiculos_antiguos = TrabajadorVehiculo.objects.filter(Q(vehiculo = vehiculo, activo = True) |
+            Q(trabajador = chofer, activo = True))
+
+        for vehiculo_antiguo in vehiculos_antiguos:
+            vehiculo_antiguo.activo = False
+            vehiculo_antiguo.save()
+
+    def get_fecha(self, fecha):
+        aux = fecha.split("-")
+        nueva_fecha = date(int(aux[0]), int(aux[1]), int(aux[2]))
+
+        return nueva_fecha
+
+
 
 index = VehiculoList.as_view()
 agregar_nuevo_vehiculo = AgregarNuevoVehiculoView.as_view()
 anexar_vehiculo = AnexarVehiculoView.as_view()
 obtener = ObtenerView.as_view()
+modificar = ModificarView.as_view()
