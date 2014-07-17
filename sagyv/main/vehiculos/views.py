@@ -146,7 +146,7 @@ class ModificarView(View):
         vehiculo = Vehiculo.objects.get(pk = id_vehiculo)
         chofer_actual = vehiculo.get_ultimo_chofer_id()
         
-        vehiculo.fecha_revision_tecnica = fecha_revision_tecnica
+        vehiculo.fecha_revision_tecnica = self.get_fecha(fecha_revision_tecnica)
         vehiculo.estado_sec = estado_sec
         vehiculo.estado_pago = estado_pago
         vehiculo.save()
