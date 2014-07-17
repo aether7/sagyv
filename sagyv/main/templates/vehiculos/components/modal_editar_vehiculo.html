@@ -1,38 +1,5 @@
-{% extends "panel_control.html" %}
-{% load static %}
-
-{% block content %}
-<h1 class="center">Vehículos</h1>
-
-<div id="mensaje" class="alert alert-success center" style="visibility:hidden"></div>
-<button id="btn_nuevo_vehiculo" class="btn btn-primary">Nuevo</button>
-
-<table id="lista_vehiculos" class="table table-striped">
-    <thead>
-        <tr>
-            <th>Número</th>
-            <th>Patente</th>
-            <th>Kilometraje</th>
-            <th>Fecha revisión técnica</th>
-            <th>Estado Sec</th>
-            <th>Estado Pago</th>
-            <th>Chofer</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for vehiculo in vehiculos %}
-        {% include "vehiculos/components/vehiculo_item.html" %}
-        {% endfor %}
-    </tbody>
-</table>
-
-<!-- MODALS -->
-{% include "vehiculos/components/modal_nuevo_vehiculo.html" %}
-{% include "vehiculos/components/modal_anexar_chofer.html" %}
-
-<div id="modal_editar_vehiculo" class="modal fade">
-    <form id="f_editar_vehiculo" action="" method="post">
+<div id="modal_editar" class="modal fade">
+    <form id="f_editar" action="" method="post">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -104,23 +71,3 @@
         </div>
     </form>
 </div>
-{% endblock %}
-
-{% block js %}
-<script src="{% static 'js/vendor/handlebars.min.js' %}"></script>
-<script src="{% static 'js/controllers/vehiculo.js' %}"></script>
-<script id="tmpl_nuevo_vehiculo" type="x-template/javascript">
-    {% include "vehiculos/components/tpl_vehiculo_item.html" %}
-</script>
-<script>
-    App.vehiculoController = new App.Controllers.Vehiculo();
-    App.vehiculoController.urlVehiculo = "{% url 'vehiculos:obtener' 0 %}";
-
-    {% for vehiculo in vehiculos %}
-    App.vehiculoController.agregarVehiculo({{ vehiculo.numero }}, '{{ vehiculo.patente }}');
-    {% endfor %}
-
-    App.vehiculoController.init();
-</script>
-{% endblock %}
-
