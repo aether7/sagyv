@@ -21,8 +21,8 @@
         </tr>
     </thead>
     <tbody>
-        {% for vehiculo in object_list %}
-        {% include "vehiculos/vehiculo_item_component.html" %}
+        {% for vehiculo in vehiculos %}
+        {% include "vehiculos/components/vehiculo_item.html" %}
         {% endfor %}
     </tbody>
 </table>
@@ -110,11 +110,16 @@
 <script src="{% static 'js/vendor/handlebars.min.js' %}"></script>
 <script src="{% static 'js/controllers/vehiculo.js' %}"></script>
 <script id="tmpl_nuevo_vehiculo" type="x-template/javascript">
-    {% include "vehiculos/vehiculo_item_escape_component.html" %}
+    {% include "vehiculos/components/tpl_vehiculo_item.html" %}
 </script>
 <script>
     App.vehiculoController = new App.Controllers.Vehiculo();
     App.vehiculoController.urlVehiculo = "{% url 'vehiculos:obtener' %}";
+
+    {% for vehiculo in vehiculos %}
+    App.vehiculoController.agregarVehiculo({{ vehiculo.numero }}, '{{ vehiculo.patente }}');
+    {% endfor %}
+
     App.vehiculoController.init();
 </script>
 {% endblock %}

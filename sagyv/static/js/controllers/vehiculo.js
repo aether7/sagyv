@@ -2,6 +2,7 @@ App.Controllers.Vehiculo = function(){
     this.btnNuevoVehiculo = $("#btn_nuevo_vehiculo");
     this.btnGuardarNuevoVehiculo = $("#btn_guardar_nuevo_vehiculo");
     this.urlVehiculo = null;
+    this.vehiculos = [];
     this.id = null;
 };
 
@@ -29,6 +30,13 @@ App.Controllers.Vehiculo.prototype = {
         $("#btn_anexar").on("click", function(evt){
             evt.preventDefault();
             _this.guardarAnexar();
+        });
+    },
+
+    agregarVehiculo: function(vehiculoNumero, vehiculoPatente){
+        this.vehiculos.push({
+            numero : vehiculoNumero,
+            patente : vehiculoPatente
         });
     },
 
@@ -120,11 +128,19 @@ App.Controllers.Vehiculo.prototype = {
                 valido = false;
                 numero.siblings("span.help-block").text("Ingrese número válido");
                 numero.parent().addClass("has-error");
+            }else if(_this.estaRepetidoVehiculo("numero", numero.val())){
+                valido = false;
+                numero.siblings("span.help-block").text("El número de vehículo ya está siendo utilizado");
+                numero.parent().addClass("has-error");
             }
 
             if(!/^[A-z]{4}\d{2}$/.test(patente.val()) && !/^[A-z]{2}\d{4}$/.test(patente.val())){
                 valido = false;
                 patente.siblings("span.help-block").text("Ingrese patente válida");
+                patente.parent().addClass("has-error");
+            }else if(_this.estaRepetidoVehiculo("patente", patente.val())){
+                valido = false;
+                patente.siblings("span.help-block").text("La patente ya está siendo utilizada");
                 patente.parent().addClass("has-error");
             }
 
@@ -166,6 +182,18 @@ App.Controllers.Vehiculo.prototype = {
                 _this.generarVehiculoLista(json);
             });
         };
+    },
+
+    estaRepetidoVehiculo: function(tipo, valor){
+        var repetido = false;
+
+        this.vehiculos.forEach(function(elem){
+            if(elem[tipo] == valor){
+                repetido = true;
+            }
+        });
+
+        return repetido;
     },
 
     generarVehiculoLista: function(json){

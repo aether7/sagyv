@@ -10,13 +10,13 @@ from django.views.generic import View, TemplateView, ListView
 from main.models import Vehiculo, Trabajador, TrabajadorVehiculo
 
 class VehiculoList(ListView):
+    context_object_name = "vehiculos"
     model = Vehiculo
     template_name = "vehiculos/index.html"
     queryset = Vehiculo.objects.all().order_by("numero")
 
     def get_context_data(self, *args, **kwargs):
         context_data = super(VehiculoList, self).get_context_data(*args, **kwargs)
-        context_data["vehiculos"] = Vehiculo.objects.all()
         context_data["trabajadores"] = Trabajador.objects.all().order_by("id")
 
         return context_data
