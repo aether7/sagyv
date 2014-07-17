@@ -128,7 +128,7 @@ App.Controllers.Vehiculo.prototype = {
         return function(){
             var json, valido = true;
 
-            valido = _this.validarCampo(numero, patente, fechaRev, kilometraje, estadoSec, estadoPago, chofer);
+            valido = _this.validarCampo(numero, patente, fechaRev, kilometraje, estadoSec, estadoPago, chofer, true);
 
             if(!valido){
                 return;
@@ -221,6 +221,7 @@ App.Controllers.Vehiculo.prototype = {
             idChofer = $("#chofer_vehiculo_editar")
             _this = this;
 
+        console.log("ASDFASDFASDF");
         valido = this.validarCampo(numero, patente, fecha, km, sec, estadoPago, idChofer);
 
         if(!valido){
@@ -241,8 +242,9 @@ App.Controllers.Vehiculo.prototype = {
         });
     },
 
-    validarCampo: function(numero, patente, fechaRev, kilometraje, estadoSec, estadoPago, chofer){
-        var valido = true;
+    validarCampo: function(numero, patente, fechaRev, kilometraje, estadoSec, estadoPago, chofer, validacionRepetido){
+        var valido = true,
+            validacionRepetido = validacionRepetido || false;
 
         $(".has-error").removeClass("has-error");
         $(".help-block").text("");
@@ -251,7 +253,7 @@ App.Controllers.Vehiculo.prototype = {
             valido = false;
             numero.siblings("span.help-block").text("Ingrese número válido");
             numero.parent().addClass("has-error");
-        }else if(this.estaRepetidoVehiculo("numero", numero.val())){
+        }else if(this.estaRepetidoVehiculo("numero", numero.val()) && validacionRepetido){
             valido = false;
             numero.siblings("span.help-block").text("El número de vehículo ya está siendo utilizado");
             numero.parent().addClass("has-error");
@@ -261,7 +263,7 @@ App.Controllers.Vehiculo.prototype = {
             valido = false;
             patente.siblings("span.help-block").text("Ingrese patente válida");
             patente.parent().addClass("has-error");
-        }else if(this.estaRepetidoVehiculo("patente", patente.val())){
+        }else if(this.estaRepetidoVehiculo("patente", patente.val()) && validacionRepetido){
             valido = false;
             patente.siblings("span.help-block").text("La patente ya está siendo utilizada");
             patente.parent().addClass("has-error");
