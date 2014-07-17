@@ -1,5 +1,6 @@
 from django.db import connection, models
 
+
 class StockManager(models.Manager):
 
 	def get_stock(self):
@@ -64,6 +65,7 @@ class StockManager(models.Manager):
 			resultado.append(p)
 
 		return resultado
+
 
 class Stock():
 	def __init__(self):
