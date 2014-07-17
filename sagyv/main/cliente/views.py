@@ -151,7 +151,7 @@ class ObtenerSituacionComercialView(View):
         dato = {
             'id': sc.id,
             'monto_descuento': sc.monto_descuento,
-            'tipo_descuento': sc.tipo_descuento
+            'tipo_descuento': sc.tipo_descuento.id
         }
         return HttpResponse(json.dumps(dato),content_type="application/json")
 

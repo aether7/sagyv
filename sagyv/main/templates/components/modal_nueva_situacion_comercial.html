@@ -1,0 +1,38 @@
+<div id="modal_agregar_situacion" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title">Crear Situacion Comercial</h4>
+            </div>
+            <div class="modal-body">
+                <!-- -->
+                <form id="f_agregar_situacion" action="{% url 'cliente:modificar_situacion_comercial' %}" method="post"> 
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="descuento_add">Monto Descuento</label>
+                        <input id="descuento_add" class="form-control" type="text" value="" />
+                        <span class="help-block"></spam>
+                    </div>
+                    <div class="form-group">
+                        <label for="sit_tipo_add">Tipo Descuento</label>
+                        <select name="sit_tipo_add" id="sit_tipo_add" class="form-control">
+                            <option value="">---</option>
+                            <option value="1">Descuento Fijo</option>
+                            <option value="2">Descuento Porcentual</option>
+                        </select>
+                        <span class="help-block"></spam>
+                    </div>
+                </form>
+                <!-- -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button id="btn_guardar_situacion"class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>

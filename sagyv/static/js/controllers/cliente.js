@@ -9,8 +9,8 @@ App.Controllers.Cliente = function(){
 
     this.btnAgregarSituacion = $("#btn_agregar_situacion");
     this.btnGuardarSituacion = $("#btn_guardar_situacion");
+    this.idSituacion = null;
     this.situacionUrl = null;
-    this.crearSituacionlUrl = null;
 };
 
 App.Controllers.Cliente.prototype = {
@@ -43,6 +43,13 @@ App.Controllers.Cliente.prototype = {
             evt.preventDefault();
             _this.mostrarModal("editar");
             _this.cargarCliente($(this).data("id"));
+        });
+
+        $("#tabla_s_comerciales").on("click","a[data-accion=editar]",function(evt){
+            evt.preventDefault();
+            _this.mostrarModal("editar_situacion");
+            alert($(this).data("id"));
+            _this.cargarSituacion($(this).data("id"));
         });
 
         $("#tabla_clientes").on("click","a[data-accion=eliminar]",function(evt){
@@ -323,5 +330,19 @@ App.Controllers.Cliente.prototype = {
         });
 
         $("#tabla_s_comerciales tbody").append(html);
+    },
+
+    cargarSituacion: function(id){
+        this.idSituacion = id;
+        alert(this.situacionUrl);
+        $.get(this.situacionUrl.replace("0", id),function(data){
+            $("#descuento_edit").val(data.monto_descuento);
+            $("#sit_tipo_edit").val(data.tipo_descuento);
+        });
+
+    },
+
+    setSituacionUrl: function(situacionUrl){
+        this.situacionUrl = situacionUrl;
     }
 };
