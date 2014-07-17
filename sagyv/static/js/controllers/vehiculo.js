@@ -88,14 +88,24 @@ App.Controllers.Vehiculo.prototype = {
         };
 
         $.post($("#f_anexar").attr("action"), json, function(data){
-            var trVehiculo,
-                optChofer = $("#anexar_chofer option:selected");
+            var tdChofer,
+                mensaje = "El conductor {0} ha sido anexado exitosamente al vehiculo {1}";
 
-            trVehiculo = $("#vehiculo_" + _this.id).find("data-nombre-chofer={0}".format(optChofer.text()));
-
-
-            console.log("psh psh psh");
             console.log(data);
+            console.log("#vehiculo_" + _this.id);
+            console.log("[data-nombre-chofer='{0}']".format(data.nombre_chofer));
+
+            tdChofer = $("#vehiculo_" + _this.id).find("[data-nombre-chofer]");
+
+            console.log(tdChofer.get(0));
+
+            tdChofer.data("nombreChofer", data.nombre_chofer).attr("data-nombre-chofer", data.nombre_chofer);
+            tdChofer.text(data.nombre_chofer);
+
+            mensaje = mensaje.format(data.nombre_chofer, data.numero_vehiculo);
+            _this.enviarMensaje(mensaje);
+
+            $("#modal_anexar").modal("hide");
         });
     },
 
