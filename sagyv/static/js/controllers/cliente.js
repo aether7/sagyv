@@ -42,8 +42,7 @@ App.Controllers.Cliente.prototype = {
 
         this.btnUpdateSituacion.on("click",function(){
             _this.guardarUpdateSituacion();
-        })
-
+        });
 
         $("#tabla_clientes").on("click","a[data-accion=editar]",function(evt){
             evt.preventDefault();
@@ -319,7 +318,7 @@ App.Controllers.Cliente.prototype = {
             }
             str = str.format(data.id_situacion, textSupport);
             $(str).insertBefore("#sit_comercial_add option:last");
-            
+
         });
     },
 

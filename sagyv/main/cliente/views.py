@@ -124,7 +124,10 @@ class ModificarClienteView(View):
             sc = DescuentoCliente.objects.get(pk = situacion_comercial)
             cliente.situacion_comercial = sc
 
-        cliente.credito = credito != "" and True or False
+        if credito != "" and credito != "0" and credito != "false":
+            cliente.credito = True
+        else:
+            cliente.credito = False
 
         cliente.save()
 
@@ -195,7 +198,7 @@ class ModificarSituacionComercialView(View):
         if(tipo != descuento_cliente.tipo_descuento.id):
             td = TipoDescuento.objects.get(pk = tipo)
             descuento_cliente.tipo_descuento = td
-        
+
         descuento_cliente.monto_descuento = monto_nuevo
         descuento_cliente.save()
 
@@ -208,7 +211,7 @@ class ModificarSituacionComercialView(View):
         }
 
         return HttpResponse(json.dumps(dato),content_type="application/json")
-        
+
 
 index = IndexView.as_view()
 obtener_cliente = ObtenerClienteView.as_view()
