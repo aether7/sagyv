@@ -185,14 +185,24 @@ class ModificarSituacionComercialView(View):
         monto_nuevo = req.POST.get('valor')
         tipo = req.POST.get('tipo')
 
-        situacion_comercial = DescuentoCliente.objects.get(pk = id_situacion)
+        descuento_cliente = DescuentoCliente.objects.get(pk = id_situacion)
 
-        if(tipo != situacion_comercial.tipo_descuento.id):
+        if(tipo != descuento_cliente.tipo_descuento.id):
             td = TipoDescuento.objects.get(pk = tipo)
-            situacion_comercial.tipo_descuento = td
+            descuento_cliente.tipo_descuento = td
         
-        situacion_comercial.monto_descuento = monto_nuevo
-        situacion_comercial.save()
+        descuento_cliente.monto_descuento = monto_nuevo
+        descuento_cliente.save()
+
+        dato = {
+            "status": "ok",
+            'id_situacion' : descuento_cliente.id,
+            'valor': descuento_cliente.monto_descuento,
+            'tipo':descuento_cliente.tipo_descuento.tipo,
+            'tipo_int':descuento_cliente.tipo_descuento.id
+        }
+
+        return HttpResponse(json.dumps(dato),content_type="application/json")
         
 
 index = IndexView.as_view()

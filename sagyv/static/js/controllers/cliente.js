@@ -9,6 +9,7 @@ App.Controllers.Cliente = function(){
 
     this.btnAgregarSituacion = $("#btn_agregar_situacion");
     this.btnGuardarSituacion = $("#btn_guardar_situacion");
+    this.btnUpdateSituacion = $("#btn_update_situacion");
     this.idSituacion = null;
     this.situacionUrl = null;
 };
@@ -38,6 +39,11 @@ App.Controllers.Cliente.prototype = {
         this.btnGuardarUpdate.on("click", function(){
             _this.guardarUpdate();
         });
+
+        this.btnUpdateSituacion.on("click",function(){
+            _this.guardarUpdateSituacion();
+        })
+
 
         $("#tabla_clientes").on("click","a[data-accion=editar]",function(evt){
             evt.preventDefault();
@@ -344,5 +350,53 @@ App.Controllers.Cliente.prototype = {
 
     setSituacionUrl: function(situacionUrl){
         this.situacionUrl = situacionUrl;
+    },
+
+    guardarUpdateSituacion:function(){
+        var json,
+        tipo = $("#sit_tipo_edit"),
+        valor = $("#descuento_edit"),
+        valido = true,
+        _this = this;
+
+        $(".has-error").removeClass("has-error");
+        $(".help-block").text("");
+
+        if(tipo.val().trim() == ""){
+            valido = false;
+            tipo.siblings("span").text("Campo obligatorio");
+            tipo.parent().addClass("has-error");
+        }
+
+        if(isNaN(valor.val())){
+            valido = false;
+            valor.siblings("span").text("Ingrese un numero");
+            valor.parent().addClass("has-error");
+        }else if(valor.val().trim() === ""){
+            valido = false;
+            valor.siblings("span").text("Campo obligatorio");
+            valor.parent().addClass("has-error");
+        }
+
+        if(!valido){
+            return
+        }
+
+        json = {
+            tipo : tipo.val(),
+            valor : valor.val(),
+            id_situacion : this.idSituacion
+        };
+
+        $.post($("#f_modificar_situacion").attr("action"), json, function(data){
+            $("#modal_editar_situacion").modal("hide");
+            _this.agregarMensaje("El cliente fue actualizado exitosamente");
+
+            var tr = $("a[data-id={0}][data-accion=editar]".format(_this.idSituacion)).closest("tr");
+
+            tr.find("[data-columna=id_situacion]").text(json.id_situacion);
+            tr.find("[data-columna=tipo_descuento]").text(json.tipo);
+            tr.find("[data-columna=descuento]").text(json.valor);
+        });
     }
 };
