@@ -20,10 +20,9 @@ App.Controllers.Vehiculo.prototype = {
             evt.preventDefault();
             var accion = $(this).data("accion"),
                 id = $(this).data("id");
-
             _this.id = id;
             _this.mostrar("modal_" + accion,"f_" + accion);
-            _this[accion]();
+            _this[accion](id);
         });
 
         $("#btn_anexar").on("click", function(evt){
@@ -184,5 +183,9 @@ App.Controllers.Vehiculo.prototype = {
         vehiculo.get_ultimo_chofer = json.chofer;
 
         lista.append(render({ vehiculo : vehiculo }));
+    },
+
+    editar_vehiculo: function(id_vehiculo){
+        alert(id_vehiculo);
     }
 };
