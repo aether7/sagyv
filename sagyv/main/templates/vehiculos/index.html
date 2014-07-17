@@ -114,7 +114,7 @@
 </script>
 <script>
     App.vehiculoController = new App.Controllers.Vehiculo();
-    App.vehiculoController.urlVehiculo = "{% url 'vehiculos:obtener' %}";
+    App.vehiculoController.urlVehiculo = "{% url 'vehiculos:obtener' 0 %}";
 
     {% for vehiculo in vehiculos %}
     App.vehiculoController.agregarVehiculo({{ vehiculo.numero }}, '{{ vehiculo.patente }}');

@@ -69,8 +69,8 @@ class AgregarNuevoVehiculoView(View):
 
 
 class ObtenerView(View):
-    def get(self, request):
-        vehiculo_id = int(request.GET.get("id_vehiculo"))
+    def get(self, request, id_vehiculo):
+        vehiculo_id = int(id_vehiculo)
         vehiculo = Vehiculo.objects.get(pk = vehiculo_id)
 
         data = {

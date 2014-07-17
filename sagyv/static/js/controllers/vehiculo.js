@@ -4,6 +4,7 @@ App.Controllers.Vehiculo = function(){
     this.urlVehiculo = null;
     this.vehiculos = [];
     this.id = null;
+    this.idVehiculo = null
 };
 
 App.Controllers.Vehiculo.prototype = {
@@ -224,6 +225,18 @@ App.Controllers.Vehiculo.prototype = {
     },
 
     editar_vehiculo: function(id_vehiculo){
-        alert(id_vehiculo);
+        var url = this.urlVehiculo.replace("0", id_vehiculo);
+        this.idVehiculo = id_vehiculo;
+
+        $.get(url, function(data){
+            $("#numero_vehiculo_editar").val(data.numero);
+            $("#patente_vehiculo_editar").val(data.patente);
+            $("#revision_tecnica_vehiculo_editar").val(data.fecha_revision_tecnica);
+            $("#kilometraje_vehiculo_editar").val(data.km);
+            $("#estado_sec_vehiculo_editar").val((data.estado_sec)? 1:2);
+            $("#estado_pago_vehiculo_editar").val((data.estado_pago)?1:2);
+            //$("#chofer_vehiculo_editar").val(data.);
+        })
+        
     }
 };
