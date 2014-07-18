@@ -3,6 +3,7 @@ App.Controllers.Vehiculo = function(){
     this.btnGuardarNuevoVehiculo = $("#btn_guardar_nuevo_vehiculo");
     this.btnGuardarEdicionVehiculo = $("#btn_editar_vehiculo");
     this.urlVehiculo = null;
+    this.urlListaVehiculo = null;
     this.vehiculos = [];
     this.id = null;
     this.idVehiculo = null
@@ -22,7 +23,7 @@ App.Controllers.Vehiculo.prototype = {
             _this.guardarEdicionVehiculo()
         });
 
-        $(".btn-acciones").on("click",function(evt){
+        $("#lista_vehiculos").on("click", ".btn-acciones", function(evt){
             evt.preventDefault();
             var accion = $(this).data("accion"),
                 id = $(this).data("id");
@@ -221,7 +222,6 @@ App.Controllers.Vehiculo.prototype = {
             idChofer = $("#chofer_vehiculo_editar")
             _this = this;
 
-        console.log("ASDFASDFASDF");
         valido = this.validarCampo(numero, patente, fecha, km, sec, estadoPago, idChofer);
 
         if(!valido){
@@ -237,8 +237,22 @@ App.Controllers.Vehiculo.prototype = {
         };
 
         $.post($("#f_editar").attr("action"), json, function(data){
-            console.log(data);
-            _this.enviarMensaje("El vehiculo {0} se ha editado exitosamente".format(numero.val()));
+            $.get(_this.urlListaVehiculo, function(listaVehiculos){
+                _this.procesarDatosVehiculos(listaVehiculos);
+                _this.enviarMensaje("El vehiculo {0} se ha editado exitosamente".format(numero.val()));
+                $("#modal_editar").modal("hide");
+            });
+        });
+    },
+
+    procesarDatosVehiculos: function(listaVehiculos){
+        var render = Handlebars.compile($("#tmpl_nuevo_vehiculo").html()),
+            tabla = $("#lista_vehiculos tbody");
+
+        tabla.empty();
+
+        listaVehiculos.forEach(function(v){
+            tabla.append(render({ vehiculo : v }));
         });
     },
 
