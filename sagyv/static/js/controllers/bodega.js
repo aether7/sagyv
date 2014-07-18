@@ -51,14 +51,20 @@ App.Controllers.Bodega.prototype = {
         var _this = this;
 
         return function(evt){
+            $(".has-error").removeClass("has-error");
+            $(".help-block").text("");
+            
             evt.preventDefault();
-            var datos, precios = [];
+            var datos, precios = [],
+            valido = true;
 
             $("[data-columna]").each(function(){
                 var valor = $(this).val(),
                     id = $(this).data("id");
 
                 if(!valor || !type.isNumber(parseInt(valor))){
+                    $(this).siblings("span").text("Campo obligatorio");
+                    valido = false;
                     return;
                 }
 
@@ -67,6 +73,10 @@ App.Controllers.Bodega.prototype = {
                     valor : valor
                 });
             });
+
+            if(!valido){
+                return
+            }
 
             datos = { precios : JSON.stringify(precios) };
 

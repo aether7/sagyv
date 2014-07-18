@@ -56,10 +56,10 @@ class StockManager(models.Manager):
 			p.peso = row[1]
 			p.nombre = row[2]
 
-			if row[4]:
-				p.cantidad = (row[3] +row[4]) or 0
+			if row[4] is not None:
+				p.cantidad = (row[3] + row[4]) or 0
 			else:
-				p.cantidad = (row[4]) or 0
+				p.cantidad = (row[3]) or 0
 
 			resultado.append(p)
 
