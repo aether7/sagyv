@@ -162,8 +162,9 @@ class ModificarView(View):
 
         data = { "status" : "ok" }
 
-        if (not(chofer_actual is None) and chofer_actual.id != id_chofer) or chofer_actual is None:
-            self.anexar_chofer_vehiculo(id_chofer, vehiculo, fecha_revision_tecnica)
+        if id_chofer != "":
+            if (not(chofer_actual is None) and chofer_actual.id != id_chofer) or chofer_actual is None:
+                self.anexar_chofer_vehiculo(id_chofer, vehiculo, fecha_revision_tecnica)
 
         return HttpResponse(json.dumps(data), content_type="application/json")
 
