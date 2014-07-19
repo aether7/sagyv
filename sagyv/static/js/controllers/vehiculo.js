@@ -27,6 +27,7 @@ App.Controllers.Vehiculo.prototype = {
             evt.preventDefault();
             var accion = $(this).data("accion"),
                 id = $(this).data("id");
+
             _this.id = id;
             _this.mostrar("modal_" + accion,"f_" + accion);
             _this[accion](id);
@@ -54,7 +55,9 @@ App.Controllers.Vehiculo.prototype = {
     },
 
     anexar: function(){
-        $.get(this.urlVehiculo,{ id_vehiculo : this.id }, function(data){
+        var url = this.urlVehiculo.replace("0", this.id);
+
+        $.get(url, function(data){
             $("#anexar_vehiculo").val(data.numero).data("id", data.id);
         });
     },
@@ -94,7 +97,13 @@ App.Controllers.Vehiculo.prototype = {
 
         $.post($("#f_anexar").attr("action"), json, function(data){
             var tdChofer,
+                tdAntiguoChofer,
                 mensaje = "El conductor {0} ha sido anexado exitosamente al vehiculo {1}";
+
+            tdAntiguoChofer = $("td[data-nombre-chofer='{1}']".format(_this.id, data.nombre_chofer));
+            tdAntiguoChofer.data("nombreChofer", "No anexado").
+                attr("data-nombre-chofer", "No anexado").
+                text("No anexado");
 
             tdChofer = $("#vehiculo_" + _this.id).find("[data-nombre-chofer]");
             tdChofer.data("nombreChofer", data.nombre_chofer).attr("data-nombre-chofer", data.nombre_chofer);
