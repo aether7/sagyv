@@ -9,4 +9,5 @@ urlpatterns += patterns("",
     url(r"^bodega/",include("main.bodega.urls",namespace="bodega")),
     url(r"^cliente/",include("main.cliente.urls",namespace="cliente")),
     url(r"^vehiculos/",include("main.vehiculos.urls",namespace="vehiculos")),
+    url(r"^precios/",include("main.precios.urls",namespace="precios")),
 )
