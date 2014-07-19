@@ -2,7 +2,7 @@ import json
 from django.db import transaction
 from django.views.generic import TemplateView,View
 from django.http import HttpResponse
-from main.models import Cliente, DescuentoCliente, TipoDescuento
+from main.models import Cliente, DescuentoCliente, TipoDescuento, Producto
 
 class IndexView(TemplateView):
     template_name = "cliente/index.html"
@@ -12,6 +12,7 @@ class IndexView(TemplateView):
         context["clientes"] = Cliente.objects.all()
         context["tipos_descuento"] = TipoDescuento.objects.all()
         context["situaciones_comerciales"] = DescuentoCliente.objects.all()
+        context["productos"] = Producto.objects.all().order_by("id")
 
         return context
 
@@ -137,7 +138,7 @@ class ModificarClienteView(View):
 
         cliente.save()
 
-        dato = { 
+        dato = {
             "status": "ok",
             "giro": cliente.giro,
             "telefono": cliente.telefono,
@@ -171,29 +172,41 @@ class ObtenerSituacionComercialView(View):
 
 
 class CrearSituacionComercialView(View):
-
+    @transaction.commit_on_success
     def post(self, req):
         tipo = req.POST.get('tipo')
         valor = req.POST.get('valor')
+        producto_id = req.POST.get("producto")
 
         td = TipoDescuento.objects.get(pk = tipo)
+        producto = Producto.objects.get(pk = producto_id)
+
         descuento_cliente = DescuentoCliente()
         descuento_cliente.tipo_descuento = td
         descuento_cliente.monto_descuento = valor
+        descuento_cliente.producto = producto
         descuento_cliente.save()
 
         dato = {
-            "status": "ok",
-            'id_situacion' : descuento_cliente.id,
-            'valor': descuento_cliente.monto_descuento,
-            'tipo':descuento_cliente.tipo_descuento.tipo,
-            'tipo_int':descuento_cliente.tipo_descuento.id
+            "status" : "ok",
+            "id_situacion" : descuento_cliente.id,
+            "valor" : descuento_cliente.monto_descuento,
+            "tipo_descuento" : {
+                "id" : td.id,
+                "tipo" : td.tipo
+            },
+            "producto" : {
+                "id" : producto.id,
+                "nombre" : producto.nombre,
+                "codigo" : producto.codigo,
+                "nombre_tipo_producto" : producto.tipo_producto.nombre
+            }
         }
 
         return HttpResponse(json.dumps(dato),content_type="application/json")
 
 class ModificarSituacionComercialView(View):
-
+    @transaction.commit_on_success
     def post(self, req):
         id_situacion = req.POST.get('id_situacion')
         monto_nuevo = req.POST.get('valor')

@@ -44,12 +44,13 @@ App.Controllers.SituacionComercial.prototype = {
             valido,
             tipo = $("#sit_tipo_add"),
             valor = $("#descuento_add"),
+            producto = $("#sit_producto_add"),
             _this = this;
 
         $(".has-error").removeClass("has-error");
         $(".help-block").text("");
 
-        valido = this.validarSituacion(valor, tipo);
+        valido = this.validarSituacion(valor, tipo, producto);
 
         if(!valido){
             return
@@ -57,28 +58,16 @@ App.Controllers.SituacionComercial.prototype = {
 
         json = {
             tipo : tipo.val(),
-            valor : valor.val()
+            valor : valor.val(),
+            producto : producto.val()
         };
 
         $.post($("#f_agregar_situacion").attr("action"), json, function(data){
-            var str = "<option value='{0}'>{1}</option>";
-
-            $("#modal_agregar_situacion").modal("hide");
-            common.agregarMensaje("La situacion comercial fue ingresado exitosamente");
             _this.procesarAgregarSituacion(data);
-
-            if(data.tipo_int == 1){
-                textSupport = "$ "+data.valor;
-            }else{
-                textSupport = "% "+data.valor;
-            }
-            str = str.format(data.id_situacion, textSupport);
-            $(str).insertBefore("#sit_comercial_add option:last");
-
         });
     },
 
-    validarSituacion: function(valor, tipo){
+    validarSituacion: function(valor, tipo, producto){
         var valido = true;
 
         $(".has-error").removeClass("has-error");
@@ -104,22 +93,38 @@ App.Controllers.SituacionComercial.prototype = {
             tipo.parent().addClass("has-error");
         }
 
+        if(producto.val().trim() === ""){
+            valido = false;
+            producto.siblings("span").text("Campo obligatorio");
+            producto.parent().addClass("has-error");
+        }
+
         return valido;
     },
 
     procesarAgregarSituacion: function(data){
         var html,
+            opt = "<option value='{0}'>{1}</option>",
             situacionComercial,
             template = $("#tpl_nueva_situacion").html(),
             render = Handlebars.compile(template);
 
         html = render({
-            tipo_descuento : data.tipo,
+            tipo_descuento : data.tipo_descuento.tipo,
             descuento : data.valor,
-            id : data.id_situacion
+            id : data.id_situacion,
+            producto : {
+                nombre : data.producto.nombre + " " + data.producto.nombre_tipo_producto,
+                codigo : data.producto.codigo
+            }
         });
 
+        opt = opt.format(data.id_situacion, data.valor);
+        $(opt).insertBefore("#sit_comercial_add option:last");
+
         $("#tabla_s_comerciales tbody").append(html);
+        $("#modal_agregar_situacion").modal("hide");
+        common.agregarMensaje("La situacion comercial fue ingresado exitosamente");
     },
 
     cargarSituacion: function(id){

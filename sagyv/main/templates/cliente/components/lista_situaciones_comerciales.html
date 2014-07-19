@@ -3,6 +3,7 @@
         <tr>
             <th>Tipo</th>
             <th>Valor</th>
+            <th>Producto</th>
             <th>Accion</th>
         </tr>
     </thead>
@@ -11,8 +12,15 @@
         <tr>
             <td data-columna="tipo_descuento">{{ cs.tipo_descuento.tipo }}</td>
             <td data-columna="descuento">{{ cs.monto_descuento }}</td>
+            <td data-columna="producto">
+                {% if cs.id != 1 %}
+                ( {{ cs.producto.codigo }} ) {{ cs.producto.get_nombre_tipo }}
+                {% endif %}
+            </td>
             <td>
+                {% if cs.id != 1 %}
                 <a href="#" data-accion="editar" data-id="{{ cs.id }}">Editar</a>
+                {% endif %}
             </td>
         </tr>
         {% endfor %}

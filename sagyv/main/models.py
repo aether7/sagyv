@@ -239,6 +239,9 @@ class Producto(models.Model):
 
         return precio
 
+    def get_nombre_tipo(self):
+        return self.nombre + " " + self.tipo_producto.nombre
+
 
 class TipoCambioStock(models.Model):
     nombre = models.CharField(max_length=140)
@@ -292,6 +295,7 @@ class TipoDescuento(models.Model):
 class DescuentoCliente(models.Model):
     monto_descuento = models.IntegerField()
     tipo_descuento = models.ForeignKey(TipoDescuento)
+    producto = models.ForeignKey(Producto, null=True)
 
     def es_cliente_sin_descuento(self):
         return self.id == 1
