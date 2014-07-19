@@ -47,13 +47,7 @@
                         <select name="sit_comercial_add" id="sit_comercial_add" class="form-control">
                             {% for situacion in situaciones_comerciales %}
                             <option value="{{ situacion.id }}">
-                                {% if situacion.tipo_descuento.id == 1 %}
-                                    $
-                                {% elif situacion.tipo_descuento.id == 2 %}
-                                    %
-                                {% endif %}
-
-                                {{ situacion.monto_descuento }}
+                                {{ situacion }}
                             </option>
                             {% endfor%}
                             <option value="otro">Otro...</option>

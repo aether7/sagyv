@@ -301,7 +301,14 @@ class DescuentoCliente(models.Model):
         return self.id == 1
 
     def __unicode__(self):
-        return unicode(str(self.monto_descuento))
+        if self.id == 1:
+            return unicode("Sin descuento")
+        else:
+            tipo = self.tipo_descuento.id == 1 and "$" or "%"
+            producto = self.producto.nombre + " " + self.producto.tipo_producto.nombre
+            texto = "%s %s en %s" % (tipo, self.monto_descuento, producto)
+
+            return unicode(texto)
 
 
 class Cliente(models.Model):
