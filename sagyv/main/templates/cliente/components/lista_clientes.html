@@ -1,6 +1,7 @@
 <table id="tabla_clientes" class="table table-striped">
     <thead>
         <tr>
+            <th>Nombre</th>
             <th>Giro</th>
             <th>Rut</th>
             <th>Telefono</th>
@@ -11,6 +12,7 @@
     <tbody>
         {% for cliente in clientes %}
         <tr>
+            <td data-columna="nombre">{{ cliente.nombre }}</td>
             <td data-columna="giro">{{ cliente.giro }}</td>
             <td>{{ cliente.rut }}</td>
             <td data-columna="telefono">{{ cliente.telefono }}</td>

@@ -5,5 +5,13 @@ var common = {
         setTimeout(function(){
             $mensaje.removeClass("alert-success").hide().text("");
         },2500);
-    }
+    },
+
+    mostrarModal: function(id){
+        var $modal = $("#modal_" + id);
+        $modal.modal("show");
+        $modal.find("form").get(0).reset();
+        $(".has-error").removeClass("has-error");
+        $(".help-block").text("");
+    },
 };

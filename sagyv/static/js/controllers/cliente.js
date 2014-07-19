@@ -2,16 +2,9 @@ App.Controllers.Cliente = function(){
     this.btnAgregar = $("#btn_agregar");
     this.btnGuardarAdd = $("#btn_guardar_add");
     this.btnGuardarUpdate = $("#btn_guardar_update");
-    this.mensaje = $("#mensaje");
     this.clienteUrl = null;
     this.eliminarUrl = null;
     this.idCliente = null;
-
-    this.btnAgregarSituacion = $("#btn_agregar_situacion");
-    this.btnGuardarSituacion = $("#btn_guardar_situacion");
-    this.btnUpdateSituacion = $("#btn_update_situacion");
-    this.idSituacion = null;
-    this.situacionUrl = null;
 };
 
 App.Controllers.Cliente.prototype = {
@@ -21,61 +14,27 @@ App.Controllers.Cliente.prototype = {
         var _this = this;
 
         this.btnAgregar.on("click",function(){
-            _this.mostrarModal("agregar");
-        });
-
-        this.btnAgregarSituacion.on("click",function(){
-            _this.mostrarModal("agregar_situacion");
+            common.mostrarModal("agregar");
         });
 
         this.btnGuardarAdd.on("click", function(){
             _this.guardarAdd();
         });
 
-        this.btnGuardarSituacion.on("click", function(){
-            _this.guardarSituacion();
-        })
-
         this.btnGuardarUpdate.on("click", function(){
             _this.guardarUpdate();
         });
 
-        this.btnUpdateSituacion.on("click",function(){
-            _this.guardarUpdateSituacion();
-        });
-
         $("#tabla_clientes").on("click","a[data-accion=editar]",function(evt){
             evt.preventDefault();
-            _this.mostrarModal("editar");
+            common.mostrarModal("editar");
             _this.cargarCliente($(this).data("id"));
-        });
-
-        $("#tabla_s_comerciales").on("click","a[data-accion=editar]",function(evt){
-            evt.preventDefault();
-            _this.mostrarModal("editar_situacion");
-            _this.cargarSituacion($(this).data("id"));
         });
 
         $("#tabla_clientes").on("click","a[data-accion=eliminar]",function(evt){
             evt.preventDefault();
             _this.eliminarCliente($(this).data("id"));
         });
-
-        $("#sit_comercial_add").on("change",function(){
-            if($(this).val() === "otro"){
-                $("#nueva_situacion_add").removeClass("hidden");
-            }else{
-                $("#nueva_situacion_add").addClass("hidden");
-            }
-        });
-    },
-
-    mostrarModal: function(id){
-        var $modal = $("#modal_" + id);
-        $modal.modal("show");
-        $modal.find("form").get(0).reset();
-        $(".has-error").removeClass("has-error");
-        $(".help-block").text("");
     },
 
     cargarCliente: function(id){
@@ -108,6 +67,7 @@ App.Controllers.Cliente.prototype = {
 
     guardarAdd: function(){
         var json,
+            nombre = $("#nombre_add"),
             giro = $("#giro_add"),
             direccion = $("#direccion_add"),
             telefono = $("#telefono_add"),
@@ -117,13 +77,14 @@ App.Controllers.Cliente.prototype = {
             valido = true,
             _this = this;
 
-        valido = this.validarCampos(giro, direccion, telefono, rut);
+        valido = this.validarCampos(nombre, giro, direccion, telefono, rut);
 
         if(!valido){
             return;
         }
 
         json = {
+            nombre : nombre.val(),
             giro : giro.val(),
             direccion : direccion.val(),
             telefono : telefono.val(),
@@ -139,7 +100,7 @@ App.Controllers.Cliente.prototype = {
 
             $("#modal_agregar").modal("hide");
             _this.procesarAgregar(data);
-            _this.agregarMensaje("El cliente fue ingresado exitosamente");
+            common.agregarMensaje("El cliente fue ingresado exitosamente");
 
             var str = "<option value='{0}'>{1}</option>";
             str = str.format(data.situacion_comercial.id, data.situacion_comercial.tipo);
@@ -201,7 +162,7 @@ App.Controllers.Cliente.prototype = {
 
         $.post($("#f_editar_cliente").attr("action"), json, function(data){
             $("#modal_editar").modal("hide");
-            _this.agregarMensaje("El cliente fue actualizado exitosamente");
+            common.agregarMensaje("El cliente fue actualizado exitosamente");
 
             var tr = $("a[data-id={0}][data-accion=editar]".format(_this.idCliente)).closest("tr");
 
@@ -211,11 +172,17 @@ App.Controllers.Cliente.prototype = {
         });
     },
 
-    validarCampos: function(giro, direccion, telefono, rut){
+    validarCampos: function(nombre, giro, direccion, telefono, rut){
         var valido = true;
 
         $(".has-error").removeClass("has-error");
         $(".help-block").text("");
+
+        if(nombre.val() === ""){
+            valido = false;
+            nombre.siblings("span").text("Campo obligatorio");
+            nombre.parent().addClass("has-error");
+        }
 
         if(giro.val().trim() === ""){
             valido = false;
@@ -250,150 +217,5 @@ App.Controllers.Cliente.prototype = {
         }
 
         return valido;
-    },
-
-    agregarMensaje: function(mensaje){
-        var _this = this;
-        this.mensaje.addClass("alert-success").show().text(mensaje);
-
-        setTimeout(function(){
-            _this.mensaje.removeClass("alert-success").hide().text("");
-        },2500);
-    },
-
-    setClienteUrl: function(clienteUrl){
-        this.clienteUrl = clienteUrl;
-    },
-
-    setEliminarUrl: function(eliminarUrl){
-        this.eliminarUrl = eliminarUrl;
-    },
-
-    //situacion comercial
-    guardarSituacion: function(){
-        var json,
-            valido,
-            tipo = $("#sit_tipo_add"),
-            valor = $("#descuento_add"),
-            _this = this;
-
-        $(".has-error").removeClass("has-error");
-        $(".help-block").text("");
-
-        valido = this.validarSituacion(valor, tipo);
-
-        if(!valido){
-            return
-        }
-
-        json = {
-            tipo : tipo.val(),
-            valor : valor.val()
-        };
-
-        $.post($("#f_agregar_situacion").attr("action"), json, function(data){
-            var str = "<option value='{0}'>{1}</option>";
-
-            $("#modal_agregar_situacion").modal("hide");
-            _this.agregarMensaje("La situacion comercial fue ingresado exitosamente");
-            _this.procesarAgregarSituacion(data);
-
-            if(data.tipo_int == 1){
-                textSupport = "$ "+data.valor;
-            }else{
-                textSupport = "% "+data.valor;
-            }
-            str = str.format(data.id_situacion, textSupport);
-            $(str).insertBefore("#sit_comercial_add option:last");
-
-        });
-    },
-
-    validarSituacion: function(valor, tipo){
-        var valido = true;
-
-        $(".has-error").removeClass("has-error");
-        $(".help-block").text("");
-
-        if(valor.val().trim() === ""){
-            valido = false;
-            valor.siblings("span").text("Campo obligatorio");
-            valor.parent().addClass("has-error");
-        }else if(!type.isNumber(parseInt(valor.val()))){
-            valido = false;
-            valor.siblings("span").text("Debe ser un número");
-            valor.parent().addClass("has-error");
-        }else if(parseInt(valor.val()) < 1){
-            valido = false;
-            valor.siblings("span").text("Debe ingresar un monto mayor a 1");
-            valor.parent().addClass("has-error");
-        }
-
-        if(tipo.val().trim() == ""){
-            valido = false;
-            tipo.siblings("span").text("Campo obligatorio");
-            tipo.parent().addClass("has-error");
-        }
-
-        return valido;
-    },
-
-    procesarAgregarSituacion: function(data){
-        var html,
-            situacionComercial,
-            template = $("#tpl_nueva_situacion").html(),
-            render = Handlebars.compile(template);
-
-        html = render({
-            tipo_descuento : data.tipo,
-            descuento : data.valor,
-            id : data.id_situacion
-        });
-
-        $("#tabla_s_comerciales tbody").append(html);
-    },
-
-    cargarSituacion: function(id){
-        var url = this.situacionUrl.replace("0", id);
-        this.idSituacion = id;
-
-        $.get(url, function(data){
-            $("#descuento_edit").val(data.monto_descuento);
-            $("#sit_tipo_edit").val(data.tipo_descuento);
-        });
-    },
-
-    setSituacionUrl: function(situacionUrl){
-        this.situacionUrl = situacionUrl;
-    },
-
-    guardarUpdateSituacion:function(){
-        var json,
-            valido,
-            tipo = $("#sit_tipo_edit"),
-            valor = $("#descuento_edit"),
-            _this = this;
-
-        valido = this.validarSituacion(valor, tipo);
-
-        if(!valido){
-            return
-        }
-
-        json = {
-            tipo : tipo.val(),
-            valor : valor.val(),
-            id_situacion : this.idSituacion
-        };
-
-        $.post($("#f_modificar_situacion").attr("action"), json, function(data){
-            $("#modal_editar_situacion").modal("hide");
-            _this.agregarMensaje("El cliente fue actualizado exitosamente");
-
-            var tr = $("a[data-id={0}][data-accion=editar]".format(_this.idSituacion)).closest("tr");
-
-            tr.find("[data-columna=tipo_descuento]").text(json.tipo);
-            tr.find("[data-columna=descuento]").text(json.valor);
-        });
     }
 };
