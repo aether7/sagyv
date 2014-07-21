@@ -119,7 +119,7 @@ App.Controllers.SituacionComercial.prototype = {
             }
         });
 
-        opt = opt.format(data.id_situacion, data.valor);
+        opt = opt.format(data.id_situacion, data.valor_descripcion);
         $(opt).insertBefore("#sit_comercial_add option:last");
 
         $("#tabla_s_comerciales tbody").append(html);

@@ -12,6 +12,7 @@ class IndexView(TemplateView):
         context["clientes"] = Cliente.objects.all()
         context["tipos_descuento"] = TipoDescuento.objects.all()
         context["situaciones_comerciales"] = DescuentoCliente.objects.exclude(id=1).order_by("id")
+        context["situaciones_comerciales_select"] = DescuentoCliente.objects.all().order_by("id")
         context["productos"] = Producto.objects.exclude(tipo_producto_id=3).order_by("id")
 
         return context
@@ -200,6 +201,7 @@ class CrearSituacionComercialView(View):
             "status" : "ok",
             "id_situacion" : descuento_cliente.id,
             "valor" : descuento_cliente.monto_descuento,
+            "valor_descripcion" : descuento_cliente.__unicode__(),
             "tipo_descuento" : {
                 "id" : td.id,
                 "tipo" : td.tipo
