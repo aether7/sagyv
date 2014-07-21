@@ -48,6 +48,7 @@ class CrearClienteView(View):
         rut = req.POST.get('rut')
         situacion_comercial = req.POST.get('situacion_comercial')
         credito = req.POST.get('credito')
+        obs = req.POST.get('obs')
 
         rut = rut.replace('.', '');
 
@@ -69,6 +70,7 @@ class CrearClienteView(View):
             cliente.telefono = telefono
             cliente.rut = rut
             cliente.situacion_comercial = sc
+            cliente.observacion = obs
             if credito != "" and credito != "0" and credito != "false":
                 cliente.credito = True
             else:

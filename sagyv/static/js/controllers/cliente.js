@@ -75,6 +75,7 @@ App.Controllers.Cliente.prototype = {
             rut = $("#rut_add"),
             sitComercial = $("#sit_comercial_add"),
             credito = $("#credito_add"),
+            observaciones = $("#obs_add"),
             valido = true,
             _this = this;
 
@@ -94,7 +95,8 @@ App.Controllers.Cliente.prototype = {
             credito : credito.is(":checked"),
             cantidad : $("#numero_add").val(),
             tipo : $("#tipo_add").val(),
-            producto : $("#sel_producto_add").val()
+            producto : $("#sel_producto_add").val(),
+            obs : observaciones
         };
 
         $.post($("#f_agregar_cliente").attr("action"), json, function(data){
