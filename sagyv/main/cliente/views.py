@@ -39,6 +39,7 @@ class CrearClienteView(View):
 
     @transaction.commit_on_success
     def post(self, req):
+        nombre = req.POST.get('nombre')
         giro = req.POST.get('giro')
         direccion = req.POST.get('direccion')
         telefono = req.POST.get('telefono')
@@ -58,6 +59,7 @@ class CrearClienteView(View):
                 sc = DescuentoCliente.objects.get(pk = situacion_comercial)
 
             cliente = Cliente()
+            cliente.nombre = nombre
             cliente.giro = giro
             cliente.direccion = direccion
             cliente.telefono = telefono
@@ -69,6 +71,7 @@ class CrearClienteView(View):
             dato = {
                 "status": "ok",
                 "id" : cliente.id,
+                "nombre" : cliente.nombre,
                 "giro" : cliente.giro,
                 "rut" : cliente.rut,
                 "situacion_comercial_text" : str(sc.monto_descuento)+' '+sc.tipo_descuento.tipo,

@@ -312,6 +312,7 @@ class DescuentoCliente(models.Model):
 
 
 class Cliente(models.Model):
+    nombre = models.CharField(max_length=140)
     giro = models.CharField(max_length=140)
     direccion = models.TextField()
     telefono = models.CharField(max_length=140)

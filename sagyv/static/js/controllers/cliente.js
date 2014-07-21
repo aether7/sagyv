@@ -121,6 +121,7 @@ App.Controllers.Cliente.prototype = {
         }
 
         html = render({
+            nombre : data.nombre,
             giro : data.giro,
             rut : data.rut,
             situacion_comercial :data.situacion_comercial_text,
