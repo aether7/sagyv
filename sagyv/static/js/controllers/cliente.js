@@ -42,6 +42,7 @@ App.Controllers.Cliente.prototype = {
 
         $.get(this.clienteUrl.replace("0", id),function(data){
             $("#giro_update").val(data.giro);
+            $("#nombre_update").val(data.nombre);
             $("#direccion_update").val(data.direccion);
             $("#telefono_update").val(data.telefono);
             $("#rut_update").val(data.rut);
@@ -144,7 +145,7 @@ App.Controllers.Cliente.prototype = {
             valido = true,
             _this = this;
 
-        valido = this.validarCampos(giro, direccion, telefono, rut);
+        valido = this.validarCampos(nombre, giro, direccion, telefono, rut);
 
         if(!valido){
             return;
@@ -167,6 +168,7 @@ App.Controllers.Cliente.prototype = {
 
             var tr = $("a[data-id={0}][data-accion=editar]".format(_this.idCliente)).closest("tr");
 
+            tr.find("[data-columna=nombre]").text(data.nombre);
             tr.find("[data-columna=giro]").text(data.giro);
             tr.find("[data-columna=telefono]").text(data.telefono);
             tr.find("[data-columna=situacion_comercial]").text(data.situacion_comercial);
