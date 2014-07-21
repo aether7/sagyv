@@ -47,6 +47,7 @@ App.Controllers.Cliente.prototype = {
             $("#telefono_update").val(data.telefono);
             $("#rut_update").val(data.rut);
             $("#sit_comercial_update").val(data.situacion_comercial);
+            $("#obs_update").val(data.obs);
 
             if(data.credito){
                 $("#credito_update").get(0).checked = true;
@@ -96,7 +97,7 @@ App.Controllers.Cliente.prototype = {
             cantidad : $("#numero_add").val(),
             tipo : $("#tipo_add").val(),
             producto : $("#sel_producto_add").val(),
-            obs : observaciones
+            obs : observaciones.val().trim()
         };
 
         $.post($("#f_agregar_cliente").attr("action"), json, function(data){
@@ -145,6 +146,7 @@ App.Controllers.Cliente.prototype = {
             rut = $("#rut_update"),
             sitComercial = $("#sit_comercial_update"),
             credito = $("#credito_update"),
+            observaciones = $("#obs_update"),
             valido = true,
             _this = this;
 
@@ -162,7 +164,8 @@ App.Controllers.Cliente.prototype = {
             rut : rut.val(),
             situacion_comercial : sitComercial.val(),
             credito : credito.is(":checked"),
-            id_cliente : this.idCliente
+            id_cliente : this.idCliente,
+            obs : observaciones.val().trim()
         };
 
         $.post($("#f_editar_cliente").attr("action"), json, function(data){

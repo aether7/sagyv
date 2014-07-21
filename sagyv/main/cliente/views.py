@@ -31,7 +31,8 @@ class ObtenerClienteView(View):
             'telefono' : cliente.telefono,
             'rut' : cliente.rut,
             'situacion_comercial' : cliente.situacion_comercial.id,
-            'credito' : cliente.credito
+            'credito' : cliente.credito,
+            'obs' : cliente.observacion
         }
 
         return HttpResponse(json.dumps(dato),content_type="application/json")
@@ -131,12 +132,14 @@ class ModificarClienteView(View):
         telefono = req.POST.get('telefono')
         situacion_comercial = req.POST.get('situacion_comercial')
         credito = req.POST.get('credito')
+        obs = req.POST.get('obs')
 
         cliente = Cliente.objects.get(pk = id_cliente)
         cliente.nombre = nombre
         cliente.giro = giro
         cliente.direccion = direccion
         cliente.telefono = telefono
+        cliente.observacion = obs
 
         if( cliente.situacion_comercial.id != situacion_comercial ):
             sc = DescuentoCliente.objects.get(pk = situacion_comercial)
