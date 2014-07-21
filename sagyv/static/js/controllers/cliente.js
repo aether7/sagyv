@@ -92,7 +92,8 @@ App.Controllers.Cliente.prototype = {
             situacion_comercial : sitComercial.val(),
             credito : credito.is(":checked"),
             cantidad : $("#numero_add").val(),
-            tipo : $("#tipo_add").val()
+            tipo : $("#tipo_add").val(),
+            producto : $("#sel_producto_add").val()
         };
 
         $.post($("#f_agregar_cliente").attr("action"), json, function(data){

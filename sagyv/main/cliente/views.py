@@ -11,8 +11,8 @@ class IndexView(TemplateView):
         context = super(IndexView, self).get_context_data(**kwargs)
         context["clientes"] = Cliente.objects.all()
         context["tipos_descuento"] = TipoDescuento.objects.all()
-        context["situaciones_comerciales"] = DescuentoCliente.objects.all()
-        context["productos"] = Producto.objects.all().order_by("id")
+        context["situaciones_comerciales"] = DescuentoCliente.objects.exclude(id=1).order_by("id")
+        context["productos"] = Producto.objects.exclude(tipo_producto_id=3).order_by("id")
 
         return context
 
@@ -51,7 +51,9 @@ class CrearClienteView(View):
         if situacion_comercial == "otro":
             cantidad = req.POST.get("cantidad")
             tipo = req.POST.get("tipo")
-            situacion_comercial = self.crear_nueva_situacion(cantidad, tipo)
+            producto_id = req.POST.get("producto")
+
+            situacion_comercial = self.crear_nueva_situacion(cantidad, tipo, producto_id)
 
         if self.validar_cliente(rut):
             if situacion_comercial != '':
@@ -83,12 +85,14 @@ class CrearClienteView(View):
 
         return HttpResponse(json.dumps(dato), content_type="application/json")
 
-    def crear_nueva_situacion(self, cantidad, tipo_id):
+    def crear_nueva_situacion(self, cantidad, tipo_id, producto_id):
         descuento_tipo = TipoDescuento.objects.get(pk = int(tipo_id))
+        producto = Producto.objects.get(pk = int(producto_id))
 
         descuento_cliente = DescuentoCliente()
         descuento_cliente.monto_descuento = cantidad
         descuento_cliente.tipo_descuento = descuento_tipo
+        descuento_cliente.producto = producto
         descuento_cliente.save()
 
         return descuento_cliente.id
