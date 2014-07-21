@@ -24,6 +24,7 @@ class ObtenerClienteView(View):
 
         dato = {
             'id' : cliente.id,
+            'nombre' : cliente.nombre,
             'giro' : cliente.giro,
             'direccion' : cliente.direccion,
             'telefono' : cliente.telefono,
@@ -39,6 +40,7 @@ class CrearClienteView(View):
 
     @transaction.commit_on_success
     def post(self, req):
+        nombre = req.POST.get('nombre')
         giro = req.POST.get('giro')
         direccion = req.POST.get('direccion')
         telefono = req.POST.get('telefono')
@@ -60,17 +62,23 @@ class CrearClienteView(View):
                 sc = DescuentoCliente.objects.get(pk = situacion_comercial)
 
             cliente = Cliente()
+            cliente.nombre = nombre
             cliente.giro = giro
             cliente.direccion = direccion
             cliente.telefono = telefono
             cliente.rut = rut
             cliente.situacion_comercial = sc
-            cliente.credito = credito != "" and True or False
+            if credito != "" and credito != "0" and credito != "false":
+                cliente.credito = True
+            else:
+                cliente.credito = False
+
             cliente.save()
 
             dato = {
                 "status": "ok",
                 "id" : cliente.id,
+                "nombre" : cliente.nombre,
                 "giro" : cliente.giro,
                 "rut" : cliente.rut,
                 "situacion_comercial_text" : str(sc.monto_descuento)+' '+sc.tipo_descuento.tipo,
@@ -114,6 +122,7 @@ class ModificarClienteView(View):
     @transaction.commit_on_success
     def post(self,req):
         id_cliente = req.POST.get('id_cliente')
+        nombre = req.POST.get('nombre')
         giro = req.POST.get('giro')
         direccion = req.POST.get('direccion')
         telefono = req.POST.get('telefono')
@@ -121,15 +130,10 @@ class ModificarClienteView(View):
         credito = req.POST.get('credito')
 
         cliente = Cliente.objects.get(pk = id_cliente)
-
-        if( cliente.giro != giro ):
-            cliente.giro = giro
-
-        if( cliente.direccion != direccion ):
-            cliente.direccion = direccion
-
-        if( cliente.telefono != telefono ):
-            cliente.telefono = telefono
+        cliente.nombre = nombre
+        cliente.giro = giro
+        cliente.direccion = direccion
+        cliente.telefono = telefono
 
         if( cliente.situacion_comercial.id != situacion_comercial ):
             sc = DescuentoCliente.objects.get(pk = situacion_comercial)
@@ -144,6 +148,7 @@ class ModificarClienteView(View):
 
         dato = {
             "status": "ok",
+            "nombre" : cliente.nombre,
             "giro": cliente.giro,
             "telefono": cliente.telefono,
             "situacion_comercial" : str(sc.monto_descuento)+' '+sc.tipo_descuento.tipo
