@@ -45,15 +45,9 @@
                     <div class="form-group">
                         <label for="sit_comercial_update" class="control-label">Situación comercial</label>
                         <select name="sit_comercial_update" id="sit_comercial_update" class="form-control">
-                            {% for situacion in situaciones_comerciales %}
-                            <option value="{{ situacion.id }}">
-                                {% if situacion.tipo_descuento.id == 1 %}
-                                    $
-                                {% elif situacion.tipo_descuento.id == 2 %}
-                                    %
-                                {% endif %}
-
-                                {{ situacion.monto_descuento }}
+                            {% for situacion in situaciones_comerciales_select %}
+                            <option value="{{ situacion.id }}" data-id="{{ situacion.id }}">
+                                {{ situacion }}
                             </option>
                             {% endfor%}
                         </select>

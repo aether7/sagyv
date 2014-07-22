@@ -142,9 +142,10 @@ App.Controllers.SituacionComercial.prototype = {
             valido,
             tipo = $("#sit_tipo_edit"),
             valor = $("#descuento_edit"),
+            producto = $("#producto_edit"),
             _this = this;
 
-        valido = this.validarSituacion(valor, tipo);
+        valido = this.validarSituacion(valor, tipo, producto);
 
         if(!valido){
             return
@@ -162,8 +163,11 @@ App.Controllers.SituacionComercial.prototype = {
 
             var tr = $("a[data-id={0}][data-accion=editar]".format(_this.idSituacion)).closest("tr");
 
-            tr.find("[data-columna=tipo_descuento]").text(json.tipo);
+            tr.find("[data-columna=tipo_descuento]").text(data.tipo);
             tr.find("[data-columna=descuento]").text(json.valor);
+
+            $("#sit_comercial_add option[data-id={0}]".format(_this.idSituacion)).text(data.valor_descripcion);
+            $("#sit_comercial_update option[data-id={0}]".format(_this.idSituacion)).text(data.valor_descripcion);
         });
     }
 };

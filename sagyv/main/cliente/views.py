@@ -237,7 +237,8 @@ class ModificarSituacionComercialView(View):
             'id_situacion' : descuento_cliente.id,
             'valor': descuento_cliente.monto_descuento,
             'tipo':descuento_cliente.tipo_descuento.tipo,
-            'tipo_int': descuento_cliente.tipo_descuento.id
+            'tipo_int': descuento_cliente.tipo_descuento.id,
+            "valor_descripcion" : descuento_cliente.__unicode__()
         }
 
         return HttpResponse(json.dumps(dato),content_type="application/json")
