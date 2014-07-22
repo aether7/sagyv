@@ -1,0 +1,29 @@
+<form id="f_precio_masivo" action="{% url 'bodega:update_precio' %}" method="post" role="form">
+    <table id="tabla_precios" class="table table-striped">
+        <thead>
+            <tr>
+                <tr>
+                    <th>Codigo</th>
+                    <th>Precio actual</th>
+                    <th>Precio nuevo</th>
+                </tr>
+            </tr>
+        </thead>
+        <tbody>
+            {% for producto in lista_precios %}
+            <tr>
+                <td>{{ producto.codigo }}</td>
+                <td>$ <span data-actual="true">{{ producto.get_precio_producto }}</span></td>
+                <td class="form-group">
+                    <input id="producto_precio_{{ producto.id }}" type="text"
+                    value="" data-columna="{{ forloop.counter }}" data-id="{{ producto.id }}" />
+                    <span class="help-block"></span>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="form-group center">
+        <button class="btn btn-primary">Guardar</button>
+    </div>
+</form>
