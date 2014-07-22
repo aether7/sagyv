@@ -20,8 +20,7 @@
                 {% if cliente.situacion_comercial.es_cliente_sin_descuento %}
                     Sin descuento
                 {% else %}
-                    {{ cliente.situacion_comercial.monto_descuento }}
-                    {{ cliente.situacion_comercial.tipo_descuento.tipo }}
+                    {{ cliente.situacion_comercial }}
                 {% endif %}
             </td>
             <td>

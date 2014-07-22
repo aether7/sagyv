@@ -129,7 +129,7 @@ App.Controllers.Cliente.prototype = {
             nombre : data.nombre,
             giro : data.giro,
             rut : data.rut,
-            situacion_comercial :data.situacion_comercial_text,
+            situacion_comercial : data.situacion_comercial.texto,
             telefono : data.telefono,
             id : data.id
         });

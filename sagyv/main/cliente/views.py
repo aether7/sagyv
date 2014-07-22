@@ -85,11 +85,11 @@ class CrearClienteView(View):
                 "nombre" : cliente.nombre,
                 "giro" : cliente.giro,
                 "rut" : cliente.rut,
-                "situacion_comercial_text" : str(sc.monto_descuento)+' '+sc.tipo_descuento.tipo,
                 "telefono" : cliente.telefono,
                 "situacion_comercial" : {
                     "id" : sc.id,
-                    "tipo" : sc.tipo_descuento.tipo
+                    "tipo" : sc.tipo_descuento.tipo,
+                    "texto" : sc.__unicode__()
                 }
             }
         else:
@@ -157,8 +157,9 @@ class ModificarClienteView(View):
             "nombre" : cliente.nombre,
             "giro": cliente.giro,
             "telefono": cliente.telefono,
-            "situacion_comercial" : str(sc.monto_descuento)+' '+sc.tipo_descuento.tipo
+            "situacion_comercial" : sc.__unicode__()
         }
+
         return HttpResponse(json.dumps(dato), content_type="application/json")
 
 
