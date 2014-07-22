@@ -63,6 +63,7 @@ class UpdatePrecioProductoView(View):
 
     def post(self,req):
         cambios = req.POST.get("precios")
+        print cambios
         cambios_productos = json.loads(cambios)
 
         for cambio in cambios_productos:
