@@ -319,6 +319,7 @@ class Cliente(models.Model):
     rut = models.CharField(max_length=140)
     situacion_comercial = models.ForeignKey(DescuentoCliente)
     credito = models.IntegerField(null=True)
+    observacion = models.CharField(max_length=500)
 
     def __unicode__(self):
         return self.nombre + " " + self.telefono

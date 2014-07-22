@@ -104,7 +104,7 @@ App.Controllers.SituacionComercial.prototype = {
 
     procesarAgregarSituacion: function(data){
         var html,
-            opt = "<option value='{0}'>{1}</option>",
+            opt = "<option value='{0}' data-id='{0}'>{1}</option>",
             situacionComercial,
             template = $("#tpl_nueva_situacion").html(),
             render = Handlebars.compile(template);
