@@ -7,7 +7,6 @@
 <ul class="nav nav-tabs" role="tablist" id="myTab">
     <li class="active"><a href="#bodega" role="tab" data-toggle="tab">Bodega</a></li>
     <li><a href="#transito" role="tab" data-toggle="tab">En transito</a></li>
-    <li><a href="#precios" role="tab" data-toggle="tab">Precios</a></li>
     <li><a href="#consolidado" role="tab" data-toggle="tab">Consolidado</a></li>
 </ul>
 
@@ -18,10 +17,6 @@
 
     <div class="tab-pane" id="transito">
         {% include "bodega/components/productos_bodega_transito.html" %}
-    </div>
-
-    <div class="tab-pane" id="precios">
-        {% include "bodega/components/precios_productos.html" %}
     </div>
 
     <div class="tab-pane" id="consolidado">
