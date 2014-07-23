@@ -2,7 +2,6 @@
     <table class="table center table-striped">
         <tr>
             <td>codigo</td>
-            <td>Peso</td>
             <td>Tipo</td>
             <td>Stock</td>
             <td>Precio actual</td>
@@ -11,7 +10,6 @@
         {% for producto in productos  %}
         <tr>
             <td>{{ producto.codigo }}</td>
-            <td>{{ producto.peso }} Kilos</td>
             <td>{{ producto.tipo_producto.nombre }}</td>
             <td>
                 <span id="stock_{{ producto.id }}">
