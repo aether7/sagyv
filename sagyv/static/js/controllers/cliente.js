@@ -2,6 +2,7 @@ App.Controllers.Cliente = function(){
     this.btnAgregar = $("#btn_agregar");
     this.btnGuardarAdd = $("#btn_guardar_add");
     this.btnGuardarUpdate = $("#btn_guardar_update");
+    this.rutList = [];
     this.clienteUrl = null;
     this.eliminarUrl = null;
     this.idCliente = null;
@@ -9,6 +10,10 @@ App.Controllers.Cliente = function(){
 
 App.Controllers.Cliente.prototype = {
     constructor: App.Controllers.Cliente,
+
+    addClienteRut: function(rut){
+        this.rutList.push(rut);
+    },
 
     init: function(){
         var _this = this;
@@ -103,6 +108,10 @@ App.Controllers.Cliente.prototype = {
 
         if(!valido){
             return;
+        }else if(_.indexOf(this.rutList, rut.val()) !== -1){
+            rut.siblings("span").text("El rut ya está siendo utilizado");
+            rut.parent().addClass("has-error");
+            return;
         }
 
         json = {
@@ -121,6 +130,7 @@ App.Controllers.Cliente.prototype = {
 
         $.post($("#f_agregar_cliente").attr("action"), json, function(data){
             json.id = data.id;
+            _this.rutList.push(rut.val());
 
             $("#modal_agregar").modal("hide");
             _this.procesarAgregar(data);

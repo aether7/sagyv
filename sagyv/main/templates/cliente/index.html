@@ -54,6 +54,9 @@
     App.clienteController = new App.Controllers.Cliente();
     App.clienteController.clienteUrl = "{% url 'cliente:obtener' 0 %}";
     App.clienteController.eliminarUrl = "{% url 'cliente:eliminar' %}";
+    {% for cliente in clientes %}
+    App.clienteController.addClienteRut('{{ cliente.rut }}');
+    {% endfor %}
     App.clienteController.init();
 
     App.situacionController = new App.Controllers.SituacionComercial();
