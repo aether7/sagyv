@@ -126,6 +126,7 @@ App.Controllers.SituacionComercial.prototype = {
         $.get(url, function(data){
             $("#descuento_edit").val(data.monto_descuento);
             $("#sit_tipo_edit").val(data.tipo_descuento);
+            $("#producto_edit").val(data.formato_descuento);
         });
     },
 
