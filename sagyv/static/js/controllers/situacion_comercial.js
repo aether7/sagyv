@@ -69,9 +69,9 @@ App.Controllers.SituacionComercial.prototype = {
             valido = false;
             valor.siblings("span").text("Campo obligatorio");
             valor.parent().addClass("has-error");
-        }else if(!type.isNumber(parseInt(valor.val()))){
+        }else if(!/^\d+$/.test(valor.val()) || !type.isNumber(parseInt(valor.val()))){
             valido = false;
-            valor.siblings("span").text("Debe ser un número");
+            valor.siblings("span").text("Solo se deben agregar números");
             valor.parent().addClass("has-error");
         }else if(parseInt(valor.val()) < 1){
             valido = false;
@@ -151,7 +151,7 @@ App.Controllers.SituacionComercial.prototype = {
 
         $.post($("#f_modificar_situacion").attr("action"), json, function(data){
             $("#modal_editar_situacion").modal("hide");
-            common.agregarMensaje("El cliente fue actualizado exitosamente");
+            common.agregarMensaje("La situación comercial fue actualizada exitosamente");
 
             var tr = $("a[data-id={0}][data-accion=editar]".format(_this.idSituacion)).closest("tr");
 
