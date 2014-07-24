@@ -14,6 +14,7 @@ App.Controllers.Cliente.prototype = {
         var _this = this;
 
         this.btnAgregar.on("click",function(){
+            $("#nueva_situacion_add").addClass("hidden");
             common.mostrarModal("agregar");
         });
 
@@ -27,6 +28,7 @@ App.Controllers.Cliente.prototype = {
 
         $("#tabla_clientes").on("click","a[data-accion=editar]",function(evt){
             evt.preventDefault();
+            $("#nueva_situacion_update").addClass("hidden");
             common.mostrarModal("editar");
             _this.cargarCliente($(this).data("id"));
         });
@@ -51,6 +53,7 @@ App.Controllers.Cliente.prototype = {
                 $("#nueva_situacion_update").addClass("hidden");
             }
         });
+
     },
 
     cargarCliente: function(id){
