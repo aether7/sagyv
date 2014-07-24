@@ -2,7 +2,7 @@ import json
 from django.http import HttpResponse
 from django.db import transaction
 from django.views.generic import View, TemplateView, ListView
-from main.models import Producto
+from main.models import Producto, PrecioProducto
 
 class IndexView(TemplateView):
     template_name = "precios/index.html"
