@@ -131,6 +131,7 @@ App.Controllers.Cliente.prototype = {
             rut : data.rut,
             situacion_comercial : data.situacion_comercial.texto,
             telefono : data.telefono,
+            direccion : data.direccion,
             id : data.id
         });
 
@@ -177,6 +178,7 @@ App.Controllers.Cliente.prototype = {
             tr.find("[data-columna=nombre]").text(data.nombre);
             tr.find("[data-columna=giro]").text(data.giro);
             tr.find("[data-columna=telefono]").text(data.telefono);
+            tr.find("[data-columna=direccion]").text(data.direccion);
             tr.find("[data-columna=situacion_comercial]").text(data.situacion_comercial);
         });
     },
@@ -189,25 +191,33 @@ App.Controllers.Cliente.prototype = {
 
         if(nombre.val() === ""){
             valido = false;
-            nombre.siblings("span").text("Campo obligatorio");
+            nombre.siblings("span").text("campo obligatorio");
+            nombre.parent().addClass("has-error");
+        }else if(!/^[A-záéíóúñÁÉÍÓÚÑ\s]+$/i.test(nombre.val())){
+            valido = false;
+            nombre.siblings("span").text("El nombre no es válido");
             nombre.parent().addClass("has-error");
         }
 
         if(giro.val().trim() === ""){
             valido = false;
-            giro.siblings("span").text("Campo obligatorio");
+            giro.siblings("span").text("campo obligatorio");
             giro.parent().addClass("has-error");
         }
 
         if(direccion.val().trim() === ""){
             valido = false;
-            direccion.siblings("span").text("Campo obligatorio");
+            direccion.siblings("span").text("campo obligatorio");
+            direccion.parent().addClass("has-error");
+        }else if(!/^[A-záéíóúñÁÉÍÓÚÑ\s]+\s(#|Nº|No)\d+$/i.test(direccion.val())){
+            valido = false;
+            direccion.siblings("span").text("el formato de la dirección no es válido");
             direccion.parent().addClass("has-error");
         }
 
         if(telefono.val().trim() === ""){
             valido = false;
-            telefono.siblings("span").text("Campo obligatorio");
+            telefono.siblings("span").text("campo obligatorio");
             telefono.parent().addClass("has-error");
         }else if(!type.isNumber(parseInt(telefono.val()))){
             valido = false;
@@ -217,7 +227,7 @@ App.Controllers.Cliente.prototype = {
 
         if(rut.val().trim() === ""){
             valido = false;
-            rut.siblings("span").text("Campo obligatorio");
+            rut.siblings("span").text("campo obligatorio");
             rut.parent().addClass("has-error");
         }else if(!$.Rut.validar(rut.val())){
             valido = false;

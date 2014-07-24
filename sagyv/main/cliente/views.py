@@ -86,6 +86,7 @@ class CrearClienteView(View):
                 "giro" : cliente.giro,
                 "rut" : cliente.rut,
                 "telefono" : cliente.telefono,
+                "direccion" : cliente.direccion,
                 "situacion_comercial" : {
                     "id" : sc.id,
                     "tipo" : sc.tipo_descuento.tipo,
@@ -157,6 +158,8 @@ class ModificarClienteView(View):
             "nombre" : cliente.nombre,
             "giro": cliente.giro,
             "telefono": cliente.telefono,
+            "direccion" : cliente.direccion,
+            "id" : cliente.id,
             "situacion_comercial" : sc.__unicode__()
         }
 
