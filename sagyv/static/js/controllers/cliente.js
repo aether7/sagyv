@@ -127,8 +127,9 @@ App.Controllers.Cliente.prototype = {
             common.agregarMensaje("El cliente fue ingresado exitosamente");
 
             var str = "<option value='{0}'>{1}</option>";
-            str = str.format(data.situacion_comercial.id, data.situacion_comercial.tipo);
+            str = str.format(data.situacion_comercial.id, data.situacion_comercial.texto);
             $(str).insertBefore("#sit_comercial_add option:last");
+            $(str).insertBefore("#sit_comercial_update option:last");
         });
     },
 
