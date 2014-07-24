@@ -50,7 +50,7 @@ App.Controllers.SituacionComercial.prototype = {
 
         json = {
             tipo : tipo.val(),
-            valor : valor.val(),
+            valor : valor.val().replace(/[\.,]/g, ""),
             producto : producto.val()
         };
 
@@ -145,7 +145,7 @@ App.Controllers.SituacionComercial.prototype = {
 
         json = {
             tipo : tipo.val(),
-            valor : valor.val(),
+            valor : valor.val().replace(/[\.,]/g, ""),
             id_situacion : this.idSituacion
         };
 
