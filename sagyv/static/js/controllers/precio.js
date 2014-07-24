@@ -10,16 +10,18 @@ App.Controllers.Precio.prototype = {
     init: function(){
         var _this = this;
 
-        $("[data-columna]").on("keyup",this.moverInputs());
-        $("#f_precio_masivo").on("submit",this.actualizarPrecios);
-        $("#f_precio_masivo_garantias").on("submit", this.actualizarPreciosGarantias);
+        $("[data-columna-normal]").on("keyup",this.moverInputs("Normal"));
+        $("[data-columna-garantias]").on("keyup",this.moverInputs("Garantias"));
+
+        $("#f_precio_masivo").on("submit",this.actualizarPrecios("normal", "f_precio_masivo"));
+        $("#f_precio_masivo_garantias").on("submit", this.actualizarPrecios("garantias", "f_precio_masivo_garantias"));
     },
 
-    moverInputs: function(){
+    moverInputs: function(modo){
         var _this = this;
 
         return function(evt){
-            var valor, numeroActual = parseInt($(this).data("columna"));
+            var valor, numeroActual = parseInt($(this).data("columna" + modo));
 
             if(evt.which === _this.UP && numeroActual > 1){
                 numeroActual--;
@@ -30,113 +32,62 @@ App.Controllers.Precio.prototype = {
                 $(this).val(valor);
             }
 
-            $("[data-columna={0}]".format(numeroActual)).trigger("focus");
+            $("[data-columna-{0}={1}]".format(modo.toLowerCase(), numeroActual)).trigger("focus");
         };
     },
 
-    actualizarPrecios: function(evt){
-        evt.preventDefault();
+    actualizarPrecios: function(modo, idForm){
 
-        $(".has-error").removeClass("has-error");
-        $(".help-block").text("");
+        return function(evt){
+            evt.preventDefault();
 
-        var datos,
-            precios = [],
-            valido = true;
+            $(".has-error").removeClass("has-error");
+            $(".help-block").text("");
 
-        $("[data-columna-a]").each(function(){
-            console.log($(this).data("id"));
-            var valor = $(this).val(),
-                id = $(this).data("id");
+            var datos,
+                precios = [],
+                valido = true;
 
-            if(!valor || !type.isNumber(parseInt(valor))){
-                $(this).siblings("span").text("Campo obligatorio");
-                $(this).parent().addClass("has-error");
-                valido = false;
-                return;
-            }
-
-            precios.push({
-                id : id,
-                valor : valor
-            });
-
-        });
-
-        if(!valido){
-            return
-        }
-
-        datos = { precios : JSON.stringify(precios) };
-
-        $.post($(this).attr("action"), datos, function(data){
-            $("[data-columna-a]").each(function(){
-                var valorActual = $(this).val() || 0,
-                    valorAnterior = $(this).closest("tr").find("span[data-actual=true]"),
+            $("[data-columna-{0}]".format(modo)).each(function(){
+                var valor = $(this).val(),
                     id = $(this).data("id");
 
-                if(valorActual){
-                    $("#precio_{0}".format(id)).text(valorActual);
+                if(!valor || !type.isNumber(parseInt(valor))){
+                    $(this).siblings("span").text("Campo obligatorio");
+                    $(this).parent().addClass("has-error");
+                    valido = false;
+                    return;
                 }
 
-                valorAnterior.text(valorActual);
+                precios.push({
+                    id : id,
+                    valor : valor
+                });
+
             });
 
-            common.agregarMensaje("Los precios han sido actualizados exitosamente");
-            $("#f_precio_masivo").get(0).reset();
-        });
-    },
-
-    actualizarPreciosGarantias: function(evt){
-        evt.preventDefault();
-
-        $(".has-error").removeClass("has-error");
-        $(".help-block").text("");
-
-        var datos,
-            precios = [],
-            valido = true;
-
-        $("[data-columna-b]").each(function(){
-            console.log($(this).data("id"));
-            var valor = $(this).val(),
-                id = $(this).data("id");
-
-            if(!valor || !type.isNumber(parseInt(valor))){
-                $(this).siblings("span").text("Campo obligatorio");
-                $(this).parent().addClass("has-error");
-                valido = false;
-                return;
+            if(!valido){
+                return
             }
 
-            precios.push({
-                id : id,
-                valor : valor
+            datos = { precios : JSON.stringify(precios) };
+
+            $.post($(this).attr("action"), datos, function(data){
+                $("[data-columna-{0}]".format(modo)).each(function(){
+                    var valorActual = $(this).val() || 0,
+                        valorAnterior = $(this).closest("tr").find("span[data-actual=true]"),
+                        id = $(this).data("id");
+
+                    if(valorActual){
+                        $("#precio_{0}".format(id)).text(valorActual);
+                    }
+
+                    valorAnterior.text(valorActual);
+                });
+
+                common.agregarMensaje("Los precios han sido actualizados exitosamente");
+                $("#" + idForm).get(0).reset();
             });
-
-        });
-
-        if(!valido){
-            return
-        }
-
-        datos = { precios : JSON.stringify(precios) };
-
-        $.post($(this).attr("action"), datos, function(data){
-            $("[data-columna-b]").each(function(){
-                var valorActual = $(this).val() || 0,
-                    valorAnterior = $(this).closest("tr").find("span[data-actual=true]"),
-                    id = $(this).data("id");
-
-                if(valorActual){
-                    $("#precio_{0}".format(id)).text(valorActual);
-                }
-
-                valorAnterior.text(valorActual);
-            });
-
-            common.agregarMensaje("Los precios han sido actualizados exitosamente");
-            $("#f_precio_masivo_garantias").get(0).reset();
-        });
+        };
     }
 };

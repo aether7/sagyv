@@ -15,12 +15,10 @@
 
 <div class="tab-content">
     <div class="tab-pane active" id="cargas">
-        asdf
         {% include "precios/components/lista_precios.html" %}
     </div>
 
     <div class="tab-pane" id="garantias">
-        zxcv
         {% include "precios/components/lista_precios_garantias.html" %}
     </div>
 </div>
@@ -33,6 +31,6 @@
 <script src="{% static 'js/controllers/precio.js' %}"></script>
 <script>
     App.precioController = new App.Controllers.Precio();
-    App.precioController.init();
+    App.precioController.init("sadf");
 </script>
 {% endblock %}

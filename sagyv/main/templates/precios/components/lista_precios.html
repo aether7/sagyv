@@ -1,4 +1,4 @@
-<form id="f_precio_masivo" action="{% url 'bodega:update_precio' %}" method="post" role="form">
+<form id="f_precio_masivo" action="{% url 'precios:update_precios' %}" method="post" role="form">
     {% csrf_token %}
     <table id="tabla_precios" class="table table-striped">
         <thead>
@@ -17,7 +17,7 @@
                 <td>$ <span data-actual="true">{{ producto.get_precio_producto }}</span></td>
                 <td class="form-group">
                     <input id="producto_precio_{{ producto.id }}" type="text"
-                    value="" data-columna-a="{{ forloop.counter }}" data-id="{{ producto.id }}" />
+                    value="" data-columna-normal="{{ forloop.counter }}" data-id="{{ producto.id }}" />
                     <span class="help-block"></span>
                 </td>
             </tr>
