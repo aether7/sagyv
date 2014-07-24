@@ -35,6 +35,22 @@ App.Controllers.Cliente.prototype = {
             evt.preventDefault();
             _this.eliminarCliente($(this).data("id"));
         });
+
+        $("#sit_comercial_add").on("change",function(){
+            if($(this).val() === "otro"){
+                $("#nueva_situacion_add").removeClass("hidden");
+            }else{
+                $("#nueva_situacion_add").addClass("hidden");
+            }
+        });
+
+        $("#sit_comercial_update").on("change", function(){
+            if($(this).val() === "otro"){
+                $("#nueva_situacion_update").removeClass("hidden");
+            }else{
+                $("#nueva_situacion_update").addClass("hidden");
+            }
+        });
     },
 
     cargarCliente: function(id){
@@ -166,7 +182,10 @@ App.Controllers.Cliente.prototype = {
             situacion_comercial : sitComercial.val(),
             credito : credito.is(":checked"),
             id_cliente : this.idCliente,
-            obs : observaciones.val().trim()
+            obs : observaciones.val().trim(),
+            cantidad : $("#numero_update").val(),
+            tipo : $("#tipo_update").val(),
+            producto : $("#sel_producto_update").val()
         };
 
         $.post($("#f_editar_cliente").attr("action"), json, function(data){

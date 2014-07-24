@@ -29,14 +29,6 @@ App.Controllers.SituacionComercial.prototype = {
             common.mostrarModal("editar_situacion");
             _this.cargarSituacion($(this).data("id"));
         });
-
-        $("#sit_comercial_add").on("change",function(){
-            if($(this).val() === "otro"){
-                $("#nueva_situacion_add").removeClass("hidden");
-            }else{
-                $("#nueva_situacion_add").addClass("hidden");
-            }
-        });
     },
 
     guardarSituacion: function(){

@@ -4,6 +4,20 @@ from django.views.generic import TemplateView,View
 from django.http import HttpResponse
 from main.models import Cliente, DescuentoCliente, TipoDescuento, Producto
 
+
+def crear_nueva_situacion(cantidad, tipo_id, producto_id):
+    descuento_tipo = TipoDescuento.objects.get(pk = int(tipo_id))
+    producto = Producto.objects.get(pk = int(producto_id))
+
+    descuento_cliente = DescuentoCliente()
+    descuento_cliente.monto_descuento = cantidad
+    descuento_cliente.tipo_descuento = descuento_tipo
+    descuento_cliente.producto = producto
+    descuento_cliente.save()
+
+    return descuento_cliente.id
+
+
 class IndexView(TemplateView):
     template_name = "cliente/index.html"
 
@@ -58,7 +72,7 @@ class CrearClienteView(View):
             tipo = req.POST.get("tipo")
             producto_id = req.POST.get("producto")
 
-            situacion_comercial = self.crear_nueva_situacion(cantidad, tipo, producto_id)
+            situacion_comercial = crear_nueva_situacion(cantidad, tipo, producto_id)
 
         if self.validar_cliente(rut):
             if situacion_comercial != '':
@@ -98,18 +112,6 @@ class CrearClienteView(View):
 
         return HttpResponse(json.dumps(dato), content_type="application/json")
 
-    def crear_nueva_situacion(self, cantidad, tipo_id, producto_id):
-        descuento_tipo = TipoDescuento.objects.get(pk = int(tipo_id))
-        producto = Producto.objects.get(pk = int(producto_id))
-
-        descuento_cliente = DescuentoCliente()
-        descuento_cliente.monto_descuento = cantidad
-        descuento_cliente.tipo_descuento = descuento_tipo
-        descuento_cliente.producto = producto
-        descuento_cliente.save()
-
-        return descuento_cliente.id
-
     def validar_cliente(self, dni):
         existe = True
 
@@ -142,6 +144,13 @@ class ModificarClienteView(View):
         cliente.telefono = telefono
         cliente.observacion = obs
 
+        if situacion_comercial == "otro":
+            cantidad = req.POST.get("cantidad")
+            tipo = req.POST.get("tipo")
+            producto_id = req.POST.get("producto")
+
+            situacion_comercial = crear_nueva_situacion(cantidad, tipo, producto_id)
+
         if( cliente.situacion_comercial.id != situacion_comercial ):
             sc = DescuentoCliente.objects.get(pk = situacion_comercial)
             cliente.situacion_comercial = sc
@@ -160,7 +169,7 @@ class ModificarClienteView(View):
             "telefono": cliente.telefono,
             "direccion" : cliente.direccion,
             "id" : cliente.id,
-            "situacion_comercial" : sc.__unicode__()
+            "situacion_comercial" : cliente.situacion_comercial.__unicode__()
         }
 
         return HttpResponse(json.dumps(dato), content_type="application/json")

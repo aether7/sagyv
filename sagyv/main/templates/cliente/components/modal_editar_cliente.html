@@ -55,6 +55,35 @@
                         <span class="help-block"></span>
                     </div>
 
+                    <div id="nueva_situacion_update" class="form-group row hidden">
+                        <div class="col-xs-2">
+                            <label for="numero_update" class="control-label">Cantidad:</label>
+                        </div>
+                        <div class="col-xs-2">
+                            <input id="numero_update" class="form-control" type="text" value="" />
+                        </div>
+                        <div class="col-xs-2">
+                            <label for="tipo_update" class="control-label">Tipo</label>
+                        </div>
+                        <div class="col-xs-2">
+                            <select name="tipo_update" id="tipo_update" class="form-control">
+                            {% for tipo_descuento in tipos_descuento %}
+                                <option value="{{ tipo_descuento.id }}">{{ tipo_descuento.tipo }}</option>
+                            {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-xs-2">
+                            <label for="sel_producto_update" class="control-label">Producto</label>
+                        </div>
+                        <div class="col-xs-2">
+                            <select name="selc_producto_update" id="sel_producto_update" class="form-control">
+                                {% for producto in productos %}
+                                <option value="{{ producto.id }}">{{ producto.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
                     <div class="checkbox">
                         <label for="credito_update">
                             <input id="credito_update" type="checkbox" value="1" />
