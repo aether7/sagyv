@@ -122,7 +122,7 @@ App.Controllers.Cliente.prototype = {
             rut : rut.val(),
             situacion_comercial : sitComercial.val(),
             credito : credito.is(":checked"),
-            cantidad : $("#numero_add").val(),
+            cantidad : $("#numero_add").val().replace(/[\.,]/g, ""),
             tipo : $("#tipo_add").val(),
             producto : $("#sel_producto_add").val(),
             obs : observaciones.val().trim()
@@ -197,7 +197,7 @@ App.Controllers.Cliente.prototype = {
             credito : credito.is(":checked"),
             id_cliente : this.idCliente,
             obs : observaciones.val().trim(),
-            cantidad : $("#numero_update").val(),
+            cantidad : $("#numero_update").val().replace(/[\.,]/g, ""),
             tipo : $("#tipo_update").val(),
             producto : $("#sel_producto_update").val()
         };

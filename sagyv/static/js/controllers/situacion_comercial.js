@@ -50,7 +50,7 @@ App.Controllers.SituacionComercial.prototype = {
 
         json = {
             tipo : tipo.val(),
-            valor : valor.val(),
+            valor : valor.val().replace(/[\.,]/g, ""),
             producto : producto.val()
         };
 
@@ -69,7 +69,7 @@ App.Controllers.SituacionComercial.prototype = {
             valido = false;
             valor.siblings("span").text("Campo obligatorio");
             valor.parent().addClass("has-error");
-        }else if(!type.isNumber(parseInt(valor.val()))){
+        }else if(!type.isNumber(parseInt(valor.val().replace(/[\.,]/g, "")))){
             valido = false;
             valor.siblings("span").text("Debe ser un número");
             valor.parent().addClass("has-error");
