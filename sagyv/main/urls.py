@@ -10,4 +10,5 @@ urlpatterns += patterns("",
     url(r"^cliente/",include("main.cliente.urls",namespace="cliente")),
     url(r"^vehiculos/",include("main.vehiculos.urls",namespace="vehiculos")),
     url(r"^precios/",include("main.precios.urls",namespace="precios")),
+    url(r"^trabajador/",include("main.trabajador.urls",namespace="trabajador")),
 )

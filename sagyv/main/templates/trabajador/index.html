@@ -1,0 +1,34 @@
+{% extends "panel_control.html" %}
+{% load static %}
+
+{% block content %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nombres</th>
+            <th>Apellidos</th>
+            <th>Rut</th>
+            <th>Estado Vacaciones</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for trabajador in trabajadores %}
+        <tr>
+            <td>{{ trabajador.nombre }}</td>
+            <td>{{ trabajador.apellido }}</td>
+            <td>{{ trabajador.rut }}-{{ trabajador.dv }}</td>
+            <td>{{ trabajador.estado_vacaciones }}</td>
+            <td>
+                <a href="">Ver detalles</a>
+                <a href="">Editar</a>
+                <a href="">Eliminar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+
+{% block js %}
+{% endblock %}
