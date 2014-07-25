@@ -180,13 +180,19 @@ App.Controllers.Vehiculo.prototype = {
         var lista = $("#lista_vehiculos tbody"),
             template = $("#tmpl_nuevo_vehiculo").html(),
             render = Handlebars.compile(template),
-            vehiculo = {};
+            vehiculo = {},
+            meses = new Array("","Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"),
+            fechaTmp = json.revision_tecnica.split("-");
+
+            if(fechaTmp[1] < 10)
+                fechaTmp[1] = fechaTmp[1].replace('0','');
+            fecha = fechaTmp[2]+" de "+ meses[fechaTmp[1]] +" de "+fechaTmp[0];
 
         vehiculo.id = json.id;
         vehiculo.numero = json.numero;
         vehiculo.patente = json.patente;
         vehiculo.km = json.kilometraje;
-        vehiculo.fecha_revision_tecnica = json.revision_tecnica;
+        vehiculo.fecha_revision_tecnica = fecha;
         vehiculo.estado_sec = json.estado_sec;
         vehiculo.estado_pago = json.estado_pago;
         vehiculo.get_ultimo_chofer = json.chofer;
@@ -256,11 +262,19 @@ App.Controllers.Vehiculo.prototype = {
 
     procesarDatosVehiculos: function(listaVehiculos){
         var render = Handlebars.compile($("#tmpl_nuevo_vehiculo").html()),
+            meses = new Array("","Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"),
             tabla = $("#lista_vehiculos tbody");
-
         tabla.empty();
 
         listaVehiculos.forEach(function(v){
+            console.debug(v);
+            
+            fechaTmp = v.fecha_revision_tecnica.split('-');
+            
+            if(fechaTmp[1] < 10)
+                fechaTmp[1] = fechaTmp[1].replace('0','');
+
+            v.fecha_revision_tecnica = fechaTmp[2]+" de "+ meses[fechaTmp[1]] +" de "+fechaTmp[0];
             tabla.append(render({ vehiculo : v }));
         });
     },
