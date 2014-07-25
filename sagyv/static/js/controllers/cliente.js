@@ -137,11 +137,13 @@ App.Controllers.Cliente.prototype = {
             $("#modal_agregar").modal("hide");
             _this.procesarAgregar(data);
             common.agregarMensaje("El cliente fue ingresado exitosamente");
-
-            var str = "<option value='{0}'>{1}</option>";
-            str = str.format(data.situacion_comercial.id, data.situacion_comercial.texto);
-            $(str).insertBefore("#sit_comercial_add option:last");
-            $(str).insertBefore("#sit_comercial_update option:last");
+            
+            if( data.situacion_comercial.id != 1){
+                var str = "<option value='{0}'>{1}</option>";
+                str = str.format(data.situacion_comercial.id, data.situacion_comercial.texto);
+                $(str).insertBefore("#sit_comercial_add option:last");
+                $(str).insertBefore("#sit_comercial_update option:last");
+            }
         });
     },
 
