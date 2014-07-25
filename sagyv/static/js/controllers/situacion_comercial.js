@@ -158,8 +158,8 @@ App.Controllers.SituacionComercial.prototype = {
             common.agregarMensaje("La situación comercial fue actualizada exitosamente");
 
             var tr = $("a[data-id={0}][data-accion=editar]".format(_this.idSituacion)).closest("tr");
-            textTmp = "({0}) {1}";
-            textTmp = textTmp.format(data.id_situacion, data.valor_descripcion);
+            textTmp = "( {0} ) {1}";
+            textTmp = textTmp.format(data.producto.codigo, data.valor_descripcion);
 
             tr.find("[data-columna=tipo_descuento]").text(data.tipo);
             tr.find("[data-columna=descuento]").text(json.valor);
