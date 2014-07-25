@@ -43,6 +43,8 @@ App.Controllers.Cliente.prototype = {
             _this.eliminarCliente($(this).data("id"));
         });
 
+        $("#tabla_clientes").tablesorter();
+
         $("#sit_comercial_add").on("change",function(){
             if($(this).val() === "otro"){
                 $("#nueva_situacion_add").removeClass("hidden");
@@ -242,17 +244,13 @@ App.Controllers.Cliente.prototype = {
             valido = false;
             direccion.siblings("span").text("campo obligatorio");
             direccion.parent().addClass("has-error");
-        }else if(!/^[A-záéíóúñÁÉÍÓÚÑ\s]+\s(#|Nº|No)\d+$/i.test(direccion.val())){
+        }else if(!common.constantes.regex.direccion.test(direccion.val())){
             valido = false;
             direccion.siblings("span").text("el formato de la dirección no es válido");
             direccion.parent().addClass("has-error");
         }
 
-        if(telefono.val().trim() === ""){
-            valido = false;
-            telefono.siblings("span").text("campo obligatorio");
-            telefono.parent().addClass("has-error");
-        }else if(!type.isNumber(parseInt(telefono.val()))){
+        if(telefono.val().trim() !== "" && !/^\d+$/i.test(telefono.val())){
             valido = false;
             telefono.siblings("span").text("Debe ingresar número de teléfono válido");
             telefono.parent().addClass("has-error");

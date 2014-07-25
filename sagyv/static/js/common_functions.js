@@ -1,4 +1,10 @@
 var common = {
+    constantes: {
+        regex : {
+            direccion : /^[A-záéíóúñÁÉÍÓÚÑ\s]+\s((#|Nº|No)\d+)|(s\/n)$/i
+        }
+    },
+
     agregarMensaje: function(mensaje){
         var $mensaje = $("#mensaje").addClass("alert-success").show().text(mensaje);
 

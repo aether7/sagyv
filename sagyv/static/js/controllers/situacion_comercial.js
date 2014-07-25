@@ -29,6 +29,8 @@ App.Controllers.SituacionComercial.prototype = {
             common.mostrarModal("editar_situacion");
             _this.cargarSituacion($(this).data("id"));
         });
+
+        $("#tabla_s_comerciales").tablesorter();
     },
 
     guardarSituacion: function(){
