@@ -158,6 +158,7 @@ App.Controllers.Vehiculo.prototype = {
                 _this.mostrar("modal_nuevo_vehiculo");
                 _this.enviarMensaje("El vehículo se ha registrado exitosamente");
                 json.id = data.id_vehiculo;
+                json.chofer = data.chofer;
 
                 _this.generarVehiculoLista(json);
             });

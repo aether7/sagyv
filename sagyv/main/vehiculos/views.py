@@ -61,7 +61,13 @@ class AgregarNuevoVehiculoView(View):
         self.chofer = request.POST.get('chofer')
 
         vehiculo = self.__crear_nuevo_vehiculo()
-        data = { "status" : "ok", "id_vehiculo" : vehiculo.id }
+        if(self.chofer != ''):
+            chofer = Trabajador.objects.get(pk = self.chofer)
+            name_chofer = chofer.get_nombre_completo()
+        else:
+            name_chofer = "No anexado"
+
+        data = { "status" : "ok", "id_vehiculo" : vehiculo.id, "chofer" : name_chofer }
 
         return HttpResponse(json.dumps(data),content_type="application/json")
 
