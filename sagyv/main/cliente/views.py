@@ -240,6 +240,7 @@ class ModificarSituacionComercialView(View):
     def post(self, req):
         id_situacion = req.POST.get('id_situacion')
         monto_nuevo = req.POST.get('valor')
+        producto_id = req.POST.get('producto_id')
         tipo = req.POST.get('tipo')
 
         descuento_cliente = DescuentoCliente.objects.get(pk = id_situacion)
@@ -248,16 +249,28 @@ class ModificarSituacionComercialView(View):
             td = TipoDescuento.objects.get(pk = tipo)
             descuento_cliente.tipo_descuento = td
 
+        if(producto_id != descuento_cliente.producto.id):
+            prod = Producto.objects.get(pk = producto_id)
+            descuento_cliente.producto = prod
+
         descuento_cliente.monto_descuento = monto_nuevo
         descuento_cliente.save()
 
         dato = {
-            "status": "ok",
-            'id_situacion' : descuento_cliente.id,
-            'valor': descuento_cliente.monto_descuento,
-            'tipo':descuento_cliente.tipo_descuento.tipo,
-            'tipo_int': descuento_cliente.tipo_descuento.id,
-            "valor_descripcion" : descuento_cliente.__unicode__()
+            "status" : "ok",
+            "id_situacion" : descuento_cliente.id,
+            "valor" : descuento_cliente.monto_descuento,
+            "valor_descripcion" : descuento_cliente.__unicode__(),
+            "tipo_descuento" : {
+                "id" : td.id,
+                "tipo" : td.tipo
+            },
+            "producto" : {
+                "id" : prod.id,
+                "nombre" : prod.nombre,
+                "codigo" : prod.codigo,
+                "nombre_tipo_producto" : prod.tipo_producto.nombre
+            }
         }
 
         return HttpResponse(json.dumps(dato),content_type="application/json")

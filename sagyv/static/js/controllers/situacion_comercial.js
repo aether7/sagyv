@@ -149,7 +149,8 @@ App.Controllers.SituacionComercial.prototype = {
         json = {
             tipo : tipo.val(),
             valor : valor.val().replace(/[\.,]/g, ""),
-            id_situacion : this.idSituacion
+            id_situacion : this.idSituacion,
+            producto_id : producto.val()
         };
 
         $.post($("#f_modificar_situacion").attr("action"), json, function(data){
@@ -157,9 +158,12 @@ App.Controllers.SituacionComercial.prototype = {
             common.agregarMensaje("La situación comercial fue actualizada exitosamente");
 
             var tr = $("a[data-id={0}][data-accion=editar]".format(_this.idSituacion)).closest("tr");
+            textTmp = "({0}) {1}";
+            textTmp = textTmp.format(data.id_situacion, data.valor_descripcion);
 
             tr.find("[data-columna=tipo_descuento]").text(data.tipo);
             tr.find("[data-columna=descuento]").text(json.valor);
+            tr.find("[data-columna=producto]").text(textTmp)
 
             $("#sit_comercial_add option[data-id={0}]".format(_this.idSituacion)).text(data.valor_descripcion);
             $("#sit_comercial_update option[data-id={0}]".format(_this.idSituacion)).text(data.valor_descripcion);
