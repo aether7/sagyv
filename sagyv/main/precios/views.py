@@ -9,8 +9,8 @@ class IndexView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(IndexView, self).get_context_data(**kwargs)
-        context['lista_precios'] = Producto.objects.exclude(tipo_producto_id = 3).order_by('orden')
-        context['lista_precios_garantias'] = Producto.objects.filter(tipo_producto_id = 3)
+        context['lista_precios'] = Producto.objects.exclude(tipo_producto_id = 3).exclude(codigo = 1515).order_by('orden')
+        context['lista_precios_garantias'] = Producto.objects.filter(tipo_producto_id = 3).order_by("id")
         return context
 
 
