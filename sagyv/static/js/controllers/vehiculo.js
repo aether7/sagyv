@@ -267,8 +267,6 @@ App.Controllers.Vehiculo.prototype = {
         tabla.empty();
 
         listaVehiculos.forEach(function(v){
-            console.debug(v);
-            
             fechaTmp = v.fecha_revision_tecnica.split('-');
             
             if(fechaTmp[1] < 10)
