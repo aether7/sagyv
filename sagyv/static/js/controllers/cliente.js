@@ -138,7 +138,7 @@ App.Controllers.Cliente.prototype = {
             _this.procesarAgregar(data);
             common.agregarMensaje("El cliente fue ingresado exitosamente");
             
-            if( data.situacion_comercial.id != 1){
+            if( $("#numero_add").val() != '' ){
                 var str = "<option value='{0}'>{1}</option>";
                 str = str.format(data.situacion_comercial.id, data.situacion_comercial.texto);
                 $(str).insertBefore("#sit_comercial_add option:last");
