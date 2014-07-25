@@ -2,6 +2,7 @@ App.Controllers.Cliente = function(){
     this.btnAgregar = $("#btn_agregar");
     this.btnGuardarAdd = $("#btn_guardar_add");
     this.btnGuardarUpdate = $("#btn_guardar_update");
+    this.listaClientes = $("#tabla_clientes tbody");
     this.rutList = [];
     this.clienteUrl = null;
     this.eliminarUrl = null;
@@ -31,14 +32,14 @@ App.Controllers.Cliente.prototype = {
             _this.guardarUpdate();
         });
 
-        $("#tabla_clientes").on("click","a[data-accion=editar]",function(evt){
+        this.listaClientes.on("click","a[data-accion=editar]",function(evt){
             evt.preventDefault();
             $("#nueva_situacion_update").addClass("hidden");
             common.mostrarModal("editar");
             _this.cargarCliente($(this).data("id"));
         });
 
-        $("#tabla_clientes").on("click","a[data-accion=eliminar]",function(evt){
+        this.listaClientes.on("click","a[data-accion=eliminar]",function(evt){
             evt.preventDefault();
             _this.eliminarCliente($(this).data("id"));
         });
@@ -61,6 +62,37 @@ App.Controllers.Cliente.prototype = {
             }
         });
 
+        $("#f_buscar_cliente").on("submit", function(evt){
+            evt.preventDefault();
+            var busqueda = $("#cliente_busqueda").val(),
+                action = $(this).attr("action");
+
+            _this.buscarCliente(busqueda, action);
+        });
+
+    },
+
+    buscarCliente: function(busqueda, action){
+        var _this = this;
+
+        $.get(action, { busqueda : busqueda }, function(data){
+            var template = $("#tpl_nuevo_cliente").html(),
+                fn = Handlebars.compile(template);
+
+            _this.listaClientes.empty();
+
+            data.forEach(function(cliente){
+                _this.listaClientes.append(fn({
+                    id : cliente.id,
+                    nombre : cliente.nombre,
+                    rut : cliente.rut,
+                    direccion : cliente.direccion,
+                    giro : cliente.giro,
+                    situacion_comercial : cliente.situacion_comercial,
+                    telefono : cliente.telefono
+                }));
+            });
+        });
     },
 
     cargarCliente: function(id){
@@ -246,7 +278,7 @@ App.Controllers.Cliente.prototype = {
             valido = false;
             direccion.siblings("span").text("campo obligatorio");
             direccion.parent().addClass("has-error");
-        }else if(!common.constantes.regex.direccion.test(direccion.val())){
+        }else if(/^\d+$/.test(direccion.val())){
             valido = false;
             direccion.siblings("span").text("el formato de la dirección no es válido");
             direccion.parent().addClass("has-error");

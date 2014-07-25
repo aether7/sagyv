@@ -1,3 +1,4 @@
+#-*- coding: utf-8 -*-
 import json
 from django.db import transaction
 from django.views.generic import TemplateView,View
@@ -23,6 +24,7 @@ class IndexView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(IndexView, self).get_context_data(**kwargs)
+
         context["clientes"] = Cliente.objects.all()
         context["tipos_descuento"] = TipoDescuento.objects.all()
         context["situaciones_comerciales"] = DescuentoCliente.objects.exclude(id=1).order_by("id")
@@ -235,6 +237,7 @@ class CrearSituacionComercialView(View):
 
         return HttpResponse(json.dumps(dato),content_type="application/json")
 
+
 class ModificarSituacionComercialView(View):
     @transaction.commit_on_success
     def post(self, req):
@@ -276,11 +279,33 @@ class ModificarSituacionComercialView(View):
         return HttpResponse(json.dumps(dato),content_type="application/json")
 
 
+class BuscarClienteView(View):
+    def get(self, request):
+        busqueda = request.GET.get("busqueda")
+        clientes = Cliente.objects.busqueda_por_campo(busqueda)
+
+        data = []
+
+        for cliente in clientes:
+            data.append({
+                "id" : cliente.id,
+                "nombre" : cliente.nombre,
+                "giro" : cliente.giro,
+                "rut" : cliente.rut,
+                "telefono" : cliente.telefono,
+                "direccion" : cliente.direccion,
+                "situacion_comercial" : cliente.situacion_comercial.__unicode__()
+            })
+
+        return HttpResponse(json.dumps(data),content_type="application/json")
+
+
 index = IndexView.as_view()
 obtener_cliente = ObtenerClienteView.as_view()
 crear_cliente = CrearClienteView.as_view()
 modificar_cliente = ModificarClienteView.as_view()
 eliminar_cliente = EliminarClienteView.as_view()
+buscar_cliente = BuscarClienteView.as_view()
 
 obtener_situacion_comercial = ObtenerSituacionComercialView.as_view()
 crear_situacion_comercial = CrearSituacionComercialView.as_view()

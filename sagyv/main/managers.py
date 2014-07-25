@@ -1,9 +1,20 @@
 from django.db import connection, models
+from django.db.models import Q
+
+class Stock(object):
+
+    def __init__(self):
+        self.codigo = 0
+        self.peso = 0
+        self.producto_id = 0
+        self.nombre = ''
+        self.cantidad = 0
+
 
 class StockManager(models.Manager):
 
-	def get_stock(self):
-		consulta_sql = """
+    def get_stock(self):
+        consulta_sql = """
             SELECT  mp.codigo,
                     mp.peso,
                     msv.producto_id,
@@ -14,24 +25,24 @@ class StockManager(models.Manager):
             INNER JOIN main_tipoproducto mtp ON(mp.tipo_producto_id = mtp.id)
             GROUP BY mp.codigo, mp.peso, msv.producto_id, mtp.nombre;
         """
-		query = connection.cursor()
-		query.execute(consulta_sql)
+        query = connection.cursor()
+        query.execute(consulta_sql)
 
-		resultado = []
+        resultado = []
 
-		for row in query.fetchall():
-			p = Stock()
-			p.codigo = row[0]
-			p.peso = row[1]
-			p.producto_id = row[2]
-			p.nombre = row[3]
-			p.cantidad = row[4]
-			resultado.append(p)
+        for row in query.fetchall():
+            p = Stock()
+            p.codigo = row[0]
+            p.peso = row[1]
+            p.producto_id = row[2]
+            p.nombre = row[3]
+            p.cantidad = row[4]
+            resultado.append(p)
 
-		return resultado
+        return resultado
 
-	def get_stock_total(self):
-		consulta_sql = """
+    def get_stock_total(self):
+        consulta_sql = """
             SELECT  mp.codigo,
                     mp.peso,
                     mtp.nombre,
@@ -45,32 +56,33 @@ class StockManager(models.Manager):
             GROUP BY mp.codigo, mp.peso,  mtp.nombre, mp.stock,mp.id
         """
 
-		query = connection.cursor()
-		query.execute(consulta_sql)
+        query = connection.cursor()
+        query.execute(consulta_sql)
 
-		resultado = []
+        resultado = []
 
-		for row in query.fetchall():
-			p = Stock()
-			p.codigo = row[0]
-			p.peso = row[1]
-			p.nombre = row[2]
+        for row in query.fetchall():
+            p = Stock()
+            p.codigo = row[0]
+            p.peso = row[1]
+            p.nombre = row[2]
 
-			if row[4] is not None:
-				p.cantidad = (row[3] + row[4]) or 0
-			else:
-				p.cantidad = (row[3]) or 0
+            if row[4] is not None:
+                p.cantidad = (row[3] + row[4]) or 0
+            else:
+                p.cantidad = (row[3]) or 0
 
-			resultado.append(p)
+            resultado.append(p)
 
-		return resultado
+        return resultado
 
 
-class Stock(object):
+class ClienteManager(models.Manager):
+    def busqueda_por_campo(self, valor):
+        resultados = self.filter(
+            Q(nombre__contains = valor)|
+            Q(giro__contains = valor)|
+            Q(rut__contains = valor)
+        )
 
-	def __init__(self):
-		self.codigo = 0
-		self.peso = 0
-		self.producto_id = 0
-		self.nombre = ''
-		self.cantidad = 0
+        return resultados

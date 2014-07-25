@@ -1,6 +1,6 @@
 import json
 from django.db import models
-from main.managers import StockManager
+from main.managers import StockManager, ClienteManager
 
 class Region(models.Model):
     nombre = models.CharField(max_length=140)
@@ -335,6 +335,8 @@ class Cliente(models.Model):
     situacion_comercial = models.ForeignKey(DescuentoCliente)
     credito = models.IntegerField(null=True)
     observacion = models.CharField(max_length=500)
+
+    objects = ClienteManager()
 
     def __unicode__(self):
         return self.nombre + " " + self.telefono

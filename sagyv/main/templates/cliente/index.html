@@ -1,14 +1,19 @@
 {% extends "panel_control.html" %}
 {% load static %}
 
+{% block css %}
+<style>
+    th{
+        cursor: pointer;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 
 <h1 class="center">Clientes</h1>
 
 {% include "mensaje.html" %}
-
-<button id="btn_agregar" class="btn btn-primary">Agregar Cliente</button>
-<button id="btn_agregar_situacion" class="btn btn-primary">Agregar Situacion comercial</button>
 
 <ul class="nav nav-tabs" role="tablist" id="my_tab">
     <li class="active">
@@ -21,10 +26,23 @@
 
 <div class="tab-content">
     <div class="tab-pane active" id="clientes">
+        <div class="col-xs-6">
+            <button id="btn_agregar" class="btn btn-primary">Agregar Cliente</button>
+        </div>
+
+        <form id="f_buscar_cliente" action="{% url 'cliente:buscar_cliente' %}" method="get">
+            <div class="col-xs-6" style="text-align:right">
+                <input id="cliente_busqueda" type="text" value="" />
+                <button class="btn btn-primary">Buscar</button>
+            </div>
+        </form>
+
         {% include "cliente/components/lista_clientes.html" %}
     </div>
 
     <div class="tab-pane" id="scomerciales">
+        <button id="btn_agregar_situacion" class="btn btn-primary">Agregar Situacion comercial</button>
+
         {% include "cliente/components/lista_situaciones_comerciales.html" %}
     </div>
 </div>
