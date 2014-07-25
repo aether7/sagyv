@@ -20,6 +20,7 @@ class Comuna(models.Model):
     def __unicode__(self):
         return self.nombre
 
+
 class Herramienta(models.Model):
     nombre = models.CharField(max_length=140)
     stock = models.IntegerField()
@@ -134,18 +135,21 @@ class SistemaSalud(models.Model):
         verbose_name_plural = "sistemas salud"
 
 
-class Isapre(models.Model):
-    nombre = models.CharField(max_length=140)
-
-    def __unicode__(self):
-        return self.nombre
-
-
 class EstadoCivil(models.Model):
     nombre = models.CharField(max_length=140)
 
     def __unicode__(self):
         return self.nombre
+
+
+class EstadoVacacion(models.Model):
+    nombre = models.CharField(max_length=140)
+
+    def __unicode__(self):
+        return self.nombre
+
+    class Meta:
+        verbose_name_plural = "estados de vacaciones"
 
 
 class Trabajador(models.Model):
@@ -160,7 +164,6 @@ class Trabajador(models.Model):
     afp = models.ForeignKey(Afp,null=True,blank=True)
     sistema_salud = models.ForeignKey(SistemaSalud,null=True,default=1)
     estado_civil = models.ForeignKey(EstadoCivil,null=True,default=1)
-    estado_vacaciones = models.NullBooleanField()
 
     def get_nombre_completo(self):
         return self.nombre + " " + self.apellido
@@ -181,6 +184,17 @@ class Trabajador(models.Model):
 
     class Meta:
         verbose_name_plural = "trabajadores"
+
+
+class Vacacion(models.Model):
+    trabajador = models.ForeignKey(Trabajador)
+    estado_vacacion = models.ForeignKey(EstadoVacacion)
+    fecha_inicio = models.DateField(null=True)
+    dias_restantes = models.IntegerField(null=True)
+    activo = models.NullBooleanField()
+
+    def __unicode__(self):
+        return self.trabajador + ", " + self.estado_vacacion
 
 
 class CargaFamiliar(models.Model):
@@ -248,6 +262,7 @@ class TipoCambioStock(models.Model):
 
     def __unicode__(self):
         return self.nombre
+
 
 class HistorialStock(models.Model):
     producto = models.ForeignKey(Producto)
@@ -359,8 +374,6 @@ class HistorialCambioVehiculo(models.Model):
         return self.terminal.codigo + "(" + self.vehiculo.p + ") " + self.fecha
 
 
-#crear tabla procedencia
-
 class Venta(models.Model):
     numero_serie = models.IntegerField(null=True)
     trabajador = models.ForeignKey(Trabajador)
@@ -442,6 +455,7 @@ class PrecioProducto(models.Model):
 
     def __unicode__(self):
         return str(self.precio)
+
 
 class StockVehiculo(models.Model):
     vehiculo = models.ForeignKey(Vehiculo)

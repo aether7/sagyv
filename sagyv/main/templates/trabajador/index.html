@@ -2,6 +2,11 @@
 {% load static %}
 
 {% block content %}
+
+{% include "mensaje.html" %}
+
+<button id="btn_nuevo_trabajador" class="btn btn-primary">Nuevo</button>
+
 <table class="table table-striped">
     <thead>
         <tr>
@@ -14,21 +19,31 @@
     </thead>
     <tbody>
         {% for trabajador in trabajadores %}
-        <tr>
-            <td>{{ trabajador.nombre }}</td>
-            <td>{{ trabajador.apellido }}</td>
-            <td>{{ trabajador.rut }}-{{ trabajador.dv }}</td>
-            <td>{{ trabajador.estado_vacaciones }}</td>
+        <tr data-id="{{ trabajador.id }}">
+            <td data-campo="nombre">{{ trabajador.nombre }}</td>
+            <td data-campo="apellido">{{ trabajador.apellido }}</td>
+            <td data-campo="rut">{{ trabajador.rut }}-{{ trabajador.dv }}</td>
+            <td data-campo="estado_vacaciones">{{ trabajador.estado_vacaciones }}</td>
             <td>
-                <a href="">Ver detalles</a>
-                <a href="">Editar</a>
-                <a href="">Eliminar</a>
+                <a href="#" data-accion="ver">Ver detalles</a>
+                <a href="#" data-accion="editar">Editar</a>
+                <a href="#" data-accion="eliminar">Eliminar</a>
             </td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
+
+{% include "trabajador/components/modal_nuevo_trabajador.html" %}
+{% include "trabajador/components/modal_ver_trabajador.html" %}
+
 {% endblock %}
 
 {% block js %}
+<script src="{% static 'js/common_functions.js' %}"></script>
+<script src="{% static 'js/controllers/trabajador.js' %}"></script>
+<script>
+    App.trabajadorController = new App.Controllers.Trabajador();
+    App.trabajadorController.init();
+</script>
 {% endblock %}

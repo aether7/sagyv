@@ -72,16 +72,13 @@ INSERT INTO main_afp(id, nombre) VALUES(6, 'Santa María');
 INSERT INTO main_afp(id, nombre) VALUES(7, 'Modelo');
 
 -- sistemas de salud
-INSERT INTO main_sistemasalud(id, nombre) VALUES(1,'Isapre');
-INSERT INTO main_sistemasalud(id, nombre) VALUES(2,'Fonasa');
-
--- Isapres
-INSERT INTO main_isapre(id, nombre) VALUES(1, 'Banmédica');
-INSERT INTO main_isapre(id, nombre) VALUES(2, 'Colmena');
-INSERT INTO main_isapre(id, nombre) VALUES(3, 'Consalud');
-INSERT INTO main_isapre(id, nombre) VALUES(4, 'Cruz Blanca');
-INSERT INTO main_isapre(id, nombre) VALUES(5, 'Más Vida');
-INSERT INTO main_isapre(id, nombre) VALUES(6, 'Vida Tres');
+INSERT INTO main_sistemasalud(id, nombre) VALUES(1, 'Fonasa');
+INSERT INTO main_sistemasalud(id, nombre) VALUES(2, 'Isapre Banmédica');
+INSERT INTO main_sistemasalud(id, nombre) VALUES(3, 'Isapre Colmena');
+INSERT INTO main_sistemasalud(id, nombre) VALUES(4, 'Isapre Consalud');
+INSERT INTO main_sistemasalud(id, nombre) VALUES(5, 'Isapre Cruz Blanca');
+INSERT INTO main_sistemasalud(id, nombre) VALUES(6, 'Isapre Más Vida');
+INSERT INTO main_sistemasalud(id, nombre) VALUES(7, 'Isapre Vida Tres');
 
 -- Estados Civiles
 INSERT INTO main_estadocivil(id, nombre) VALUES(1, 'Soltero');
@@ -91,6 +88,11 @@ INSERT INTO main_estadocivil(id, nombre) VALUES(4, 'Viudo');
 
 -- Situaciones comerciales
 INSERT INTO main_descuentocliente(monto_descuento, tipo_descuento_id) VALUES(0, 1);
+
+-- Estados vacaciones
+INSERT INTO main_estadovacacion(id, nombre) VALUES(1, 'Al día');
+INSERT INTO main_estadovacacion(id, nombre) VALUES(2, 'Pendientes');
+INSERT INTO main_estadovacacion(id, nombre) VALUES(3, 'Programadas');
 
 -- regiones
 INSERT INTO main_region (id, nombre, orden) VALUES (1, 'Región de Tarapacá', 1);
