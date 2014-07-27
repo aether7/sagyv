@@ -1,4 +1,5 @@
 #-*- coding: utf-8 -*-
+
 import json
 from django.db import transaction
 from django.views.generic import TemplateView,View
@@ -239,6 +240,7 @@ class CrearSituacionComercialView(View):
 
 
 class ModificarSituacionComercialView(View):
+
     @transaction.commit_on_success
     def post(self, req):
         id_situacion = req.POST.get('id_situacion')
@@ -280,10 +282,10 @@ class ModificarSituacionComercialView(View):
 
 
 class BuscarClienteView(View):
+
     def get(self, request):
         busqueda = request.GET.get("busqueda")
         clientes = Cliente.objects.busqueda_por_campo(busqueda)
-
         data = []
 
         for cliente in clientes:
@@ -297,7 +299,7 @@ class BuscarClienteView(View):
                 "situacion_comercial" : cliente.situacion_comercial.__unicode__()
             })
 
-        return HttpResponse(json.dumps(data),content_type="application/json")
+        return HttpResponse(json.dumps(data), content_type="application/json")
 
 
 index = IndexView.as_view()

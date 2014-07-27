@@ -333,7 +333,8 @@ class Cliente(models.Model):
     telefono = models.CharField(max_length=140)
     rut = models.CharField(max_length=140)
     situacion_comercial = models.ForeignKey(DescuentoCliente)
-    credito = models.IntegerField(null=True)
+    credito = models.NullBooleanField()
+    dispensador = models.NullBooleanField()
     observacion = models.CharField(max_length=500)
 
     objects = ClienteManager()
@@ -463,7 +464,8 @@ class StockVehiculo(models.Model):
     vehiculo = models.ForeignKey(Vehiculo)
     producto = models.ForeignKey(Producto)
     cantidad = models.IntegerField(null=True)
-    stockManager = StockManager()
+
+    objects = StockManager()
 
     def __unicode__(self):
         return str(self.vehiculo.patente) + " -> (cod " + str(self.producto.codigo) + ": " + str(self.cantidad) + ")"

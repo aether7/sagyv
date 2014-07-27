@@ -1,14 +1,13 @@
 import json
 from django.views.generic import TemplateView,View
 from django.http import HttpResponse
-from main.managers import StockManager
 from main.models import Producto, TipoCambioStock, HistorialStock, PrecioProducto, StockVehiculo
 
 class IndexView(TemplateView):
     template_name = "bodega/index.html"
 
-    def get_context_data(self, **kwargs):
-        context = super(IndexView, self).get_context_data(**kwargs)
+    def get_context_data(self, *args, **kwargs):
+        context = super(IndexView, self).get_context_data(*args, **kwargs)
         context["productos"] = self.get_productos()
         context["productos_transito"] = self.get_productos_transito()
         context["total_stock"] = self.get_stock_total()
@@ -20,11 +19,11 @@ class IndexView(TemplateView):
         return productos
 
     def get_productos_transito(self):
-        en_trancito = StockVehiculo.stockManager.get_stock()
+        en_trancito = StockVehiculo.objects.get_stock()
         return en_trancito
 
     def get_stock_total(self):
-        total = StockManager().get_stock_total()
+        total = StockVehiculo.objects.get_stock_total()
         return total
 
 
