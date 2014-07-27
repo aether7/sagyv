@@ -198,6 +198,15 @@ App.Controllers.Vehiculo.prototype = {
         vehiculo.estado_pago = json.estado_pago;
         vehiculo.get_ultimo_chofer = json.chofer;
 
+        if(json.estado_sec == 0){
+            vehiculo.estado_sec = false;
+        }
+        
+        if(json.estado_pago == 0){
+            vehiculo.estado_pago = false;
+        }
+
+
         lista.append(render({ vehiculo : vehiculo }));
     },
 
@@ -217,13 +226,13 @@ App.Controllers.Vehiculo.prototype = {
             }
 
             fecha = fecha.join("-");
-
+            console.log("SEC : "+(data.estado_sec)?1:2);
             $("#numero_vehiculo_editar").val(data.numero);
             $("#patente_vehiculo_editar").val(data.patente);
             $("#revision_tecnica_vehiculo_editar").val(fecha);
             $("#kilometraje_vehiculo_editar").val(data.km);
-            $("#estado_sec_vehiculo_editar").val(data.estado_sec?1:2);
-            $("#estado_pago_vehiculo_editar").val(data.estado_pago?1:2);
+            $("#estado_sec_vehiculo_editar").val((data.estado_sec)?1:0);
+            $("#estado_pago_vehiculo_editar").val((data.estado_pago)?1:0);
             $("#chofer_vehiculo_editar").val(data.chofer);
         });
     },

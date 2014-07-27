@@ -44,21 +44,20 @@ class VehiculoList(ListView):
 
 class AgregarNuevoVehiculoView(View):
     def post(self, request):
-        self.numero = request.POST.get('numero')
-        self.patente = request.POST.get('patente')
         fecha = request.POST.get('revision_tecnica')
         fecha = fecha.split('-')
         mes = int(fecha[1])
 
         if(mes < 10):
             mes = fecha[1].replace('0','')
-
-        self.revision_tecnica = datetime(int(fecha[0]), int(mes), int(fecha[2]))
-
+        
+        self.numero = request.POST.get('numero')
+        self.patente = request.POST.get('patente')
         self.kilometraje = request.POST.get('kilometraje')
         self.estado_sec = request.POST.get('estado_sec')
         self.estado_pago = request.POST.get('estado_pago')
         self.chofer = request.POST.get('chofer')
+        self.revision_tecnica = datetime(int(fecha[0]), int(mes), int(fecha[2]))
 
         vehiculo = self.__crear_nuevo_vehiculo()
         if(self.chofer != ''):
@@ -78,8 +77,20 @@ class AgregarNuevoVehiculoView(View):
         vehiculo.patente = self.patente
         vehiculo.fecha_revision_tecnica = self.revision_tecnica
         vehiculo.km = self.kilometraje
-        vehiculo.estado_sec = self.estado_sec
-        vehiculo.estado_pago = self.estado_pago
+        
+        print "SEC : "+self.estado_sec
+        print "PAGO : "+self.estado_pago
+        
+        if self.estado_sec == '0':
+            vehiculo.estado_sec = False
+        else:
+            vehiculo.estado_sec = True
+        
+        if self.estado_pago == '0':
+            vehiculo.estado_pago = False
+        else:
+            vehiculo.estado_pago = True
+
         vehiculo.save()
 
         if self.chofer is not None and self.chofer != "":
@@ -164,6 +175,18 @@ class ModificarView(View):
         vehiculo.fecha_revision_tecnica = get_fecha(fecha_revision_tecnica)
         vehiculo.estado_sec = estado_sec
         vehiculo.estado_pago = estado_pago
+
+        if estado_sec == '0':
+            vehiculo.estado_sec = False
+        else:
+            vehiculo.estado_sec = True
+        
+        if estado_pago == '0':
+            vehiculo.estado_pago = False
+        else:
+            vehiculo.estado_pago = True
+
+
         vehiculo.save()
 
         data = { "status" : "ok" }
