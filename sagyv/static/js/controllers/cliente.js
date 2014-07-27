@@ -114,6 +114,7 @@ App.Controllers.Cliente.prototype = {
     },
 
     eliminarCliente: function(id){
+        var _this = this;
         this.id = id;
 
         if(!confirm("Esta acción eliminará al cliente, ¿ desea continuar ?")){
@@ -121,6 +122,12 @@ App.Controllers.Cliente.prototype = {
         }
 
         $.post(this.eliminarUrl, { id_cliente : id }, function(data){
+            var rut = $("#tabla_clientes tbody tr[data-id={0}] td[data-columna=rut]".format(id));
+
+            if(_.indexOf(_this.rutList, rut) !== -1){
+                _this.rutList = _.without(_this.rutList, rut);
+            }
+
             $("a[data-id={0}][data-accion=editar]".format(id)).closest("tr").remove();
         });
     },
@@ -134,6 +141,7 @@ App.Controllers.Cliente.prototype = {
             rut = $("#rut_add"),
             sitComercial = $("#sit_comercial_add"),
             credito = $("#credito_add"),
+            dispensador = $("#dispensador_add"),
             observaciones = $("#obs_add"),
             valido = true,
             _this = this;
@@ -156,6 +164,7 @@ App.Controllers.Cliente.prototype = {
             rut : rut.val(),
             situacion_comercial : sitComercial.val(),
             credito : credito.is(":checked"),
+            dispensador : dispensador.is(":checked"),
             cantidad : $("#numero_add").val().replace(/[\.,]/g, ""),
             tipo : $("#tipo_add").val(),
             producto : $("#sel_producto_add").val(),
@@ -169,7 +178,7 @@ App.Controllers.Cliente.prototype = {
             $("#modal_agregar").modal("hide");
             _this.procesarAgregar(data);
             common.agregarMensaje("El cliente fue ingresado exitosamente");
-            
+
             if( $("#numero_add").val() != '' ){
                 var str = "<option value='{0}'>{1}</option>";
                 str = str.format(data.situacion_comercial.id, data.situacion_comercial.texto);
@@ -213,6 +222,7 @@ App.Controllers.Cliente.prototype = {
             rut = $("#rut_update"),
             sitComercial = $("#sit_comercial_update"),
             credito = $("#credito_update"),
+            dispensador = $("#dispensador_update"),
             observaciones = $("#obs_update"),
             valido = true,
             _this = this;
@@ -231,6 +241,7 @@ App.Controllers.Cliente.prototype = {
             rut : rut.val(),
             situacion_comercial : sitComercial.val(),
             credito : credito.is(":checked"),
+            dispensador : dispensador.is(":checked"),
             id_cliente : this.idCliente,
             obs : observaciones.val().trim(),
             cantidad : $("#numero_update").val().replace(/[\.,]/g, ""),

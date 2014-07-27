@@ -42,8 +42,8 @@ class Vehiculo(models.Model):
     patente = models.CharField(max_length=140)
     fecha_revision_tecnica = models.DateField()
     km = models.IntegerField()
-    estado_sec = models.BooleanField(default=True)
-    estado_pago = models.BooleanField(default=True)
+    estado_sec = models.NullBooleanField()
+    estado_pago = models.NullBooleanField()
 
     def get_nombre_ultimo_chofer(self):
         trabajador_vehiculo = TrabajadorVehiculo.objects.filter(vehiculo_id = self.id, activo = True)

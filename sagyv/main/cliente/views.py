@@ -6,7 +6,6 @@ from django.views.generic import TemplateView,View
 from django.http import HttpResponse
 from main.models import Cliente, DescuentoCliente, TipoDescuento, Producto
 
-
 def crear_nueva_situacion(cantidad, tipo_id, producto_id):
     descuento_tipo = TipoDescuento.objects.get(pk = int(tipo_id))
     producto = Producto.objects.get(pk = int(producto_id))
@@ -66,6 +65,7 @@ class CrearClienteView(View):
         rut = req.POST.get('rut')
         situacion_comercial = req.POST.get('situacion_comercial')
         credito = req.POST.get('credito')
+        dispensador = req.POST.get("dispensador")
         obs = req.POST.get('obs')
 
         rut = rut.replace('.', '');
@@ -77,41 +77,41 @@ class CrearClienteView(View):
 
             situacion_comercial = crear_nueva_situacion(cantidad, tipo, producto_id)
 
-        if self.validar_cliente(rut):
-            if situacion_comercial != '':
-                sc = DescuentoCliente.objects.get(pk = situacion_comercial)
-
-            cliente = Cliente()
-            cliente.nombre = nombre
-            cliente.giro = giro
-            cliente.direccion = direccion
-            cliente.telefono = telefono
-            cliente.rut = rut
-            cliente.situacion_comercial = sc
-            cliente.observacion = obs
-            if credito != "" and credito != "0" and credito != "false":
-                cliente.credito = True
-            else:
-                cliente.credito = False
-
-            cliente.save()
-
-            dato = {
-                "status": "ok",
-                "id" : cliente.id,
-                "nombre" : cliente.nombre,
-                "giro" : cliente.giro,
-                "rut" : cliente.rut,
-                "telefono" : cliente.telefono,
-                "direccion" : cliente.direccion,
-                "situacion_comercial" : {
-                    "id" : sc.id,
-                    "tipo" : sc.tipo_descuento.tipo,
-                    "texto" : sc.__unicode__()
-                }
-            }
-        else:
+        if not self.validar_cliente(rut):
             dato = { "status": "error", "status_message": "El cliente ya existe." }
+            return HttpResponse(json.dumps(dato), content_type="application/json")
+
+        if situacion_comercial != '':
+            sc = DescuentoCliente.objects.get(pk = situacion_comercial)
+
+        cliente = Cliente()
+        cliente.nombre = nombre
+        cliente.giro = giro
+        cliente.direccion = direccion
+        cliente.telefono = telefono
+        cliente.rut = rut
+        cliente.situacion_comercial = sc
+        cliente.observacion = obs
+
+        cliente.credito = (credito != "false") and True or False
+        cliente.dispensador = (dispensador != "false") and True or False
+
+        cliente.save()
+
+        dato = {
+            "status": "ok",
+            "id" : cliente.id,
+            "nombre" : cliente.nombre,
+            "giro" : cliente.giro,
+            "rut" : cliente.rut,
+            "telefono" : cliente.telefono,
+            "direccion" : cliente.direccion,
+            "situacion_comercial" : {
+                "id" : sc.id,
+                "tipo" : sc.tipo_descuento.tipo,
+                "texto" : sc.__unicode__()
+            }
+        }
 
         return HttpResponse(json.dumps(dato), content_type="application/json")
 
@@ -204,6 +204,7 @@ class ObtenerSituacionComercialView(View):
 
 
 class CrearSituacionComercialView(View):
+
     @transaction.commit_on_success
     def post(self, req):
         tipo = req.POST.get('tipo')
