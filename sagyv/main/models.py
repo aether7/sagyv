@@ -330,12 +330,12 @@ class Cliente(models.Model):
     nombre = models.CharField(max_length=140)
     giro = models.CharField(max_length=140)
     direccion = models.TextField()
-    telefono = models.CharField(max_length=140)
+    telefono = models.CharField(max_length=140, null=True)
     rut = models.CharField(max_length=140)
     situacion_comercial = models.ForeignKey(DescuentoCliente)
     credito = models.NullBooleanField()
     dispensador = models.NullBooleanField()
-    observacion = models.CharField(max_length=500)
+    observacion = models.CharField(max_length=500, null=True)
 
     objects = ClienteManager()
 
