@@ -1,7 +1,8 @@
 import json
 from django.views.generic import TemplateView,View
 from django.http import HttpResponse
-from main.models import Producto, TipoCambioStock, HistorialStock, PrecioProducto, StockVehiculo
+from main.models import Producto, TipoCambioStock, HistorialStock
+from main.models import PrecioProducto, StockVehiculo, Vehiculo
 
 class IndexView(TemplateView):
     template_name = "bodega/index.html"
@@ -11,6 +12,7 @@ class IndexView(TemplateView):
         context["productos"] = self.get_productos()
         context["productos_transito"] = self.get_productos_transito()
         context["total_stock"] = self.get_stock_total()
+        context["vehiculos"] = Vehiculo.objects.all().order_by("id")
 
         return context
 

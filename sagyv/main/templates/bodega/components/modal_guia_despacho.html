@@ -1,0 +1,74 @@
+<div id="modal_guia_despacho" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button data-dismiss="modal" class="close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Nueva guía de despacho</h4>
+            </div>
+
+            <div class="modal-body">
+                <form id="f_guia_despacho" action="" method="post">
+                    <div class="form-group">
+                        <label for="numero_despacho" class="control-label">Guía</label>
+                        <input id="numero_despacho" class="form-control" type="text" value="" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="movil_despacho" class="control-label">Móvil</label>
+                        <select id="movil_despacho" class="form-control">
+                            {% for vehiculo in vehiculos %}
+                            <option value="{{ vehiculo.id }}">{{ vehiculo.numero }} - {{ vehiculo.patente }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fecha_despacho" class="control-label">Fecha</label>
+                        <input id="fecha_despacho" class="form-control" type="date" value="" />
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                            <label for="guia_producto" class="control-label">Producto</label>
+                            <select id="guia_producto" class="form-control">
+                                {% for producto in productos %}
+                                <option value="{{ producto.id }}">{{ producto.codigo }}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="help-block"></span>
+                        </div>
+
+                        <div class="col-xs-4">
+                            <label for="cantidad_producto" class="contol-label">Cantidad</label>
+                            <input id="cantidad_producto" class="form-control" type="text" value="" />
+                            <span class="help-block"></span>
+                        </div>
+
+                        <div class="col-xs-2">
+                            <button class="btn btn-default">+</button>
+                        </div>
+                    </div>
+                </form>
+
+                <table id="lista_despacho" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Código Producto</th>
+                            <th>Cantidad</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>

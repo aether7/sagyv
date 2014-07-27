@@ -23,6 +23,11 @@ App.Controllers.Bodega.prototype = {
             evt.preventDefault();
             $(this).tab("show");
         });
+
+        $("#btn_guia_despacho").on("click", function(evt){
+            console.log("terrible");
+            $("#modal_guia_despacho").modal("show");
+        });
     },
 
     showModal: function(ventana, id, modo){
