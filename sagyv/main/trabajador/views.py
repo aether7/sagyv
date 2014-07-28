@@ -18,4 +18,39 @@ class IndexList(ListView):
         return data
 
 
+class CrearTrabajadorView(View):
+
+    def post(self, req):
+        pass
+
+
+class ModificarTrabajadorView(View):
+
+    def post(self, req):
+        pass
+
+
+class ObtenerTrabajadorView(View):
+
+    def get(self, req, id_trabajador):
+        pass
+
+
+class EliminarTrabajadorView(View):
+
+    def post(self, req):
+        pass
+
+
+class ValidarRutTrabajadorView(View):
+
+    def get(self, req, rut):
+        pass
+
+
 index = IndexList.as_view()
+obtener = ObtenerTrabajadorView.as_view()
+validar_rut = ValidarRutTrabajadorView.as_view()
+crear = CrearTrabajadorView.as_view()
+modificar = ModificarTrabajadorView.as_view()
+eliminar = EliminarTrabajadorView.as_view()
