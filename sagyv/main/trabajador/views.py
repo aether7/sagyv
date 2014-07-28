@@ -1,18 +1,17 @@
 import json
+from datetime import datetime
 from datetime import date
+
 from django.http import HttpResponse
 from django.db import transaction
 from django.views.generic import View, TemplateView, ListView
 from main.models import Trabajador, Afp, SistemaSalud, EstadoCivil, EstadoVacacion, Vacacion
 
 def convierte_fecha(texto):
-    aux = texto.split("-")
-    fecha = date()
-    fecha.year = aux[0]
-    fecha.month = aux[1]
-    fecha.day = aux[2]
+   aux = texto.split("-")
+   nueva_fecha = date(int(aux[0]), int(aux[1]), int(aux[2]))
 
-    return fecha
+   return nueva_fecha
 
 
 class IndexList(ListView):
@@ -40,20 +39,20 @@ class CrearTrabajadorView(View):
         apellido = req.POST.get("apellido")
         rut = req.POST.get("rut")
         domicilio = req.POST.get("domicilio")
-        nacimiento = req.POST.get("nacimiento")
-        fecha_inicio_contrato = req.POST.get("fecha_inicio_contrato")
+        nacimiento = req.POST.get("fecha_nacimiento")
+        fecha_inicio_contrato = req.POST.get("inicio_contrato")
         vigencia_licencia = req.POST.get("vigencia_licencia")
         afp = req.POST.get("afp")
         sistema_salud = req.POST.get("sistema_salud")
         estado_civil = req.POST.get("estado_civil")
 
         estado_vacacion_id = req.POST.get("estado_vacacion")
-        estadoVacacion = EstadoVacacion.objects.get(pk = estado_vacacion_id)
+        estado_vacaciones = EstadoVacacion.objects.get(pk = estado_vacacion_id)
 
         trabajador = self.crear_trabajador(nombre, apellido, rut, domicilio, nacimiento,
             fecha_inicio_contrato, vigencia_licencia, afp, sistema_salud, estado_civil)
 
-        vacacion = self.crear_vacacion(trabajador, estado_vacacion)
+        vacacion = self.crear_vacacion(trabajador, estado_vacaciones)
 
         dato = {
             "status" : "ok",
@@ -71,6 +70,8 @@ class CrearTrabajadorView(View):
         afp = Afp.objects.get(pk = afp_id)
         sistema_salud = SistemaSalud.objects.get(pk = sistema_salud_id)
         estado_civil = EstadoCivil.objects.get(pk = estado_civil_id)
+
+        print nacimiento
 
         trabajador = Trabajador()
         trabajador.nombre = nombre
@@ -90,7 +91,7 @@ class CrearTrabajadorView(View):
     def crear_vacacion(self, trabajador, estado_vacacion):
         vacacion = Vacacion()
         vacacion.trabajador = trabajador
-        vacacion.estado_vacacion = estadoVacacion
+        vacacion.estado_vacacion = estado_vacacion
         #vacacion.fecha_inicio =
         #vacacion.dias_restantes =
         #vacacion.activo =
