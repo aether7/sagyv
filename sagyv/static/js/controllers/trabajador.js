@@ -32,7 +32,8 @@ App.Controllers.Trabajador.prototype = {
             sistemaSalud = $("#sistema_salud_add"),
             estadoCivil = $("#estado_civil_add"),
             estadoVacacion = $("#estado_vacacion_add"),
-            valido = true;
+            valido = true,
+            _this = this;
 
         valido = this.validarCampos(nombre, apellido, rut, domicilio, fechaNacimiento,
             inicioContrato, vigenciaLicencia, afp, sistemaSalud, estadoCivil, estadoVacacion);
@@ -43,8 +44,25 @@ App.Controllers.Trabajador.prototype = {
 
         $.post(action, $form.serialize(), function(data){
             console.log(data);
+            _this.procesarAgregar(data);
             common.agregarMensaje("El trabajador ha sido ingresado exitosamente");
         });
+    },
+
+    procesarAgregar: function(data){
+        var html,
+            tpl = $("#tpl_nuevo_trabajador").html(),
+            render = Handlebars.compile(tpl);
+
+        html = render({
+            id : data.id,
+            nombre : data.nombre,
+            apellido : data.apellido,
+            rut : data.rut,
+            estado_vacaciones : data.estado_vacaciones
+        });
+
+        $("#lista_trabajadores tbody").append(html);
     },
 
     guardarUpdate: function(){
