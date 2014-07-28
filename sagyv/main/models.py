@@ -1,6 +1,13 @@
+#-*- coding: utf-8 -*-
 import json
 from django.db import models
 from main.managers import StockManager, ClienteManager
+
+"""
+Como nota adicional: Todos los ingresos que sean representados como booleanos
+las columnas con valor 1 son entradas al sistema, mientras que los 0 seran representados
+como salidas del sistema
+"""
 
 class Region(models.Model):
     nombre = models.CharField(max_length=140)
@@ -263,11 +270,23 @@ class TipoCambioStock(models.Model):
         return self.nombre
 
 
+class GuiaDespacho(models.Model):
+    numero = models.IntegerField()
+    vehiculo = models.ForeignKey(Vehiculo, null=True)
+    factura = models.IntegerField(null=True)
+    fecha = models.DateTimeField(auto_now_add=True)
+    tipo_guia = models.BooleanField()
+
+    def __unicode__(self):
+        return str(self.numero)
+
+
 class HistorialStock(models.Model):
     producto = models.ForeignKey(Producto)
     cantidad = models.IntegerField()
-    factura = models.IntegerField()
     fecha = models.DateField(auto_now_add=True)
+    tipo_operacion = models.BooleanField()
+    guia_despacho = models.ForeignKey(GuiaDespacho)
 
     def __unicode__(self):
         return ""
@@ -386,7 +405,6 @@ class Venta(models.Model):
     descuento = models.IntegerField()
     cupon_asociado = models.NullBooleanField()
     descripcion_descuento = models.CharField(max_length=140,null=True)
-    #averiguar procedencia
 
     def __unicode__(self):
         return self.monto
