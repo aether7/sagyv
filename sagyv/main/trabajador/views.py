@@ -66,7 +66,16 @@ class ModificarTrabajadorView(View):
         trabajador.estado_civil = estado_civil
         trabajador.save()
 
-        estadoVacaciones = EstadoVacacion()        
+        estadoVacacion = EstadoVacacion.objects.get(pk = estado_vacacion)
+
+
+        vacacion = Vacacion()
+        vacacion.trabajador = trabajador
+        vacacion.estado_vacacion = estadoVacacion
+        #vacacion.fecha_inicio = 
+        #vacacion.dias_restantes =
+        #vacacion.activo =
+        vacacion.save()
 
         dato{
             "status" : "ok",
