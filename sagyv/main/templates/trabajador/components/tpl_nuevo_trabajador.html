@@ -1,0 +1,14 @@
+{% verbatim %}
+<tr data-id="{{ id }}">
+    <td data-columna="nombre">{{ nombre }}</td>
+    <td data-columna="apellido">{{ apellido }}</td>
+    <td data-columna="rut">{{ rut }}</td>
+    <td data-columna="estado_vacaciones">{{ estado_vacaciones }}</td>
+    <td>
+        <a href="#" data-accion="ver" data-id="{{ id }}">Ver detalle</a>
+        <a href="#" data-accion="editar" data-id="{{ id }}">Editar</a>
+        <a href="#" data-accion="eliminar" data-id="{{ id }}">Elimina</a>
+        <a href="#" data-accion="anexar" data-id="{{ id }}">Anexar carga</a>
+    </td>
+</tr>
+{% endverbatim %}
