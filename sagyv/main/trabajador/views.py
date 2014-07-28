@@ -1,3 +1,5 @@
+import json
+from django.http import HttpResponse
 from django.views.generic import View, TemplateView, ListView
 from main.models import Trabajador, Afp, SistemaSalud, EstadoCivil, EstadoVacacion
 
@@ -53,7 +55,9 @@ class ModificarTrabajadorView(View):
 class ObtenerTrabajadorView(View):
 
     def get(self, req, id_trabajador):
+        id_trabajdor = req.GET.get("id")
         trabajador = Trabajador.objects.get(pk = id_trabajador)
+
         dato = {
             "nombre" : "",
             "apellido" : "",
@@ -66,7 +70,8 @@ class ObtenerTrabajadorView(View):
             "sistema_salud" : "",
             "estado_civil" : ""
         }
-        pass
+
+        return HttpResponse(json.dumps(dato),content_type="application/json")
 
 
 class EliminarTrabajadorView(View):
@@ -75,24 +80,8 @@ class EliminarTrabajadorView(View):
         pass
 
 
-class ValidarRutTrabajadorView(View):
-
-    def get(self, req, dni):
-        existe = False
-        try:
-            trabajador = Trabajador.objects.get(rut = dni)
-            existe = False
-        except Trabajador.DoesNotExist:
-            existe = True
-
-        dato = { "existe": existe }
-        return HttpResponse(json.dumps(dato), content_type="application/json")
-        
-
-
 index = IndexList.as_view()
 obtener = ObtenerTrabajadorView.as_view()
-validar_rut = ValidarRutTrabajadorView.as_view()
 crear = CrearTrabajadorView.as_view()
 modificar = ModificarTrabajadorView.as_view()
 eliminar = EliminarTrabajadorView.as_view()
