@@ -42,6 +42,9 @@ App.Controllers.Trabajador.prototype = {
             return;
         }
 
+        console.log($form.serialize());
+        return;
+
         $.post(action, $form.serialize(), function(data){
             console.log(data);
             _this.procesarAgregar(data);
