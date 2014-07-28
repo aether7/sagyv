@@ -43,7 +43,6 @@ App.Controllers.Trabajador.prototype = {
         }
 
         console.log($form.serialize());
-        return;
 
         $.post(action, $form.serialize(), function(data){
             console.log(data);
