@@ -155,8 +155,7 @@ class EstadoVacacion(models.Model):
 class Trabajador(models.Model):
     nombre = models.CharField(max_length=140)
     apellido = models.CharField(max_length=140)
-    rut = models.IntegerField()
-    dv = models.CharField(max_length=1)
+    rut = models.CharField(max_length=140)
     domicilio = models.CharField(max_length=140,null=True,blank=True)
     nacimiento = models.DateField(null=True,blank=True)
     fecha_inicio_contrato = models.DateField(null=True,blank=True)

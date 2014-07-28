@@ -21,6 +21,16 @@ class IndexList(ListView):
 class CrearTrabajadorView(View):
 
     def post(self, req):
+        nombre = req.POST.get("nombre")
+        apellido = req.POST.get("apellido")
+        rut = req.POST.get("rut")
+        domicilio = req.POST.get("domicilio")
+        nacimiento = req.POST.get("nacimiento")
+        fecha_inicio_contrato = req.POST.get("fecha_inicio_contrato")
+        vigencia_licencia = req.POST.get("vigencia_licencia")
+        afp = req.POST.get("afp")
+        sistema_salud = req.POST.get("sistema_salud")
+        estado_civil = req.POST.get("estado_civil")
         pass
 
 
@@ -44,8 +54,17 @@ class EliminarTrabajadorView(View):
 
 class ValidarRutTrabajadorView(View):
 
-    def get(self, req, rut):
-        pass
+    def get(self, req, dni):
+        existe = False
+        try:
+            trabajador = Trabajador.objects.get(rut = dni)
+            existe = False
+        except Trabajador.DoesNotExist:
+            existe = True
+
+        dato = { "existe": existe }
+        return HttpResponse(json.dumps(dato), content_type="application/json")
+        
 
 
 index = IndexList.as_view()
