@@ -43,13 +43,41 @@ class ModificarTrabajadorView(View):
         apellido = req.POST.get("apellido")
         rut = req.POST.get("rut")
         domicilio = req.POST.get("domicilio")
-        nacimiento = req.POST.get("nacimiento")
-        fecha_inicio_contrato = req.POST.get("fecha_inicio_contrato")
-        vigencia_licencia = req.POST.get("vigencia_licencia")
+        nacimiento = req.POST.get("fechaNacimiento")
+        fecha_inicio_contrato = req.POST.get("inicioContrato")
+        vigencia_licencia = req.POST.get("vigenciaLicencia")
         afp = req.POST.get("afp")
-        sistema_salud = req.POST.get("sistema_salud")
-        estado_civil = req.POST.get("estado_civil")
-        pass
+        sistema_salud = req.POST.get("sistemaSalud")
+        estado_civil = req.POST.get("estadoCivil")
+
+        #Vacaciones
+        estado_vacacion = req.POST.get("estadoVacacion")
+
+        trabajador = Trabajador()
+        trabajador.nombre = nombre
+        trabajador.apellido = apellido
+        trabajador.rut = rut
+        trabajador.domicilio = domicilio
+        trabajador.nacimiento = nacimiento
+        trabajador.fecha_inicio_contrato = fecha_inicio_contrato
+        trabajador.vigencia_licencia = vigencia_licencia
+        trabajador.afp = afp
+        trabajador.sistema_salud = sistema_salud
+        trabajador.estado_civil = estado_civil
+        trabajador.save()
+
+        estadoVacaciones = EstadoVacacion()        
+
+        dato{
+            "status" : "ok",
+            "id_trabajador" = trabajador.id,
+            "nombre" = trabajador.nombre,
+            "apellido" = trabajador.apellido,
+            "rut" = trabajador.rut,
+
+        }
+        return HttpResponse(json.dumps(dato),content_type="application/json")
+        
 
 
 class ObtenerTrabajadorView(View):
