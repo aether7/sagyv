@@ -1,7 +1,7 @@
 import json
 from django.http import HttpResponse
 from django.views.generic import View, TemplateView, ListView
-from main.models import Trabajador, Afp, SistemaSalud, EstadoCivil, EstadoVacacion
+from main.models import Trabajador, Afp, SistemaSalud, EstadoCivil, EstadoVacacion, Vacacion
 
 class IndexList(ListView):
     model = Trabajador
@@ -52,6 +52,7 @@ class ModificarTrabajadorView(View):
 
         #Vacaciones
         estado_vacacion = req.POST.get("estadoVacacion")
+        estadoVacacion = EstadoVacacion.objects.get(pk = estado_vacacion)
 
         trabajador = Trabajador()
         trabajador.nombre = nombre
@@ -66,9 +67,6 @@ class ModificarTrabajadorView(View):
         trabajador.estado_civil = estado_civil
         trabajador.save()
 
-        estadoVacacion = EstadoVacacion.objects.get(pk = estado_vacacion)
-
-
         vacacion = Vacacion()
         vacacion.trabajador = trabajador
         vacacion.estado_vacacion = estadoVacacion
@@ -77,17 +75,16 @@ class ModificarTrabajadorView(View):
         #vacacion.activo =
         vacacion.save()
 
-        dato{
+        dato = {
             "status" : "ok",
-            "id_trabajador" = trabajador.id,
-            "nombre" = trabajador.nombre,
-            "apellido" = trabajador.apellido,
-            "rut" = trabajador.rut,
-
+            "id_trabajador" : trabajador.id,
+            "nombre" : trabajador.nombre,
+            "apellido" : trabajador.apellido,
+            "rut" : trabajador.rut
         }
+
         return HttpResponse(json.dumps(dato),content_type="application/json")
         
-
 
 class ObtenerTrabajadorView(View):
 
