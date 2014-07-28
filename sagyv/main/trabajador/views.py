@@ -37,12 +37,35 @@ class CrearTrabajadorView(View):
 class ModificarTrabajadorView(View):
 
     def post(self, req):
+        nombre = req.POST.get("nombre")
+        apellido = req.POST.get("apellido")
+        rut = req.POST.get("rut")
+        domicilio = req.POST.get("domicilio")
+        nacimiento = req.POST.get("nacimiento")
+        fecha_inicio_contrato = req.POST.get("fecha_inicio_contrato")
+        vigencia_licencia = req.POST.get("vigencia_licencia")
+        afp = req.POST.get("afp")
+        sistema_salud = req.POST.get("sistema_salud")
+        estado_civil = req.POST.get("estado_civil")
         pass
 
 
 class ObtenerTrabajadorView(View):
 
     def get(self, req, id_trabajador):
+        trabajador = Trabajador.objects.get(pk = id_trabajador)
+        dato = {
+            "nombre" : "",
+            "apellido" : "",
+            "rut" : "",
+            "domicilio" : "",
+            "nacimiento" : "",
+            "fecha_inicio_contrato" : "",
+            "vigencia_licencia" : "",
+            "afp" : "",
+            "sistema_salud" : "",
+            "estado_civil" : ""
+        }
         pass
 
 
