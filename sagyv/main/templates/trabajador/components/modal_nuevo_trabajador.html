@@ -83,8 +83,12 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="" class="control-label">Estado vacaciones</label>
-                    <input type="text" class="form-control" />
+                    <label for="estado_vacacion" class="control-label">Estado vacaciones</label>
+                    <select id="estado_vacacion" class="form-control">
+                        {% for estado_vacacion in estados_vacacion %}
+                        <option value="{{ estado_vacacion.id }}">{{ estado_vacacion.nombre }}</option>
+                        {% endfor %}
+                    </select>
                     <span class="help-block"></span>
                 </div>
             </div>

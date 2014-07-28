@@ -25,7 +25,6 @@ App.Controllers.Bodega.prototype = {
         });
 
         $("#btn_guia_despacho").on("click", function(evt){
-            console.log("terrible");
             $("#modal_guia_despacho").modal("show");
         });
     },

@@ -1,5 +1,5 @@
 from django.views.generic import View, TemplateView, ListView
-from main.models import Trabajador, Afp, SistemaSalud, EstadoCivil
+from main.models import Trabajador, Afp, SistemaSalud, EstadoCivil, EstadoVacacion
 
 class IndexList(ListView):
     model = Trabajador
@@ -13,6 +13,7 @@ class IndexList(ListView):
         data["lista_afps"] = Afp.objects.all().order_by("id")
         data["lista_sistema_salud"] = SistemaSalud.objects.all().order_by("id")
         data["estados_civiles"] = EstadoCivil.objects.all().order_by("id")
+        data["estados_vacacion"] = EstadoVacacion.objects.all().order_by("id")
 
         return data
 
