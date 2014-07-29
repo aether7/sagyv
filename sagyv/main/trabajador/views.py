@@ -135,7 +135,13 @@ class ObtenerTrabajadorView(View):
 class EliminarTrabajadorView(View):
 
     def post(self, req):
-        pass
+        id_trabajador = req.POST.get("id")
+        worker = Trabajador.objects.get(pk = id_trabajador)
+        worker.delete()
+
+        dato = { "status" : "ok"}
+
+        return HttpResponse(json.dumps(dato), content_type="application/json")
 
 
 index = IndexList.as_view()
