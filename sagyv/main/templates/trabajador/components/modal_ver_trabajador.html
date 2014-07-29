@@ -11,80 +11,57 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label for="nombre_ver" class="control-label">Nombre</label>
-                    <input id="nombre_ver" type="text" class="form-control" value="" />
-                    <span class="help-block"></span>
+                    <span id="nombre_ver" class="form-control-static"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="apellido_ver" class="control-label">Apellido</label>
-                    <input id="apellido_ver" type="text" class="form-control" value="" />
-                    <span class="help-block"></span>
+                    <span id="apellido_ver" class="form-control-static"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="rut_ver" class="control-label">Rut</label>
-                    <input id="rut_ver" type="text" class="form-control" value="" />
-                    <span class="help-block"></span>
+                    <span id="rut_ver" class="form-control-static"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="domicilio_ver" class="control-label">Domicilio</label>
-                    <input id="domicilio_ver" type="text" class="form-control" value="" />
-                    <span class="help-block"></span>
+                    <span id="domicilio_ver" class="form-control-static"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="fecha_nacimiento_ver" class="control-label">Fecha nacimiento</label>
-                    <input id="fecha_nacimiento_ver" type="date" class="form-control" value="" />
-                    <span class="help-block"></span>
+                    <span id="fecha_nacimiento_ver" class="form-control-static"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="inicio_contrato_ver" class="control-label">Inicio contrato</label>
-                    <input id="inicio_contrato_ver" type="date" class="form-control" value="" />
-                    <span class="help-block"></span>
+                    <span id="inicio_contrato_ver" class="form-control-static"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="vigencia_licencia_ver" class="control-label">Vigencia licencia:</label>
-                    <input id="vigencia_licencia_ver" type="date" class="form-control" value="" />
-                    <span class="help-block"></span>
+                    <span id="vigencia_licencia_ver" class="form-control-static"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="afp_ver" class="control-label">AFP</label>
-                    <select name="afp" id="afp_ver" class="form-control">
-                        {% for afp in lista_afps %}
-                        <option value="{{ afp.id }}">{{ afp.nombre }}</option>
-                        {% endfor %}
-                    </select>
-                    <span class="help-block"></span>
+                    <span id="afp_ver" class="form-control-static"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="sistema_salud_ver" class="control-label">Sistema salud</label>
-                    <select name="sistema_salud" id="sistema_salud_ver" class="form-control">
-                        {% for sistema_salud in lista_sistema_salud %}
-                        <option value="{{ sistema_salud.id }}">{{ sistema_salud.nombre }}</option>
-                        {% endfor %}
-                    </select>
-                    <span class="help-block"></span>
+                    <span id="sistema_salud_ver" class="form-control-static"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="estado_civil_ver" class="control-label">Estado civil</label>
-                    <select name="estado_civil" id="estado_civil_ver" class="form-control">
-                        {% for estado_civil in estados_civiles %}
-                        <option value="{{ estado_civil.id }}">{{ estado_civil.nombre }}</option>
-                        {% endfor %}
-                    </select>
-                    <span class="help-block"></span>
+                    <span id="estado_civil_ver" class="form-control-static"></span>
                 </div>
 
                 <div class="form-group">
-                    <label for="" class="control-label">Estado vacaciones</label>
-                    <input type="text" class="form-control" />
-                    <span class="help-block"></span>
+                    <label for="estado_vacacion_ver" class="control-label">Estado vacaciones</label>
+                    <span id="estado_vacacion_ver" class="form-control-static" /></span>
                 </div>
             </div>
 
