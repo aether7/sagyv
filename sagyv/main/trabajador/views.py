@@ -5,14 +5,9 @@ from datetime import date
 from django.http import HttpResponse
 from django.db import transaction
 from django.views.generic import View, TemplateView, ListView
+
+from main.helpers.fecha import convierte_texto_fecha
 from main.models import Trabajador, Afp, SistemaSalud, EstadoCivil, EstadoVacacion, Vacacion
-
-def convierte_fecha(texto):
-   aux = [int(x) for x in texto.split("-")]
-   nueva_fecha = date(aux[0], aux[1], aux[2])
-
-   return nueva_fecha
-
 
 class IndexList(ListView):
     model = Trabajador
@@ -79,9 +74,9 @@ class CrearTrabajadorView(View):
         trabajador.apellido = apellido
         trabajador.rut = rut
         trabajador.domicilio = domicilio
-        trabajador.nacimiento = convierte_fecha(nacimiento)
-        trabajador.fecha_inicio_contrato = convierte_fecha(fecha_inicio_contrato)
-        trabajador.vigencia_licencia = convierte_fecha(vigencia_licencia)
+        trabajador.nacimiento = convierte_texto_fecha(nacimiento)
+        trabajador.fecha_inicio_contrato = convierte_texto_fecha(fecha_inicio_contrato)
+        trabajador.vigencia_licencia = convierte_texto_fecha(vigencia_licencia)
         trabajador.afp = afp
         trabajador.sistema_salud = sistema_salud
         trabajador.estado_civil = estado_civil

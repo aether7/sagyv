@@ -1,5 +1,4 @@
 import json
-from datetime import datetime
 from datetime import date
 
 from django.db import transaction
@@ -50,7 +49,7 @@ class AgregarNuevoVehiculoView(View):
 
         if(mes < 10):
             mes = fecha[1].replace('0','')
-        
+
         self.numero = request.POST.get('numero')
         self.patente = request.POST.get('patente')
         self.kilometraje = request.POST.get('kilometraje')
@@ -77,15 +76,15 @@ class AgregarNuevoVehiculoView(View):
         vehiculo.patente = self.patente
         vehiculo.fecha_revision_tecnica = self.revision_tecnica
         vehiculo.km = self.kilometraje
-        
+
         print "SEC : "+self.estado_sec
         print "PAGO : "+self.estado_pago
-        
+
         if self.estado_sec == '0':
             vehiculo.estado_sec = False
         else:
             vehiculo.estado_sec = True
-        
+
         if self.estado_pago == '0':
             vehiculo.estado_pago = False
         else:
@@ -180,7 +179,7 @@ class ModificarView(View):
             vehiculo.estado_sec = False
         else:
             vehiculo.estado_sec = True
-        
+
         if estado_pago == '0':
             vehiculo.estado_pago = False
         else:
