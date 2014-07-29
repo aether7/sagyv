@@ -3,10 +3,10 @@ body{font-size:16px}
 #login #mensaje{padding:.5em}
 #login div:last-child{padding:1em 0}
 #main_content{clear:both}
-#modal_ver .form-group{box-shadow:0 3px 3px #999;padding:.5em;}
-#modal_ver .form-group .control-label,#modal_ver .form-group .form-control-static{border:1px solid #e6e6e6;height:40px;padding:.5em}
-#modal_ver .form-group .control-label{background:#f0f0f0;width:200px}
-#modal_ver .form-group .form-control-static{font-weight:700;width:100%}
+#modal_ver .form-group{margin-bottom:0;padding:.5em;}
+#modal_ver .form-group .control-label,#modal_ver .form-group .form-control-static{border:1px solid #e6e6e6;display:inline-block;height:40px;padding:.5em;vertical-align:top}
+#modal_ver .form-group .control-label{background:#f0f0f0;width:40%}
+#modal_ver .form-group .form-control-static{width:59%}
 #my_tab{margin:2em 0}
 .auto-margin{margin:auto}
 .box{box-sizing:border-box;display:inline-block;vertical-align:top}

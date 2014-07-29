@@ -29,8 +29,6 @@ App.Controllers.Trabajador.prototype = {
 
     cargarDetalleTrabajador: function(id){
         $.get(this.urlObtenerTrabajador,{ id : id }, function(data){
-            console.log(data);
-
             $("#nombre_ver").text(data.nombre);
             $("#apellido_ver").text(data.apellido);
             $("#rut_ver").text(data.rut);
@@ -41,6 +39,7 @@ App.Controllers.Trabajador.prototype = {
             $("#afp_ver").text(data.afp);
             $("#sistema_salud_ver").text(data.sistema_salud);
             $("#estado_civil_ver").text(data.estado_civil);
+            $("#estado_vacacion_ver").text(data.estado_vacacion);
         });
     },
 
