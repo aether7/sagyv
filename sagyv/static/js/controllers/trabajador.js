@@ -1,6 +1,7 @@
 App.Controllers.Trabajador = function(){
     this.fNuevo = $("#f_nuevo");
     this.btnNuevo = $("#btn_nuevo_trabajador");
+    this.listaTrabajadores = $("#lista_trabajadores tbody");
     this.urlObtenerTrabajador = null;
 };
 
@@ -19,15 +20,15 @@ App.Controllers.Trabajador.prototype = {
             _this.guardarNuevo($(this).attr("action"), $(this));
         });
 
-        $("#lista_trabajadores").on("click", "a[data-accion]", function(evt){
+        this.listaTrabajadores.on("click", "a[data-accion]", function(evt){
             evt.preventDefault();
             var accion = $(this).data("accion");
             common.mostrarModal(accion);
-            _this.cargarDetalleTrabajador($(this).data("id"));
+            _this[accion + "Trabajador"]($(this).data("id"));
         });
     },
 
-    cargarDetalleTrabajador: function(id){
+    verTrabajador: function(id){
         $.get(this.urlObtenerTrabajador,{ id : id }, function(data){
             $("#nombre_ver").text(data.nombre);
             $("#apellido_ver").text(data.apellido);
@@ -85,7 +86,7 @@ App.Controllers.Trabajador.prototype = {
             estado_vacaciones : data.estado_vacaciones
         });
 
-        $("#lista_trabajadores tbody").append(html);
+        this.listaTrabajadores.append(html);
     },
 
     guardarUpdate: function(){

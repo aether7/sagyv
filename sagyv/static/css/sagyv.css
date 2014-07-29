@@ -3,7 +3,7 @@ body{font-size:16px}
 #login #mensaje{padding:.5em}
 #login div:last-child{padding:1em 0}
 #main_content{clear:both}
-#modal_ver .form-group{margin-bottom:0;padding:.5em;}
+#modal_ver .form-group{margin:0;padding:0 .5em;}
 #modal_ver .form-group .control-label,#modal_ver .form-group .form-control-static{border:1px solid #e6e6e6;display:inline-block;height:40px;padding:.5em;vertical-align:top}
 #modal_ver .form-group .control-label{background:#f0f0f0;width:40%}
 #modal_ver .form-group .form-control-static{width:59%}
