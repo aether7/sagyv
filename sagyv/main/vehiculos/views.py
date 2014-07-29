@@ -48,7 +48,7 @@ class AgregarNuevoVehiculoView(View):
         self.estado_sec = request.POST.get('estado_sec')
         self.estado_pago = request.POST.get('estado_pago')
         self.chofer = request.POST.get('chofer')
-        self.revision_tecnica = datetime(int(fecha[0]), int(mes), int(fecha[2]))
+        self.revision_tecnica = convierte_texto_fecha(fecha)
 
         vehiculo = self.__crear_nuevo_vehiculo()
         if(self.chofer != ''):
