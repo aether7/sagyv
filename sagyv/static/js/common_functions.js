@@ -26,4 +26,13 @@ var common = {
         $(".has-error").removeClass("has-error");
         $(".help-block").text("");
     },
+
+    formatearFecha: function(txt){
+        var aux = txt.split("-"),
+            anio = aux[0],
+            mes = parseInt(aux[1]) < 10 ? "0" + aux[1] : aux[1],
+            dia = parseInt(aux[2]) < 10 ? "0" + aux[2] : aux[2];
+
+        return dia + "-" + mes + "-" + anio;
+    }
 };
