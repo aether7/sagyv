@@ -40,7 +40,7 @@ App.Controllers.Trabajador.prototype = {
             $("#vigencia_licencia_ver").text(data.vigencia_licencia);
             $("#afp_ver").text(data.afp);
             $("#sistema_salud_ver").text(data.sistema_salud);
-            $("#estado_civil_ver").text(data.vigencia_licencia);
+            $("#estado_civil_ver").text(data.estado_civil);
         });
     },
 
