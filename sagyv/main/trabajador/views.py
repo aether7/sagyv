@@ -8,8 +8,8 @@ from django.views.generic import View, TemplateView, ListView
 from main.models import Trabajador, Afp, SistemaSalud, EstadoCivil, EstadoVacacion, Vacacion
 
 def convierte_fecha(texto):
-   aux = texto.split("-")
-   nueva_fecha = date(int(aux[0]), int(aux[1]), int(aux[2]))
+   aux = [int(x) for x in texto.split("-")]
+   nueva_fecha = date(aux[0], aux[1], aux[2])
 
    return nueva_fecha
 
@@ -59,7 +59,8 @@ class CrearTrabajadorView(View):
             "id" : trabajador.id,
             "nombre" : trabajador.nombre,
             "apellido" : trabajador.apellido,
-            "rut" : trabajador.rut
+            "rut" : trabajador.rut,
+            "estado_vacaciones" : trabajador.get_vacacion()
         }
 
         return HttpResponse(json.dumps(dato), content_type="application/json")

@@ -42,11 +42,9 @@ App.Controllers.Trabajador.prototype = {
             return;
         }
 
-        console.log($form.serialize());
-
         $.post(action, $form.serialize(), function(data){
-            console.log(data);
             _this.procesarAgregar(data);
+            $("#modal_nuevo").modal("hide");
             common.agregarMensaje("El trabajador ha sido ingresado exitosamente");
         });
     },

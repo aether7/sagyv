@@ -185,6 +185,11 @@ class Trabajador(models.Model):
 
         return json.dumps(data)
 
+    def get_vacacion(self):
+        ultima_vacacion = self.vacacion_set.all().order_by("-id")[0]
+
+        return ultima_vacacion.__unicode__()
+
     def __unicode__(self):
         return self.nombre + ' ' + self.apellido
 
@@ -200,7 +205,7 @@ class Vacacion(models.Model):
     activo = models.NullBooleanField()
 
     def __unicode__(self):
-        return self.trabajador + ", " + self.estado_vacacion
+        return  self.estado_vacacion.nombre
 
 
 class CargaFamiliar(models.Model):

@@ -22,8 +22,8 @@
         <tr data-id="{{ trabajador.id }}">
             <td data-campo="nombre">{{ trabajador.nombre }}</td>
             <td data-campo="apellido">{{ trabajador.apellido }}</td>
-            <td data-campo="rut">{{ trabajador.rut }}-{{ trabajador.dv }}</td>
-            <td data-campo="estado_vacaciones">{{ trabajador.estado_vacaciones }}</td>
+            <td data-campo="rut">{{ trabajador.rut }}</td>
+            <td data-campo="estado_vacaciones">{{ trabajador.get_vacacion }}</td>
             <td>
                 <a href="#" data-accion="ver" data-id="{{ trabajador.id }}">Ver detalle</a>
                 <a href="#" data-accion="editar" data-id="{{ trabajador.id }}">Editar</a>
@@ -41,6 +41,7 @@
 {% endblock %}
 
 {% block js %}
+<script src="{% static 'js/vendor/handlebars.min.js' %}"></script>
 <script src="{% static 'js/plugins/jquery.rut.min.js' %}"></script>
 <script src="{% static 'js/common_functions.js' %}"></script>
 <script src="{% static 'js/controllers/trabajador.js' %}"></script>
