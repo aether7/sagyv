@@ -50,6 +50,7 @@
 </script>
 <script>
     App.trabajadorController = new App.Controllers.Trabajador();
+    App.trabajadorController.urlObtenerTrabajador = "{% url 'trabajador:obtener' %}";
     App.trabajadorController.init();
 </script>
 {% endblock %}

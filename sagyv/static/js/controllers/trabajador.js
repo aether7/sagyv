@@ -28,10 +28,9 @@ App.Controllers.Trabajador.prototype = {
     },
 
     cargarDetalleTrabajador: function(id){
-        console.log(id);
-        //$.get(this.urlObtenerTrabajador,{ id : id }, function(data){
-
-        //})
+        $.get(this.urlObtenerTrabajador,{ id : id }, function(data){
+            console.log(data);
+        });
     },
 
     guardarNuevo: function(action, $form){
