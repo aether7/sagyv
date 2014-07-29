@@ -30,6 +30,17 @@ App.Controllers.Trabajador.prototype = {
     cargarDetalleTrabajador: function(id){
         $.get(this.urlObtenerTrabajador,{ id : id }, function(data){
             console.log(data);
+
+            $("#nombre_ver").text(data.nombre);
+            $("#apellido_ver").text(data.apellido);
+            $("#rut_ver").text(data.rut);
+            $("#domicilio_ver").text(data.domicilio);
+            $("#fecha_nacimiento_ver").text(data.nacimiento);
+            $("#inicio_contrato_ver").text(data.fecha_inicio_contrato);
+            $("#vigencia_licencia_ver").text(data.vigencia_licencia);
+            $("#afp_ver").text(data.afp);
+            $("#sistema_salud_ver").text(data.sistema_salud);
+            $("#estado_civil_ver").text(data.vigencia_licencia);
         });
     },
 
