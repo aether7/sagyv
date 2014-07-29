@@ -114,19 +114,19 @@ class ObtenerTrabajadorView(View):
 
     def get(self, req):
         id_trabajador = req.GET.get("id")
-        trabajador = Trabajador.objects.get(pk = id_trabajador)
-
+        worker = Trabajador.objects.get(pk = id_trabajador)
         dato = {
-            "nombre" : trabajador.nombre,
-            "apellido" : trabajador.apellido,
-            "rut" : trabajador.rut,
-            "domicilio" : trabajador.domicilio,
-            "nacimiento" : convierte_fecha_texto(trabajador.nacimiento),
-            "fecha_inicio_contrato" : convierte_fecha_texto(trabajador.fecha_inicio_contrato),
-            "vigencia_licencia" : convierte_fecha_texto(trabajador.vigencia_licencia),
-            "afp" : trabajador.afp.nombre,
-            "sistema_salud" : trabajador.sistema_salud.nombre,
-            "estado_civil" : trabajador.estado_civil.nombre
+            "nombre" : worker.nombre,
+            "apellido" : worker.apellido,
+            "rut" : worker.rut,
+            "domicilio" : worker.domicilio,
+            "nacimiento" : convierte_fecha_texto(worker.nacimiento),
+            "fecha_inicio_contrato" : convierte_fecha_texto(worker.fecha_inicio_contrato),
+            "vigencia_licencia" : convierte_fecha_texto(worker.vigencia_licencia),
+            "afp" : worker.afp.nombre,
+            "sistema_salud" : worker.sistema_salud.nombre,
+            "estado_civil" : worker.estado_civil.nombre,
+            "estado_vacacion" : worker.get_vacacion()
         }
 
         return HttpResponse(json.dumps(dato),content_type="application/json")
