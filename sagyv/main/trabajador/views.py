@@ -112,21 +112,21 @@ class ModificarTrabajadorView(View):
 
 class ObtenerTrabajadorView(View):
 
-    def get(self, req, id_trabajador):
-        id_trabajdor = req.GET.get("id")
+    def get(self, req):
+        id_trabajador = req.GET.get("id")
         trabajador = Trabajador.objects.get(pk = id_trabajador)
 
         dato = {
-            "nombre" : "",
-            "apellido" : "",
-            "rut" : "",
-            "domicilio" : "",
-            "nacimiento" : "",
-            "fecha_inicio_contrato" : "",
-            "vigencia_licencia" : "",
-            "afp" : "",
-            "sistema_salud" : "",
-            "estado_civil" : ""
+            "nombre" : trabajador.nombre,
+            "apellido" : trabajador.apellido,
+            "rut" : trabajador.rut,
+            "domicilio" : trabajador.domicilio,
+            "nacimiento" : trabajador.nacimiento,
+            "fecha_inicio_contrato" : trabajador.fecha_inicio_contrato,
+            "vigencia_licencia" : trabajador.vigencia_licencia,
+            "afp" : trabajador.afp.nombre,
+            "sistema_salud" : trabajador.sistema_salud.nombre,
+            "estado_civil" : trabajador.estado_civil.nombre
         }
 
         return HttpResponse(json.dumps(dato),content_type="application/json")
