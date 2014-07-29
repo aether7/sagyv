@@ -6,6 +6,8 @@ from django.core import serializers
 from django.http import HttpResponse
 from django.db.models import Q
 from django.views.generic import View, TemplateView, ListView
+
+from main.helpers.fecha import convierte_texto_fecha, convierte_fecha_texto
 from main.models import Vehiculo, Trabajador, TrabajadorVehiculo
 
 @transaction.commit_on_success
@@ -16,16 +18,6 @@ def actualizar_estado_vehiculos(vehiculo, chofer):
     for vehiculo_antiguo in vehiculos_antiguos:
         vehiculo_antiguo.activo = False
         vehiculo_antiguo.save()
-
-def get_fecha(fecha):
-    aux = fecha.split("-")
-    nueva_fecha = date(int(aux[0]), int(aux[1]), int(aux[2]))
-
-    return nueva_fecha
-
-def convertir_fecha_json(fecha):
-    nueva_fecha = str(fecha.year) + "-" + str(fecha.month) + "-" + str(fecha.day)
-    return nueva_fecha
 
 
 class VehiculoList(ListView):
@@ -120,7 +112,7 @@ class ObtenerView(View):
             "id" : vehiculo.id,
             "numero" : vehiculo.numero,
             "patente" : vehiculo.patente,
-            "fecha_revision_tecnica" : convertir_fecha_json(vehiculo.fecha_revision_tecnica),
+            "fecha_revision_tecnica" : convierte_fecha_texto(vehiculo.fecha_revision_tecnica),
             "km" : vehiculo.km,
             "estado_sec" : vehiculo.estado_sec,
             "estado_pago" : vehiculo.estado_pago,
@@ -146,7 +138,7 @@ class AnexarVehiculoView(View):
         trabajador_vehiculo.vehiculo = vehiculo
         trabajador_vehiculo.trabajador = chofer
         trabajador_vehiculo.activo = True
-        trabajador_vehiculo.fecha = get_fecha(fecha)
+        trabajador_vehiculo.fecha = convierte_texto_fecha(fecha)
         trabajador_vehiculo.save()
 
         data = {
@@ -171,7 +163,7 @@ class ModificarView(View):
         vehiculo = Vehiculo.objects.get(pk = id_vehiculo)
         chofer_actual = vehiculo.get_ultimo_chofer()
 
-        vehiculo.fecha_revision_tecnica = get_fecha(fecha_revision_tecnica)
+        vehiculo.fecha_revision_tecnica = convierte_texto_fecha(fecha_revision_tecnica)
         vehiculo.estado_sec = estado_sec
         vehiculo.estado_pago = estado_pago
 
@@ -205,7 +197,7 @@ class ModificarView(View):
         trabajador_vehiculo.vehiculo = vehiculo
         trabajador_vehiculo.trabajador = chofer
         trabajador_vehiculo.activo = True
-        trabajador_vehiculo.fecha = get_fecha(fecha_revision_tecnica)
+        trabajador_vehiculo.fecha = convierte_texto_fecha(fecha_revision_tecnica)
         trabajador_vehiculo.save()
 
 
@@ -222,7 +214,7 @@ class ObtenerVehiculosView(View):
             v["numero"] = vehiculo.numero
             v["patente"] = vehiculo.patente
             v["km"] = vehiculo.km
-            v["fecha_revision_tecnica"] = convertir_fecha_json(vehiculo.fecha_revision_tecnica)
+            v["fecha_revision_tecnica"] = convierte_fecha_texto(vehiculo.fecha_revision_tecnica)
             v["estado_sec"] = vehiculo.estado_sec
             v["estado_pago"] = vehiculo.estado_pago
             v["get_nombre_ultimo_chofer"] = vehiculo.get_nombre_ultimo_chofer()
