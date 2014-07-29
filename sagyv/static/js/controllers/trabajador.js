@@ -1,7 +1,7 @@
 App.Controllers.Trabajador = function(){
     this.fNuevo = $("#f_nuevo");
     this.btnNuevo = $("#btn_nuevo_trabajador");
-
+    this.urlObtenerTrabajador = null;
 };
 
 App.Controllers.Trabajador.prototype = {
@@ -18,6 +18,20 @@ App.Controllers.Trabajador.prototype = {
             evt.preventDefault();
             _this.guardarNuevo($(this).attr("action"), $(this));
         });
+
+        $("#lista_trabajadores").on("click", "a[data-accion]", function(evt){
+            evt.preventDefault();
+            var accion = $(this).data("accion");
+            common.mostrarModal(accion);
+            _this.cargarDetalleTrabajador($(this).data("id"));
+        });
+    },
+
+    cargarDetalleTrabajador: function(id){
+        console.log(id);
+        //$.get(this.urlObtenerTrabajador,{ id : id }, function(data){
+
+        //})
     },
 
     guardarNuevo: function(action, $form){

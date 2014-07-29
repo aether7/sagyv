@@ -14,10 +14,14 @@ var common = {
     },
 
     mostrarModal: function(id){
-        var $modal = $("#modal_" + id);
+        var $modal = $("#modal_" + id),
+            form = $modal.find("form");
 
         $modal.modal("show");
-        $modal.find("form").get(0).reset();
+
+        if(form.length){
+            form.get(0).reset();
+        }
 
         $(".has-error").removeClass("has-error");
         $(".help-block").text("");
