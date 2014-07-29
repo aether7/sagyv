@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from django.db import transaction
 from django.views.generic import View, TemplateView, ListView
 
-from main.helpers.fecha import convierte_texto_fecha
+from main.helpers.fecha import convierte_texto_fecha, convierte_fecha_texto
 from main.models import Trabajador, Afp, SistemaSalud, EstadoCivil, EstadoVacacion, Vacacion
 
 class IndexList(ListView):
@@ -121,9 +121,9 @@ class ObtenerTrabajadorView(View):
             "apellido" : trabajador.apellido,
             "rut" : trabajador.rut,
             "domicilio" : trabajador.domicilio,
-            "nacimiento" : trabajador.nacimiento,
-            "fecha_inicio_contrato" : trabajador.fecha_inicio_contrato,
-            "vigencia_licencia" : trabajador.vigencia_licencia,
+            "nacimiento" : convierte_fecha_texto(trabajador.nacimiento),
+            "fecha_inicio_contrato" : convierte_fecha_texto(trabajador.fecha_inicio_contrato),
+            "vigencia_licencia" : convierte_fecha_texto(trabajador.vigencia_licencia),
             "afp" : trabajador.afp.nombre,
             "sistema_salud" : trabajador.sistema_salud.nombre,
             "estado_civil" : trabajador.estado_civil.nombre
