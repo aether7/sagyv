@@ -96,18 +96,42 @@ class CrearTrabajadorView(View):
 class ModificarTrabajadorView(View):
 
     def post(self, req):
+        id_trabajador = req.POST.get("id")
         nombre = req.POST.get("nombre")
         apellido = req.POST.get("apellido")
         rut = req.POST.get("rut")
         domicilio = req.POST.get("domicilio")
-        nacimiento = req.POST.get("fechaNacimiento")
-        fecha_inicio_contrato = req.POST.get("inicioContrato")
-        vigencia_licencia = req.POST.get("vigenciaLicencia")
+        nacimiento = req.POST.get("fecha_nacimiento")
+        fecha_inicio_contrato = req.POST.get("inicio_contrato")
+        vigencia_licencia = req.POST.get("vigencia_licencia")
         afp = req.POST.get("afp")
-        sistema_salud = req.POST.get("sistemaSalud")
-        estado_civil = req.POST.get("estadoCivil")
+        sistema_salud = req.POST.get("sistema_salud")
+        estado_civil = req.POST.get("estado_civil")
 
-        pass
+        trabajador = Trabajador.objects.get(pk = id_trabajador)
+        trabajador.nombre = nombre
+        trabajador.apellido = apellido
+        trabajador.rut = rut
+        trabajador.domicilio = domicilio
+        trabajador.nacimiento = convierte_texto_fecha(nacimiento)
+        trabajador.fecha_inicio_contrato = convierte_texto_fecha(fecha_inicio_contrato)
+        trabajador.vigencia_licencia = convierte_texto_fecha(vigencia_licencia)
+        trabajador.afp = afp
+        trabajador.sistema_salud = sistema_salud
+        trabajador.estado_civil = estado_civil
+        trabajador.save()
+        
+
+        dato = {
+            "status" : "ok",
+            "id" : trabajador.id,
+            "nombre" : trabajador.nombre,
+            "apellido" : trabajador.apellido,
+            "rut" : trabajador.rut,
+            "estado_vacaciones" : trabajador.get_vacacion()
+        }
+
+        return HttpResponse(json.dumps(dato),content_type="application/json")
 
 
 class ObtenerTrabajadorView(View):
