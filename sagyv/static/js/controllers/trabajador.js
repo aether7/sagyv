@@ -151,6 +151,9 @@ App.Controllers.Trabajador.prototype = {
 
         $.post(action, json, function(data){
             console.log(data);
+
+            $("#modal_edit").modal("hide");
+            common.agregarMensaje("Se editó el trabajador exitosamente");
         });
     },
 
