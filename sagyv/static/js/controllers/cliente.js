@@ -146,10 +146,11 @@ App.Controllers.Cliente.prototype = {
             credito = $("#credito_add"),
             dispensador = $("#dispensador_add"),
             observaciones = $("#obs_add"),
+            cantidad = $("#numero_add"),
             valido = true,
             _this = this;
 
-        valido = this.validarCampos(nombre, giro, direccion, telefono, rut);
+        valido = this.validarCampos(nombre, giro, direccion, telefono, rut, cantidad);
 
         if(!valido){
             return;
@@ -168,7 +169,7 @@ App.Controllers.Cliente.prototype = {
             situacion_comercial : sitComercial.val(),
             credito : credito.is(":checked"),
             dispensador : dispensador.is(":checked"),
-            cantidad : $("#numero_add").val().replace(/[\.,]/g, ""),
+            cantidad : cantidad.val().replace(/[\.,]/g, ""),
             tipo : $("#tipo_add").val(),
             producto : $("#sel_producto_add").val(),
             obs : observaciones.val().trim()
@@ -227,10 +228,11 @@ App.Controllers.Cliente.prototype = {
             credito = $("#credito_update"),
             dispensador = $("#dispensador_update"),
             observaciones = $("#obs_update"),
+            cantidad = $("#numero_update"),
             valido = true,
             _this = this;
 
-        valido = this.validarCampos(nombre, giro, direccion, telefono, rut);
+        valido = this.validarCampos(nombre, giro, direccion, telefono, rut, cantidad);
 
         if(!valido){
             return;
@@ -247,7 +249,7 @@ App.Controllers.Cliente.prototype = {
             dispensador : dispensador.is(":checked"),
             id_cliente : this.idCliente,
             obs : observaciones.val().trim(),
-            cantidad : $("#numero_update").val().replace(/[\.,]/g, ""),
+            cantidad : cantidad.val().replace(/[\.,]/g, ""),
             tipo : $("#tipo_update").val(),
             producto : $("#sel_producto_update").val()
         };
@@ -266,7 +268,7 @@ App.Controllers.Cliente.prototype = {
         });
     },
 
-    validarCampos: function(nombre, giro, direccion, telefono, rut){
+    validarCampos: function(nombre, giro, direccion, telefono, rut, cantidad){
         var valido = true;
 
         $(".has-error").removeClass("has-error");
@@ -312,6 +314,12 @@ App.Controllers.Cliente.prototype = {
             valido = false;
             rut.siblings("span").text("El rut es incorrecto");
             rut.parent().addClass("has-error");
+        }
+
+        if(cantidad.val() !== "" && !/^\d+$/.test(cantidad.val())){
+            valido = false;
+            cantidad.siblings("span").text("solo deben ingresarse números");
+            cantidad.parent().addClass("has-error");
         }
 
         return valido;

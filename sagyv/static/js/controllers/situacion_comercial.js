@@ -2,6 +2,7 @@ App.Controllers.SituacionComercial = function(){
     this.btnAgregarSituacion = $("#btn_agregar_situacion");
     this.btnGuardarSituacion = $("#btn_guardar_situacion");
     this.btnUpdateSituacion = $("#btn_update_situacion");
+    this.situacionComercialList = [];
     this.idSituacion = null;
     this.situacionUrl = null;
 };
@@ -48,6 +49,9 @@ App.Controllers.SituacionComercial.prototype = {
 
         if(!valido){
             return
+        }else if(this.existeSituacionDuplicada(tipo.val(), valor.val(), producto.val())){
+            alert("Esta situación comercial ya ha sido ingresada anteriormente");
+            return;
         }
 
         json = {
@@ -168,5 +172,29 @@ App.Controllers.SituacionComercial.prototype = {
             $("#sit_comercial_add option[data-id={0}]".format(_this.idSituacion)).text(data.valor_descripcion);
             $("#sit_comercial_update option[data-id={0}]".format(_this.idSituacion)).text(data.valor_descripcion);
         });
+    },
+
+    addSituacionComercial: function(tipoDescuento, monto, producto){
+        this.situacionComercialList.push({
+            tipoDescuentoId : tipoDescuento,
+            monto : monto,
+            productoId : producto
+        });
+    },
+
+    existeSituacionDuplicada: function(tipoDescuento, monto, producto){
+        var duplicado = false,
+            tipoDescuento = parseInt(tipoDescuento),
+            monto = parseInt(monto),
+            producto = parseInt(producto);
+
+        this.situacionComercialList.forEach(function(sc){
+            if(sc.tipoDescuentoId === tipoDescuento &&
+                sc.monto === monto && sc.productoId === producto){
+                duplicado = true;
+            }
+        });
+
+        return duplicado;
     }
 };

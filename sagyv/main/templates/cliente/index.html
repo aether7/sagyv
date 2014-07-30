@@ -84,6 +84,10 @@
 
     App.situacionController = new App.Controllers.SituacionComercial();
     App.situacionController.situacionUrl = "{% url 'cliente:obtener_situacion_comercial' 0 %}";
+    {% for sc in situaciones_comerciales %}
+    App.situacionController.addSituacionComercial({{ sc.tipo_descuento.id }},
+        {{ sc.monto_descuento }}, {{ sc.producto.id }});
+    {% endfor %}
     App.situacionController.init();
 </script>
 {% endblock %}
