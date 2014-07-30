@@ -1,9 +1,11 @@
 App.Controllers.Trabajador = function(){
     this.fNuevo = $("#f_nuevo");
+    this.fEdit = $("#f_edit");
     this.btnNuevo = $("#btn_nuevo_trabajador");
     this.listaTrabajadores = $("#lista_trabajadores tbody");
     this.urlObtenerTrabajador = null;
     this.urlEliminarTrabajador = null;
+    this.id = null;
 };
 
 App.Controllers.Trabajador.prototype = {
@@ -21,9 +23,17 @@ App.Controllers.Trabajador.prototype = {
             _this.guardarNuevo($(this).attr("action"), $(this));
         });
 
+        this.fEdit.on("submit", function(evt){
+            evt.preventDefault();
+            _this.guardarUpdate($(this).attr("action"), $(this));
+        });
+
         this.listaTrabajadores.on("click", "a[data-accion]", function(evt){
             evt.preventDefault();
+
             var accion = $(this).data("accion");
+            _this.id = $(this).data("id");
+
             common.mostrarModal(accion);
             _this[accion + "Trabajador"]($(this).data("id"));
         });
@@ -35,13 +45,13 @@ App.Controllers.Trabajador.prototype = {
             $("#apellido_ver").text(data.apellido);
             $("#rut_ver").text(data.rut);
             $("#domicilio_ver").text(data.domicilio);
-            $("#fecha_nacimiento_ver").text(common.formatearFecha(data.nacimiento));
-            $("#inicio_contrato_ver").text(common.formatearFecha(data.fecha_inicio_contrato));
-            $("#vigencia_licencia_ver").text(common.formatearFecha(data.vigencia_licencia));
-            $("#afp_ver").text(data.afp);
-            $("#sistema_salud_ver").text(data.sistema_salud);
-            $("#estado_civil_ver").text(data.estado_civil);
-            $("#estado_vacacion_ver").text(data.estado_vacacion);
+            $("#fecha_nacimiento_ver").text(common.fecha.formatearFecha(data.nacimiento));
+            $("#inicio_contrato_ver").text(common.fecha.formatearFecha(data.fecha_inicio_contrato));
+            $("#vigencia_licencia_ver").text(common.fecha.formatearFecha(data.vigencia_licencia));
+            $("#afp_ver").text(data.afp.nombre);
+            $("#sistema_salud_ver").text(data.sistema_salud.nombre);
+            $("#estado_civil_ver").text(data.estado_civil.nombre);
+            $("#estado_vacacion_ver").text(data.estado_vacacion.nombre);
         });
     },
 
@@ -60,18 +70,17 @@ App.Controllers.Trabajador.prototype = {
 
     editarTrabajador: function(id){
         $.get(this.urlObtenerTrabajador,{ id : id }, function(data){
-            console.log(data);
             $("#nombre_edit").val(data.nombre);
             $("#apellido_edit").val(data.apellido);
             $("#rut_edit").val(data.rut);
             $("#domicilio_edit").val(data.domicilio);
-            $("#fecha_nacimiento_edit").val(data.nacimiento);
-            $("#inicio_contrato_edit").val(data.fecha_inicio_contrato);
-            $("#vigencia_licencia_edit").val(data.vigencia_licencia);
-            $("#afp_edit").val(data.afp);
-            $("#sistema_salud_edit").val(data.sistema_salud);
-            $("#estado_civil_edit").val(data.estado_civil);
-            //$("#estado_vacacion_edit").val(data.estado_vacacion);
+            $("#fecha_nacimiento_edit").val(common.fecha.agregarCeros(data.nacimiento));
+            $("#inicio_contrato_edit").val(common.fecha.agregarCeros(data.fecha_inicio_contrato));
+            $("#vigencia_licencia_edit").val(common.fecha.agregarCeros(data.vigencia_licencia));
+            $("#afp_edit").val(data.afp.id);
+            $("#sistema_salud_edit").val(data.sistema_salud.id);
+            $("#estado_civil_edit").val(data.estado_civil.id);
+            $("#estado_vacacion_edit").val(data.estado_vacacion.id);
         });
     },
 
@@ -120,7 +129,7 @@ App.Controllers.Trabajador.prototype = {
         this.listaTrabajadores.append(html);
     },
 
-    guardarUpdate: function(){
+    guardarUpdate: function(action, $form){
         var nombre = $("#nombre_edit"),
             apellido = $("#apellido_edit"),
             rut = $("#rut_edit"),
@@ -132,10 +141,17 @@ App.Controllers.Trabajador.prototype = {
             sistemaSalud = $("#sistema_salud_edit"),
             estadoCivil = $("#estado_civil_edit"),
             estadoVacacion = $("#estado_vacacion_edit"),
-            valido = true;
+            valido = true, json;
 
         valido = this.validarCampos(nombre, apellido, rut, domicilio, fechaNacimiento,
             inicioContrato, vigenciaLicencia, afp, sistemaSalud, estadoCivil, estadoVacacion);
+
+        json = $form.serialize();
+        json += "&id=" + this.id;
+
+        $.post(action, json, function(data){
+            console.log(data);
+        });
     },
 
     validarCampos: function(nombre, apellido, rut, domicilio, fechaNacimiento,
