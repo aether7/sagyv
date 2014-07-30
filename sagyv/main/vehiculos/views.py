@@ -64,9 +64,6 @@ class AgregarNuevoVehiculoView(View):
         vehiculo.fecha_revision_tecnica = self.revision_tecnica
         vehiculo.km = self.kilometraje
 
-        print "SEC : "+self.estado_sec
-        print "PAGO : "+self.estado_pago
-
         if self.estado_sec == '0':
             vehiculo.estado_sec = False
         else:
@@ -203,16 +200,16 @@ class ObtenerVehiculosView(View):
         data = []
 
         for vehiculo in vehiculos:
-            v = {}
-
-            v["id"] = vehiculo.id
-            v["numero"] = vehiculo.numero
-            v["patente"] = vehiculo.patente
-            v["km"] = vehiculo.km
-            v["fecha_revision_tecnica"] = convierte_fecha_texto(vehiculo.fecha_revision_tecnica)
-            v["estado_sec"] = vehiculo.estado_sec
-            v["estado_pago"] = vehiculo.estado_pago
-            v["get_nombre_ultimo_chofer"] = vehiculo.get_nombre_ultimo_chofer()
+            v = {
+                "id" : vehiculo.id,
+                "numero" : vehiculo.numero,
+                "patente" : vehiculo.patente,
+                "km" : vehiculo.km,
+                "fecha_revision_tecnica" : convierte_fecha_texto(vehiculo.fecha_revision_tecnica),
+                "estado_sec" : vehiculo.estado_sec,
+                "estado_pago" : vehiculo.estado_pago,
+                "get_nombre_ultimo_chofer" : vehiculo.get_nombre_ultimo_chofer()
+            }
 
             data.append(v)
 
