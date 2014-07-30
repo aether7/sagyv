@@ -48,6 +48,7 @@ class ObtenerClienteView(View):
             'rut' : cliente.rut,
             'situacion_comercial' : cliente.situacion_comercial.id,
             'credito' : cliente.credito,
+            'dispensador' : cliente.dispensador,
             'obs' : cliente.observacion
         }
 

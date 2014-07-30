@@ -110,6 +110,9 @@ App.Controllers.Cliente.prototype = {
             if(data.credito){
                 $("#credito_update").get(0).checked = true;
             }
+            if(data.dispensador){
+                $("#dispensador_update").get(0).checked = true;
+            }
         });
     },
 
