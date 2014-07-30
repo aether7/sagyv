@@ -190,6 +190,11 @@ class Trabajador(models.Model):
 
         return ultima_vacacion.__unicode__()
 
+    def get_id_vacacion(self):
+        ultima_vacacion = self.vacacion_set.all().order_by("-id")[0]
+
+        return ultima_vacacion.estado_vacacion.id
+
     def __unicode__(self):
         return self.nombre + ' ' + self.apellido
 

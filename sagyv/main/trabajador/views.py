@@ -160,7 +160,7 @@ class ObtenerTrabajadorView(View):
                 "nombre" : worker.estado_civil.nombre
             },
             "estado_vacacion" : {
-                "id" : 1,
+                "id" : worker.get_id_vacacion(),
                 "nombre" : worker.get_vacacion()
             }
         }
