@@ -95,6 +95,8 @@ class CrearTrabajadorView(View):
 class ModificarTrabajadorView(View):
 
     def post(self, req):
+        print req.POST
+        
         id_trabajador = req.POST.get("id")
         nombre = req.POST.get("nombre")
         apellido = req.POST.get("apellido")
