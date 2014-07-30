@@ -59,7 +59,20 @@ App.Controllers.Trabajador.prototype = {
     },
 
     editarTrabajador: function(id){
-
+        $.get(this.urlObtenerTrabajador,{ id : id }, function(data){
+            console.log(data);
+            $("#nombre_edit").val(data.nombre);
+            $("#apellido_edit").val(data.apellido);
+            $("#rut_edit").val(data.rut);
+            $("#domicilio_edit").val(data.domicilio);
+            $("#fecha_nacimiento_edit").val(data.nacimiento);
+            $("#inicio_contrato_edit").val(data.fecha_inicio_contrato);
+            $("#vigencia_licencia_edit").val(data.vigencia_licencia);
+            $("#afp_edit").val(data.afp);
+            $("#sistema_salud_edit").val(data.sistema_salud);
+            $("#estado_civil_edit").val(data.estado_civil);
+            //$("#estado_vacacion_edit").val(data.estado_vacacion);
+        });
     },
 
     guardarNuevo: function(action, $form){

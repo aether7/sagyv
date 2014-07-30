@@ -147,10 +147,22 @@ class ObtenerTrabajadorView(View):
             "nacimiento" : convierte_fecha_texto(worker.nacimiento),
             "fecha_inicio_contrato" : convierte_fecha_texto(worker.fecha_inicio_contrato),
             "vigencia_licencia" : convierte_fecha_texto(worker.vigencia_licencia),
-            "afp" : worker.afp.nombre,
-            "sistema_salud" : worker.sistema_salud.nombre,
-            "estado_civil" : worker.estado_civil.nombre,
-            "estado_vacacion" : worker.get_vacacion()
+            "afp" : {
+                "id" : worker.afp.id,
+                "nombre" : worker.afp.nombre,
+            },
+            "sistema_salud" : {
+                "id" : worker.sistema_salud.id,
+                "nombre" : worker.sistema_salud.nombre
+            },
+            "estado_civil" : {
+                "id" : worker.estado_civil.id,
+                "nombre" : worker.estado_civil.nombre
+            },
+            "estado_vacacion" : {
+                "id" : 1,
+                "nombre" : worker.get_vacacion()
+            }
         }
 
         return HttpResponse(json.dumps(dato),content_type="application/json")
