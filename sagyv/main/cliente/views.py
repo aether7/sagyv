@@ -139,6 +139,7 @@ class ModificarClienteView(View):
         telefono = req.POST.get('telefono')
         situacion_comercial = req.POST.get('situacion_comercial')
         credito = req.POST.get('credito')
+        dispensador = req.POST.get('dispensador')
         obs = req.POST.get('obs')
 
         cliente = Cliente.objects.get(pk = id_cliente)
@@ -159,11 +160,8 @@ class ModificarClienteView(View):
             sc = DescuentoCliente.objects.get(pk = situacion_comercial)
             cliente.situacion_comercial = sc
 
-        if credito != "" and credito != "0" and credito != "false":
-            cliente.credito = True
-        else:
-            cliente.credito = False
-
+        cliente.credito = (credito != "false") and True or False
+        cliente.dispensador = (dispensador != "false") and True or False
         cliente.save()
 
         dato = {
