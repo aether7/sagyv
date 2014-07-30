@@ -104,9 +104,9 @@ class ModificarTrabajadorView(View):
         nacimiento = req.POST.get("fecha_nacimiento")
         fecha_inicio_contrato = req.POST.get("inicio_contrato")
         vigencia_licencia = req.POST.get("vigencia_licencia")
-        afp = req.POST.get("afp")
-        sistema_salud = req.POST.get("sistema_salud")
-        estado_civil = req.POST.get("estado_civil")
+        afp_id = req.POST.get("afp")
+        sistema_salud_id = req.POST.get("sistema_salud")
+        estado_civil_id = req.POST.get("estado_civil")
 
         trabajador = Trabajador.objects.get(pk = id_trabajador)
         trabajador.nombre = nombre
@@ -116,7 +116,11 @@ class ModificarTrabajadorView(View):
         trabajador.nacimiento = convierte_texto_fecha(nacimiento)
         trabajador.fecha_inicio_contrato = convierte_texto_fecha(fecha_inicio_contrato)
         trabajador.vigencia_licencia = convierte_texto_fecha(vigencia_licencia)
-        trabajador.afp = afp
+        
+        afp = Afp.objects.get(pk = afp_id)
+        sistema_salud = SistemaSalud.objects.get(pk = sistema_salud_id)
+        estado_civil = EstadoCivil.objects.get(pk = estado_civil_id)
+            
         trabajador.sistema_salud = sistema_salud
         trabajador.estado_civil = estado_civil
         trabajador.save()
