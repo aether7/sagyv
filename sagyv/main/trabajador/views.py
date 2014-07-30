@@ -67,8 +67,6 @@ class CrearTrabajadorView(View):
         sistema_salud = SistemaSalud.objects.get(pk = sistema_salud_id)
         estado_civil = EstadoCivil.objects.get(pk = estado_civil_id)
 
-        print nacimiento
-
         trabajador = Trabajador()
         trabajador.nombre = nombre
         trabajador.apellido = apellido
@@ -92,6 +90,7 @@ class CrearTrabajadorView(View):
         #vacacion.dias_restantes =
         #vacacion.activo =
         vacacion.save()
+
 
 class ModificarTrabajadorView(View):
 
@@ -120,7 +119,7 @@ class ModificarTrabajadorView(View):
         trabajador.sistema_salud = sistema_salud
         trabajador.estado_civil = estado_civil
         trabajador.save()
-        
+
 
         dato = {
             "status" : "ok",
@@ -139,6 +138,7 @@ class ObtenerTrabajadorView(View):
     def get(self, req):
         id_trabajador = req.GET.get("id")
         worker = Trabajador.objects.get(pk = id_trabajador)
+
         dato = {
             "nombre" : worker.nombre,
             "apellido" : worker.apellido,
@@ -163,7 +163,7 @@ class EliminarTrabajadorView(View):
         worker = Trabajador.objects.get(pk = id_trabajador)
         worker.delete()
 
-        dato = { "status" : "ok"}
+        dato = { "status" : "ok" }
 
         return HttpResponse(json.dumps(dato), content_type="application/json")
 

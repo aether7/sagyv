@@ -3,6 +3,7 @@ App.Controllers.Trabajador = function(){
     this.btnNuevo = $("#btn_nuevo_trabajador");
     this.listaTrabajadores = $("#lista_trabajadores tbody");
     this.urlObtenerTrabajador = null;
+    this.urlEliminarTrabajador = null;
 };
 
 App.Controllers.Trabajador.prototype = {
@@ -41,6 +42,19 @@ App.Controllers.Trabajador.prototype = {
             $("#sistema_salud_ver").text(data.sistema_salud);
             $("#estado_civil_ver").text(data.estado_civil);
             $("#estado_vacacion_ver").text(data.estado_vacacion);
+        });
+    },
+
+    eliminarTrabajador: function(id){
+        if(!confirm("Al confirmar se eliminará el trabajador, ¿ Desea continuar ?")){
+            return;
+        }
+
+        var _this = this;
+
+        $.post(this.urlEliminarTrabajador, { id: id }, function(data){
+            _this.listaTrabajadores.find("tr[data-id={0}]".format(id)).remove();
+            common.agregarMensaje("El trabajador ha sido eliminado exitosamente");
         });
     },
 
