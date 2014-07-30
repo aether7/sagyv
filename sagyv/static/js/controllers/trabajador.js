@@ -58,6 +58,10 @@ App.Controllers.Trabajador.prototype = {
         });
     },
 
+    editarTrabajador: function(id){
+
+    },
+
     guardarNuevo: function(action, $form){
         var nombre = $("#nombre_add"),
             apellido = $("#apellido_add"),

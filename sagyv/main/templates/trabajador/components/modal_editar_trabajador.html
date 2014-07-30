@@ -1,0 +1,106 @@
+<div id="modal_edit" class="modal fade">
+    <form id="f_edit" action="{% url 'trabajador:modificar' %}" method="post">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Nuevo trabajador</h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="nombre_edit" class="control-label">Nombre</label>
+                    <input id="nombre_edit" name="nombre" type="text" class="form-control" value="" />
+                    <span class="help-block"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="apellido_edit" class="control-label">Apellido</label>
+                    <input id="apellido_edit" name="apellido" type="text" class="form-control" value="" />
+                    <span class="help-block"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="rut_edit" class="control-label">Rut</label>
+                    <input id="rut_edit" name="rut" type="text" class="form-control" value="" />
+                    <span class="help-block"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="domicilio_edit" class="control-label">Domicilio</label>
+                    <input id="domicilio_edit" name="domicilio" type="text" class="form-control" value="" />
+                    <span class="help-block"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="fecha_nacimiento_edit" class="control-label">Fecha nacimiento</label>
+                    <input id="fecha_nacimiento_edit" name="fecha_nacimiento"
+                        type="date" class="form-control" value="" />
+                    <span class="help-block"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="inicio_contrato_edit" class="control-label">Inicio contrato</label>
+                    <input id="inicio_contrato_edit" name="inicio_contrato"
+                        type="date" class="form-control" value="" />
+                    <span class="help-block"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="vigencia_licencia_edit" class="control-label">Vigencia licencia:</label>
+                    <input id="vigencia_licencia_edit" name="vigencia_licencia"
+                        type="date" class="form-control" value="" />
+                    <span class="help-block"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="afp_edit" class="control-label">AFP</label>
+                    <select name="afp" id="afp_edit" class="form-control">
+                        {% for afp in lista_afps %}
+                        <option value="{{ afp.id }}">{{ afp.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="help-block"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="sistema_salud_edit" class="control-label">Sistema salud</label>
+                    <select name="sistema_salud" id="sistema_salud_edit" class="form-control">
+                        {% for sistema_salud in lista_sistema_salud %}
+                        <option value="{{ sistema_salud.id }}">{{ sistema_salud.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="help-block"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="estado_civil_edit" class="control-label">Estado civil</label>
+                    <select name="estado_civil" id="estado_civil_edit" class="form-control">
+                        {% for estado_civil in estados_civiles %}
+                        <option value="{{ estado_civil.id }}">{{ estado_civil.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="help-block"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="estado_vacacion_edit" class="control-label">Estado vacaciones</label>
+                    <select id="estado_vacacion_edit" name="estado_vacacion" class="form-control">
+                        {% for estado_vacacion in estados_vacacion %}
+                        <option value="{{ estado_vacacion.id }}">{{ estado_vacacion.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="help-block"></span>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+    </form>
+</div>
