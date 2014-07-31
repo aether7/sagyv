@@ -150,8 +150,6 @@ App.Controllers.Trabajador.prototype = {
         json += "&id=" + this.id;
 
         $.post(action, json, function(data){
-            console.log(data);
-
             $("#modal_edit").modal("hide");
             common.agregarMensaje("Se editó el trabajador exitosamente");
         });
@@ -159,6 +157,9 @@ App.Controllers.Trabajador.prototype = {
 
     validarCampos: function(nombre, apellido, rut, domicilio, fechaNacimiento,
         inicioContrato, vigenciaLicencia, afp, sistemaSalud, estadoCivil, estadoVacacion){
+
+        $(".has-error").removeClass("has-error");
+        $(".help-block").text("");
 
         var valido = true;
         $(".has-error").removeClass("has-error");
@@ -168,11 +169,20 @@ App.Controllers.Trabajador.prototype = {
             valido = false;
             nombre.siblings("span").text("campo obligatorio");
             nombre.parent().addClass("has-error");
+        }else if(common.constantes.regex.noNombre.test(nombre.val())){
+            valido = false;
+            nombre.siblings("span").text("nombre no válido");
+            nombre.parent().addClass("has-error");
         }
 
         if(apellido.val().trim() === ""){
             valido = false;
             apellido.siblings("span").text("campo obligatorio");
+            apellido.parent().addClass("has-error");
+        }else if(common.constantes.regex.noNombre.test(apellido.val())){
+            console.log("asdfasdf");
+            valido = false;
+            apellido.siblings("span").text("apellido no válido");
             apellido.parent().addClass("has-error");
         }
 

@@ -1,7 +1,8 @@
 var common = {
     constantes: {
         regex : {
-            direccion : /^[A-záéíóúñÁÉÍÓÚÑ\s]+\s((#|Nº|No)\d+)|(s\/n)$/i
+            direccion : /^[A-záéíóúñÁÉÍÓÚÑ\s]+\s((#|Nº|No)\d+)|(s\/n)$/i,
+            noNombre : /[^A-záéíóúñÁÉÍÓÚÑ\s]+/g
         }
     },
 
