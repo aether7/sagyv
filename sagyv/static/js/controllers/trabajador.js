@@ -161,7 +161,9 @@ App.Controllers.Trabajador.prototype = {
         inicioContrato, vigenciaLicencia, afp, sistemaSalud, estadoCivil, estadoVacacion){
 
         var valido = true;
-
+        $(".has-error").removeClass("has-error");
+        $(".help-block").text("");
+        
         if(nombre.val().trim() === ""){
             valido = false;
             nombre.siblings("span").text("campo obligatorio");
