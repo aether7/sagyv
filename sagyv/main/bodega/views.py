@@ -54,6 +54,9 @@ class CrearGuiaDespachoView(View):
 
         data = {
             "status" : "ok",
+            "productos" : {
+
+            },
             "guia" : {
                 "id" : guia.id,
                 "numero" : guia.numero
