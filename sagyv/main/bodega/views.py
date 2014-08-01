@@ -67,12 +67,12 @@ class CrearGuiaDespachoView(View):
     @transaction.commit_on_success
     def post(self,req):
         #{{id_producto:xxx, cantidad:xxx}...}
-        lista_producto = req.POST.get("lista_producto")
-        self.numero_guia = req.POST.get("numero_guia")
-        self.id_vehiculo = req.POST.get("id_vehiculo")
-        self.num_factura = req.POST.get("num_factura")
+        lista_producto = req.POST.get("productos")
+        self.numero_guia = req.POST.get("numero")
+        self.id_vehiculo = req.POST.get("movil")
+        self.factura = req.POST.get("num_factura")
         #es probable que no se utilice.
-        self.fecha_creacion = req.POST.get("fecha_creacion")
+        self.fecha_creacion = req.POST.get("fecha")
 
         lista = json.loads(lista_producto)
         guia = self.crear_guia_despacho()
@@ -118,8 +118,9 @@ class CrearGuiaDespachoView(View):
     def carga_datos_salida(self, guia, lista):
 
         for item in lista:
+            print item["cantidad"]
             cantidad = int(item["cantidad"])
-            producto = Producto.objects.get(pk = item["id_producto"])
+            producto = Producto.objects.get(pk = item["id"])
             producto.stock -= cantidad
             producto.save()
 
