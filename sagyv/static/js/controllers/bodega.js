@@ -39,12 +39,18 @@ App.Controllers.Bodega.prototype = {
     agregarProducto: function(){
         var html,
             producto = $("#guia_producto"),
-            cantidad = $("#cantidad_producto");
+            cantidad = $("#cantidad_producto"),
+            codigo = producto.find("option:selected").text().trim();
+
+        if(this.listaDespacho.find("tr[data-id={0}]".format(producto.val())).length){
+            alert("EL producto {0} ya fue ingresado, revise nuevamente".format(codigo));
+            return;
+        }
 
         html = this.renderProducto({
             id : producto.val(),
             cantidad : cantidad.val(),
-            codigo : producto.find("option:selected").text().trim()
+            codigo : codigo
         });
 
         this.listaDespacho.append(html);
@@ -80,11 +86,24 @@ App.Controllers.Bodega.prototype = {
         });
 
         json.productos = JSON.stringify(json.productos);
-        console.log(json);
+        $.post(action, json, this.procesarGuiaSalida);
+    },
 
-        $.post(action, json, function(data){
-            console.log(data);
+    procesarGuiaSalida: function(data){
+        data.productos.forEach(function(producto){
+            var stock = $("#stock_{0}".format(producto.id));
+
+            stock.text(producto.cantidad);
+
+            if(producto.cantidad < 10){
+                stock.addClass("text-danger");
+            }else{
+                stock.removeClass("text-danger");
+            }
         });
+
+        $("#modal_guia_despacho").modal("hide");
+        common.agregarMensaje("Se ha creado la nueva guía exitosamente");
     },
 
     esValidaGuia: function(numero, movil, fecha){

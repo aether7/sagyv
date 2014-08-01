@@ -7,7 +7,7 @@
             <td>Precio actual</td>
         </tr>
         {% for producto in productos  %}
-        <tr>
+        <tr data-producto="{{ producto.id }}">
             <td data-columna="codigo">{{ producto.codigo }}</td>
             <td data-columna="tipo_producto">{{ producto.tipo_producto.nombre }}</td>
             <td data-columna="stock">

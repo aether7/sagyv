@@ -14,6 +14,7 @@ class IndexView(TemplateView):
     def get_context_data(self, *args, **kwargs):
         context = super(IndexView, self).get_context_data(*args, **kwargs)
         context["productos"] = self.get_productos()
+        context["productos_guia"] = Producto.objects.exclude(tipo_producto_id = 3).order_by("id")
         context["productos_transito"] = self.get_productos_transito()
         context["total_stock"] = self.get_stock_total()
         context["vehiculos"] = Vehiculo.objects.all().order_by("id")
