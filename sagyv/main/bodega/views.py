@@ -85,7 +85,7 @@ class CrearGuiaDespachoView(View):
             producto.stock += cantidad
             producto.save()
 
-            self.crear_historico(producto, cantidad, guia.numero ,False)
+            self.crear_historico(producto, cantidad, guia, False)
 
     def carga_datos_salida(self, guia, lista):
 
@@ -95,14 +95,14 @@ class CrearGuiaDespachoView(View):
             producto.stock -= cantidad
             producto.save()
 
-            self.crear_historico(producto, cantidad, guia.numero ,True)
+            self.crear_historico(producto, cantidad, guia, True)
 
-    def crear_historico(self, producto, cantidad, guia_numero,tipo_operacion):
+    def crear_historico(self, producto, cantidad, guia, tipo_operacion):
         historico = HistorialStock()
         historico.producto = producto
         historico.cantidad = cantidad
         historico.tipo_operacion = tipo_operacion
-        historico.guia_despacho = guia_numero
+        historico.guia_despacho = guia
         historico.save()
 
 
