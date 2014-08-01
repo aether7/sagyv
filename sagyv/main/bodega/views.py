@@ -1,3 +1,4 @@
+#-*- coding: utf-8 -*-
 import json
 from django.views.generic import TemplateView,View
 from django.db import transaction
@@ -35,11 +36,12 @@ class CrearGuiaDespachoView(View):
 
     @transaction.commit_on_success
     def post(self,req):
-        lista_producto = req.POST.get("lista_producto")
-        self.numero_guia = req.POST.get("numero_guia")
-        self.id_vehiculo = req.POST.get("id_vehiculo")
-        self.num_factura = req.POST.get("num_factura")
-        self.fecha_creacion = req.POST.get("fecha_creacion")
+        self.numero_guia = req.POST.get("numero")
+        self.id_vehiculo = req.POST.get("movil")
+        self.factura = req.POST.get("num_factura")
+        #es probable que no se utilice.
+        self.fecha_creacion = req.POST.get("fecha")
+        lista_producto = req.POST.get("productos")
 
         lista = json.loads(lista_producto)
         guia = self.crear_guia_despacho()
@@ -61,18 +63,17 @@ class CrearGuiaDespachoView(View):
 
     def crear_guia_despacho(self):
         guia_despacho = GuiaDespacho()
-        #guia_despacho.fecha = CAMPO AUTO
         guia_despacho.numero = self.numero_guia
 
         if self.id_vehiculo == "":
             guia_despacho.factura = self.factura
             guia_despacho.tipo_guia = True
-            guia_despacho.save()
         elif self.factura == "":
             movil = Vehiculo.objects.get(pk = self.id_vehiculo)
             guia_despacho.vehiculo = movil
             guia_despacho.tipo_guia = False
-            guia_despacho.save()
+
+        guia_despacho.save()
 
         return guia_despacho
 
@@ -80,7 +81,7 @@ class CrearGuiaDespachoView(View):
 
         for item in lista:
             cantidad = int(item["cantidad"])
-            producto = Producto.objects.get(pk = item["id_producto"])
+            producto = Producto.objects.get(pk = item["id"])
             producto.stock += cantidad
             producto.save()
 
@@ -90,7 +91,7 @@ class CrearGuiaDespachoView(View):
 
         for item in lista:
             cantidad = int(item["cantidad"])
-            producto = Producto.objects.get(pk = item["id_producto"])
+            producto = Producto.objects.get(pk = item["id"])
             producto.stock -= cantidad
             producto.save()
 
@@ -100,7 +101,6 @@ class CrearGuiaDespachoView(View):
         historico = HistorialStock()
         historico.producto = producto
         historico.cantidad = cantidad
-        #historico.fecha = AUTO DATE
         historico.tipo_operacion = tipo_operacion
         historico.guia_despacho = guia_numero
         historico.save()
