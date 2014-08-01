@@ -37,6 +37,7 @@ class CrearGuiaDespachoView(View):
 
     @transaction.commit_on_success
     def post(self,req):
+        self.productosActualizados = []
         self.numero_guia = req.POST.get("numero")
         self.id_vehiculo = req.POST.get("movil")
         self.factura = req.POST.get("num_factura")
@@ -47,6 +48,7 @@ class CrearGuiaDespachoView(View):
         lista = json.loads(lista_producto)
         guia = self.crear_guia_despacho()
 
+
         if(self.id_vehiculo != ""):
             self.carga_datos_salida(guia, lista)
         elif(self.factura != ""):
@@ -54,9 +56,7 @@ class CrearGuiaDespachoView(View):
 
         data = {
             "status" : "ok",
-            "productos" : {
-
-            },
+            "productos" : self.productosActualizados,
             "guia" : {
                 "id" : guia.id,
                 "numero" : guia.numero
@@ -82,12 +82,18 @@ class CrearGuiaDespachoView(View):
         return guia_despacho
 
     def carga_datos_ingreso(self, guia, lista):
-
         for item in lista:
             cantidad = int(item["cantidad"])
             producto = Producto.objects.get(pk = item["id"])
             producto.stock += cantidad
             producto.save()
+
+            this_prod = {
+                'id': producto.id,
+                'cantidad' : producto.stock
+            }
+
+            self.productosActualizados.append(this_prod)
 
             self.crear_historico(producto, cantidad, guia, False)
 
@@ -98,6 +104,13 @@ class CrearGuiaDespachoView(View):
             producto = Producto.objects.get(pk = item["id"])
             producto.stock -= cantidad
             producto.save()
+
+            this_prod = {
+                'id': producto.id,
+                'cantidad' : producto.stock
+            }
+
+            self.productosActualizados.append(this_prod)
 
             self.crear_historico(producto, cantidad, guia, True)
 
