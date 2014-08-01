@@ -1,5 +1,6 @@
 #-*- coding: utf-8 -*-
 import json
+
 from django.views.generic import TemplateView,View
 from django.db import transaction
 from django.http import HttpResponse
@@ -65,10 +66,10 @@ class CrearGuiaDespachoView(View):
         guia_despacho = GuiaDespacho()
         guia_despacho.numero = self.numero_guia
 
-        if self.id_vehiculo == "":
+        if self.id_vehiculo != "":
             guia_despacho.factura = self.factura
             guia_despacho.tipo_guia = True
-        elif self.factura == "":
+        elif self.factura != "":
             movil = Vehiculo.objects.get(pk = self.id_vehiculo)
             guia_despacho.vehiculo = movil
             guia_despacho.tipo_guia = False
