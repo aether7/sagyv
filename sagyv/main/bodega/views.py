@@ -39,7 +39,7 @@ class UpdateStockProductoView(View):
         stock_entra = req.POST.get("agregar_stock")
         tipo_accion = req.POST.get("accion")
 
-        accion = TipoCambioStock.objects.get(pk = tipo_accion)
+        #accion = TipoCambioStock.objects.get(pk = tipo_accion)
         producto = Producto.objects.get(pk = id_producto)
         old_stock = producto.stock
 
@@ -47,13 +47,14 @@ class UpdateStockProductoView(View):
         hsp.producto = producto
         hsp.cantidad = stock_entra
         hsp.factura = num_factura
+        hsp.tipo_operacion = tipo_accion
         hsp.save()
 
         new_stock = int(old_stock)
 
-        if tipo_accion == "1":
+        if tipo_accion:
             new_stock += int(stock_entra)
-        elif tipo_accion == "2":
+        else:
             new_stock -= int(stock_entra)
 
         producto.stock = new_stock
