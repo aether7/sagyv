@@ -75,10 +75,15 @@ App.Controllers.Bodega.prototype = {
             valido = true;
 
         $(".has-error").removeClass("has-error");
-
-        if(!type.isNumber(parseInt(this.numFact.val()))){
+        $(".help-block").text("");
+        
+        if(this.numFact.val().trim() === ''){
             valido = false;
             this.numFact.siblings("span.help-block").text("Campo obligatorio");
+            this.numFact.parent().addClass("has-error");
+        }else if(!type.isNumber(parseInt(this.numFact.val()))){
+            valido = false;
+            this.numFact.siblings("span.help-block").text("Ingrese solo numeros");
             this.numFact.parent().addClass("has-error");
         }else if( parseInt(this.numFact.val()) <= 0 ){
             valido = false;
@@ -86,9 +91,14 @@ App.Controllers.Bodega.prototype = {
             this.numFact.parent().addClass("has-error");
         }
 
-        if(!type.isNumber(parseInt(cantidad))){
+
+        if(cantidad.trim() === ''){
             valido = false;
             this.agregarStock.siblings("span.help-block").text("Campo obligatorio");
+            this.agregarStock.parent().addClass("has-error");
+        }else if(!type.isNumber(parseInt(cantidad))){
+            valido = false;
+            this.agregarStock.siblings("span.help-block").text("Ingrese solo numeros");
             this.agregarStock.parent().addClass("has-error");
         }else if( parseInt(this.agregarStock.val()) <= 0 ){
             valido = false;
