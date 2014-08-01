@@ -1,5 +1,5 @@
 <div class="panel panel-default">
-    <table class="table center table-striped">
+    <table id="lista_productos" class="table center table-striped">
         <tr>
             <td>codigo</td>
             <td>Tipo</td>
@@ -8,14 +8,14 @@
         </tr>
         {% for producto in productos  %}
         <tr>
-            <td>{{ producto.codigo }}</td>
-            <td>{{ producto.tipo_producto.nombre }}</td>
-            <td>
-                <span id="stock_{{ producto.id }}">
+            <td data-columna="codigo">{{ producto.codigo }}</td>
+            <td data-columna="tipo_producto">{{ producto.tipo_producto.nombre }}</td>
+            <td data-columna="stock">
+                <span id="stock_{{ producto.id }}" class="{% if producto.stock < 10 %}text-danger{% endif %}">
                     {{ producto.stock }}
                 </span>
             </td>
-            <td>
+            <td data-columna="precio">
                 $ <span id="precio_{{ producto.id }}">
                     {{ producto.get_precio_producto }}
                 </span>
