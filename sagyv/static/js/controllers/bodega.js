@@ -1,11 +1,9 @@
 App.Controllers.Bodega = function(){
-    this.mensaje = $("#mensaje");
-    this.numFact = $("#factura_add");
-    this.agregarStock = $("#cantidad_add");
-    this.tituloModal = $("#titulo_modal");
-    this.precio = $("#precio_update");
-    this.cantidadActual = null;
-    this.id = null;
+    var tpl = $("#tpl_nuevo_producto").html();
+    this.btnAgregar = $("#btn_agregar");
+    this.btnGuardar = $("#btn_guardar_guia");
+    this.listaDespacho = $("#lista_despacho tbody");
+    this.renderProducto = Handlebars.compile(tpl);
 };
 
 App.Controllers.Bodega.prototype = {
@@ -22,148 +20,97 @@ App.Controllers.Bodega.prototype = {
         $("#btn_guia_despacho").on("click", function(evt){
             $("#modal_guia_despacho").modal("show");
         });
+
+        this.btnAgregar.on("click", function(evt){
+            _this.agregarProducto();
+        });
+
+        this.btnGuardar.on("click", function(evt){
+            _this.guardar();
+        });
+
+        this.listaDespacho.on("click","i[data-accion=eliminar]", function(evt){
+            evt.preventDefault();
+            $(this).closest("tr").remove();
+        });
     },
 
-    showModal: function(ventana, id, modo){
-        var modalAbrir = "";
+    agregarProducto: function(){
+        var html,
+            producto = $("#guia_producto"),
+            cantidad = $("#cantidad_producto");
 
-        this.id = id;
+        html = this.renderProducto({
+            id : producto.val(),
+            cantidad : cantidad.val(),
+            codigo : producto.find("option:selected").text().trim()
+        });
 
-        $(".has-error").removeClass("has-error");
-        $(".help-block").text("");
-
-        $("#" + modalAbrir).modal("toggle");
+        this.listaDespacho.append(html);
+        cantidad.val("");
     },
 
-    modalStock: function(modo){
-        var textoModal = null;
-        this.modo = modo;
-
-        if(this.modo === this.AGREGAR){
-            textoModal = "Compra de producto";
-            this.stockEntra = true;
-        }else if(this.modo === this.VENDER){
-            textoModal = "Venta de producto";
-            this.stockEntra = false;
-        }
-
-        this.tituloModal.text(textoModal);
-        this.cantidadActual = parseInt($("#stock_" + this.id).text());
-
-        $("#modal_add_id").val(this.id);
-        $("#f_add").get(0).reset();
-    },
-
-    modalPrecio: function(id){
-        $("#f_precio").get(0).reset();
-    },
-
-    actualizarStock: function(){
+    guardar: function(){
         var json,
-            cantidad = this.agregarStock.val(),
-            valido = true;
+            numero = $("#numero_despacho"),
+            movil = $("#movil_despacho"),
+            fecha = $("#fecha_despacho");
+
+        if(!this.esValidaGuia(numero, movil, fecha)){
+            return;
+        }
+
+        json = {
+            numero : numero.val(),
+            movil : movil.val(),
+            fecha : fecha.val(),
+            productos : []
+        };
+
+        this.listaDespacho.find("tr").each(function(){
+            var id = $(this).data("id"),
+                cantidad = $(this).data("cantidad");
+
+            json.productos.push({
+                id : id,
+                cantidad : cantidad
+            });
+        });
+
+        console.log(json);
+    },
+
+    esValidaGuia: function(numero, movil, fecha){
+        var valido = true;
 
         $(".has-error").removeClass("has-error");
         $(".help-block").text("");
 
-        if(this.numFact.val().trim() === ''){
+        if(numero.val().trim() === ""){
             valido = false;
-            this.numFact.siblings("span.help-block").text("Campo obligatorio");
-            this.numFact.parent().addClass("has-error");
-        }else if(!type.isNumber(parseInt(this.numFact.val()))){
-            valido = false;
-            this.numFact.siblings("span.help-block").text("Ingrese solo numeros");
-            this.numFact.parent().addClass("has-error");
-        }else if( parseInt(this.numFact.val()) <= 0 ){
-            valido = false;
-            this.numFact.siblings("span.help-block").text("El numero de factura no puede ser menor que 1");
-            this.numFact.parent().addClass("has-error");
+            numero.siblings("span").text("campo obligatorio");
+            numero.parent().addClass("has-error");
         }
 
-        if(cantidad.trim() === ''){
+        if(movil.val() === ""){
             valido = false;
-            this.agregarStock.siblings("span.help-block").text("Campo obligatorio");
-            this.agregarStock.parent().addClass("has-error");
-        }else if(!type.isNumber(parseInt(cantidad))){
-            valido = false;
-            this.agregarStock.siblings("span.help-block").text("Ingrese solo numeros");
-            this.agregarStock.parent().addClass("has-error");
-        }else if( parseInt(this.agregarStock.val()) <= 0 ){
-            valido = false;
-            this.agregarStock.siblings("span.help-block").text("El stock a ingresar no puede ser menor a 1");
-            this.agregarStock.parent().addClass("has-error");
-        }else if(parseInt(cantidad) > this.cantidadActual && this.modo === this.VENDER){
-            valido = false;
-            this.agregarStock.siblings("span.help-block").text("La cantidad a quitar es mayor que el monto actual");
-            this.agregarStock.parent().addClass("has-error");
+            movil.siblings("span").text("campo obligatorio");
+            movil.parent().addClass("has-error");
         }
 
-        if(!valido){
-            return;
-        }
-
-        json = {
-            id : this.id,
-            num_fact : this.numFact.val(),
-            agregar_stock : this.agregarStock.val(),
-            accion : this.stockEntra
-        };
-
-        $.post($("#f_add").attr("action"), json, this.procesarDataStock());
-    },
-
-    actualizarPrecio: function(){
-        var json, valido = true;
-
-        if(!type.isNumber(parseInt(this.precio.val()))){
+        if(fecha.val().trim() === ""){
             valido = false;
-            this.precio.siblings("span.help-block").text("Debe ingresar un numero");
-            this.precio.parent().addClass("has-error");
-        }else if(parseInt(this.precio.val()) < 1){
+            fecha.siblings("span").text("campo obligatorio");
+            fecha.parent().addClass("has-error");
+        }
+
+        if(!this.listaDespacho.find("tr").length){
             valido = false;
-            this.precio.siblings("span.help-block").text("Debe ingresar un precio mayor que 0");
-            this.precio.parent().addClass("has-error");
+            $("#mensajes_lista_productos span").
+                text("se debe agregar al menos 1 producto a la lista de productos").
+                parent().addClass("has-error");
         }
 
-        if(!valido){
-            return;
-        }
-
-        json = {
-            id : this.id,
-            precio : this.precio.val()
-        };
-
-        $.post($("#f_precio").attr("action"), json, this.procesarDataPrecio());
-    },
-
-    procesarDataStock: function(id){
-        var _this = this;
-
-        return function(data){
-            $("#stock_" + _this.id).text(data);
-            $("#modal_add").modal('toggle');
-
-            _this.agregarMensaje("Los cambios han sido guardados exitosamente");
-        };
-    },
-
-    procesarDataPrecio: function(){
-        var _this = this;
-
-        return function(data){
-            $("#precio_" + _this.id).text(_this.precio.val());
-            $("#modal_precio").modal("toggle");
-            _this.agregarMensaje("Precio actualizado");
-        };
-    },
-
-    agregarMensaje: function(mensaje){
-        var _this = this;
-        this.mensaje.addClass("alert-success").show().text(mensaje);
-
-        setTimeout(function(){
-            _this.mensaje.removeClass("alert-success").hide().text("");
-        },2500);
+        return valido;
     }
 };

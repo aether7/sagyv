@@ -9,10 +9,11 @@
             </div>
 
             <div class="modal-body">
-                <form id="f_guia_despacho" action="" method="post">
+                <form id="f_guia_despacho" action="" method="post" style="overflow:hidden">
                     <div class="form-group">
                         <label for="numero_despacho" class="control-label">Guía</label>
                         <input id="numero_despacho" class="form-control" type="text" value="" />
+                        <span class="help-block"></span>
                     </div>
 
                     <div class="form-group">
@@ -22,11 +23,13 @@
                             <option value="{{ vehiculo.id }}">{{ vehiculo.numero }} - {{ vehiculo.patente }}</option>
                             {% endfor %}
                         </select>
+                        <span class="help-block"></span>
                     </div>
 
                     <div class="form-group">
                         <label for="fecha_despacho" class="control-label">Fecha</label>
                         <input id="fecha_despacho" class="form-control" type="date" value="" />
+                        <span class="help-block"></span>
                     </div>
 
                     <div class="form-group">
@@ -46,11 +49,15 @@
                             <span class="help-block"></span>
                         </div>
 
-                        <div class="col-xs-2">
-                            <button class="btn btn-default">+</button>
+                        <div class="col-xs-2 btn-productos">
+                            <button id="btn_agregar" type="button" class="btn btn-default">+</button>
                         </div>
                     </div>
                 </form>
+
+                <div id="mensajes_lista_productos" class="form-group center">
+                    <span class="help-block"></span>
+                </div>
 
                 <table id="lista_despacho" class="table table-striped">
                     <thead>
@@ -67,7 +74,7 @@
 
             <div class="modal-footer">
                 <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <button class="btn btn-primary">Guardar</button>
+                <button id="btn_guardar_guia" class="btn btn-primary">Guardar</button>
             </div>
         </div>
     </div>

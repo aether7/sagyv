@@ -1,5 +1,24 @@
 {% extends "panel_control.html" %}
 {% load static %}
+{% block css %}
+<style>
+    i[data-accion="eliminar"]{
+        cursor: pointer;
+    }
+
+    .btn-productos{
+        height: 71px;
+        position: relative;
+    }
+
+    .btn-productos #btn_agregar{
+        bottom: 11px;
+        position: absolute;
+    }
+
+</style>
+{% endblock %}
+
 {% block content %}
 
 <div id="mensaje" class="center alert" style="display:none"></div>
@@ -28,8 +47,21 @@
 {% include "bodega/components/modal_guia_despacho.html" %}
 
 {% endblock %}
+
 {% block js %}
+<script src="{% static 'js/vendor/handlebars.min.js' %}"></script>
 <script src="{% static 'js/controllers/bodega.js' %}"></script>
+<script id="tpl_nuevo_producto" type="text/x-template">
+    {% verbatim %}
+    <tr data-id="{{ id }}" data-codigo="{{ codigo }}" data-cantidad="{{ cantidad }}">
+        <th>{{ codigo }}</th>
+        <th>{{ cantidad }}</th>
+        <th>
+            <i data-accion="eliminar" class="glyphicon glyphicon-remove"></i>
+        </th>
+    </tr>
+    {% endverbatim %}
+</script>
 <script>
     App.bodegaController = new App.Controllers.Bodega();
     App.bodegaController.init();
