@@ -31,57 +31,33 @@ class IndexView(TemplateView):
         return total
 
 
-class UpdateStockProductoView(View):
-
-    def post(self,req):
-        id_producto = req.POST.get("id")
-        num_factura = req.POST.get("num_fact")
-        stock_entra = req.POST.get("agregar_stock")
-        tipo_accion = req.POST.get("accion")
-
-        #accion = TipoCambioStock.objects.get(pk = tipo_accion)
-        producto = Producto.objects.get(pk = id_producto)
-        old_stock = producto.stock
-
-        hsp = HistorialStock()
-        hsp.producto = producto
-        hsp.cantidad = stock_entra
-        hsp.factura = num_factura
-        hsp.tipo_operacion = tipo_accion
-        hsp.save()
-
-        new_stock = int(old_stock)
-
-        if tipo_accion:
-            new_stock += int(stock_entra)
-        else:
-            new_stock -= int(stock_entra)
-
-        producto.stock = new_stock
-        producto.save()
-
-        return HttpResponse(new_stock)
-
 class CrearGuiaDespachoView(View):
 
     @transaction.commit_on_success
     def post(self,req):
-        #{{id_producto:xxx, cantidad:xxx}...}
         lista_producto = req.POST.get("lista_producto")
         self.numero_guia = req.POST.get("numero_guia")
         self.id_vehiculo = req.POST.get("id_vehiculo")
         self.num_factura = req.POST.get("num_factura")
-        #es probable que no se utilice.
         self.fecha_creacion = req.POST.get("fecha_creacion")
 
         lista = json.loads(lista_producto)
         guia = self.crear_guia_despacho()
 
         if(self.id_vehiculo != ""):
-            self.carga_datos_salida(guia,lista)
+            self.carga_datos_salida(guia, lista)
+        elif(self.factura != ""):
+            self.carga_datos_ingreso(guia, lista)
 
-        if(self.factura != ""):
-            self.carga_datos_ingreso(guia,lista)
+        data = {
+            "status" : "ok",
+            "guia" : {
+                "id" : guia.id,
+                "numero" : guia.numero
+            }
+        }
+
+        return HttpResponse(json.dumps(data), content_type="application/json")
 
     def crear_guia_despacho(self):
         guia_despacho = GuiaDespacho()
@@ -97,8 +73,6 @@ class CrearGuiaDespachoView(View):
             guia_despacho.vehiculo = movil
             guia_despacho.tipo_guia = False
             guia_despacho.save()
-        else:
-            guia_despacho = None
 
         return guia_despacho
 
@@ -112,9 +86,6 @@ class CrearGuiaDespachoView(View):
 
             self.crear_historico(producto, cantidad, guia.numero ,False)
 
-        return "OK"
-
-
     def carga_datos_salida(self, guia, lista):
 
         for item in lista:
@@ -124,8 +95,6 @@ class CrearGuiaDespachoView(View):
             producto.save()
 
             self.crear_historico(producto, cantidad, guia.numero ,True)
-
-        return "OK"
 
     def crear_historico(self, producto, cantidad, guia_numero,tipo_operacion):
         historico = HistorialStock()
@@ -138,5 +107,4 @@ class CrearGuiaDespachoView(View):
 
 
 index = IndexView.as_view()
-update_stock = UpdateStockProductoView.as_view()
 crea_guia = CrearGuiaDespachoView.as_view()
