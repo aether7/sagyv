@@ -4,6 +4,7 @@ App.Controllers.Bodega = function(){
     this.UP = 38;
     this.DOWN = 40;
     this.modo = null;
+    this.stockEntra = null;
     this.mensaje = $("#mensaje");
     this.numFact = $("#factura_add");
     this.agregarStock = $("#cantidad_add");
@@ -54,8 +55,10 @@ App.Controllers.Bodega.prototype = {
 
         if(this.modo === this.AGREGAR){
             textoModal = "Compra de producto";
+            this.stockEntra = true;
         }else if(this.modo === this.VENDER){
             textoModal = "Venta de producto";
+            this.stockEntra = false;
         }
 
         this.tituloModal.text(textoModal);
@@ -114,13 +117,11 @@ App.Controllers.Bodega.prototype = {
             return;
         }
 
-        $("#ajax_load").css("visibility","visible");
-
         json = {
             id : this.id,
             num_fact : this.numFact.val(),
             agregar_stock : this.agregarStock.val(),
-            accion : this.modo
+            accion : this.stockEntra
         };
 
         $.post($("#f_add").attr("action"), json, this.procesarDataStock());
@@ -155,7 +156,6 @@ App.Controllers.Bodega.prototype = {
         var _this = this;
 
         return function(data){
-            $("#ajax_load").css("visibility","hidden");
             $("#stock_" + _this.id).text(data);
             $("#modal_add").modal('toggle');
 
