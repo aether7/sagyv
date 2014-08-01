@@ -1,10 +1,4 @@
 App.Controllers.Bodega = function(){
-    this.AGREGAR = 1;
-    this.VENDER = 2;
-    this.UP = 38;
-    this.DOWN = 40;
-    this.modo = null;
-    this.stockEntra = null;
     this.mensaje = $("#mensaje");
     this.numFact = $("#factura_add");
     this.agregarStock = $("#cantidad_add");
@@ -34,14 +28,6 @@ App.Controllers.Bodega.prototype = {
         var modalAbrir = "";
 
         this.id = id;
-
-        if(ventana === "stock"){
-            this.modalStock(modo);
-            modalAbrir = "modal_add";
-        }else if(ventana === "precio"){
-            this.modalPrecio();
-            modalAbrir = "modal_precio";
-        }
 
         $(".has-error").removeClass("has-error");
         $(".help-block").text("");
@@ -79,7 +65,7 @@ App.Controllers.Bodega.prototype = {
 
         $(".has-error").removeClass("has-error");
         $(".help-block").text("");
-        
+
         if(this.numFact.val().trim() === ''){
             valido = false;
             this.numFact.siblings("span.help-block").text("Campo obligatorio");
@@ -93,7 +79,6 @@ App.Controllers.Bodega.prototype = {
             this.numFact.siblings("span.help-block").text("El numero de factura no puede ser menor que 1");
             this.numFact.parent().addClass("has-error");
         }
-
 
         if(cantidad.trim() === ''){
             valido = false;
