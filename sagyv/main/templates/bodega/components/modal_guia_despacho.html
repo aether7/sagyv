@@ -9,7 +9,7 @@
             </div>
 
             <div class="modal-body">
-                <form id="f_guia_despacho" action="" method="post" style="overflow:hidden">
+                <form id="f_guia_despacho" action="{% url 'bodega:crea_guia' %}" method="post" style="overflow:hidden">
                     <div class="form-group">
                         <label for="numero_despacho" class="control-label">Guía</label>
                         <input id="numero_despacho" class="form-control" type="text" value="" />

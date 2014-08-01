@@ -67,7 +67,7 @@ class CrearGuiaDespachoView(View):
     @transaction.commit_on_success
     def post(self,req):
         #{{id_producto:xxx, cantidad:xxx}...}
-        lista_producto = req.POST.get("lista_producto") 
+        lista_producto = req.POST.get("lista_producto")
         self.numero_guia = req.POST.get("numero_guia")
         self.id_vehiculo = req.POST.get("id_vehiculo")
         self.num_factura = req.POST.get("num_factura")
@@ -87,7 +87,7 @@ class CrearGuiaDespachoView(View):
         guia_despacho = GuiaDespacho()
         #guia_despacho.fecha = CAMPO AUTO
         guia_despacho.numero = self.numero_guia
-        
+
         if self.id_vehiculo == "":
             guia_despacho.factura = self.factura
             guia_despacho.tipo_guia = True
@@ -99,11 +99,11 @@ class CrearGuiaDespachoView(View):
             guia_despacho.save()
         else:
             guia_despacho = None
-        
+
         return guia_despacho
 
     def carga_datos_ingreso(self, guia, lista):
-        
+
         for item in lista:
             cantidad = int(item["cantidad"])
             producto = Producto.objects.get(pk = item["id_producto"])
@@ -116,7 +116,7 @@ class CrearGuiaDespachoView(View):
 
 
     def carga_datos_salida(self, guia, lista):
-        
+
         for item in lista:
             cantidad = int(item["cantidad"])
             producto = Producto.objects.get(pk = item["id_producto"])
@@ -139,3 +139,4 @@ class CrearGuiaDespachoView(View):
 
 index = IndexView.as_view()
 update_stock = UpdateStockProductoView.as_view()
+crea_guia = CrearGuiaDespachoView.as_view()

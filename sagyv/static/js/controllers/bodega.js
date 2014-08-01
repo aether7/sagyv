@@ -18,7 +18,8 @@ App.Controllers.Bodega.prototype = {
         });
 
         $("#btn_guia_despacho").on("click", function(evt){
-            $("#modal_guia_despacho").modal("show");
+            common.mostrarModal("guia_despacho");
+            _this.listaDespacho.empty();
         });
 
         this.btnAgregar.on("click", function(evt){
@@ -54,7 +55,8 @@ App.Controllers.Bodega.prototype = {
         var json,
             numero = $("#numero_despacho"),
             movil = $("#movil_despacho"),
-            fecha = $("#fecha_despacho");
+            fecha = $("#fecha_despacho"),
+            action = $("#f_guia_despacho").attr("action");
 
         if(!this.esValidaGuia(numero, movil, fecha)){
             return;
@@ -77,7 +79,12 @@ App.Controllers.Bodega.prototype = {
             });
         });
 
+        json.productos = JSON.stringify(json.productos);
         console.log(json);
+
+        $.post(action, json, function(data){
+            console.log(data);
+        });
     },
 
     esValidaGuia: function(numero, movil, fecha){
