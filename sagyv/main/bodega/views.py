@@ -42,13 +42,11 @@ class CrearGuiaDespachoView(View):
         self.numero_guia = req.POST.get("numero")
         self.id_vehiculo = req.POST.get("movil")
         self.factura = req.POST.get("num_factura")
-        #es probable que no se utilice.
         self.fecha_creacion = req.POST.get("fecha")
         lista_producto = req.POST.get("productos")
 
         lista = json.loads(lista_producto)
         guia = self.crear_guia_despacho()
-
 
         if(self.id_vehiculo != ""):
             self.carga_datos_salida(guia, lista)
@@ -71,11 +69,12 @@ class CrearGuiaDespachoView(View):
         guia_despacho.numero = self.numero_guia
 
         if self.id_vehiculo != "":
+            movil = Vehiculo.objects.get(pk = self.id_vehiculo)
             guia_despacho.factura = self.factura
             guia_despacho.tipo_guia = True
+            guia_despacho.vehiculo = movil
         elif self.factura != "":
             movil = Vehiculo.objects.get(pk = self.id_vehiculo)
-            guia_despacho.vehiculo = movil
             guia_despacho.tipo_guia = False
 
         guia_despacho.save()
@@ -95,7 +94,6 @@ class CrearGuiaDespachoView(View):
             }
 
             self.productosActualizados.append(this_prod)
-
             self.crear_historico(producto, cantidad, guia, False)
 
     def carga_datos_salida(self, guia, lista):
@@ -107,13 +105,16 @@ class CrearGuiaDespachoView(View):
             producto.save()
 
             this_prod = {
-                'id': producto.id,
+                'id' : producto.id,
                 'cantidad' : producto.stock
             }
 
-            self.productosActualizados.append(this_prod)
+            print "El vehiculo existe en la guia ?"
+            print guia.vehiculo
 
+            self.productosActualizados.append(this_prod)
             self.crear_historico(producto, cantidad, guia, True)
+            self.modificar_stock_vehiculo(guia.vehiculo, producto, cantidad)
 
     def crear_historico(self, producto, cantidad, guia, tipo_operacion):
         historico = HistorialStock()
@@ -122,6 +123,18 @@ class CrearGuiaDespachoView(View):
         historico.tipo_operacion = tipo_operacion
         historico.guia_despacho = guia
         historico.save()
+
+    def modificar_stock_vehiculo(self, vehiculo, producto, cantidad):
+
+        if not StockVehiculo.objects.filter(vehiculo = vehiculo, producto = producto).exists():
+            stock_vehiculo = StockVehiculo()
+            stock_vehiculo.vehiculo = vehiculo
+            stock_vehiculo.producto = producto
+        else:
+            stock_vehiculo = StockVehiculo.objects.get(vehiculo = vehiculo, producto = producto)
+
+        stock_vehiculo.cantidad = cantidad
+        stock_vehiculo.save()
 
 
 index = IndexView.as_view()
