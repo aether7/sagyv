@@ -19,11 +19,11 @@ def crear_nueva_situacion(cantidad, tipo_id, producto_id):
     return descuento_cliente.id
 
 
-class IndexView(TemplateView):
+class Index(TemplateView):
     template_name = "cliente/index.html"
 
-    def get_context_data(self, **kwargs):
-        context = super(IndexView, self).get_context_data(**kwargs)
+    def get_context_data(self, *args, **kwargs):
+        context = super(Index, self).get_context_data(*args, **kwargs)
 
         context["clientes"] = Cliente.objects.all()
         context["tipos_descuento"] = TipoDescuento.objects.all()
@@ -34,7 +34,7 @@ class IndexView(TemplateView):
         return context
 
 
-class ObtenerClienteView(View):
+class ObtenerCliente(View):
 
     def get(self, req, id_cliente):
         cliente = Cliente.objects.get(pk = id_cliente)
@@ -59,45 +59,17 @@ class CrearClienteView(View):
 
     @transaction.commit_on_success
     def post(self, req):
-        nombre = req.POST.get('nombre')
-        giro = req.POST.get('giro')
-        direccion = req.POST.get('direccion')
-        telefono = req.POST.get('telefono')
-        rut = req.POST.get('rut')
         situacion_comercial = req.POST.get('situacion_comercial')
-        credito = req.POST.get('credito')
-        dispensador = req.POST.get("dispensador")
-        obs = req.POST.get('obs')
+        rut = req.POST.get('rut')
 
-        rut = rut.replace('.', '');
-
-        if situacion_comercial == "otro":
-            cantidad = req.POST.get("cantidad")
-            tipo = req.POST.get("tipo")
-            producto_id = req.POST.get("producto")
-
-            situacion_comercial = crear_nueva_situacion(cantidad, tipo, producto_id)
+        self.rut = rut.replace('.', '')
 
         if not self.validar_cliente(rut):
             dato = { "status": "error", "status_message": "El cliente ya existe." }
             return HttpResponse(json.dumps(dato), content_type="application/json")
 
-        if situacion_comercial != '':
-            sc = DescuentoCliente.objects.get(pk = situacion_comercial)
-
-        cliente = Cliente()
-        cliente.nombre = nombre
-        cliente.giro = giro
-        cliente.direccion = direccion
-        cliente.telefono = telefono
-        cliente.rut = rut
-        cliente.situacion_comercial = sc
-        cliente.observacion = obs
-
-        cliente.credito = (credito != "false") and True or False
-        cliente.dispensador = (dispensador != "false") and True or False
-
-        cliente.save()
+        sc = self.obtener_situacion_comercial(situacion_comercial)
+        cliente = self.crear_cliente(sc)
 
         dato = {
             "status": "ok",
@@ -126,6 +98,45 @@ class CrearClienteView(View):
             existe = True
 
         return existe
+
+    def obtener_situacion_comercial(self, situacion_comercial):
+        if situacion_comercial == "otro":
+            cantidad = self.request.POST.get("cantidad")
+            tipo = self.request.POST.get("tipo")
+            producto_id = self.request.POST.get("producto")
+
+            situacion_comercial = crear_nueva_situacion(cantidad, tipo, producto_id)
+
+        #revisar por si acaso, mas adelante
+        if situacion_comercial != '':
+            sc = DescuentoCliente.objects.get(pk = situacion_comercial)
+
+        return sc
+
+    def crear_cliente(self, situacion_comercial):
+        nombre = self.request.POST.get('nombre')
+        giro = self.request.POST.get('giro')
+        direccion = self.request.POST.get('direccion')
+        telefono = self.request.POST.get('telefono')
+        credito = self.request.POST.get('credito')
+        dispensador = self.request.POST.get("dispensador")
+        obs = self.request.POST.get('obs')
+
+        cliente = Cliente()
+        cliente.nombre = nombre
+        cliente.giro = giro
+        cliente.direccion = direccion
+        cliente.telefono = telefono
+        cliente.rut = self.rut
+        cliente.situacion_comercial = situacion_comercial
+        cliente.observacion = obs
+
+        cliente.credito = (credito != "false") and True or False
+        cliente.dispensador = (dispensador != "false") and True or False
+
+        cliente.save()
+
+        return cliente
 
 
 class ModificarClienteView(View):
@@ -302,8 +313,8 @@ class BuscarClienteView(View):
         return HttpResponse(json.dumps(data), content_type="application/json")
 
 
-index = IndexView.as_view()
-obtener_cliente = ObtenerClienteView.as_view()
+index = Index.as_view()
+obtener_cliente = ObtenerCliente.as_view()
 crear_cliente = CrearClienteView.as_view()
 modificar_cliente = ModificarClienteView.as_view()
 eliminar_cliente = EliminarClienteView.as_view()
