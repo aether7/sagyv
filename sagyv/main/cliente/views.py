@@ -55,7 +55,7 @@ class ObtenerCliente(View):
         return HttpResponse(json.dumps(dato),content_type="application/json")
 
 
-class CrearClienteView(View):
+class CrearCliente(View):
 
     @transaction.commit_on_success
     def post(self, req):
@@ -188,7 +188,7 @@ class ModificarClienteView(View):
         return HttpResponse(json.dumps(dato), content_type="application/json")
 
 
-class EliminarClienteView(View):
+class EliminarCliente(View):
 
     @transaction.commit_on_success
     def post(self,req):
@@ -200,7 +200,7 @@ class EliminarClienteView(View):
         return HttpResponse(json.dumps(dato), content_type="application/json")
 
 
-class ObtenerSituacionComercialView(View):
+class ObtenerSituacionComercial(View):
 
     def get(self, req, id_situacion):
         sc = DescuentoCliente.objects.get(pk = id_situacion)
@@ -213,13 +213,35 @@ class ObtenerSituacionComercialView(View):
         return HttpResponse(json.dumps(dato),content_type="application/json")
 
 
-class CrearSituacionComercialView(View):
+class CrearSituacionComercial(View):
 
     @transaction.commit_on_success
     def post(self, req):
-        tipo = req.POST.get('tipo')
-        valor = req.POST.get('valor')
-        producto_id = req.POST.get("producto")
+        descuento_cliente = self.crear_nueva_situacion()
+
+        dato = {
+            "status" : "ok",
+            "id_situacion" : descuento_cliente.id,
+            "valor" : descuento_cliente.monto_descuento,
+            "valor_descripcion" : descuento_cliente.__unicode__(),
+            "tipo_descuento" : {
+                "id" : descuento_cliente.tipo_descuento.id,
+                "tipo" : descuento_cliente.tipo_descuento.tipo
+            },
+            "producto" : {
+                "id" : descuento_client.producto.id,
+                "nombre" : descuento_client.producto.nombre,
+                "codigo" : descuento_client.producto.codigo,
+                "nombre_tipo_producto" : descuento_client.producto.tipo_producto.nombre
+            }
+        }
+
+        return HttpResponse(json.dumps(dato),content_type="application/json")
+
+    def crear_nueva_situacion(self):
+        tipo = self.request.POST.get('tipo')
+        valor = self.request.POST.get('valor')
+        producto_id = self.request.POST.get("producto")
 
         td = TipoDescuento.objects.get(pk = tipo)
         producto = Producto.objects.get(pk = producto_id)
@@ -230,24 +252,7 @@ class CrearSituacionComercialView(View):
         descuento_cliente.producto = producto
         descuento_cliente.save()
 
-        dato = {
-            "status" : "ok",
-            "id_situacion" : descuento_cliente.id,
-            "valor" : descuento_cliente.monto_descuento,
-            "valor_descripcion" : descuento_cliente.__unicode__(),
-            "tipo_descuento" : {
-                "id" : td.id,
-                "tipo" : td.tipo
-            },
-            "producto" : {
-                "id" : producto.id,
-                "nombre" : producto.nombre,
-                "codigo" : producto.codigo,
-                "nombre_tipo_producto" : producto.tipo_producto.nombre
-            }
-        }
-
-        return HttpResponse(json.dumps(dato),content_type="application/json")
+        return descuento_cliente
 
 
 class ModificarSituacionComercialView(View):
@@ -292,7 +297,7 @@ class ModificarSituacionComercialView(View):
         return HttpResponse(json.dumps(dato),content_type="application/json")
 
 
-class BuscarClienteView(View):
+class BuscarCliente(View):
 
     def get(self, request):
         busqueda = request.GET.get("busqueda")
@@ -315,11 +320,11 @@ class BuscarClienteView(View):
 
 index = Index.as_view()
 obtener_cliente = ObtenerCliente.as_view()
-crear_cliente = CrearClienteView.as_view()
+crear_cliente = CrearCliente.as_view()
 modificar_cliente = ModificarClienteView.as_view()
-eliminar_cliente = EliminarClienteView.as_view()
-buscar_cliente = BuscarClienteView.as_view()
+eliminar_cliente = EliminarCliente.as_view()
+buscar_cliente = BuscarCliente.as_view()
 
-obtener_situacion_comercial = ObtenerSituacionComercialView.as_view()
-crear_situacion_comercial = CrearSituacionComercialView.as_view()
+obtener_situacion_comercial = ObtenerSituacionComercial.as_view()
+crear_situacion_comercial = CrearSituacionComercial.as_view()
 modificar_situacion_comercial = ModificarSituacionComercialView.as_view()
