@@ -11,7 +11,7 @@
             <td data-columna="codigo">{{ producto.codigo }}</td>
             <td data-columna="tipo_producto">{{ producto.tipo_producto.nombre }}</td>
             <td data-columna="stock">
-                <span id="stock_{{ producto.id }}" class="{% if producto.stock < 10 %}text-danger{% endif %}">
+                <span id="stock_{{ producto.id }}" class="{{ producto.get_clase_nivel_alerta }}">
                     {{ producto.stock }}
                 </span>
             </td>

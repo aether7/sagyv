@@ -41,9 +41,10 @@
     {% include "vehiculos/components/tpl_vehiculo_item.html" %}
 </script>
 <script>
+    App.urls.set("vehiculos:obtener","{% url 'vehiculos:obtener' 0 %}");
+    App.urls.set("vehiculos:obtener_vehiculos","{% url 'vehiculos:obtener_vehiculos' %}");
+
     App.vehiculoController = new App.Controllers.Vehiculo();
-    App.vehiculoController.urlVehiculo = "{% url 'vehiculos:obtener' 0 %}";
-    App.vehiculoController.urlListaVehiculo = "{% url 'vehiculos:obtener_vehiculos' %}"
 
     {% for vehiculo in vehiculos %}
     App.vehiculoController.agregarVehiculo({{ vehiculo.numero }}, '{{ vehiculo.patente }}');

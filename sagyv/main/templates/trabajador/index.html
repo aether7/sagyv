@@ -50,9 +50,10 @@
     {% include "trabajador/components/tpl_nuevo_trabajador.html" %}
 </script>
 <script>
+    App.urls.set("trabajador:obtener","{% url 'trabajador:obtener' %}");
+    App.urls.set("trabajador:eliminar","{% url 'trabajador:eliminar' %}");
+
     App.trabajadorController = new App.Controllers.Trabajador();
-    App.trabajadorController.urlObtenerTrabajador = "{% url 'trabajador:obtener' %}";
-    App.trabajadorController.urlEliminarTrabajador = "{% url 'trabajador:eliminar' %}";
     App.trabajadorController.init();
 </script>
 {% endblock %}

@@ -4,7 +4,6 @@ App.Controllers.SituacionComercial = function(){
     this.btnUpdateSituacion = $("#btn_update_situacion");
     this.situacionComercialList = [];
     this.idSituacion = null;
-    this.situacionUrl = null;
 };
 
 App.Controllers.SituacionComercial.prototype = {
@@ -126,7 +125,7 @@ App.Controllers.SituacionComercial.prototype = {
     },
 
     cargarSituacion: function(id){
-        var url = this.situacionUrl.replace("0", id);
+        var url = App.urls.get("cliente:obtener_situacion_comercial").replace("0", id);
         this.idSituacion = id;
 
         $.get(url, function(data){

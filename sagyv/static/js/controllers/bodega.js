@@ -34,6 +34,17 @@ App.Controllers.Bodega.prototype = {
             evt.preventDefault();
             $(this).closest("tr").remove();
         });
+
+        $("#lista_productos_transito").on("click","a[data-accion=ver_detalle]", function(evt){
+            evt.preventDefault();
+
+            var id = $(this).data("productoId"),
+                url = App.urls.get("bodega:obtener_vehiculos_por_producto");
+
+            $.get(url, { producto_id : id }, function(data){
+                console.log(data);
+            })
+        });
     },
 
     agregarProducto: function(){

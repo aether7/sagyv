@@ -3,8 +3,6 @@ App.Controllers.Trabajador = function(){
     this.fEdit = $("#f_edit");
     this.btnNuevo = $("#btn_nuevo_trabajador");
     this.listaTrabajadores = $("#lista_trabajadores tbody");
-    this.urlObtenerTrabajador = null;
-    this.urlEliminarTrabajador = null;
     this.id = null;
 };
 
@@ -40,7 +38,9 @@ App.Controllers.Trabajador.prototype = {
     },
 
     verTrabajador: function(id){
-        $.get(this.urlObtenerTrabajador,{ id : id }, function(data){
+        var url = App.urls.get("trabajador:obtener");
+
+        $.get(url, { id : id }, function(data){
             $("#nombre_ver").text(data.nombre);
             $("#apellido_ver").text(data.apellido);
             $("#rut_ver").text(data.rut);
@@ -60,16 +60,19 @@ App.Controllers.Trabajador.prototype = {
             return;
         }
 
-        var _this = this;
+        var _this = this,
+            url = App.urls.get("trabajador:eliminar");
 
-        $.post(this.urlEliminarTrabajador, { id: id }, function(data){
+        $.post(url, { id: id }, function(data){
             _this.listaTrabajadores.find("tr[data-id={0}]".format(id)).remove();
             common.agregarMensaje("El trabajador ha sido eliminado exitosamente");
         });
     },
 
     editarTrabajador: function(id){
-        $.get(this.urlObtenerTrabajador,{ id : id }, function(data){
+        var url = App.urls.get("trabajador:obtener");
+
+        $.get(url, { id : id }, function(data){
             $("#nombre_edit").val(data.nombre);
             $("#apellido_edit").val(data.apellido);
             $("#rut_edit").val(data.rut);
@@ -164,7 +167,7 @@ App.Controllers.Trabajador.prototype = {
         var valido = true;
         $(".has-error").removeClass("has-error");
         $(".help-block").text("");
-        
+
         if(nombre.val().trim() === ""){
             valido = false;
             nombre.siblings("span").text("campo obligatorio");

@@ -1,15 +1,20 @@
-<div class="panel panel-default">
+<div id="lista_productos_transito" class="panel panel-default">
     <table class="table center table-striped">
         <tr>
             <td>Codigo</td>
             <td>Tipo</td>
             <td>Stock</td>
+            <td>Vehiculos</td>
         </tr>
         {% for item in productos_transito %}
         <tr>
             <td>{{ item.codigo }}</td>
             <td>{{ item.nombre }}</td>
             <td>{{ item.cantidad }}</td>
+            <td>
+                <a href="#" data-accion="ver_detalle"
+                    data-producto-id="{{ item.producto_id }}">Ver detalle :P</a>
+            </td>
         </tr>
         {% endfor %}
     </table>

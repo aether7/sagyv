@@ -3,9 +3,33 @@ App.Controllers = {};
 App.Models = {};
 App.cookies = {};
 
+//se crea funcionalidad para urls
+App.urls = (function(){
+    function URLError(mensaje){
+        this.name = "URL";
+        this.message = mensaje;
+    }
 
-// funciones varias
+    var urls = {};
 
+    return {
+        set:function(urlLabel, urlLocation, urlParams){
+            urls[urlLabel] = urlLocation;
+        },
+
+        get: function(urlLabel){
+            var mje = "La etiqueta {0} no se encuentra, estas son las disponibles: {1}";
+
+            if(urlLabel in urls){
+                return urls[urlLabel];
+            }else{
+                throw new URLError(mje.format(urlLabel, Object.keys(urls).join(",")));
+            }
+        }
+    }
+})();
+
+// procesamos las cookies que hayan en el sistema
 (function(){
     document.cookie.split(";").forEach(function(token){
         var tokens = token.split("=");
@@ -23,6 +47,7 @@ App.cookies = {};
     });
 })();
 
+//se agrega funcionalidad type para ver tipos de variables
 (function(context){
 "use strict";
 
@@ -63,6 +88,8 @@ for(var i = 0; i < paramTypes.length; i++){
 context.type = type;
 })(window);
 
+
+//se agregan metodos nuevos a string
 (function(){
 String.prototype.trim = function(){
     return this.replace(/^\s+|\s+$/gi, "");

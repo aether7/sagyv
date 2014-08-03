@@ -55,7 +55,7 @@ class Vehiculo(models.Model):
     def get_nombre_ultimo_chofer(self):
         trabajador_vehiculo = TrabajadorVehiculo.objects.filter(vehiculo_id = self.id, activo = True)
 
-        if len(trabajador_vehiculo) == 0:
+        if not trabajador_vehiculo.exists():
             return "No anexado"
         else:
             return trabajador_vehiculo[0].trabajador.get_nombre_completo()
@@ -63,7 +63,7 @@ class Vehiculo(models.Model):
     def get_ultimo_chofer(self):
         trabajador_vehiculo = TrabajadorVehiculo.objects.filter(vehiculo_id = self.id, activo = True)
 
-        if len(trabajador_vehiculo) == 0:
+        if not trabajador_vehiculo.exists():
             return None
         else:
             return trabajador_vehiculo[0].trabajador
@@ -71,7 +71,7 @@ class Vehiculo(models.Model):
     def get_ultimo_chofer_id(self):
         trabajador_vehiculo = TrabajadorVehiculo.objects.filter(vehiculo_id = self.id, activo = True)
 
-        if len(trabajador_vehiculo) == 0:
+        if not trabajador_vehiculo.exists():
             return 0
         else:
             return trabajador_vehiculo[0].trabajador.id
@@ -271,6 +271,18 @@ class Producto(models.Model):
 
     def get_nombre_tipo(self):
         return self.nombre + " " + self.tipo_producto.nombre
+
+    def get_clase_nivel_alerta(self):
+        clase_alerta = "text-"
+
+        if self.stock < 10:
+            clase_alerta += "danger"
+        elif self.stock >= 10 and self.stock < 20:
+            clase_alerta += "warning"
+        elif self.stock >= 20:
+            clase_alerta += "success"
+
+        return clase_alerta
 
 
 class TipoCambioStock(models.Model):
@@ -493,6 +505,10 @@ class StockVehiculo(models.Model):
     cantidad = models.IntegerField(null=True)
 
     objects = StockManager()
+
+    def get_productos_vehiculos(self):
+        stocks_vehiculos = StockVehiculo.objects.filter(producto = self.producto, vehiculo = self.vehiculo)
+        return stock_vehiculo
 
     def __unicode__(self):
         return str(self.vehiculo.patente) + " -> (cod " + str(self.producto.codigo) + ": " + str(self.cantidad) + ")"

@@ -26,11 +26,11 @@ class IndexView(TemplateView):
         return productos
 
     def get_productos_transito(self):
-        en_trancito = StockVehiculo.objects.get_stock()
+        en_trancito = StockVehiculo.objects.get_stock_transito()
         return en_trancito
 
     def get_stock_total(self):
-        total = StockVehiculo.objects.get_stock_total()
+        total = StockVehiculo.objects.get_stock_consolidado()
         return total
 
 
@@ -71,11 +71,11 @@ class CrearGuiaDespachoView(View):
         if self.id_vehiculo != "":
             movil = Vehiculo.objects.get(pk = self.id_vehiculo)
             guia_despacho.factura = self.factura
-            guia_despacho.tipo_guia = True
+            guia_despacho.tipo_guia = False
             guia_despacho.vehiculo = movil
         elif self.factura != "":
             movil = Vehiculo.objects.get(pk = self.id_vehiculo)
-            guia_despacho.tipo_guia = False
+            guia_despacho.tipo_guia = True
 
         guia_despacho.save()
 
@@ -94,7 +94,7 @@ class CrearGuiaDespachoView(View):
             }
 
             self.productosActualizados.append(this_prod)
-            self.crear_historico(producto, cantidad, guia, False)
+            self.crear_historico(producto, cantidad, guia, True)
 
     def carga_datos_salida(self, guia, lista):
 
@@ -109,11 +109,8 @@ class CrearGuiaDespachoView(View):
                 'cantidad' : producto.stock
             }
 
-            print "El vehiculo existe en la guia ?"
-            print guia.vehiculo
-
             self.productosActualizados.append(this_prod)
-            self.crear_historico(producto, cantidad, guia, True)
+            self.crear_historico(producto, cantidad, guia, False)
             self.modificar_stock_vehiculo(guia.vehiculo, producto, cantidad)
 
     def crear_historico(self, producto, cantidad, guia, tipo_operacion):
@@ -137,5 +134,27 @@ class CrearGuiaDespachoView(View):
         stock_vehiculo.save()
 
 
+class ObtenerVehiculosPorProductoView(View):
+
+    def get(self, req):
+        producto_id = int(req.GET.get("producto_id"))
+        stocks_vehiculos = StockVehiculo.objects.filter(producto_id = producto_id)
+
+        resultados = []
+
+        for stock_vehiculo in stocks_vehiculos:
+            resultados.append({
+                "cantidad" : stock_vehiculo.cantidad,
+                "vehiculo" : {
+                    "id" : stock_vehiculo.vehiculo.id,
+                    "patente" : stock_vehiculo.vehiculo.patente,
+                    "numero" : stock_vehiculo.vehiculo.numero
+                }
+            })
+
+        return HttpResponse(json.dumps(resultados), content_type="application/json")
+
+
 index = IndexView.as_view()
 crea_guia = CrearGuiaDespachoView.as_view()
+obtener_vehiculos_por_producto = ObtenerVehiculosPorProductoView.as_view()

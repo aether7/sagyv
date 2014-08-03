@@ -4,8 +4,6 @@ App.Controllers.Cliente = function(){
     this.btnGuardarUpdate = $("#btn_guardar_update");
     this.listaClientes = $("#tabla_clientes tbody");
     this.rutList = [];
-    this.clienteUrl = null;
-    this.eliminarUrl = null;
     this.idCliente = null;
 };
 
@@ -96,9 +94,10 @@ App.Controllers.Cliente.prototype = {
     },
 
     cargarCliente: function(id){
+        var url = App.urls.get("cliente:obtener").replace("0", id);
         this.idCliente = id;
 
-        $.get(this.clienteUrl.replace("0", id),function(data){
+        $.get(url, function(data){
             $("#giro_update").val(data.giro);
             $("#nombre_update").val(data.nombre);
             $("#direccion_update").val(data.direccion);
@@ -110,6 +109,7 @@ App.Controllers.Cliente.prototype = {
             if(data.credito){
                 $("#credito_update").get(0).checked = true;
             }
+
             if(data.dispensador){
                 $("#dispensador_update").get(0).checked = true;
             }
@@ -117,14 +117,16 @@ App.Controllers.Cliente.prototype = {
     },
 
     eliminarCliente: function(id){
-        var _this = this;
+        var _this = this,
+            url = App.urls.get("cliente:eliminar");
+
         this.id = id;
 
         if(!confirm("Esta acción eliminará al cliente, ¿ desea continuar ?")){
             return;
         }
 
-        $.post(this.eliminarUrl, { id_cliente : id }, function(data){
+        $.post(url, { id_cliente : id }, function(data){
             var rut = $("#tabla_clientes tbody tr[data-id={0}] td[data-columna=rut]".format(id));
 
             if(_.indexOf(_this.rutList, rut) !== -1){

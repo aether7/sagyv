@@ -2,8 +2,6 @@ App.Controllers.Vehiculo = function(){
     this.btnNuevoVehiculo = $("#btn_nuevo_vehiculo");
     this.btnGuardarNuevoVehiculo = $("#btn_guardar_nuevo_vehiculo");
     this.btnGuardarEdicionVehiculo = $("#btn_editar_vehiculo");
-    this.urlVehiculo = null;
-    this.urlListaVehiculo = null;
     this.vehiculos = [];
     this.id = null;
     this.idVehiculo = null
@@ -55,7 +53,7 @@ App.Controllers.Vehiculo.prototype = {
     },
 
     anexar: function(){
-        var url = this.urlVehiculo.replace("0", this.id);
+        var url = App.urls.get("vehiculos:obtener").replace("0", this.id);
 
         $.get(url, function(data){
             $("#anexar_vehiculo").val(data.numero).data("id", data.id);
@@ -201,7 +199,7 @@ App.Controllers.Vehiculo.prototype = {
         if(json.estado_sec == 0){
             vehiculo.estado_sec = false;
         }
-        
+
         if(json.estado_pago == 0){
             vehiculo.estado_pago = false;
         }
@@ -211,7 +209,7 @@ App.Controllers.Vehiculo.prototype = {
     },
 
     editar: function(id_vehiculo){
-        var url = this.urlVehiculo.replace("0", id_vehiculo);
+        var url = App.urls.get("vehiculos:obtener").replace("0", id_vehiculo);
         this.idVehiculo = id_vehiculo;
 
         $.get(url, function(data){
@@ -262,7 +260,9 @@ App.Controllers.Vehiculo.prototype = {
         };
 
         $.post($("#f_editar").attr("action"), json, function(data){
-            $.get(_this.urlListaVehiculo, function(listaVehiculos){
+            var url = App.urls.get("vehiculos:obtener_vehiculos");
+
+            $.get(url, function(listaVehiculos){
                 _this.procesarDatosVehiculos(listaVehiculos);
                 _this.enviarMensaje("El vehiculo {0} se ha editado exitosamente".format(numero.val()));
                 $("#modal_editar").modal("hide");
@@ -278,7 +278,7 @@ App.Controllers.Vehiculo.prototype = {
 
         listaVehiculos.forEach(function(v){
             fechaTmp = v.fecha_revision_tecnica.split('-');
-            
+
             if(fechaTmp[1] < 10)
                 fechaTmp[1] = fechaTmp[1].replace('0','');
 

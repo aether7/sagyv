@@ -5,7 +5,6 @@ class Stock(object):
 
     def __init__(self):
         self.codigo = 0
-        self.peso = 0
         self.producto_id = 0
         self.nombre = ''
         self.cantidad = 0
@@ -13,12 +12,11 @@ class Stock(object):
 
 class StockManager(models.Manager):
 
-    def get_stock(self):
+    def get_stock_transito(self):
         consulta_sql = """
-            SELECT  mp.codigo,
-                    mp.peso,
-                    msv.producto_id,
-                    mtp.nombre,
+            SELECT  mp.codigo as codigo,
+                    msv.producto_id as producto_id,
+                    mtp.nombre as nombre,
                     SUM(msv.cantidad) as cantidad
             FROM main_stockvehiculo msv
             INNER JOIN main_producto mp ON(msv.producto_id = mp.id)
@@ -33,15 +31,15 @@ class StockManager(models.Manager):
         for row in query.fetchall():
             p = Stock()
             p.codigo = row[0]
-            p.peso = row[1]
-            p.producto_id = row[2]
-            p.nombre = row[3]
-            p.cantidad = row[4]
+            p.producto_id = row[1]
+            p.nombre = row[2]
+            p.cantidad = row[3]
+
             resultado.append(p)
 
         return resultado
 
-    def get_stock_total(self):
+    def get_stock_consolidado(self):
         consulta_sql = """
             SELECT  mp.codigo,
                     mp.peso,
