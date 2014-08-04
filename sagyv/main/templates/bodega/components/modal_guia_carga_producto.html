@@ -30,23 +30,23 @@
 
                     <div class="form-group">
                         <div class="col-xs-6">
-                            <label for="guia_producto">Producto</label>
-                            <select id="guia_producto" class="form-control">
+                            <label for="guia_carga_producto">Producto</label>
+                            <select id="guia_carga_producto" class="form-control">
                                 {% for producto in productos_guia %}
-                                <option value="{{producto.id}}">{{producto.codigo}}</option>
+                                <option value="{{producto.id}}" data-precio="{{producto.get_precio_producto}}">{{producto.codigo}}</option>
                                 {% endfor %}
                             </select>
                             <span class="help-block"></span>
                         </div>
                         
                         <div class="col-xs-4">
-                            <label for="cantidad_producto" class="control-label">cantidad</label>
-                            <input id="cantidad_producto" class="form-control" type="text" value="" />
+                            <label for="cantidad_carga_producto" class="control-label">cantidad</label>
+                            <input id="cantidad_carga_producto" class="form-control" type="text" value="" />
                             <span class="help-block"></span>
                         </div>
 
                         <div class="col-xs-2 btn-productos">
-                            <button id="btn_agregar" type="button" class="btn btn-default" >+</button>
+                            <button id="btn_agregar_carga" type="button" class="btn btn-default" >+</button>
                         </div>
                     </div>
                 </form>
@@ -55,7 +55,7 @@
                     <span class="help-block"></span>
                 </div>
 
-                <table id="lista_despacho" class="table table-striped">
+                <table id="lista_carga" class="table table-striped">
                     <thead>
                         <tr>
                             <th>Código Producto</th>
@@ -71,7 +71,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <button id="btn_guardar_guia" class="btn btn-primary">Guardar</button>
+                <button id="btn_guardar_carga_producto" class="btn btn-primary">Guardar</button>
             </div>
         </div>
     </div>

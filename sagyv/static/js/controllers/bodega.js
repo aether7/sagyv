@@ -1,8 +1,12 @@
 App.Controllers.Bodega = function(){
     this.btnAgregar = $("#btn_agregar");
+    this.btnAgregarCarga = $("#btn_agregar_carga");
     this.btnGuardar = $("#btn_guardar_guia");
+    this.btnGuardarCarga = $("#btn_guardar_carga_producto");
     this.listaDespacho = $("#lista_despacho tbody");
+    this.listaCargaDespacho = $("#lista_carga tbody");
     this.renderProducto = Handlebars.compile($("#tpl_nuevo_producto").html());
+    this.renderCargaProducto = Handlebars.compile($("#tpl_carga_producto").html());
     this.renderVerDetalleProducto = Handlebars.compile($("#tpl_ver_detalle").html());
 };
 
@@ -31,8 +35,16 @@ App.Controllers.Bodega.prototype = {
             _this.agregarProducto();
         });
 
+        this.btnAgregarCarga.on("click", function(evt){
+            _this.agregarCargaProducto();
+        });
+
         this.btnGuardar.on("click", function(evt){
             _this.guardar();
+        });
+
+        this.btnGuardarCarga.on("click", function(evt){
+            _this.guardarCargaProducto();
         });
 
         this.listaDespacho.on("click","i[data-accion=eliminar]", function(evt){
@@ -159,6 +171,95 @@ App.Controllers.Bodega.prototype = {
             $("#mensajes_lista_productos span").
                 text("se debe agregar al menos 1 producto a la lista de productos").
                 parent().addClass("has-error");
+        }
+
+        return valido;
+    },
+
+    guardarCargaProducto: function(){
+        var json,
+            factura = $("#factura"),
+            fecha = $("#fecha_ingreso"),
+            precio = $("#valor_total")
+            action = $("#f_carga_producto").attr("action");
+
+        if(!this.esValidaCargaProducto(factura, fecha, precio)){
+            return;
+        }
+    },
+
+    agregarCargaProducto: function(){
+        var html,
+            producto = $("#guia_carga_producto"),
+            cantidad = $("#cantidad_carga_producto"),
+            precio = producto.find("option:selected").data("precio"),
+            codigo = producto.find("option:selected").text().trim();
+
+            alert(precio);
+
+        if(this.listaCargaDespacho.find("tr[data-id={0}]".format(producto.val())).length){
+            alert("EL producto {0} ya fue ingresado, revise nuevamente".format(codigo));
+            return;
+        }
+
+        html = this.renderProducto({
+            id : producto.val(),
+            cantidad : cantidad.val(),
+            codigo : codigo,
+            precio : producto.val()*precio
+        });
+
+        this.listaCargaDespacho.append(html);
+        cantidad.val("");
+    },
+
+    procesarCarga: function(data){
+        data.productos.forEach(function(producto){
+            var stock = $("#stock_{0}".format(producto.id));
+
+            stock.text(producto.cantidad);
+
+            if(producto.cantidad < 10){
+                stock.addClass("text-danger");
+            }else{
+                stock.removeClass("text-danger");
+            }
+        });
+
+        $("#modal_guia_despacho").modal("hide");
+        common.agregarMensaje("Se ha creado la nueva guía exitosamente");
+    },
+
+    esValidaCargaProducto: function(factura, fecha, precio){
+        var valido = true;
+
+        $(".has-error").removeClass("has-error");
+        $(".help-block").text("");
+
+        if(factura.val().trim() === ""){
+            valido = false;
+            factura.siblings("span").text("campo obligatorio");
+            factura.parent().addClass("has-error");
+        }else if(isNaN(factura.val().trim())){
+            valido = false;
+            factura.siblings("span").text("deben ser solo numeros");
+            factura.parent().addClass("has-error");
+        }
+
+        if(fecha.val().trim() === ""){
+            valido = false;
+            fecha.siblings("span").text("campo obligatorio");
+            fecha.parent().addClass("has-error");
+        }
+
+        if(precio.val().trim() === ""){
+            valido = false;
+            precio.siblings("span").text("campo obligatorio");
+            precio.parent().addClass("has-error");
+        }else if(isNaN(precio.val())){
+            valido = false;
+            factura.siblings("span").text("deben ser solo numeros");
+            factura.parent().addClass("has-error");
         }
 
         return valido;
