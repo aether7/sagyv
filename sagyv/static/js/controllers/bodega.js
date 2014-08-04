@@ -1,9 +1,9 @@
 App.Controllers.Bodega = function(){
-    var tpl = $("#tpl_nuevo_producto").html();
     this.btnAgregar = $("#btn_agregar");
     this.btnGuardar = $("#btn_guardar_guia");
     this.listaDespacho = $("#lista_despacho tbody");
-    this.renderProducto = Handlebars.compile(tpl);
+    this.renderProducto = Handlebars.compile($("#tpl_nuevo_producto").html());
+    this.renderVerDetalleProducto = Handlebars.compile($("#tpl_ver_detalle").html());
 };
 
 App.Controllers.Bodega.prototype = {
@@ -39,11 +39,19 @@ App.Controllers.Bodega.prototype = {
             evt.preventDefault();
 
             var id = $(this).data("productoId"),
-                url = App.urls.get("bodega:obtener_vehiculos_por_producto");
+                url = App.urls.get("bodega:obtener_vehiculos_por_producto"),
+                modalBody = $("#modal_ver_detalle .modal-body");
+
+            modalBody.empty();
 
             $.get(url, { producto_id : id }, function(data){
-                console.log(data);
-            })
+                var html,
+                    dato = { resultados : data };
+
+                html = _this.renderVerDetalleProducto(dato);
+                modalBody.html(html);
+                common.mostrarModal("ver_detalle");
+            });
         });
     },
 

@@ -144,11 +144,14 @@ class ObtenerVehiculosPorProductoView(View):
 
         for stock_vehiculo in stocks_vehiculos:
             resultados.append({
-                "cantidad" : stock_vehiculo.cantidad,
                 "vehiculo" : {
                     "id" : stock_vehiculo.vehiculo.id,
                     "patente" : stock_vehiculo.vehiculo.patente,
                     "numero" : stock_vehiculo.vehiculo.numero
+                },
+                "producto" : {
+                    "cantidad" : stock_vehiculo.cantidad,
+                    "codigo" : stock_vehiculo.producto.codigo
                 }
             })
 
