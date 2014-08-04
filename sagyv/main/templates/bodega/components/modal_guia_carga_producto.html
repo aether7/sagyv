@@ -1,0 +1,78 @@
+<div id="modal_carga_producto" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button data-dismiss="modal" class="close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Carga de productos</h4>
+            </div>
+            <div class="modal-body">
+                <form id="f_carga_producto" action="" method="post" style="overflow:hidden">
+
+                    <div class="form-group">
+                        <label for="factura" class="control-label">Factura</label>
+                        <input id="factura" class="form-control" type="text" value="" />
+                        <span class="help-block"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fecha_ingreso" class="control-label">Fecha</label>
+                        <input id="fecha_ingreso" class="form-control" type="date" value="" />
+                        <span class="help-block"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="valor_total" class="control-label">Valor total</label>
+                        <input id="valor_total" class="form-control" type="text" value="" />
+                        <span class="help-block"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                            <label for="guia_producto">Producto</label>
+                            <select id="guia_producto" class="form-control">
+                                {% for producto in productos_guia %}
+                                <option value="{{producto.id}}">{{producto.codigo}}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="help-block"></span>
+                        </div>
+                        
+                        <div class="col-xs-4">
+                            <label for="cantidad_producto" class="control-label">cantidad</label>
+                            <input id="cantidad_producto" class="form-control" type="text" value="" />
+                            <span class="help-block"></span>
+                        </div>
+
+                        <div class="col-xs-2 btn-productos">
+                            <button id="btn_agregar" type="button" class="btn btn-default" >+</button>
+                        </div>
+                    </div>
+                </form>
+
+                <div id="mensajes_lista_productos" class="form-group center">
+                    <span class="help-block"></span>
+                </div>
+
+                <table id="lista_despacho" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Código Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button id="btn_guardar_guia" class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>

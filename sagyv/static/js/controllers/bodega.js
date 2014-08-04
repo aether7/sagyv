@@ -22,6 +22,11 @@ App.Controllers.Bodega.prototype = {
             _this.listaDespacho.empty();
         });
 
+        $("#btn_guia_cargar_producto").on("click", function(evt){
+            common.mostrarModal("carga_producto");
+            _this.listaDespacho.empty();
+        });
+
         this.btnAgregar.on("click", function(evt){
             _this.agregarProducto();
         });
