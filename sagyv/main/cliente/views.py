@@ -331,7 +331,7 @@ class BuscarCliente(View):
 index = Index.as_view()
 obtener_cliente = ObtenerCliente.as_view()
 crear_cliente = CrearCliente.as_view()
-modificar_cliente = ModificarClienteView.as_view()
+modificar_cliente = ModificarCliente.as_view()
 eliminar_cliente = EliminarCliente.as_view()
 buscar_cliente = BuscarCliente.as_view()
 
