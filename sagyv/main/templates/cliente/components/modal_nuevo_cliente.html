@@ -79,7 +79,7 @@
                         <div class="col-xs-2">
                             <select name="selc_producto_add" id="sel_producto_add" class="form-control">
                                 {% for producto in productos %}
-                                <option value="{{ producto.id }}">{{ producto.nombre }}</option>
+                                <option value="{{ producto.id }}">{{ producto.codigo }} - {{ producto.nombre }}</option>
                                 {% endfor %}
                             </select>
                         </div>

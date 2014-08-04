@@ -4,7 +4,7 @@ App.Controllers.Vehiculo = function(){
     this.btnGuardarEdicionVehiculo = $("#btn_editar_vehiculo");
     this.vehiculos = [];
     this.id = null;
-    this.idVehiculo = null
+    this.idVehiculo = null;
 };
 
 App.Controllers.Vehiculo.prototype = {
