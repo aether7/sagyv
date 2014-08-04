@@ -239,10 +239,10 @@ class CrearSituacionComercial(View):
                 "tipo" : descuento_cliente.tipo_descuento.tipo
             },
             "producto" : {
-                "id" : descuento_client.producto.id,
-                "nombre" : descuento_client.producto.nombre,
-                "codigo" : descuento_client.producto.codigo,
-                "nombre_tipo_producto" : descuento_client.producto.tipo_producto.nombre
+                "id" : descuento_cliente.producto.id,
+                "nombre" : descuento_cliente.producto.nombre,
+                "codigo" : descuento_cliente.producto.codigo,
+                "nombre_tipo_producto" : descuento_cliente.producto.tipo_producto.nombre
             }
         }
 

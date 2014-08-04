@@ -16,6 +16,10 @@
         position: absolute;
     }
 
+    .btn-accion{
+        margin: 1em;
+    }
+
 </style>
 {% endblock %}
 
@@ -31,7 +35,7 @@
 
 <div class="tab-content">
     <div class="tab-pane active" id="bodega">
-        <button id="btn_guia_despacho" class="btn btn-primary">Crear nueva guía</button>
+        <button id="btn_guia_despacho" class="btn btn-primary btn-accion">Crear nueva guía</button>
         {% include "bodega/components/productos_bodega.html" %}
     </div>
 
