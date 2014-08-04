@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.db import transaction
 from django.views.generic import View, TemplateView, ListView
 from main.models import Producto, PrecioProducto
+from main.helpers.auth import permiso_admin
 
 class IndexView(TemplateView):
     template_name = "precios/index.html"
@@ -37,5 +38,5 @@ class UpdatePrecioProductoView(View):
         return HttpResponse(json.dumps(dato), content_type="application/json")
 
 
-index = IndexView.as_view()
+index = permiso_admin(IndexView.as_view())
 update_precios = UpdatePrecioProductoView.as_view()

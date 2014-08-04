@@ -4,7 +4,9 @@
             <th>Tipo de descuento</th>
             <th>Valor</th>
             <th>Producto</th>
+            {% if es_admin %}
             <th>Accion</th>
+            {% endif %}
         </tr>
     </thead>
     <tbody>
@@ -17,11 +19,13 @@
                 ( {{ cs.producto.codigo }} ) {{ cs.producto.get_nombre_tipo }}
                 {% endif %}
             </td>
+            {% if es_admin %}
             <td>
                 {% if cs.id != 1 %}
                 <a href="#" data-accion="editar" data-id="{{ cs.id }}">Editar</a>
                 {% endif %}
             </td>
+            {% endif %}
         </tr>
         {% endfor %}
     </tbody>

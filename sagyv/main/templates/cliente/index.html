@@ -30,9 +30,11 @@
 
 <div class="tab-content">
     <div class="tab-pane active" id="clientes">
+        {% if es_admin %}
         <div class="col-xs-6">
             <button id="btn_agregar" class="btn btn-primary">Agregar Cliente</button>
         </div>
+        {% endif %}
 
         <form id="f_buscar_cliente" action="{% url 'cliente:buscar_cliente' %}" method="get">
             <div class="col-xs-6" style="text-align:right">
@@ -45,7 +47,9 @@
     </div>
 
     <div class="tab-pane" id="scomerciales">
+        {% if es_admin %}
         <button id="btn_agregar_situacion" class="btn btn-primary">Agregar Situacion comercial</button>
+        {% endif %}
 
         {% include "cliente/components/lista_situaciones_comerciales.html" %}
     </div>
@@ -78,7 +82,7 @@
     App.urls.set("cliente:eliminar","{% url 'cliente:eliminar' %}");
     App.urls.set("cliente:obtener_situacion_comercial","{% url 'cliente:obtener_situacion_comercial' 0 %}");
 
-    App.clienteController = new App.Controllers.Cliente();
+    App.clienteController = new App.Controllers.Cliente("{{ es_admin }}");
     {% for cliente in clientes %}
     App.clienteController.addClienteRut('{{ cliente.rut }}');
     {% endfor %}

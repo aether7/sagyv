@@ -5,7 +5,9 @@
 <h1 class="center">Vehículos</h1>
 
 <div id="mensaje" class="alert alert-success center" style="visibility:hidden"></div>
+{% if es_admin %}
 <button id="btn_nuevo_vehiculo" class="btn btn-primary">Nuevo</button>
+{% endif %}
 
 <table id="lista_vehiculos" class="table table-striped">
     <thead>
@@ -17,7 +19,9 @@
             <th>Estado Sec</th>
             <th>Estado Pago</th>
             <th>Chofer</th>
+            {% if es_admin %}
             <th>Acciones</th>
+            {% endif %}
         </tr>
     </thead>
     <tbody>

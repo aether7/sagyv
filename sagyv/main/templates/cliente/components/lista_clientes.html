@@ -7,7 +7,9 @@
             <th>Telefono</th>
             <th>Dirección</th>
             <th>Situacion comercial</th>
+            {% if es_admin %}
             <th>Acciones</th>
+            {% endif %}
         </tr>
     </thead>
     <tbody>
@@ -25,10 +27,12 @@
                     {{ cliente.situacion_comercial }}
                 {% endif %}
             </td>
+            {% if es_admin %}
             <td>
                 <a href="#" data-accion="editar" data-id="{{ cliente.id }}">Editar</a>
                 <a href="#" data-accion="eliminar" data-id="{{ cliente.id }}">Eliminar</a>
             </td>
+            {% endif %}
         </tr>
         {% endfor %}
     </tbody>
