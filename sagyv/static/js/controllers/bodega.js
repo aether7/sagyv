@@ -52,6 +52,11 @@ App.Controllers.Bodega.prototype = {
             $(this).closest("tr").remove();
         });
 
+        this.listaCargaDespacho.on("click", "i[data-accion=eliminar_carga]", function(evt){
+            evt.preventDefault();
+            $(this).closest("tr").remove();
+        });
+
         $("#lista_productos_transito").on("click","a[data-accion=ver_detalle]", function(evt){
             evt.preventDefault();
 
@@ -186,6 +191,24 @@ App.Controllers.Bodega.prototype = {
         if(!this.esValidaCargaProducto(factura, fecha, precio)){
             return;
         }
+
+        json = {
+            factura : factura.val(),
+            fecha : fecha.val(),
+            productos : []
+        };
+
+        this.listaCargaDespacho.find("tr").each(function(){
+            var id = $(this).data("id"),
+                cantidad = $(this).data("cantidad");
+
+            json.productos.push({
+                id : id,
+                cantidad : cantidad
+            });
+        });
+
+        console.debug(json.productos);
     },
 
     agregarCargaProducto: function(){
@@ -195,8 +218,6 @@ App.Controllers.Bodega.prototype = {
             precio = producto.find("option:selected").data("precio"),
             codigo = producto.find("option:selected").text().trim(),
             total = cantidad.val() * precio;
-
-            alert(total);
 
         if(this.listaCargaDespacho.find("tr[data-id={0}]".format(producto.val())).length){
             alert("EL producto {0} ya fue ingresado, revise nuevamente".format(codigo));
