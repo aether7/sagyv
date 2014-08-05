@@ -293,11 +293,11 @@ class TipoCambioStock(models.Model):
 
 
 class GuiaDespacho(models.Model):
-    numero = models.IntegerField()
+    numero = models.IntegerField(null = True)
     vehiculo = models.ForeignKey(Vehiculo, null=True)
     factura = models.IntegerField(null=True)
     fecha = models.DateTimeField(auto_now_add=True)
-    tipo_guia = models.BooleanField()
+    tipo_guia = models.NullBooleanField()
 
     def __unicode__(self):
         return str(self.numero)

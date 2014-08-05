@@ -188,7 +188,10 @@ App.Controllers.Bodega.prototype = {
             precio = $("#valor_total")
             action = $("#f_carga_producto").attr("action");
 
+        console.log('pre if');
+        console.log(action);
         if(!this.esValidaCargaProducto(factura, fecha, precio)){
+            console.log('cage, por que no se..');
             return;
         }
 
@@ -197,7 +200,7 @@ App.Controllers.Bodega.prototype = {
             fecha : fecha.val(),
             productos : []
         };
-
+        console.log('pase el if');
         this.listaCargaDespacho.find("tr").each(function(){
             var id = $(this).data("id"),
                 cantidad = $(this).data("cantidad");
@@ -209,8 +212,9 @@ App.Controllers.Bodega.prototype = {
         });
 
         json.productos = JSON.stringify(json.productos);
-        // FALTA EL POST
-        
+        $.post(action, json, function(data){
+            console.debug(data);
+        });
     },
 
     agregarCargaProducto: function(){
@@ -286,13 +290,13 @@ App.Controllers.Bodega.prototype = {
             factura.parent().addClass("has-error");
         }
 
-        if(!this.listaDespacho.find("tr").length){
+        if(!this.listaCargaDespacho.find("tr").length){
             valido = false;
             $("#mensajes_carga_lista_productos span").
                 text("se debe agregar al menos 1 producto a la lista de productos").
                 parent().addClass("has-error");
         }else{
-            valido = false;
+            valido = true;
             $("#mensajes_carga_lista_productos span").
                 text("").
                 parent().removeClass("has-error");

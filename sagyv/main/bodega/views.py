@@ -41,16 +41,18 @@ class CrearGuiaDespachoView(View):
         self.productosActualizados = []
         self.numero_guia = req.POST.get("numero")
         self.id_vehiculo = req.POST.get("movil")
-        self.factura = req.POST.get("num_factura")
+        self.factura = req.POST.get("factura")
         self.fecha_creacion = req.POST.get("fecha")
         lista_producto = req.POST.get("productos")
 
         lista = json.loads(lista_producto)
+
         guia = self.crear_guia_despacho()
 
-        if(self.id_vehiculo != ""):
+        if(self.id_vehiculo != None):
             self.carga_datos_salida(guia, lista)
-        elif(self.factura != ""):
+
+        elif(self.factura != None):
             self.carga_datos_ingreso(guia, lista)
 
         data = {
@@ -66,27 +68,38 @@ class CrearGuiaDespachoView(View):
 
     def crear_guia_despacho(self):
         guia_despacho = GuiaDespacho()
-        guia_despacho.numero = self.numero_guia
+        
+        print self.factura
 
-        if self.id_vehiculo != "":
+        if self.id_vehiculo != None:
+            guia_despacho.numero = self.numero_guia
             movil = Vehiculo.objects.get(pk = self.id_vehiculo)
-            guia_despacho.factura = self.factura
             guia_despacho.tipo_guia = False
             guia_despacho.vehiculo = movil
-        elif self.factura != "":
-            movil = Vehiculo.objects.get(pk = self.id_vehiculo)
+        
+        elif self.factura != None:
+            guia_despacho.factura = self.factura
             guia_despacho.tipo_guia = True
 
         guia_despacho.save()
 
         return guia_despacho
 
+
     def carga_datos_ingreso(self, guia, lista):
         for item in lista:
+            print "lista :"+str(item["id"])
             cantidad = int(item["cantidad"])
             producto = Producto.objects.get(pk = item["id"])
-            producto.stock += cantidad
+            
+            if producto.stock is None:
+                producto.stock = cantidad
+            else:
+                producto.stock += cantidad
+
             producto.save()
+
+            print cantidad
 
             this_prod = {
                 'id': producto.id,
