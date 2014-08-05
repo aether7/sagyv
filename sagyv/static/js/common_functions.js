@@ -3,7 +3,20 @@ var common = {
         regex : {
             direccion : /^[A-záéíóúñÁÉÍÓÚÑ\s]+\s((#|Nº|No)\d+)|(s\/n)$/i,
             noNombre : /[^A-záéíóúñÁÉÍÓÚÑ\s]+/g
+        },
+
+        mensajes : {
+            obligatorio : "campo obligatorio"
         }
+    },
+
+    mostrarErroresVista: function(dict, errorList){
+        errorList.forEach(function(err){
+            var $obj = dict[err.campo];
+
+            $obj.siblings("span").text(err.mensaje);
+            $obj.parent().addClass("has-error");
+        });
     },
 
     agregarMensaje: function(mensaje){

@@ -69,14 +69,17 @@
 <script src="{% static 'js/plugins/jquery.rut.min.js' %}"></script>
 <script src="{% static 'js/plugins/jquery.tablesorter.min.js' %}"></script>
 <script src="{% static 'js/common_functions.js' %}"></script>
+<script src="{% static 'js/models/cliente.js' %}"></script>
 <script src="{% static 'js/controllers/cliente.js' %}"></script>
 <script src="{% static 'js/controllers/situacion_comercial.js' %}"></script>
+
 <script id="tpl_nuevo_cliente" type="text/x-template">
     {% include "cliente/components/tpl_nuevo_cliente.html" %}
 </script>
 <script id="tpl_nueva_situacion" type="text/x-template">
     {% include "cliente/components/tpl_nueva_situacion_comercial.html" %}
 </script>
+
 <script>
     App.urls.set("cliente:obtener","{% url 'cliente:obtener' 0 %}");
     App.urls.set("cliente:eliminar","{% url 'cliente:eliminar' %}");

@@ -1,10 +1,8 @@
 App.Controllers.Cliente = function(){
-    this.btnAgregar = $("#btn_agregar");
-    this.btnGuardarAdd = $("#btn_guardar_add");
-    this.btnGuardarUpdate = $("#btn_guardar_update");
     this.listaClientes = $("#tabla_clientes tbody");
     this.rutList = [];
     this.idCliente = null;
+    this.cliente = null;
 };
 
 App.Controllers.Cliente.prototype = {
@@ -17,32 +15,15 @@ App.Controllers.Cliente.prototype = {
     init: function(){
         var _this = this;
 
-        this.btnAgregar.on("click",function(){
+        $("#tabla_clientes").tablesorter();
+
+        $("#btn_agregar").on("click",function(){
             $("#nueva_situacion_add").addClass("hidden");
             common.mostrarModal("agregar");
         });
 
-        this.btnGuardarAdd.on("click", function(){
-            _this.guardarAdd();
-        });
-
-        this.btnGuardarUpdate.on("click", function(){
-            _this.guardarUpdate();
-        });
-
-        this.listaClientes.on("click","a[data-accion=editar]",function(evt){
-            evt.preventDefault();
-            $("#nueva_situacion_update").addClass("hidden");
-            common.mostrarModal("editar");
-            _this.cargarCliente($(this).data("id"));
-        });
-
-        this.listaClientes.on("click","a[data-accion=eliminar]",function(evt){
-            evt.preventDefault();
-            _this.eliminarCliente($(this).data("id"));
-        });
-
-        $("#tabla_clientes").tablesorter();
+        $("#btn_guardar_add").on("click", this.guardarAdd.bind(this));
+        $("#btn_guardar_update").on("click", this.guardarUpdate.bind(this));
 
         $("#sit_comercial_add").on("change",function(){
             if($(this).val() === "otro"){
@@ -66,6 +47,18 @@ App.Controllers.Cliente.prototype = {
                 action = $(this).attr("action");
 
             _this.buscarCliente(busqueda, action);
+        });
+
+        this.listaClientes.on("click","a[data-accion=editar]",function(evt){
+            evt.preventDefault();
+            $("#nueva_situacion_update").addClass("hidden");
+            common.mostrarModal("editar");
+            _this.cargarCliente($(this).data("id"));
+        });
+
+        this.listaClientes.on("click","a[data-accion=eliminar]",function(evt){
+            evt.preventDefault();
+            _this.eliminarCliente($(this).data("id"));
         });
 
     },
@@ -138,48 +131,26 @@ App.Controllers.Cliente.prototype = {
     },
 
     guardarAdd: function(){
-        var json,
-            nombre = $("#nombre_add"),
-            giro = $("#giro_add"),
-            direccion = $("#direccion_add"),
-            telefono = $("#telefono_add"),
-            rut = $("#rut_add"),
-            sitComercial = $("#sit_comercial_add"),
-            credito = $("#credito_add"),
-            dispensador = $("#dispensador_add"),
-            observaciones = $("#obs_add"),
-            cantidad = $("#numero_add"),
+        var cliente,
+            sels = this.obtenerSelectores("add");
             valido = true,
             _this = this;
 
-        valido = this.validarCampos(nombre, giro, direccion, telefono, rut, cantidad);
+        cliente = this.setearCliente(sels);
+
+        valido = this.validarCampos(cliente, sels.nombre, sels.giro,
+            sels.direccion, sels.telefono, sels.rut, sels.cantidad);
 
         if(!valido){
             return;
-        }else if(_.indexOf(this.rutList, rut.val()) !== -1){
-            rut.siblings("span").text("El rut ya está siendo utilizado");
-            rut.parent().addClass("has-error");
+        }else if(_.indexOf(this.rutList, sels.rut.val()) !== -1){
+            sels.rut.siblings("span").text("El rut ya está siendo utilizado");
+            sels.rut.parent().addClass("has-error");
             return;
         }
 
-        json = {
-            nombre : nombre.val(),
-            giro : giro.val(),
-            direccion : direccion.val(),
-            telefono : telefono.val(),
-            rut : rut.val(),
-            situacion_comercial : sitComercial.val(),
-            credito : credito.is(":checked"),
-            dispensador : dispensador.is(":checked"),
-            cantidad : cantidad.val().replace(/[\.,]/g, ""),
-            tipo : $("#tipo_add").val(),
-            producto : $("#sel_producto_add").val(),
-            obs : observaciones.val().trim()
-        };
-
-        $.post($("#f_agregar_cliente").attr("action"), json, function(data){
-            json.id = data.id;
-            _this.rutList.push(rut.val());
+        $.post($("#f_agregar_cliente").attr("action"), cliente.getJSON(), function(data){
+            _this.rutList.push(sels.rut.val());
 
             $("#modal_agregar").modal("hide");
             _this.procesarAgregar(data);
@@ -220,43 +191,21 @@ App.Controllers.Cliente.prototype = {
     },
 
     guardarUpdate: function(){
-        var json,
-            nombre = $("#nombre_update"),
-            giro = $("#giro_update"),
-            direccion = $("#direccion_update"),
-            telefono = $("#telefono_update"),
-            rut = $("#rut_update"),
-            sitComercial = $("#sit_comercial_update"),
-            credito = $("#credito_update"),
-            dispensador = $("#dispensador_update"),
-            observaciones = $("#obs_update"),
-            cantidad = $("#numero_update"),
-            valido = true,
+        var valido = true,
+            sels = this.obtenerSelectores("update"),
             _this = this;
 
-        valido = this.validarCampos(nombre, giro, direccion, telefono, rut, cantidad);
+        cliente = this.setearCliente(sels);
+        cliente.idCliente = this.idCliente;
+
+        valido = this.validarCampos(cliente, sels.nombre, sels.giro,
+            sels.direccion, sels.telefono, sels.rut, sels.cantidad);
 
         if(!valido){
             return;
         }
 
-        json = {
-            nombre : nombre.val(),
-            giro : giro.val(),
-            direccion : direccion.val(),
-            telefono : telefono.val(),
-            rut : rut.val(),
-            situacion_comercial : sitComercial.val(),
-            credito : credito.is(":checked"),
-            dispensador : dispensador.is(":checked"),
-            id_cliente : this.idCliente,
-            obs : observaciones.val().trim(),
-            cantidad : cantidad.val().replace(/[\.,]/g, ""),
-            tipo : $("#tipo_update").val(),
-            producto : $("#sel_producto_update").val()
-        };
-
-        $.post($("#f_editar_cliente").attr("action"), json, function(data){
+        $.post($("#f_editar_cliente").attr("action"), cliente.getJSON(), function(data){
             $("#modal_editar").modal("hide");
             common.agregarMensaje("El cliente fue actualizado exitosamente");
 
@@ -270,60 +219,64 @@ App.Controllers.Cliente.prototype = {
         });
     },
 
-    validarCampos: function(nombre, giro, direccion, telefono, rut, cantidad){
-        var valido = true;
+    validarCampos: function(cliente, nombre, giro, direccion, telefono, rut, cantidad){
+        var sels,
+            valido = true;
+
+        sels = {
+            nombre : nombre,
+            giro : giro,
+            direccion : direccion,
+            telefono : telefono,
+            rut : rut,
+            cantidad: cantidad
+        };
 
         $(".has-error").removeClass("has-error");
         $(".help-block").text("");
 
-        if(nombre.val() === ""){
-            valido = false;
-            nombre.siblings("span").text("campo obligatorio");
-            nombre.parent().addClass("has-error");
-        }else if(!/^[A-záéíóúñÁÉÍÓÚÑ\s]+$/i.test(nombre.val())){
-            valido = false;
-            nombre.siblings("span").text("El nombre no es válido");
-            nombre.parent().addClass("has-error");
-        }
+        valido = cliente.esValido();
 
-        if(giro.val().trim() === ""){
-            valido = false;
-            giro.siblings("span").text("campo obligatorio");
-            giro.parent().addClass("has-error");
-        }
-
-        if(direccion.val().trim() === ""){
-            valido = false;
-            direccion.siblings("span").text("campo obligatorio");
-            direccion.parent().addClass("has-error");
-        }else if(/^\d+$/.test(direccion.val())){
-            valido = false;
-            direccion.siblings("span").text("el formato de la dirección no es válido");
-            direccion.parent().addClass("has-error");
-        }
-
-        if(telefono.val().trim() !== "" && !/^\d+$/i.test(telefono.val())){
-            valido = false;
-            telefono.siblings("span").text("Debe ingresar número de teléfono válido");
-            telefono.parent().addClass("has-error");
-        }
-
-        if(rut.val().trim() === ""){
-            valido = false;
-            rut.siblings("span").text("campo obligatorio");
-            rut.parent().addClass("has-error");
-        }else if(!$.Rut.validar(rut.val())){
-            valido = false;
-            rut.siblings("span").text("El rut es incorrecto");
-            rut.parent().addClass("has-error");
-        }
-
-        if(cantidad.val() !== "" && !/^\d+$/.test(cantidad.val())){
-            valido = false;
-            cantidad.siblings("span").text("solo deben ingresarse números");
-            cantidad.parent().addClass("has-error");
+        if(!valido){
+            common.mostrarErroresVista(sels, cliente.getErrorList());
         }
 
         return valido;
+    },
+
+    obtenerSelectores: function(opcion){
+        return {
+            nombre : $("#nombre_" + opcion),
+            giro : $("#giro_" + opcion),
+            direccion : $("#direccion_" + opcion),
+            telefono : $("#telefono_" + opcion),
+            rut : $("#rut_" + opcion),
+            sitComercial : $("#sit_comercial_" + opcion),
+            credito : $("#credito_" + opcion),
+            dispensador : $("#dispensador_" + opcion),
+            observaciones : $("#obs_" + opcion),
+            cantidad : $("#numero_" + opcion),
+            tipo : $("#tipo_" + opcion),
+            producto : $("#sel_producto_" + opcion)
+        };
+    },
+
+    setearCliente: function(sels){
+        var cliente = new App.Models.Cliente();
+
+        cliente.nombre = sels.nombre.val();
+        cliente.giro = sels.giro.val();
+        cliente.direccion = sels.direccion.val();
+        cliente.telefono = sels.telefono.val();
+        cliente.rut = sels.rut.val();
+        cliente.situacionComercial = sels.sitComercial.val();
+        cliente.credito = sels.credito.is(":checked");
+        cliente.dispensador = sels.dispensador.is(":checked");
+        cliente.cantidad = sels.cantidad.val();
+        cliente.tipo = sels.tipo.val();
+        cliente.producto = sels.producto.val();
+        cliente.observacion = sels.observaciones.val();
+
+        return cliente;
     }
 };
