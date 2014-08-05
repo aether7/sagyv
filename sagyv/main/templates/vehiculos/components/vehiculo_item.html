@@ -4,18 +4,10 @@
     <td data-km="{{ vehiculo.km }}">{{ vehiculo.km }}</td>
     <td data-fecha-revision-tecnica="{{ vehiculo.fecha_revision_tecnica }}">{{ vehiculo.fecha_revision_tecnica }}</td>
     <td data-estado-sec="{{ vehiculo.estado_sec }}">
-        {% if vehiculo.estado_sec %}
-        Sí
-        {% else %}
-        No
-        {% endif %}
+        {% if vehiculo.estado_sec %}Sí{% else %}No{% endif %}
     </td>
     <td data-estado-pago="{{ vehiculo.estado_pago }}">
-        {% if vehiculo.estado_pago %}
-        Sí
-        {% else %}
-        No
-        {% endif %}
+        {% if vehiculo.estado_pago %}Sí{% else %}No{% endif %}
     </td>
     <td data-nombre-chofer="{{ vehiculo.get_nombre_ultimo_chofer }}">{{ vehiculo.get_nombre_ultimo_chofer }}</td>
     {% if es_admin %}
