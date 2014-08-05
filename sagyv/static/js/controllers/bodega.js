@@ -208,7 +208,9 @@ App.Controllers.Bodega.prototype = {
             });
         });
 
-        console.debug(json.productos);
+        json.productos = JSON.stringify(json.productos);
+        // FALTA EL POST
+        
     },
 
     agregarCargaProducto: function(){
@@ -282,6 +284,18 @@ App.Controllers.Bodega.prototype = {
             valido = false;
             factura.siblings("span").text("deben ser solo numeros");
             factura.parent().addClass("has-error");
+        }
+
+        if(!this.listaDespacho.find("tr").length){
+            valido = false;
+            $("#mensajes_carga_lista_productos span").
+                text("se debe agregar al menos 1 producto a la lista de productos").
+                parent().addClass("has-error");
+        }else{
+            valido = false;
+            $("#mensajes_carga_lista_productos span").
+                text("").
+                parent().removeClass("has-error");
         }
 
         return valido;
