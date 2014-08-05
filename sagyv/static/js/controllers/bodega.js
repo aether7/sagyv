@@ -193,20 +193,21 @@ App.Controllers.Bodega.prototype = {
             producto = $("#guia_carga_producto"),
             cantidad = $("#cantidad_carga_producto"),
             precio = producto.find("option:selected").data("precio"),
-            codigo = producto.find("option:selected").text().trim();
+            codigo = producto.find("option:selected").text().trim(),
+            total = cantidad.val() * precio;
 
-            alert(precio);
+            alert(total);
 
         if(this.listaCargaDespacho.find("tr[data-id={0}]".format(producto.val())).length){
             alert("EL producto {0} ya fue ingresado, revise nuevamente".format(codigo));
             return;
         }
 
-        html = this.renderProducto({
+        html = this.renderCargaProducto({
             id : producto.val(),
             cantidad : cantidad.val(),
             codigo : codigo,
-            precio : producto.val()*precio
+            precio : total
         });
 
         this.listaCargaDespacho.append(html);
