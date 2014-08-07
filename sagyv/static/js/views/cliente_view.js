@@ -2,6 +2,7 @@ App.Views.Cliente = function(){
     this.controller = new App.Controllers.Cliente();
     this.listaClientes = $("#tabla_clientes tbody");
 
+    this.idCliente = null;
     this.nombre = null;
     this.giro = null;
     this.direccion = null;
