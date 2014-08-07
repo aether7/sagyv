@@ -89,7 +89,8 @@ App.Controllers.Cliente.prototype = {
     },
 
     guardarAdd: function(data){
-        var cliente = new App.Models.Cliente(),
+        var url,
+            cliente = new App.Models.Cliente(),
             data = Object.create(data);
 
         cliente.nombre = data.nombre;
@@ -101,11 +102,21 @@ App.Controllers.Cliente.prototype = {
         cliente.credito = data.credito;
         cliente.dispensador = data.dispensador;
         cliente.observacion = data.observacion;
+        cliente.cantidad = data.cantidad;
+        cliente.tipo = data.tipo;
+        cliente.producto = data.producto;
 
         if(!cliente.esValido()){
             pubsub.publish("cliente:noValido", [ cliente.getErrorList() ]);
             return;
         }
+
+        url = App.urls.get("cliente:crear");
+        json = cliente.getJSON();
+
+        $.post(url, json, function(data){
+            pubsub.publish("cliente:procesarCrear", [ data ]);
+        });
         /*var cliente,
             sels = this.obtenerSelectores("add");
             valido = true,

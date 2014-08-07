@@ -105,11 +105,11 @@ class CrearCliente(View):
             tipo = self.request.POST.get("tipo")
             producto_id = self.request.POST.get("producto")
 
-            situacion_comercial = crear_nueva_situacion(cantidad, tipo, producto_id)
-
-        #revisar por si acaso, mas adelante
-        if situacion_comercial != '':
+            sc = crear_nueva_situacion(cantidad, tipo, producto_id)
+        elif situacion_comercial != '':
             sc = DescuentoCliente.objects.get(pk = situacion_comercial)
+        else:
+            sc = None
 
         return sc
 

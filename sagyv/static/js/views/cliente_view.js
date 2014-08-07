@@ -39,6 +39,46 @@ App.Views.Cliente.prototype = {
 
     agregarSuscriptores: function(){
         pubsub.suscribe("cliente:noValido", this.esValido, this);
+        pubsub.suscribe("cliente:procesarCrear", this.procesarCrear, this);
+    },
+
+    procesarCrear: function(data){
+        $("#modal_agregar").modal("hide");
+        this.procesarAgregar(data);
+        common.agregarMensaje("El cliente fue ingresado exitosamente");
+
+        if( $("#numero_add").val() != '' ){
+            var str = "<option value='{0}'>{1}</option>";
+
+            str = str.format(data.situacion_comercial.id, data.situacion_comercial.texto);
+            $(str).insertBefore("#sit_comercial_add option:last");
+            $(str).insertBefore("#sit_comercial_update option:last");
+        }
+    },
+
+    procesarAgregar: function(data){
+        var html,
+            situacionComercial,
+            template = $("#tpl_nuevo_cliente").html(),
+            render = Handlebars.compile(template);
+
+        if(data.situacion_comercial == 1){
+            situacionComercial = "Sin descuento";
+        }else{
+            situacionComercial = data.situacion_comercial;
+        }
+
+        html = render({
+            nombre : data.nombre,
+            giro : data.giro,
+            rut : data.rut,
+            situacion_comercial : data.situacion_comercial.texto,
+            telefono : data.telefono,
+            direccion : data.direccion,
+            id : data.id
+        });
+
+        $("#tabla_clientes tbody").append(html);
     },
 
     esValido: function(errorList){
