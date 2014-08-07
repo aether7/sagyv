@@ -61,6 +61,9 @@ App.Controllers.Cliente.prototype = {
     },
 
     eliminarCliente: function(id){
+        console.log('alive');
+        return false;
+
         var _this = this,
             url = App.urls.get("cliente:eliminar");
 

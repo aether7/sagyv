@@ -112,8 +112,9 @@ App.Views.Cliente.prototype = {
     },
 
     eliminarCliente: function(evt){
+        var _this = this;
         evt.preventDefault();
-
+        console.log(_this);
         this.controller.eliminarCliente($(this).data("id"));
     },
 
