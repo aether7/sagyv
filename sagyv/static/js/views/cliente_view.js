@@ -134,7 +134,23 @@ App.Views.Cliente.prototype = {
     },
 
     guardarUpdate: function(){
-        this.controller.guardarUpdate();
+        console.log('click');
+
+        this.nombre = $("#nombre_update");
+        this.giro = $("#giro_update");
+        this.direccion = $("#direccion_update");
+        this.telefono = $("#telefono_update");
+        this.rut = $("#rut_update");
+        this.situacionComercial = $("#sit_comercial_update");
+        this.credito = $("#credito_update");
+        this.dispensador = $("#dispensador_update");
+        this.observacion = $("#obs_update");
+        this.cantidad = $("#numero_update");
+        this.tipo = $("#tipo_update");
+        this.producto = $("#sel_producto_update");
+
+        
+        //this.controller.guardarUpdate();
     },
 
     buscarCliente: function(evt){
