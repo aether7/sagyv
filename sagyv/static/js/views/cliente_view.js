@@ -145,12 +145,11 @@ App.Views.Cliente.prototype = {
     },
 
     editarCliente: function(evt){
-        evt.preventDefault();
-
+        console.log('alive');
+        /*evt.preventDefault();
         $("#nueva_situacion_update").addClass("hidden");
         common.mostrarModal("editar");
-
-        this.controller.cargarCliente($(this).data("id"));
+        this.controller.cargarCliente($(this).data("id"));*/
     },
 
     eliminarCliente: function(){
