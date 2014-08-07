@@ -39,6 +39,7 @@ App.Views.Cliente.prototype = {
 
     agregarSuscriptores: function(){
         pubsub.suscribe("cliente:noValido", this.esValido, this);
+        pubsub.suscribe("cliente:removerCliente", this.removerCliente);
     },
 
     esValido: function(errorList){
@@ -114,11 +115,19 @@ App.Views.Cliente.prototype = {
 
     eliminarCliente: function(){
         var _this = this;
-
+        
         return function(evt){
+            if(!confirm("Esta acción eliminará al cliente, ¿ desea continuar ?")){
+                return;
+            }
             evt.preventDefault();
             _this.controller.eliminarCliente($(this).data("id"));
         };
+    },
+
+    removerCliente: function(data){
+        $("a[data-id={0}][data-accion=editar]".format(data.id)).closest("tr").remove();
+        common.agregarMensaje("Se ha eliminado al cliente exitosamente");
     },
 
     addClienteRut: function(rut){

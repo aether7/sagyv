@@ -62,30 +62,18 @@ App.Controllers.Cliente.prototype = {
 
     eliminarCliente: function(id){
         console.log(id);
-        /*console.log('alive');
-        return false;
-
         var _this = this,
             url = App.urls.get("cliente:eliminar");
 
-        this.id = id;
-
-        if(!confirm("Esta acción eliminará al cliente, ¿ desea continuar ?")){
-            return;
-        }
-
         $.post(url, { id_cliente : id }, function(data){
-            pubsub.publish("cliente:eliminarCliente",[ data ]);
-            var rut = $("#tabla_clientes tbody tr[data-id={0}] td[data-columna=rut]".format(id));
-
+            pubsub.publish("cliente:removerCliente",[ data ]);
+            
+            rut = data.rut;
+            
             if(_.indexOf(_this.rutList, rut) !== -1){
                 _this.rutList = _.without(_this.rutList, rut);
             }
-
-            $("a[data-id={0}][data-accion=editar]".format(id)).closest("tr").remove();
-            common.agregarMensaje("Se ha eliminado al cliente exitosamente");
         });
-        */
     },
 
     guardarAdd: function(data){
