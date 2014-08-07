@@ -86,7 +86,7 @@ App.Controllers.Cliente.prototype = {
         cliente.direccion = data.direccion;
         cliente.telefono = data.telefono;
         cliente.rut = data.rut;
-        cliente.sitacionComercial = data.sitacionComercial;
+        cliente.situacionComercial = data.situacionComercial;
         cliente.credito = data.credito;
         cliente.dispensador = data.dispensador;
         cliente.observacion = data.observacion;
@@ -105,39 +105,6 @@ App.Controllers.Cliente.prototype = {
         $.post(url, json, function(data){
             pubsub.publish("cliente:procesarCrear", [ data ]);
         });
-        /*var cliente,
-            sels = this.obtenerSelectores("add");
-            valido = true,
-            _this = this;
-
-        cliente = this.setearCliente(sels);
-
-        valido = this.validarCampos(cliente, sels.nombre, sels.giro,
-            sels.direccion, sels.telefono, sels.rut, sels.cantidad);
-
-        if(!valido){
-            return;
-        }else if(_.indexOf(this.rutList, sels.rut.val()) !== -1){
-            sels.rut.siblings("span").text("El rut ya está siendo utilizado");
-            sels.rut.parent().addClass("has-error");
-            return;
-        }
-
-        $.post($("#f_agregar_cliente").attr("action"), cliente.getJSON(), function(data){
-            _this.rutList.push(sels.rut.val());
-
-            $("#modal_agregar").modal("hide");
-            _this.procesarAgregar(data);
-            common.agregarMensaje("El cliente fue ingresado exitosamente");
-
-            if( $("#numero_add").val() != '' ){
-                var str = "<option value='{0}'>{1}</option>";
-                str = str.format(data.situacion_comercial.id, data.situacion_comercial.texto);
-                $(str).insertBefore("#sit_comercial_add option:last");
-                $(str).insertBefore("#sit_comercial_update option:last");
-            }
-        });
-        */
     },
 
     procesarAgregar: function(data){
