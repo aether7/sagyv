@@ -30,7 +30,7 @@ App.Views.Cliente.prototype = {
         $("#sit_comercial_add").on("change", this.sitComercialHandler("add"));
         $("#sit_comercial_update").on("change", this.sitComercialHandler("update"));
 
-        $("#f_buscar_cliente").on("submit", this.buscarCliente);
+        $("#f_buscar_cliente").on("submit", this.buscarCliente());
 
         this.listaClientes.on("click","a[data-accion=editar]", this.editarCliente());
         this.listaClientes.on("click","a[data-accion=eliminar]",this.eliminarCliente());
@@ -43,6 +43,28 @@ App.Views.Cliente.prototype = {
         pubsub.suscribe("cliente:procesarCrear", this.procesarCrear, this);
         pubsub.suscribe("cliente:removerCliente", this.removerCliente);
         pubsub.suscribe("cliente:cargarCliente", this.cargarCliente);
+        pubsub.suscribe("cliente:buscar", this.procesarBuscar);
+    },
+
+    procesarBuscar: function(data){
+        var template = $("#tpl_nuevo_cliente").html(),
+            fn = Handlebars.compile(template),
+            _this = this;
+
+        this.listaClientes = $("#tabla_clientes tbody");
+        this.listaClientes.empty();
+
+        data.forEach(function(cliente){
+            _this.listaClientes.append(fn({
+                id : cliente.id,
+                nombre : cliente.nombre,
+                rut : cliente.rut,
+                direccion : cliente.direccion,
+                giro : cliente.giro,
+                situacion_comercial : cliente.situacion_comercial,
+                telefono : cliente.telefono
+            }));
+        });
     },
 
     procesarCrear: function(data){
@@ -170,13 +192,17 @@ App.Views.Cliente.prototype = {
 
     },
 
-    buscarCliente: function(evt){
-        evt.preventDefault();
+    buscarCliente: function(){
+        var _this = this;
 
-        var busqueda = $("#cliente_busqueda").val(),
-            action = $(this).attr("action");
+        return function(evt){
+            evt.preventDefault();
 
-        this.controller.buscarCliente(busqueda, action);
+            var busqueda = $("#cliente_busqueda").val(),
+                action = $(this).attr("action");
+
+            _this.controller.buscarCliente(busqueda, action);
+        };
     },
 
     editarCliente: function(){

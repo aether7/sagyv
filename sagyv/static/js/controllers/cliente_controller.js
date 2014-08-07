@@ -11,29 +11,11 @@ App.Controllers.Cliente.prototype = {
         this.rutList.push(rut);
     },
 
-    init: function(){
-    },
-
     buscarCliente: function(busqueda, action){
         var _this = this;
 
-        $.get(action, { busqueda : busqueda }, function(data){
-            var template = $("#tpl_nuevo_cliente").html(),
-                fn = Handlebars.compile(template);
-
-            _this.listaClientes.empty();
-
-            data.forEach(function(cliente){
-                _this.listaClientes.append(fn({
-                    id : cliente.id,
-                    nombre : cliente.nombre,
-                    rut : cliente.rut,
-                    direccion : cliente.direccion,
-                    giro : cliente.giro,
-                    situacion_comercial : cliente.situacion_comercial,
-                    telefono : cliente.telefono
-                }));
-            });
+        $.get(action, { busqueda: busqueda }, function(data){
+            pubsub.publish("cliente:buscar", [ data ]);
         });
     },
 
@@ -47,7 +29,6 @@ App.Controllers.Cliente.prototype = {
     },
 
     eliminarCliente: function(id){
-        console.log(id);
         var _this = this,
             url = App.urls.get("cliente:eliminar");
 
