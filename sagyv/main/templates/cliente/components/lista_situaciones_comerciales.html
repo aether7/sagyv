@@ -11,7 +11,7 @@
     </thead>
     <tbody>
         {% for cs in situaciones_comerciales %}
-        <tr>
+        <tr data-id="{{ cs.id }}">
             <td data-columna="tipo_descuento">{{ cs.tipo_descuento.tipo }}</td>
             <td data-columna="descuento">{{ cs.monto_descuento }}</td>
             <td data-columna="producto">

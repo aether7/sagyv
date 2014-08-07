@@ -1,6 +1,7 @@
 var App = {};
 App.Controllers = {};
 App.Models = {};
+App.Views = {};
 App.cookies = {};
 
 //se crea funcionalidad para urls
@@ -106,4 +107,50 @@ String.prototype.format = function(){
 
     return s;
 };
+})();
+
+(function(){
+    var context = (function(){ return this; }).call(),
+        channels = {};
+
+    function publish(channel, args){
+        var _this = this;
+
+        if(!(channel in channels)){
+            channels[channel] = [];
+        }
+
+        channels[channel].forEach(function(trigger){
+            if(!Array.isArray(args)){
+                throw new Error("arguments must be an array of args");
+            }
+
+            trigger.callback.apply(trigger.context || _this, args);
+        });
+    }
+
+    function suscribe(channel, callback, context){
+        if(!(channel in channels)){
+            channels[channel] = [];
+        }
+
+        channels[channel].push({
+            callback : callback,
+            context : context
+        });
+
+        return channels[channel].length - 1;
+    }
+
+    function unsuscribe(channel, id){
+        if(channel in channels && channels[channel][id] !== null){
+            channels = channels[channel].splice(id, 1);
+        }
+    }
+
+    context.pubsub = {
+        publish : publish,
+        suscribe : suscribe,
+        unsuscribe : unsuscribe
+    };
 })();

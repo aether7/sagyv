@@ -1,5 +1,4 @@
 App.Controllers.Cliente = function(){
-    this.listaClientes = $("#tabla_clientes tbody");
     this.rutList = [];
     this.idCliente = null;
     this.cliente = null;
@@ -13,54 +12,6 @@ App.Controllers.Cliente.prototype = {
     },
 
     init: function(){
-        var _this = this;
-
-        $("#tabla_clientes").tablesorter();
-
-        $("#btn_agregar").on("click",function(){
-            $("#nueva_situacion_add").addClass("hidden");
-            common.mostrarModal("agregar");
-        });
-
-        $("#btn_guardar_add").on("click", this.guardarAdd.bind(this));
-        $("#btn_guardar_update").on("click", this.guardarUpdate.bind(this));
-
-        $("#sit_comercial_add").on("change",function(){
-            if($(this).val() === "otro"){
-                $("#nueva_situacion_add").removeClass("hidden");
-            }else{
-                $("#nueva_situacion_add").addClass("hidden");
-            }
-        });
-
-        $("#sit_comercial_update").on("change", function(){
-            if($(this).val() === "otro"){
-                $("#nueva_situacion_update").removeClass("hidden");
-            }else{
-                $("#nueva_situacion_update").addClass("hidden");
-            }
-        });
-
-        $("#f_buscar_cliente").on("submit", function(evt){
-            evt.preventDefault();
-            var busqueda = $("#cliente_busqueda").val(),
-                action = $(this).attr("action");
-
-            _this.buscarCliente(busqueda, action);
-        });
-
-        this.listaClientes.on("click","a[data-accion=editar]",function(evt){
-            evt.preventDefault();
-            $("#nueva_situacion_update").addClass("hidden");
-            common.mostrarModal("editar");
-            _this.cargarCliente($(this).data("id"));
-        });
-
-        this.listaClientes.on("click","a[data-accion=eliminar]",function(evt){
-            evt.preventDefault();
-            _this.eliminarCliente($(this).data("id"));
-        });
-
     },
 
     buscarCliente: function(busqueda, action){
@@ -127,6 +78,7 @@ App.Controllers.Cliente.prototype = {
             }
 
             $("a[data-id={0}][data-accion=editar]".format(id)).closest("tr").remove();
+            common.agregarMensaje("Se ha eliminado al cliente exitosamente");
         });
     },
 

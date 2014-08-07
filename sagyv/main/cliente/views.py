@@ -269,9 +269,9 @@ class ModificarSituacionComercialView(View):
 
     @transaction.commit_on_success
     def post(self, req):
-        id_situacion = req.POST.get('id_situacion')
+        id_situacion = req.POST.get('id')
         monto_nuevo = req.POST.get('valor')
-        producto_id = req.POST.get('producto_id')
+        producto_id = req.POST.get('producto')
         tipo = req.POST.get('tipo')
 
         descuento_cliente = DescuentoCliente.objects.get(pk = id_situacion)

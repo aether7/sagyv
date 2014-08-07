@@ -55,10 +55,8 @@
     </div>
 </div>
 
-<!-- modals -->
 {% include "cliente/components/modal_nuevo_cliente.html" %}
 {% include "cliente/components/modal_editar_cliente.html" %}
-
 {% include "cliente/components/modal_nueva_situacion_comercial.html"%}
 {% include "cliente/components/modal_editar_situacion_comercial.html"%}
 
@@ -69,9 +67,15 @@
 <script src="{% static 'js/plugins/jquery.rut.min.js' %}"></script>
 <script src="{% static 'js/plugins/jquery.tablesorter.min.js' %}"></script>
 <script src="{% static 'js/common_functions.js' %}"></script>
+
 <script src="{% static 'js/models/cliente.js' %}"></script>
+<script src="{% static 'js/models/situacion_comercial_model.js' %}"></script>
+
 <script src="{% static 'js/controllers/cliente.js' %}"></script>
-<script src="{% static 'js/controllers/situacion_comercial.js' %}"></script>
+<script src="{% static 'js/controllers/situacion_comercial_controller.js' %}"></script>
+
+<script src="{% static 'js/views/cliente.js' %}"></script>
+<script src="{% static 'js/views/situacion_comercial_view.js' %}"></script>
 
 <script id="tpl_nuevo_cliente" type="text/x-template">
     {% include "cliente/components/tpl_nuevo_cliente.html" %}
@@ -84,18 +88,22 @@
     App.urls.set("cliente:obtener","{% url 'cliente:obtener' 0 %}");
     App.urls.set("cliente:eliminar","{% url 'cliente:eliminar' %}");
     App.urls.set("cliente:obtener_situacion_comercial","{% url 'cliente:obtener_situacion_comercial' 0 %}");
+    App.urls.set("cliente:crear_situacion_comercial", "{% url 'cliente:crear_situacion_comercial' %}");
+    App.urls.set("cliente:modificar_situacion_comercial", "{% url 'cliente:modificar_situacion_comercial' %}");
 
-    App.clienteController = new App.Controllers.Cliente("{{ es_admin }}");
+    App.clienteView = new App.Views.Cliente();
+    App.clienteView.init();
+
     {% for cliente in clientes %}
-    App.clienteController.addClienteRut('{{ cliente.rut }}');
+    App.clienteView.addClienteRut("{{ cliente.rut }}");
     {% endfor %}
-    App.clienteController.init();
 
-    App.situacionController = new App.Controllers.SituacionComercial();
+    App.situacionView = new App.Views.SituacionComercial();
+    App.situacionView.init();
+
     {% for sc in situaciones_comerciales %}
-    App.situacionController.addSituacionComercial({{ sc.tipo_descuento.id }},
+    App.situacionView.addSituacionComercial({{ sc.tipo_descuento.id }},
         {{ sc.monto_descuento }}, {{ sc.producto.id }});
     {% endfor %}
-    App.situacionController.init();
 </script>
 {% endblock %}
