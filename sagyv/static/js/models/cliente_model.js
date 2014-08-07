@@ -88,7 +88,7 @@ App.Models.Cliente.prototype = {
             });
         }
 
-        if(this.cantidad.trim() !== "" && !/^\d+$/.test(this.cantidad)){
+        /*if(this.cantidad.trim() !== "" && !/^\d+$/.test(this.cantidad)){
             valido = false;
 
             this.errorList.push({
@@ -96,6 +96,7 @@ App.Models.Cliente.prototype = {
                 mensaje : "solo deben ingresarse números"
             });
         }
+        */
 
         return valido;
     },

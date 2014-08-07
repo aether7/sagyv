@@ -1,6 +1,19 @@
 App.Views.Cliente = function(){
     this.controller = new App.Controllers.Cliente();
     this.listaClientes = $("#tabla_clientes tbody");
+
+    this.nombre = null;
+    this.giro = null;
+    this.direccion = null;
+    this.telefono = null;
+    this.rut = null;
+    this.situacionComercial = null;
+    this.credito = null;
+    this.dispensador = null;
+    this.observacion = null;
+    this.cantidad = null;
+    this.tipo = null;
+    this.producto = null;
 };
 
 App.Views.Cliente.prototype = {
@@ -10,7 +23,7 @@ App.Views.Cliente.prototype = {
         $("#tabla_clientes").tablesorter();
         $("#btn_agregar").on("click",this.mostrarModal);
 
-        $("#btn_guardar_add").on("click", this.guardarAdd);
+        $("#btn_guardar_add").on("click", this.guardarAdd.bind(this));
         $("#btn_guardar_update").on("click", this.guardarUpdate);
 
         $("#sit_comercial_add").on("change", this.sitComercialHandler("add"));
@@ -20,6 +33,15 @@ App.Views.Cliente.prototype = {
 
         this.listaClientes.on("click","a[data-accion=editar]", this.editarCliente);
         this.listaClientes.on("click","a[data-accion=eliminar]", this.eliminarCliente);
+
+        this.agregarSuscriptores();
+    },
+
+    agregarSuscriptores: function(){
+        pubsub.suscribe("cliente:esValido", function(lista){
+            console.log("lista");
+            console.log(lista);
+        });
     },
 
     mostrarModal: function(){
@@ -38,7 +60,33 @@ App.Views.Cliente.prototype = {
     },
 
     guardarAdd: function(){
-        this.controller.guardarAdd();
+        this.nombre = $("#nombre_add");
+        this.giro = $("#giro_add");
+        this.direccion = $("#direccion_add");
+        this.telefono = $("#telefono_add");
+        this.rut = $("#rut_add");
+        this.situacionComercial = $("#sit_comercial_add");
+        this.credito = $("#credito_add");
+        this.dispensador = $("#dispensador_add");
+        this.observacion = $("#obs_add");
+        this.cantidad = $("#numero_add");
+        this.tipo = $("#tipo_add");
+        this.producto = $("#sel_producto_add");
+
+        this.controller.guardarAdd({
+            nombre : this.nombre.val(),
+            giro : this.giro.val(),
+            direccion : this.direccion.val(),
+            telefono : this.telefono.val(),
+            rut : this.rut.val(),
+            situacionComercial : this.situacionComercial.val(),
+            credito : this.credito.val(),
+            dispensador : this.dispensador.val(),
+            observacion : this.observacion.val(),
+            cantidad : this.cantidad.val(),
+            tipo : this.tipo.val(),
+            producto : this.producto.val()
+        });
     },
 
     guardarUpdate: function(){

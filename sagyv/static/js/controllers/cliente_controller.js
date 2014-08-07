@@ -82,8 +82,24 @@ App.Controllers.Cliente.prototype = {
         });
     },
 
-    guardarAdd: function(){
-        var cliente,
+    guardarAdd: function(data){
+        var cliente = new App.Models.Cliente();
+
+        cliente.nombre = data.nombre;
+        cliente.giro = data.giro;
+        cliente.direccion = data.direccion;
+        cliente.telefono = data.telefono;
+        cliente.rut = data.rut;
+        cliente.sitacionComercial = data.sitacionComercial;
+        cliente.credito = data.credito;
+        cliente.dispensador = data.dispensador;
+        cliente.observacion = data.observacion;
+
+        if(!cliente.esValido()){
+            pubsub.publish("cliente:esValido", cliente.getErrorList());
+            return;
+        }
+        /*var cliente,
             sels = this.obtenerSelectores("add");
             valido = true,
             _this = this;
@@ -115,6 +131,7 @@ App.Controllers.Cliente.prototype = {
                 $(str).insertBefore("#sit_comercial_update option:last");
             }
         });
+        */
     },
 
     procesarAgregar: function(data){
