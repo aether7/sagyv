@@ -74,6 +74,7 @@ App.Controllers.Cliente.prototype = {
         }
 
         $.post(url, { id_cliente : id }, function(data){
+            pubsub.publish("cliente:eliminarCliente",[ data ]);
             var rut = $("#tabla_clientes tbody tr[data-id={0}] td[data-columna=rut]".format(id));
 
             if(_.indexOf(_this.rutList, rut) !== -1){

@@ -39,6 +39,7 @@ App.Views.Cliente.prototype = {
 
     agregarSuscriptores: function(){
         pubsub.suscribe("cliente:esValido", this.esValido, this);
+        pubsub.suscribe("cliente:eliminarCliente", this.eliminarCliente);
     },
 
     esValido: function(errorList){
@@ -113,9 +114,7 @@ App.Views.Cliente.prototype = {
     },
 
     eliminarCliente: function(evt){
-        var _this = this;
         evt.preventDefault();
-        console.log(_this);
         this.controller.eliminarCliente($(this).data("id"));
     },
 
