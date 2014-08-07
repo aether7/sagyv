@@ -61,7 +61,8 @@ App.Controllers.Cliente.prototype = {
     },
 
     eliminarCliente: function(id){
-        console.log('alive');
+        console.log(id);
+        /*console.log('alive');
         return false;
 
         var _this = this,
@@ -83,13 +84,12 @@ App.Controllers.Cliente.prototype = {
             $("a[data-id={0}][data-accion=editar]".format(id)).closest("tr").remove();
             common.agregarMensaje("Se ha eliminado al cliente exitosamente");
         });
+        */
     },
 
     guardarAdd: function(data){
         var cliente = new App.Models.Cliente(),
             data = Object.create(data);
-
-        console.log(data);
 
         cliente.nombre = data.nombre;
         cliente.giro = data.giro;
@@ -102,7 +102,7 @@ App.Controllers.Cliente.prototype = {
         cliente.observacion = data.observacion;
 
         if(!cliente.esValido()){
-            pubsub.publish("cliente:esValido", [ cliente.getErrorList() ]);
+            pubsub.publish("cliente:noValido", [ cliente.getErrorList() ]);
             return;
         }
         /*var cliente,

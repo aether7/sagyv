@@ -32,13 +32,13 @@ App.Views.Cliente.prototype = {
         $("#f_buscar_cliente").on("submit", this.buscarCliente);
 
         this.listaClientes.on("click","a[data-accion=editar]", this.editarCliente);
-        this.listaClientes.on("click","a[data-accion=eliminar]", this.eliminarCliente);
+        this.listaClientes.on("click","a[data-accion=eliminar]",this.eliminarCliente());
 
         this.agregarSuscriptores();
     },
 
     agregarSuscriptores: function(){
-        pubsub.suscribe("cliente:esValido", this.esValido, this);
+        pubsub.suscribe("cliente:noValido", this.esValido, this);
     },
 
     esValido: function(errorList){
@@ -112,11 +112,13 @@ App.Views.Cliente.prototype = {
         this.controller.cargarCliente($(this).data("id"));
     },
 
-    eliminarCliente: function(evt){
+    eliminarCliente: function(){
         var _this = this;
-        evt.preventDefault();
-        console.log(_this);
-        this.controller.eliminarCliente($(this).data("id"));
+
+        return function(evt){
+            evt.preventDefault();
+            _this.controller.eliminarCliente($(this).data("id"));
+        };
     },
 
     addClienteRut: function(rut){
