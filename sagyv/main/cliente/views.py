@@ -204,9 +204,14 @@ class EliminarCliente(View):
     def post(self,req):
         id_cliente = req.POST.get('id_cliente')
         cliente = Cliente.objects.get(pk = id_cliente)
+        rut = cliente.rut
         cliente.delete()
 
-        dato = { "status": "ok" }
+        dato = { 
+            "status": "ok", 
+            "id": id_cliente,
+            "rut":  rut
+        }
         return HttpResponse(json.dumps(dato), content_type="application/json")
 
 
