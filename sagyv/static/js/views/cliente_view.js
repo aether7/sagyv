@@ -31,7 +31,7 @@ App.Views.Cliente.prototype = {
 
         $("#f_buscar_cliente").on("submit", this.buscarCliente);
 
-        this.listaClientes.on("click","a[data-accion=editar]", this.editarCliente);
+        this.listaClientes.on("click","a[data-accion=editar]", this.editarCliente());
         this.listaClientes.on("click","a[data-accion=eliminar]",this.eliminarCliente());
 
         this.agregarSuscriptores();
@@ -144,13 +144,17 @@ App.Views.Cliente.prototype = {
         this.controller.buscarCliente(busqueda, action);
     },
 
-    editarCliente: function(evt){
-        evt.preventDefault();
+    editarCliente: function(){
+        var _this = this;
 
-        $("#nueva_situacion_update").addClass("hidden");
-        common.mostrarModal("editar");
+        return function(evt){
+            evt.preventDefault();
 
-        this.controller.cargarCliente($(this).data("id"));
+            _this.idCliente = $(this).data("id");
+            $("#nueva_situacion_update").addClass("hidden");
+            common.mostrarModal("editar");
+            _this.controller.cargarCliente($(this).data("id"));
+        };
     },
 
     eliminarCliente: function(){
@@ -160,6 +164,7 @@ App.Views.Cliente.prototype = {
             if(!confirm("Esta acción eliminará al cliente, ¿ desea continuar ?")){
                 return;
             }
+
             evt.preventDefault();
             _this.controller.eliminarCliente($(this).data("id"));
         };
