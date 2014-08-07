@@ -200,7 +200,7 @@ App.Controllers.Bodega.prototype = {
             fecha : fecha.val(),
             productos : []
         };
-        console.log('pase el if');
+
         this.listaCargaDespacho.find("tr").each(function(){
             var id = $(this).data("id"),
                 cantidad = $(this).data("cantidad");
@@ -213,7 +213,12 @@ App.Controllers.Bodega.prototype = {
 
         json.productos = JSON.stringify(json.productos);
         $.post(action, json, function(data){
-            console.debug(data);
+            data.productos.forEach(function(producto){
+                var stock = $("#stock_{0}".format(producto.id));
+                stock.text(producto.cantidad);
+            });
+            $("#modal_carga_producto").modal("hide");
+            common.agregarMensaje("Se han cagado los productos exitosamente");
         });
     },
 
