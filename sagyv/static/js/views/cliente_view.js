@@ -38,10 +38,11 @@ App.Views.Cliente.prototype = {
     },
 
     agregarSuscriptores: function(){
-        pubsub.suscribe("cliente:esValido", function(lista){
-            console.log("lista");
-            console.log(lista);
-        });
+        pubsub.suscribe("cliente:esValido", this.esValido, this);
+    },
+
+    esValido: function(errorList){
+        common.mostrarErroresVista(this.getFields(), errorList);
     },
 
     mostrarModal: function(){
@@ -120,5 +121,22 @@ App.Views.Cliente.prototype = {
 
     addClienteRut: function(rut){
         this.controller.addClienteRut(rut);
+    },
+
+    getFields: function(){
+        return {
+            nombre : this.nombre,
+            giro : this.giro,
+            direccion : this.direccion,
+            telefono : this.telefono,
+            rut : this.rut,
+            situacionComercial : this.situacionComercial,
+            credito : this.credito,
+            dispensador : this.dispensador,
+            observacion : this.observacion,
+            cantidad : this.cantidad,
+            tipo : this.tipo,
+            producto : this.producto
+        };
     }
 };

@@ -86,7 +86,10 @@ App.Controllers.Cliente.prototype = {
     },
 
     guardarAdd: function(data){
-        var cliente = new App.Models.Cliente();
+        var cliente = new App.Models.Cliente(),
+            data = Object.create(data);
+
+        console.log(data);
 
         cliente.nombre = data.nombre;
         cliente.giro = data.giro;
@@ -99,7 +102,7 @@ App.Controllers.Cliente.prototype = {
         cliente.observacion = data.observacion;
 
         if(!cliente.esValido()){
-            pubsub.publish("cliente:esValido", cliente.getErrorList());
+            pubsub.publish("cliente:esValido", [ cliente.getErrorList() ]);
             return;
         }
         /*var cliente,
