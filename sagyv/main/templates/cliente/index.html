@@ -85,12 +85,13 @@
 </script>
 
 <script>
+    App.urls.set("cliente:update","{% url 'cliente:modificar' %}");
+    App.urls.set("cliente:crear","{% url 'cliente:crear' %}");
     App.urls.set("cliente:obtener","{% url 'cliente:obtener' 0 %}");
     App.urls.set("cliente:eliminar","{% url 'cliente:eliminar' %}");
     App.urls.set("cliente:obtener_situacion_comercial","{% url 'cliente:obtener_situacion_comercial' 0 %}");
     App.urls.set("cliente:crear_situacion_comercial", "{% url 'cliente:crear_situacion_comercial' %}");
     App.urls.set("cliente:modificar_situacion_comercial", "{% url 'cliente:modificar_situacion_comercial' %}");
-    App.urls.set("cliente:crear","{% url 'cliente:crear' %}");
 
     App.clienteView = new App.Views.Cliente();
     App.clienteView.init();

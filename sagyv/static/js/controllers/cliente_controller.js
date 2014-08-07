@@ -20,9 +20,10 @@ App.Controllers.Cliente.prototype = {
     },
 
     cargarCliente: function(id){
-        var url = App.urls.get("cliente:obtener").replace("0", id);
-        this.idCliente = id;
-
+        var url = App.urls.get("cliente:obtener").replace("0", id),
+            _this = this;
+        
+        _this.idCliente = id;
         $.get(url, function(data){
             pubsub.publish("cliente:cargarCliente", [ data ]);
         });
@@ -46,7 +47,10 @@ App.Controllers.Cliente.prototype = {
     guardarAdd: function(data){
         var url,
             cliente = new App.Models.Cliente(),
-            data = Object.create(data);
+            data = Object.create(data),
+            _this = this;
+
+        console.log(_this);
 
         cliente.nombre = data.nombre;
         cliente.giro = data.giro;
@@ -103,7 +107,8 @@ App.Controllers.Cliente.prototype = {
     guardarUpdate: function(data){
         var url,
             cliente = new App.Models.Cliente(),
-            data = Object.create(data);
+            data = Object.create(data),
+            _this = this;
 
         cliente.nombre = data.nombre;
         cliente.giro = data.giro;
@@ -117,13 +122,20 @@ App.Controllers.Cliente.prototype = {
         cliente.cantidad = data.cantidad;
         cliente.tipo = data.tipo;
         cliente.producto = data.producto;
+        cliente.idCliente = _this.idCliente;
 
         if(!cliente.esValido()){
             pubsub.publish("cliente:noValido", [ cliente.getErrorList() ]);
             return;
         }
 
-        return;
+        url = App.urls.get("cliente:update");
+        json = cliente.getJSON();
+
+        $.post(url, json, function(data){
+            console.log(data);
+            pubsub.publish("cliente:actualizarCliente", [ data ]);
+        });
 
         /*console.log(data);
         var valido = true,

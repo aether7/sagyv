@@ -44,6 +44,7 @@ App.Views.Cliente.prototype = {
         pubsub.suscribe("cliente:removerCliente", this.removerCliente);
         pubsub.suscribe("cliente:cargarCliente", this.cargarCliente);
         pubsub.suscribe("cliente:buscar", this.procesarBuscar);
+        pubsub.suscribe("cliente:actualizarCliente", this.actualizarCliente);
     },
 
     procesarBuscar: function(data){
@@ -65,6 +66,21 @@ App.Views.Cliente.prototype = {
                 telefono : cliente.telefono
             }));
         });
+    },
+
+    actualizarCliente: function(data){
+        console.log(data);
+
+        var tr = $("a[data-id={0}][data-accion=editar]".format(data.id)).closest("tr");
+
+        tr.find("[data-columna=nombre]").text(data.nombre);
+        tr.find("[data-columna=giro]").text(data.giro);
+        tr.find("[data-columna=telefono]").text(data.telefono);
+        tr.find("[data-columna=direccion]").text(data.direccion);
+        tr.find("[data-columna=situacion_comercial]").text(data.situacion_comercial);
+
+        $("#modal_editar").modal("hide");
+        common.agregarMensaje("El cliente fue actualizado exitosamente");
     },
 
     procesarCrear: function(data){
