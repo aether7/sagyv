@@ -25,7 +25,7 @@ App.Views.Cliente.prototype = {
         $("#btn_agregar").on("click",this.mostrarModal);
 
         $("#btn_guardar_add").on("click", this.guardarAdd.bind(this));
-        $("#btn_guardar_update").on("click", this.guardarUpdate);
+        $("#btn_guardar_update").on("click", this.guardarUpdate.bind(this));
 
         $("#sit_comercial_add").on("change", this.sitComercialHandler("add"));
         $("#sit_comercial_update").on("change", this.sitComercialHandler("update"));
@@ -104,6 +104,9 @@ App.Views.Cliente.prototype = {
     },
 
     guardarAdd: function(){
+        $(".has-error").removeClass("has-error");
+        $(".help-block").text("");
+
         this.nombre = $("#nombre_add");
         this.giro = $("#giro_add");
         this.direccion = $("#direccion_add");
@@ -134,7 +137,8 @@ App.Views.Cliente.prototype = {
     },
 
     guardarUpdate: function(){
-        console.log('click');
+        $(".has-error").removeClass("has-error");
+        $(".help-block").text("");
 
         this.nombre = $("#nombre_update");
         this.giro = $("#giro_update");
@@ -149,8 +153,21 @@ App.Views.Cliente.prototype = {
         this.tipo = $("#tipo_update");
         this.producto = $("#sel_producto_update");
 
-        
-        //this.controller.guardarUpdate();
+        this.controller.guardarUpdate({
+            nombre : this.nombre.val(),
+            giro : this.giro.val(),
+            direccion : this.direccion.val(),
+            telefono : this.telefono.val(),
+            rut : this.rut.val(),
+            situacionComercial : this.situacionComercial.val(),
+            credito : this.credito.val(),
+            dispensador : this.dispensador.val(),
+            observacion : this.observacion.val(),
+            cantidad : this.cantidad.val(),
+            tipo : this.tipo.val(),
+            producto : this.producto.val()
+        });
+
     },
 
     buscarCliente: function(evt){

@@ -93,10 +93,63 @@ App.Controllers.Cliente.prototype = {
         });
     },
 
-    guardarUpdate: function(){
+
+    procesarAgregar: function(data){
+        var html,
+            situacionComercial,
+            template = $("#tpl_nuevo_cliente").html(),
+            render = Handlebars.compile(template);
+
+        if(data.situacion_comercial == 1){
+            situacionComercial = "Sin descuento";
+        }else{
+            situacionComercial = data.situacion_comercial;
+        }
+
+        html = render({
+            nombre : data.nombre,
+            giro : data.giro,
+            rut : data.rut,
+            situacion_comercial : data.situacion_comercial.texto,
+            telefono : data.telefono,
+            direccion : data.direccion,
+            id : data.id
+        });
+
+        $("#tabla_clientes tbody").append(html);
+    },
+
+    guardarUpdate: function(data){
+        var url,
+            cliente = new App.Models.Cliente(),
+            data = Object.create(data);
+
+        cliente.nombre = data.nombre;
+        cliente.giro = data.giro;
+        cliente.direccion = data.direccion;
+        cliente.telefono = data.telefono;
+        cliente.rut = data.rut;
+        cliente.situacionComercial = data.situacionComercial;
+        cliente.credito = data.credito;
+        cliente.dispensador = data.dispensador;
+        cliente.observacion = data.observacion;
+        cliente.cantidad = data.cantidad;
+        cliente.tipo = data.tipo;
+        cliente.producto = data.producto;
+
+        if(!cliente.esValido()){
+            pubsub.publish("cliente:noValido", [ cliente.getErrorList() ]);
+            return;
+        }
+
+        return;
+
+        /*console.log(data);
         var valido = true,
-            sels = this.obtenerSelectores("update"),
+            //sels = this.obtenerSelectores("update"),
             _this = this;
+
+        return;
 
         cliente = this.setearCliente(sels);
         cliente.idCliente = this.idCliente;
@@ -119,7 +172,7 @@ App.Controllers.Cliente.prototype = {
             tr.find("[data-columna=telefono]").text(data.telefono);
             tr.find("[data-columna=direccion]").text(data.direccion);
             tr.find("[data-columna=situacion_comercial]").text(data.situacion_comercial);
-        });
+        });*/
     },
 
     validarCampos: function(cliente, nombre, giro, direccion, telefono, rut, cantidad){
