@@ -42,6 +42,7 @@ App.Views.Cliente.prototype = {
         pubsub.suscribe("cliente:noValido", this.esValido, this);
         pubsub.suscribe("cliente:procesarCrear", this.procesarCrear, this);
         pubsub.suscribe("cliente:removerCliente", this.removerCliente);
+        pubsub.suscribe("cliente:cargarCliente", this.cargarCliente);
     },
 
     procesarCrear: function(data){
@@ -156,6 +157,24 @@ App.Views.Cliente.prototype = {
             common.mostrarModal("editar");
             _this.controller.cargarCliente($(this).data("id"));
         };
+    },
+
+    cargarCliente: function(data){
+        $("#giro_update").val(data.giro);
+        $("#nombre_update").val(data.nombre);
+        $("#direccion_update").val(data.direccion);
+        $("#telefono_update").val(data.telefono);
+        $("#rut_update").val(data.rut);
+        $("#sit_comercial_update").val(data.situacion_comercial);
+        $("#obs_update").val(data.obs);
+
+        if(data.credito){
+            $("#credito_update").get(0).checked = true;
+        }
+
+        if(data.dispensador){
+            $("#dispensador_update").get(0).checked = true;
+        }
     },
 
     eliminarCliente: function(){
