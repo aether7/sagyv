@@ -51,7 +51,7 @@ class ObtenerGuiaDespacho(View):
                     'id': item.producto.id,
                     'codigo': item.producto.codigo,
                     'cantidad': item.cantidad,
-                    'precio': item.producto.
+                    'precio': item.producto.get_precio_producto()
                 }
             )
         
