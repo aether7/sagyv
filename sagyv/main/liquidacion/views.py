@@ -62,6 +62,21 @@ class ObtenerGuiaDespacho(View):
         return HttpResponse(json.dumps(datos), content_type="application/json")
 
 
+class BuscarCliente(View):
+    def get(self, req, id_cliente):
+        cliente = Cliente.objects.get(pk = id_cliente)
+
+        data = {
+            "id" : cliente.id,
+            "direccion" : cliente.direccion,
+            "rut" : cliente.rut,
+            "situacion_comercial" : cliente.situacion_comercial.get_json_string()
+        }
+
+        return HttpResponse(json.dumps(data), content_type="application/json")
+
+
 index = IndexView.as_view()
 obtener_guia = ObtenerGuiaDespacho.as_view()
 balance_liquidacion = BalanceLiquidacionView.as_view()
+buscar_cliente = BuscarCliente.as_view()

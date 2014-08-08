@@ -14,18 +14,36 @@
         </section>
 
         <section>
-            <div>
-                <label for="numero_guia">Numero guía:</label>
-                <input id="numero_guia" type="text" value="" data-ng-model="liqCtrl.numeroGuia" />
+                <div>
+                    <div>
+                        <label for="numero_guia">Numero guía:</label>
+                        <input id="numero_guia" type="text" value="" data-ng-model="liqCtrl.numeroGuia" />
 
-                <label for="lista_clientes">Cliente:</label>
-                <select name="lista_clientes" id="lista_clientes" data-ng-model="liqCtrl.idCliente">
-                    {% for cliente in clientes %}
-                    <option value="{{ cliente.id }}">{{ cliente.giro }}</option>
-                    {% endfor %}
-                </select>
-            </div>
+                        <label for="lista_clientes">Cliente:</label>
+                        <select name="lista_clientes" id="lista_clientes"
+                            data-ng-model="liqCtrl.idCliente" data-ng-change="liqCtrl.buscarCliente()">
+                            {% for cliente in clientes %}
+                            <option value="{{ cliente.id }}">{{ cliente.giro }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label for="direccion">Dirección</label>
+                        <input id="direccion" type="text" value=""
+                            readonly data-ng-model="liqCtrl.cliente.direccion" />
 
+                        <label for="rut">RUT</label>
+                        <input id="rut" type="text" value=""
+                            readonly data-ng-model="liqCtrl.cliente.rut" />
+
+                        <label for="situacion_comercial">Situación Comercial</label>
+                        <input id="situacion_comercial" type="text"
+                            value="" readonly ng-model="liqCtrl.cliente.situacionComercial" />
+                    </div>
+                </div>
+        </section>
+
+        <section>
             {% verbatim %}
             <table class="table table-striped">
                 <thead>
@@ -74,5 +92,6 @@
 <script src="{% static 'js/controllers/liquidacion_controller.js' %}"></script>
 <script>
     App.urls.set("liquidacion:obtener_guia", "{% url 'liquidacion:obtener_guia' %}");
+    App.urls.set("liquidacion:buscar_cliente", "{% url 'liquidacion:buscar_cliente' 0 %}");
 </script>
 {% endblock %}

@@ -9,6 +9,7 @@
         this.subTotal = 0;
         this.descuentos = 0;
         this.total = 0;
+        this.cliente = {};
 
         var _this = this;
 
@@ -20,6 +21,18 @@
 
             $http.get(url).success(function(data){
                 _this.productos = data.productos;
+            });
+        };
+
+        this.buscarCliente = function(){
+            var url = App.urls.get("liquidacion:buscar_cliente");
+            url = url.replace("0", this.idCliente);
+
+            $http.get(url).success(function(data){
+                _this.cliente.id = data.id;
+                _this.cliente.direccion = data.direccion;
+                _this.cliente.rut = data.rut;
+                _this.cliente.situacionComercial = data.situacion_comercial;
             });
         };
 

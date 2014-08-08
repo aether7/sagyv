@@ -355,6 +355,17 @@ class DescuentoCliente(models.Model):
     def es_cliente_sin_descuento(self):
         return self.id == 1
 
+    def get_json_string(self):
+        if self.id == 1:
+            return "Sin descuento"
+
+        if self.tipo_descuento.id == 1:
+            texto = "$ %s (%s)"
+        else:
+            texto = "%s % (%s)"
+
+        return texto % (self.monto_descuento, self.producto.codigo)
+
     def __unicode__(self):
         if self.id == 1:
             return unicode("Sin descuento")
