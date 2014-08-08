@@ -20,6 +20,7 @@
 
             $.get(url, json, function(data){
                 console.log(data);
+                _this.productos = data.productos;
             });
         };
 
