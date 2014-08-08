@@ -3,7 +3,7 @@ import json
 from django.http import HttpResponse
 from django.views.generic import TemplateView,View
 from main.models import Trabajador, Producto, Vehiculo, StockVehiculo
-from main.models import GuiaDespacho, HistorialStock
+from main.models import GuiaDespacho, HistorialStock, Cliente
 
 
 class IndexView(TemplateView):
@@ -12,6 +12,7 @@ class IndexView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(IndexView, self).get_context_data(**kwargs)
         context["vehiculos"] = Vehiculo.objects.order_by("id")
+        context["clientes"] = Cliente.objects.order_by("nombre")
 
         return context
 
@@ -37,9 +38,11 @@ class BalanceLiquidacionView(View):
 
 class ObtenerGuiaDespacho(View):
     def get(self, req):
-        numero_guia = req.GET.get('numero_guia')
-        guia = GuiaDespacho.objects.get(numero = numero_guia)
-        lote = StockVehiculo.objects.filter(vehiculo = guia.vehiculo)
+        #numero_guia = req.GET.get('numero_guia')
+        #guia = GuiaDespacho.objects.get(numero = numero_guia)
+        #lote = StockVehiculo.objects.filter(vehiculo = guia.vehiculo)
+        id_vehiculo = int(req.GET.get("id_vehiculo"))
+        lote = StockVehiculo.objects.filter(vehiculo_id = id_vehiculo)
         productos = []
 
         for item in lote:
@@ -51,8 +54,8 @@ class ObtenerGuiaDespacho(View):
             })
 
         datos = {
-            'numero_guia': guia.numero,
-            'id_vehiculo': guia.vehiculo.id,
+            #'numero_guia': guia.numero,
+            'id_vehiculo': id_vehiculo,
             'productos': productos
         }
 

@@ -2,23 +2,31 @@
 {% load static %}
 
 {% block content %}
-    <section id="liquidacion" data-ng-app="liquidacionApp" data-ng-controller="LiquidacionController as liquidacion">
+    <section id="liquidacion" data-ng-app="liquidacionApp" data-ng-controller="LiquidacionController as liqCtrl">
         <section class="panel-busqueda">
-            <label for="">Numero guía:</label>
-            <input type="text" value="" data-ng-model="liquidacion.numeroGuia" />
-            <button class="btn btn-primary" data-ng-click="liquidacion.buscarGuia()">Buscar</button>
+            <label for="lista_vehiculos" >Vehículo:</label>
+            <select name="lista_vehiculos" id="lista_vehiculos" data-ng-model="liqCtrl.idVehiculo">
+                {% for vehiculo in vehiculos %}
+                <option value="{{ vehiculo.id }}">{{ vehiculo.numero }} - {{ vehiculo.patente }}</option>
+                {% endfor %}
+            </select>
+            <button class="btn btn-primary" data-ng-click="liqCtrl.buscarGuia()">Buscar</button>
         </section>
 
         <section>
             <div>
-                <label for="lista_vehiculos" >Vehículo:</label>
-                <select name="lista_vehiculos" id="lista_vehiculos" data-ng-model="liquidacion.idVehiculo">
-                    {% for vehiculo in vehiculos %}
-                    <option value="{{ vehiculo.id }}">{{ vehiculo.numero }} - {{ vehiculo.patente }}</option>
+                <label for="numero_guia">Numero guía:</label>
+                <input id="numero_guia" type="text" value="" data-ng-model="liqCtrl.numeroGuia" />
+
+                <label for="lista_clientes">Cliente:</label>
+                <select name="lista_clientes" id="lista_clientes" data-ng-model="liqCtrl.idCliente">
+                    {% for cliente in clientes %}
+                    <option value="{{ cliente.id }}">{{ cliente.giro }}</option>
                     {% endfor %}
                 </select>
             </div>
 
+            {% verbatim %}
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -31,35 +39,31 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% verbatim %}
-                    <tr data-ng-repeat="producto in liquidacion.productos"
+                    <tr data-ng-repeat="producto in liqCtrl.productos"
                         data-ng-controller="ProductoController as productoCtrl">
                         <td>{{ producto.codigo }}</td>
                         <td>{{ producto.cantidad }}</td>
                         <td>
-                            <input type="text" value="{{ producto.vacios }}" data-ng-model="producto.vacios" />
+                            <input type="text" value="{{ producto.vacios }}"
+                                data-ng-model="producto.vacios"
+                                data-ng-keyup="liqCtrl.calcularSubTotal()" />
                         </td>
                         <td>{{ productoCtrl.calcularRestante(producto) }}</td>
                         <td>{{ producto.precio | currency }}</td>
                         <td style="text-align:right">
-                            {{ productoCtrl.calcularPrecio(producto) | currency }}
+                            {{ producto.valorTotal | currency }}
                         </td>
                     </tr>
-                    <tr class="fila-desglose">
-                        <td colspan="5">Subtotal</td>
-                        <td>{{ vc.calcularSubTotal() | currency }}</td>
-                    </tr>
-                    <tr class="fila-desglose">
-                        <td colspan="5">Descuentos</td>
-                        <td>{{ vc.descuentos | currency }}</td>
-                    </tr>
-                    <tr class="fila-desglose">
-                        <td colspan="5">TOTAL</td>
-                        <td>{{ vc.calcularTotal() | currency }}</td>
-                    </tr>
-                    {% endverbatim %}
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="2">Subtotal: {{ liqCtrl.subTotal | currency }}</td>
+                        <td colspan="2">Descuentos: {{ liqCtrl.descuentos | currency }}</td>
+                        <td colspan="2">Total: {{ liqCtrl.total | currency }}</td>
+                    </tr>
+                </tfoot>
             </table>
+            {% endverbatim %}
         </section>
     </section>
 {% endblock %}
