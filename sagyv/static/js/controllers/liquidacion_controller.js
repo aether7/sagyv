@@ -1,36 +1,36 @@
 (function(){
     var app = angular.module("vehiculoApp",[]);
 
-    app.controller("VehiculoController", function(){
+    app.controller("VehiculoController", ["$http", function($http){
         this.idVehiculo = null;
         this.numeroGuia = null;
         this.productos = [];
 
+        var controller = this;
+
         this.buscar = function(){
-            this.productos = [{
-                id : 1,
-                codigo : 1414,
-                cantidad : 20,
-                precio : 1000
-            }];
-
             var url = App.urls.get("liquidacion:obtener_guia"),
-                json = { numero_guia : this.numeroGuia },
-                _this = this;
+                json = { numero_guia : this.numeroGuia };
 
-            $.get(url, json, function(data){
-                console.log(data);
-                _this.productos = data.productos;
+            url += "?numero_guia=" + this.numeroGuia;
+
+            $http.get(url).success(function(data){
+                controller.productos = data.productos;
             });
         };
 
         this.calcularRestante = function(producto){
             producto.llenos = producto.cantidad - producto.vacios;
+
+            if(isNaN(producto.llenos)){
+                producto.llenos = 0;
+            }
+
             return producto.llenos;
         };
 
         this.liquidar = function(){
             console.log(this.productos);
         };
-    });
+    }]);
 })();

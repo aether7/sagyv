@@ -2,7 +2,9 @@
 import json
 from django.http import HttpResponse
 from django.views.generic import TemplateView,View
-from main.models import Trabajador, Producto, GuiaDespacho, HistorialStock, Vehiculo
+from main.models import Trabajador, Producto, Vehiculo, StockVehiculo
+from main.models import GuiaDespacho, HistorialStock
+
 
 class IndexView(TemplateView):
     template_name = "liquidacion/index.html"
@@ -37,7 +39,7 @@ class ObtenerGuiaDespacho(View):
     def get(self, req):
         numero_guia = req.GET.get('numero_guia')
         guia = GuiaDespacho.objects.get(numero = numero_guia)
-        lote = HistorialStock.objects.filter(guia_despacho = guia)
+        lote = StockVehiculo.objects.filter(vehiculo = guia.vehiculo)
         productos = []
 
         for item in lote:

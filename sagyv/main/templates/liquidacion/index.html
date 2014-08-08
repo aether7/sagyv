@@ -26,6 +26,7 @@
                         <th>Cantidad en Tránsito</th>
                         <th>Vacíos</th>
                         <th>Llenos</th>
+                        <th>Precio Unitario</th>
                         <th>Cantidad a pagar</th>
                     </tr>
                 </thead>
@@ -37,10 +38,8 @@
                         <td>
                             <input type="text" value="{{ producto.vacios }}" ng-model="producto.vacios" />
                         </td>
-                        <td>
-                            <input type="text" value="{{ vc.calcularRestante(producto) }}"
-                                data-ng-model="producto.llenos" />
-                        </td>
+                        <td>{{ vc.calcularRestante(producto) }}</td>
+                        <td>{{ producto.precio | currency }}</td>
                         <td>{{ producto.precio * producto.vacios | currency }}</td>
                     </tr>
                     <tr class="fila-desglose">
