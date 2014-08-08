@@ -2,21 +2,21 @@
 {% load static %}
 
 {% block content %}
-    <section id="liquidacion" data-ng-app="vehiculoApp" data-ng-controller="VehiculoController as vc">
+    <section id="liquidacion" data-ng-app="liquidacionApp" data-ng-controller="LiquidacionController as liquidacion">
         <section class="panel-busqueda">
-            <label for="lista_vehiculos" >Vehículo:</label>
-            <select name="lista_vehiculos" id="lista_vehiculos" data-ng-model="vc.idVehiculo">
-                {% for vehiculo in vehiculos %}
-                <option value="{{ vehiculo.id }}">{{ vehiculo.numero }} - {{ vehiculo.patente }}</option>
-                {% endfor %}
-            </select>
-            <button class="btn btn-primary" data-ng-click="vc.buscar()">Buscar</button>
+            <label for="">Numero guía:</label>
+            <input type="text" value="" data-ng-model="liquidacion.numeroGuia" />
+            <button class="btn btn-primary" data-ng-click="liquidacion.buscarGuia()">Buscar</button>
         </section>
 
         <section>
             <div>
-                <label for="">Numero guía:</label>
-                <input type="text" value="" data-ng-model="vc.numeroGuia" />
+                <label for="lista_vehiculos" >Vehículo:</label>
+                <select name="lista_vehiculos" id="lista_vehiculos" data-ng-model="liquidacion.idVehiculo">
+                    {% for vehiculo in vehiculos %}
+                    <option value="{{ vehiculo.id }}">{{ vehiculo.numero }} - {{ vehiculo.patente }}</option>
+                    {% endfor %}
+                </select>
             </div>
 
             <table class="table table-striped">
@@ -32,16 +32,17 @@
                 </thead>
                 <tbody>
                     {% verbatim %}
-                    <tr data-ng-repeat="producto in vc.productos">
+                    <tr data-ng-repeat="producto in liquidacion.productos"
+                        data-ng-controller="ProductoController as productoCtrl">
                         <td>{{ producto.codigo }}</td>
                         <td>{{ producto.cantidad }}</td>
                         <td>
-                            <input type="text" value="{{ producto.vacios }}" ng-model="producto.vacios" />
+                            <input type="text" value="{{ producto.vacios }}" data-ng-model="producto.vacios" />
                         </td>
-                        <td>{{ vc.calcularRestante(producto) }}</td>
+                        <td>{{ productoCtrl.calcularRestante(producto) }}</td>
                         <td>{{ producto.precio | currency }}</td>
                         <td style="text-align:right">
-                            {{ vc.calcularPrecio(producto) | currency }}
+                            {{ productoCtrl.calcularPrecio(producto) | currency }}
                         </td>
                     </tr>
                     <tr class="fila-desglose">
