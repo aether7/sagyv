@@ -28,6 +28,10 @@
                         <input type="text" readonly value="1023012031023">
                     </div>
                 </div>
+                <div>
+                    <label for="">numero de boleta</label>
+                    <input type="text">(ajaxazo)
+                </div>
         </section>
 
         <section class="panel-detalle">
@@ -105,6 +109,7 @@
             </select>
             <label for="">monto</label>
             <input type="text" value="100102203012301203" />
+            <button class="btn btn-default">+</button>
 
             <table>
                 <thead>
@@ -125,23 +130,92 @@
             <input type="text" value="0" />
 
             <label for="">TOTAL</label>
-            <label for="">$12301239120301923</label>
+            {% verbatim %}
+            <input type="text" value="{{ 123123123 | currency }}" />
+            {% endverbatim %}
 
             <label for="">Numero Cierre</label>
             <input type="text" />
+            <label for="">Terminal</label>
+            <input type="text" value="123123">
         </section>
 
 
         <section>
             <h1>Voucher Transbank</h1>
             <label for="">tipo de tarjeta</label>
+
             <select name="" id="">
                 <option value="">DEBITO</option>
                 <option value="">VISA</option>
                 <option value="">Mastercard</option>
                 <option value="">Dinners Club</option>
             </select>
+
+            <button class="btn btn-default">+</button>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tarjeta</th>
+                        <th>Monto</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Ripley</td>
+                        <td>100000000</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <label for="">descuentos</label>
+            <input type="text" value="0" />
+
+            <label for="">TOTAL</label>
+            {% verbatim %}
+            <input type="text" value="{{ 123123123 | currency }}" />
+            {% endverbatim %}
+
+            <label for="">Numero Cierre</label>
+            <input type="text" />
+            <label for="">TERMINAL</label>
+            <input type="text" value="" />
+            <label for="">CUOTAS</label>
+            <input type="text" />
         </section>
+
+        <section>
+            <h1>Cupones de prepago</h1>
+            <label for="">numero</label>
+            <input type="text">
+            <label for="">cliente</label>
+            <input type="text" value="" />
+            <label for="">formato</label>
+            <select name="" id="">
+                <option value="">15 KG (codigo balon)</option>
+            </select>
+            <label for="">Descuento</label>
+            <input type="text" value="" />
+        </section>
+
+        <section>
+            <h1>OTROS</h1>
+            <label for="">Concepto</label>
+            <input type="text">
+            <label for="">monto</label>
+            <input type="text">
+            (" AQUI SE INGRESA SIGNO POSITIVO O NEGATIVO PARA SUMAR O RESTAR EL VALOR ")
+        </section>
+
+        <section>
+            <h1>CHEQUES</h1>
+            <label for="">MONTO</label>
+            <label for="">Banco</label>
+            <label for="">SERIE</label>
+            <label for="">FECHA</label>
+        </section>
+
 
         <button class="btn btn-default">Guia Lipigas</button>
         <button class="btn btn-default">Guia propia</button>
@@ -149,8 +223,13 @@
         <button class="btn btn-default">Voucher Transbank</button>
         <button class="btn btn-default">Cupones de prepago</button>
         <button class="btn btn-default">Otros</button>
-
+        <button class="btn btn-default">VENTA GARANTIAS</button>
+        <button class="btn btn-default">ABONO</button>
+        <button class="btn btn-default">CHEQUES</button>
         <button class="btn btn-primary">Guardar</button>
+        <button class="btn btn-primary">CERRAR LIQUIDACIÓN</button>
+
+        (Cerrada la liquidación, se puede mostrar la información resumen y exportar info a EXCEL).
     </section>
 {% endblock %}
 
