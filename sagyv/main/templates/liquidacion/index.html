@@ -40,19 +40,21 @@
                         </td>
                         <td>{{ vc.calcularRestante(producto) }}</td>
                         <td>{{ producto.precio | currency }}</td>
-                        <td>{{ producto.precio * producto.vacios | currency }}</td>
+                        <td style="text-align:right">
+                            {{ vc.calcularPrecio(producto) | currency }}
+                        </td>
                     </tr>
                     <tr class="fila-desglose">
-                        <td colspan="4">Subtotal</td>
-                        <td>{{ 15000 | currency }}</td>
+                        <td colspan="5">Subtotal</td>
+                        <td>{{ vc.calcularSubTotal() | currency }}</td>
                     </tr>
                     <tr class="fila-desglose">
-                        <td colspan="4">Descuentos</td>
-                        <td>{{ 1500 | currency }}</td>
+                        <td colspan="5">Descuentos</td>
+                        <td>{{ vc.descuentos | currency }}</td>
                     </tr>
                     <tr class="fila-desglose">
-                        <td colspan="4">TOTAL</td>
-                        <td>{{ 15000 - 1500 | currency }}</td>
+                        <td colspan="5">TOTAL</td>
+                        <td>{{ vc.calcularTotal() | currency }}</td>
                     </tr>
                     {% endverbatim %}
                 </tbody>

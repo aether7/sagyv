@@ -2,16 +2,17 @@
     var app = angular.module("vehiculoApp",[]);
 
     app.controller("VehiculoController", ["$http", function($http){
-        this.idVehiculo = null;
-        this.numeroGuia = null;
-        this.productos = [];
-
         var controller = this;
 
-        this.buscar = function(){
-            var url = App.urls.get("liquidacion:obtener_guia"),
-                json = { numero_guia : this.numeroGuia };
+        this.idVehiculo = null;
+        this.numeroGuia = null;
+        this.subTotal = 0;
+        this.descuentos = 0;
+        this.total = 0;
+        this.productos = [];
 
+        this.buscar = function(){
+            var url = App.urls.get("liquidacion:obtener_guia");
             url += "?numero_guia=" + this.numeroGuia;
 
             $http.get(url).success(function(data){
@@ -27,6 +28,30 @@
             }
 
             return producto.llenos;
+        };
+
+        this.calcularPrecio = function(producto){
+            var precioTotal = parseInt(producto.precio) * parseInt(producto.vacios);
+
+            if(isNaN(precioTotal)){
+                precioTotal = 0;
+            }
+
+            return precioTotal;
+        };
+
+        this.calcularSubTotal = function(){
+            this.subTotal = 0;
+
+            this.productos.forEach(function(producto){
+                controller.subTotal += parseInt(producto.precio) * parseInt(producto.vacios);
+            });
+
+            return this.subTotal;
+        };
+
+        this.calcularTotal = function(){
+            return this.subTotal - this.descuentos;
         };
 
         this.liquidar = function(){
