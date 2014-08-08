@@ -2,7 +2,11 @@
 import json
 from django.http import HttpResponse
 from django.views.generic import TemplateView,View
+<<<<<<< fb5bf0a23adee9f1f870b7a9384b70762d1cce0d
 from main.models import Trabajador, Producto, Vehiculo, GuiaDespacho
+=======
+from main.models import Trabajador, Producto, GuiaDespacho, HistorialStock
+>>>>>>> 303e17003ae7823dc22ab88848b5b7b8289b9fb9
 
 class IndexView(TemplateView):
     template_name = "liquidacion/index.html"
@@ -36,23 +40,26 @@ class BalanceLiquidacionView(View):
 class ObtenerGuiaDespacho(View):
     def get(self, req):
         numero_guia = req.GET.get('numero_guia')
-
+        productos = []
         guia = GuiaDespacho.objects.get(numero = numero_guia)
+        lote = HistorialStock.objects.filter(guia_despacho = guia)
 
-        datos = [
-            {
-                'id': '1',
-                'codigo': '1105',
-                'cantidad': '10',
-                'precio':'5000'
-            },
-            {
-                'id': '2',
-                'codigo': '1115',
-                'cantidad': '5',
-                'precio':'9500'
-            },
-        ]
+
+        for item in lote:
+            productos.append(
+                {
+                    'id': item.producto.id,
+                    'codigo': item.producto.codigo,
+                    'cantidad': item.cantidad,
+                    'precio': item.producto.
+                }
+            )
+        
+        data = {
+            'numero_guia': guia.numero,
+            'id_vehiculo': guia.vehiculo.id,
+            'productos': productos
+        }
 
         return HttpResponse(json.dumps(datos), content_type="application/json")
 
