@@ -63,7 +63,8 @@ class ObtenerGuiaDespacho(View):
 
 
 class BuscarCliente(View):
-    def get(self, req, id_cliente):
+    def get(self, req):
+        id_cliente = int(req.GET.get("id_cliente"))
         cliente = Cliente.objects.get(pk = id_cliente)
 
         data = {

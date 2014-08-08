@@ -13,7 +13,7 @@
             <button class="btn btn-primary" data-ng-click="liqCtrl.buscarGuia()">Buscar</button>
         </section>
 
-        <section>
+        <section class="panel-cabecera">
                 <div>
                     <div>
                         <label for="numero_guia">Numero guía:</label>
@@ -43,15 +43,15 @@
                 </div>
         </section>
 
-        <section>
+        <section class="panel-detalle">
             {% verbatim %}
             <table class="table table-striped">
                 <thead>
                     <tr>
                         <th>Código</th>
                         <th>Cantidad en Tránsito</th>
-                        <th>Vacíos</th>
                         <th>Llenos</th>
+                        <th>Vacíos</th>
                         <th>Precio Unitario</th>
                         <th>Cantidad a pagar</th>
                     </tr>
@@ -61,12 +61,12 @@
                         data-ng-controller="ProductoController as productoCtrl">
                         <td>{{ producto.codigo }}</td>
                         <td>{{ producto.cantidad }}</td>
+                        <td>{{ productoCtrl.calcularRestante(producto) }}</td>
                         <td>
                             <input type="text" value="{{ producto.vacios }}"
                                 data-ng-model="producto.vacios"
                                 data-ng-keyup="liqCtrl.calcularSubTotal()" />
                         </td>
-                        <td>{{ productoCtrl.calcularRestante(producto) }}</td>
                         <td>{{ producto.precio | currency }}</td>
                         <td style="text-align:right">
                             {{ producto.valorTotal | currency }}
@@ -92,6 +92,6 @@
 <script src="{% static 'js/controllers/liquidacion_controller.js' %}"></script>
 <script>
     App.urls.set("liquidacion:obtener_guia", "{% url 'liquidacion:obtener_guia' %}");
-    App.urls.set("liquidacion:buscar_cliente", "{% url 'liquidacion:buscar_cliente' 0 %}");
+    App.urls.set("liquidacion:buscar_cliente", "{% url 'liquidacion:buscar_cliente' %}");
 </script>
 {% endblock %}

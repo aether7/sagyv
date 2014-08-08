@@ -26,7 +26,7 @@
 
         this.buscarCliente = function(){
             var url = App.urls.get("liquidacion:buscar_cliente");
-            url = url.replace("0", this.idCliente);
+            url += "?id_cliente=" + this.idCliente;
 
             $http.get(url).success(function(data){
                 _this.cliente.id = data.id;
