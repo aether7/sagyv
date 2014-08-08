@@ -18,27 +18,14 @@
                     <div>
                         <label for="numero_guia">Numero guía:</label>
                         <input id="numero_guia" type="text" value="" data-ng-model="liqCtrl.numeroGuia" />
-
-                        <label for="lista_clientes">Cliente:</label>
-                        <select name="lista_clientes" id="lista_clientes"
-                            data-ng-model="liqCtrl.idCliente" data-ng-change="liqCtrl.buscarCliente()">
-                            {% for cliente in clientes %}
-                            <option value="{{ cliente.id }}">{{ cliente.giro }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div>
-                        <label for="direccion">Dirección</label>
-                        <input id="direccion" type="text" value=""
-                            readonly data-ng-model="liqCtrl.cliente.direccion" />
-
-                        <label for="rut">RUT</label>
-                        <input id="rut" type="text" value=""
-                            readonly data-ng-model="liqCtrl.cliente.rut" />
-
-                        <label for="situacion_comercial">Situación Comercial</label>
-                        <input id="situacion_comercial" type="text"
-                            value="" readonly ng-model="liqCtrl.cliente.situacionComercial" />
+                        <label for="fecha">Fecha</label>
+                        <input id="fecha" type="date" value="" />
+                        <label for="">Chofer:</label>
+                        <input type="text" value="juanito" />
+                        <label for="kilometraje">KM</label>
+                        <input id="kilometraje" type="text" value="" />
+                        <label for="">KM recorridos</label>
+                        <input type="text" readonly value="1023012031023">
                     </div>
                 </div>
         </section>
@@ -83,6 +70,87 @@
             </table>
             {% endverbatim %}
         </section>
+
+        <section>
+            <h1>Guia lipigas</h1>
+            <label for="">Numero guía</label>
+            <input type="text" value="" />
+            <label for="">Cliente</label>
+            <input type="text" value="cliente muy importante" />
+            <br />
+            sistema de carga de guia
+            <br />
+            (si el cliente tiene credito se aplica el total de la guía)<br />
+            (si el cliente tiene solo descuento se descuenta el % X del producto)
+        </section>
+
+        <section>
+            <h1>Guías propias</h1>
+            <label for="">Numero guía</label>
+            <input type="text" value="" />
+            <label for="">Cliente</label>
+            <input type="text" value="cliente muy importante" />
+            <br />
+            sistema de carga de guia
+            <br />
+            (si el cliente tiene credito se aplica el total de la guía)<br />
+            (si el cliente tiene solo descuento se descuenta el % X del producto)
+        </section>
+
+        <section>
+            <h1>Voucher Lipigas</h1>
+            tarjeta comercial <br />
+            <select name="" id="">
+                <option value="">RIPLEY y DEMASES</option>
+            </select>
+            <label for="">monto</label>
+            <input type="text" value="100102203012301203" />
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tarjeta</th>
+                        <th>Monto</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Ripley</td>
+                        <td>100000000</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <label for="">descuentos</label>
+            <input type="text" value="0" />
+
+            <label for="">TOTAL</label>
+            <label for="">$12301239120301923</label>
+
+            <label for="">Numero Cierre</label>
+            <input type="text" />
+        </section>
+
+
+        <section>
+            <h1>Voucher Transbank</h1>
+            <label for="">tipo de tarjeta</label>
+            <select name="" id="">
+                <option value="">DEBITO</option>
+                <option value="">VISA</option>
+                <option value="">Mastercard</option>
+                <option value="">Dinners Club</option>
+            </select>
+        </section>
+
+        <button class="btn btn-default">Guia Lipigas</button>
+        <button class="btn btn-default">Guia propia</button>
+        <button class="btn btn-default">Voucher Lipigas</button>
+        <button class="btn btn-default">Voucher Transbank</button>
+        <button class="btn btn-default">Cupones de prepago</button>
+        <button class="btn btn-default">Otros</button>
+
+        <button class="btn btn-primary">Guardar</button>
     </section>
 {% endblock %}
 
