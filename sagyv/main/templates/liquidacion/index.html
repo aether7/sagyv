@@ -2,126 +2,71 @@
 {% load static %}
 
 {% block content %}
-    <input id="balance_liquidacion" type="hidden" value="{% url 'balance_liquidacion' %}" />
-
-    <section class="container">
-        <article class="pull-right">
-            Guía # : <input id="guia_despacho" type="text" value="" />
-        </article>
-
-        <article class="pull-right">
-            <input id="busca_trabajador" type="search" value="" placeholder="Nombre trabajador" />
-            <span class="glyphicon glyphicon-search"></span>
-        </article>
-
-        <article class="pull-right">
-            <input type="text" type="search" value="" placeholder="Nº móvil" />
-            <span class="glyphicon glyphicon-search"></span>
-        </article>
-    </section>
-
-    <section class="container" style="margin-top:4em">
-        <article class="row">
-
-            <div id="stock_inicial" class="col-md-4 list-group">
-                {% for producto in productos %}
-                    <a href="javascript:;" class="list-group-item" data-cantidad="{{producto.stock}}">
-                        {{ producto.codigo }} - {{ producto.tipo_producto.nombre }} ({{ producto.peso }} Kg)
-                        <span class="badge" id="id_initial_{{producto.id}}">{{ producto.stock }}</span>
-                    </a>
+    <section id="liquidacion" data-ng-app="vehiculoApp" data-ng-controller="VehiculoController as vc">
+        <section class="panel-busqueda">
+            <label for="lista_vehiculos" >Vehículo:</label>
+            <select name="lista_vehiculos" id="lista_vehiculos" data-ng-model="vc.idVehiculo">
+                {% for vehiculo in vehiculos %}
+                <option value="{{ vehiculo.id }}">{{ vehiculo.numero }} - {{ vehiculo.patente }}</option>
                 {% endfor %}
-            </div>
-
-            <div id="stock_actual" class="col-md-4 list-group">
-                {% for producto in productos %}
-                    <a href="javascript:;" class="list-group-item"
-                        onclick="App.liquidacionController.showModal({{ producto.id }})"
-                        data-cantidad="0" data-id="{{ producto.id }}" data-producto="true">
-                        {{ producto.codigo }} - {{ producto.tipo_producto.nombre }} ({{ producto.peso }} Kg)
-                        <span class="badge" id="id_actual_{{ producto.id }}">0</span>
-                    </a>
-                {% endfor %}
-            </div>
-
-            <div id="stock_gastado" class="col-md-4">
-                {% for producto in productos %}
-                    <a href="javascript:;" class="list-group-item" data-cantidad="0">
-                        {{ producto.codigo }} - {{ producto.tipo_producto.nombre }} ({{ producto.peso }} Kg)
-                        <span class="badge" id="id_gastado_{{ producto.id }}">0</span>
-                    </a>
-                {% endfor %}
-            </div>
-        </article>
-
-        <section class="container" style="margin-top:4em">
-            <form action="" method="post" role="form">
-                <table class="table table-stripped">
-                    <thead>
-                        <tr>
-                            <th>Código</th>
-                            <th>Cantidad en tránsito</th>
-                            <th>LLenos</th>
-                            <th>Vacíos</th>
-                            <th>Total pagar</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for producto in productos %}
-                        {% if producto.stock > 0 %}
-                        <tr>
-                            <td>{{ producto.codigo }}</td>
-                            <td>{{ producto.stock }}</td>
-                            <td><input type="text" value="" placeholder="cantidad llena" /></td>
-                            <td><input type="text" value="" placeholder="cantidad vacíos" /></td>
-                            <td><span>$ 5000</span></td>
-                        </tr>
-                        {% endif %}
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </form>
+            </select>
+            <button class="btn btn-primary" data-ng-click="vc.buscar()">Buscar</button>
         </section>
 
-        <article class="row center">
-            <button id="btn_guardar_liquidacion" class="btn btn-primary">Guardar</button>
-        </article>
-    </section>
-
-    <div id="modal" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Cantidad utilizada</h4>
-                </div>
-
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label class="control-label" for="cantidad">Cantidad:</label>
-                        <input id="cantidad" type="text" class="form-control" />
-                        <span class="help-block"></span>
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                    <button id="btn_actualizar_venta" type="button" class="btn btn-primary">Guardar</button>
-                </div>
+        <section>
+            <div>
+                <label for="">Numero guía:</label>
+                <input type="text" value="" data-ng-model="vc.numeroGuia" />
             </div>
-        </div>
-    </div>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Cantidad en Tránsito</th>
+                        <th>Vacíos</th>
+                        <th>Llenos</th>
+                        <th>Cantidad a pagar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% verbatim %}
+                    <tr data-ng-repeat="producto in vc.productos">
+                        <td>{{ producto.codigo }}</td>
+                        <td>{{ producto.cantidad }}</td>
+                        <td>
+                            <input type="text" value="{{ producto.vacios }}" ng-model="producto.vacios" />
+                        </td>
+                        <td>
+                            <input type="text" value="{{ vc.calcularRestante(producto) }}"
+                                data-ng-model="producto.llenos" />
+                        </td>
+                        <td>{{ producto.precio * producto.vacios | currency }}</td>
+                    </tr>
+                    <tr class="fila-desglose">
+                        <td colspan="4">Subtotal</td>
+                        <td>{{ 15000 | currency }}</td>
+                    </tr>
+                    <tr class="fila-desglose">
+                        <td colspan="4">Descuentos</td>
+                        <td>{{ 1500 | currency }}</td>
+                    </tr>
+                    <tr class="fila-desglose">
+                        <td colspan="4">TOTAL</td>
+                        <td>{{ 15000 - 1500 | currency }}</td>
+                    </tr>
+                    {% endverbatim %}
+                </tbody>
+            </table>
+        </section>
+    </section>
 {% endblock %}
 
 {% block js %}
+<script src="{% static 'js/vendor/angular.min.js' %}"></script>
 <script src="{% static 'js/plugins/typeahead.min.js' %}"></script>
-<script src="{% static 'js/controllers/liquidacion.js' %}"></script>
+<script src="{% static 'js/controllers/liquidacion_controller.js' %}"></script>
 <script>
-    App.liquidacionController = new App.Controllers.Liquidacion();
-
-    {% for trabajador in trabajadores %}
-        App.liquidacionController.addTrabajador("{{ trabajador }}");
-    {% endfor %}
-
-    App.liquidacionController.init();
+    App.urls.set("liquidacion:obtener_guia", "{% url 'liquidacion:obtener_guia' %}");
 </script>
 {% endblock %}

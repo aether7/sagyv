@@ -69,8 +69,6 @@ App.Views.Cliente.prototype = {
     },
 
     actualizarCliente: function(data){
-        console.log(data);
-
         var tr = $("a[data-id={0}][data-accion=editar]".format(data.id)).closest("tr");
 
         tr.find("[data-columna=nombre]").text(data.nombre);

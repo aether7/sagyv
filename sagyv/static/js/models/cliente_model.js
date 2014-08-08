@@ -88,16 +88,6 @@ App.Models.Cliente.prototype = {
             });
         }
 
-        /*if(this.cantidad.trim() !== "" && !/^\d+$/.test(this.cantidad)){
-            valido = false;
-
-            this.errorList.push({
-                campo : "cantidad",
-                mensaje : "solo deben ingresarse números"
-            });
-        }
-        */
-
         return valido;
     },
 
