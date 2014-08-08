@@ -2,11 +2,8 @@
 import json
 from django.http import HttpResponse
 from django.views.generic import TemplateView,View
-<<<<<<< fb5bf0a23adee9f1f870b7a9384b70762d1cce0d
-from main.models import Trabajador, Producto, Vehiculo, GuiaDespacho
-=======
-from main.models import Trabajador, Producto, GuiaDespacho, HistorialStock
->>>>>>> 303e17003ae7823dc22ab88848b5b7b8289b9fb9
+from main.models import Trabajador, Producto, Vehiculo, StockVehiculo
+from main.models import GuiaDespacho, HistorialStock
 
 class IndexView(TemplateView):
     template_name = "liquidacion/index.html"
@@ -42,7 +39,7 @@ class ObtenerGuiaDespacho(View):
         numero_guia = req.GET.get('numero_guia')
         productos = []
         guia = GuiaDespacho.objects.get(numero = numero_guia)
-        lote = HistorialStock.objects.filter(guia_despacho = guia)
+        lote = StockVehiculo.objects.filter(guia_despacho = guia.viheiculo)
 
 
         for item in lote:
