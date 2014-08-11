@@ -23,7 +23,7 @@
                         <label for="">Chofer:</label>
                         <input type="text" value="juanito" />
                         <label for="kilometraje">KM</label>
-                        <input id="kilometraje" type="text" value="" />
+                        <input id="kilometraje" type="text" value="" data-ng-model="liqCtrl.vehiculo.km" readonly />
                         <label for="">KM recorridos</label>
                         <input type="text" readonly value="1023012031023">
                     </div>
@@ -75,159 +75,29 @@
             {% endverbatim %}
         </section>
 
-        <section>
-            <h1>Guia lipigas</h1>
-            <label for="">Numero guía</label>
-            <input type="text" value="" />
-            <label for="">Cliente</label>
-            <input type="text" value="cliente muy importante" />
-            <br />
-            sistema de carga de guia
-            <br />
-            (si el cliente tiene credito se aplica el total de la guía)<br />
-            (si el cliente tiene solo descuento se descuenta el % X del producto)
-        </section>
+        <button class="btn btn-default" data-accion="abre_modal" data-modal="guia_propia">Guia propia</button>
+        <button class="btn btn-default" data-accion="abre_modal" data-modal="guia_lipigas">Guia Lipigas</button>
+        <button class="btn btn-default" data-accion="abre_modal" data-modal="voucher_lipigas">Voucher Lipigas</button>
+        <button class="btn btn-default" data-accion="abre_modal" data-modal="voucher_transbank">Voucher Transbank</button>
+        <button class="btn btn-default" data-accion="abre_modal" data-modal="cupones_prepago">Cupones de prepago</button>
+        <button class="btn btn-default" data-accion="abre_modal" data-modal="otros">Otros</button>
+        <button class="btn btn-default" data-accion="abre_modal" data-modal="abono">ABONO</button>
+        <button class="btn btn-default" data-accion="abre_modal" data-modal="cheques">CHEQUES</button>
 
-        <section>
-            <h1>Guías propias</h1>
-            <label for="">Numero guía</label>
-            <input type="text" value="" />
-            <label for="">Cliente</label>
-            <input type="text" value="cliente muy importante" />
-            <br />
-            sistema de carga de guia
-            <br />
-            (si el cliente tiene credito se aplica el total de la guía)<br />
-            (si el cliente tiene solo descuento se descuenta el % X del producto)
-        </section>
+        <button class="btn btn-primary" data-modal="">Guardar</button>
+        <button class="btn btn-default" data-modal="">VENTA GARANTIAS</button>
+        <button class="btn btn-primary" data-modal="">CERRAR LIQUIDACIÓN</button>
 
-        <section>
-            <h1>Voucher Lipigas</h1>
-            tarjeta comercial <br />
-            <select name="" id="">
-                <option value="">RIPLEY y DEMASES</option>
-            </select>
-            <label for="">monto</label>
-            <input type="text" value="100102203012301203" />
-            <button class="btn btn-default">+</button>
+        {% include "liquidacion/components/modal_guia_propia.html" %}
+        {% include "liquidacion/components/modal_guia_lipigas.html" %}
+        {% include "liquidacion/components/modal_voucher_lipigas.html" %}
+        {% include "liquidacion/components/modal_voucher_transbank.html" %}
+        {% include "liquidacion/components/modal_cupones_prepago.html" %}
+        {% include "liquidacion/components/modal_otros.html" %}
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Tarjeta</th>
-                        <th>Monto</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Ripley</td>
-                        <td>100000000</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <label for="">descuentos</label>
-            <input type="text" value="0" />
-
-            <label for="">TOTAL</label>
-            {% verbatim %}
-            <input type="text" value="{{ 123123123 | currency }}" />
-            {% endverbatim %}
-
-            <label for="">Numero Cierre</label>
-            <input type="text" />
-            <label for="">Terminal</label>
-            <input type="text" value="123123">
-        </section>
-
-
-        <section>
-            <h1>Voucher Transbank</h1>
-            <label for="">tipo de tarjeta</label>
-
-            <select name="" id="">
-                <option value="">DEBITO</option>
-                <option value="">VISA</option>
-                <option value="">Mastercard</option>
-                <option value="">Dinners Club</option>
-            </select>
-
-            <button class="btn btn-default">+</button>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Tarjeta</th>
-                        <th>Monto</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Ripley</td>
-                        <td>100000000</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <label for="">descuentos</label>
-            <input type="text" value="0" />
-
-            <label for="">TOTAL</label>
-            {% verbatim %}
-            <input type="text" value="{{ 123123123 | currency }}" />
-            {% endverbatim %}
-
-            <label for="">Numero Cierre</label>
-            <input type="text" />
-            <label for="">TERMINAL</label>
-            <input type="text" value="" />
-            <label for="">CUOTAS</label>
-            <input type="text" />
-        </section>
-
-        <section>
-            <h1>Cupones de prepago</h1>
-            <label for="">numero</label>
-            <input type="text">
-            <label for="">cliente</label>
-            <input type="text" value="" />
-            <label for="">formato</label>
-            <select name="" id="">
-                <option value="">15 KG (codigo balon)</option>
-            </select>
-            <label for="">Descuento</label>
-            <input type="text" value="" />
-        </section>
-
-        <section>
-            <h1>OTROS</h1>
-            <label for="">Concepto</label>
-            <input type="text">
-            <label for="">monto</label>
-            <input type="text">
-            (" AQUI SE INGRESA SIGNO POSITIVO O NEGATIVO PARA SUMAR O RESTAR EL VALOR ")
-        </section>
-
-        <section>
-            <h1>CHEQUES</h1>
-            <label for="">MONTO</label>
-            <label for="">Banco</label>
-            <label for="">SERIE</label>
-            <label for="">FECHA</label>
-        </section>
-
-
-        <button class="btn btn-default">Guia Lipigas</button>
-        <button class="btn btn-default">Guia propia</button>
-        <button class="btn btn-default">Voucher Lipigas</button>
-        <button class="btn btn-default">Voucher Transbank</button>
-        <button class="btn btn-default">Cupones de prepago</button>
-        <button class="btn btn-default">Otros</button>
-        <button class="btn btn-default">VENTA GARANTIAS</button>
-        <button class="btn btn-default">ABONO</button>
-        <button class="btn btn-default">CHEQUES</button>
-        <button class="btn btn-primary">Guardar</button>
-        <button class="btn btn-primary">CERRAR LIQUIDACIÓN</button>
+        {% comment %}
+        {% include "liquidacion/components/modal_cheques.html" %}
+        {% endcomment %}
 
         (Cerrada la liquidación, se puede mostrar la información resumen y exportar info a EXCEL).
     </section>
@@ -236,6 +106,7 @@
 {% block js %}
 <script src="{% static 'js/vendor/angular.min.js' %}"></script>
 <script src="{% static 'js/plugins/typeahead.min.js' %}"></script>
+<script src="{% static 'js/common_functions.js' %}"></script>
 <script src="{% static 'js/controllers/liquidacion_controller.js' %}"></script>
 <script>
     App.urls.set("liquidacion:obtener_guia", "{% url 'liquidacion:obtener_guia' %}");

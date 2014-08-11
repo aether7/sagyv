@@ -1,7 +1,7 @@
 #-*- coding: utf-8 -*-
 import json
 from django.db import models
-from main.managers import StockManager, ClienteManager
+from main.managers import StockManager, ClienteManager, TarjetaCreditoManager
 
 """
 Como nota adicional: Todos los ingresos que sean representados como booleanos
@@ -325,6 +325,8 @@ class TarjetaCredito(models.Model):
     nombre = models.CharField(max_length=140)
     codigo = models.CharField(max_length=140, null=True)
     tipo_tarjeta = models.ForeignKey(TipoTarjeta)
+
+    objects = TarjetaCreditoManager()
 
     def __unicode__(self):
         return self.nombre + " " + self.codigo

@@ -84,3 +84,21 @@ class ClienteManager(models.Manager):
         )
 
         return resultados
+
+
+class TarjetaCreditoManager(models.Manager):
+    TARJETA_CREDITO = 1
+    TARJETA_DEBITO = 2
+    TARJETA_COMERCIAL = 3
+
+    def get_tarjetas_comerciales(self):
+        resultados = self.filter(tipo_tarjeta_id = self.TARJETA_COMERCIAL)
+        return resultados
+
+    def get_tarjetas_bancarias(self):
+        resultados = self.filter(
+            Q(tipo_tarjeta_id = self.TARJETA_DEBITO) |
+            Q(tipo_tarjeta_id = self.TARJETA_CREDITO)
+        ).order_by("-tipo_tarjeta")
+
+        return resultados

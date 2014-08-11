@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.views.generic import TemplateView,View
 from main.models import Trabajador, Producto, Vehiculo, StockVehiculo
 from main.models import GuiaDespacho, HistorialStock, Cliente
+from main.models import TarjetaCredito, Producto
 
 
 class IndexView(TemplateView):
@@ -13,6 +14,9 @@ class IndexView(TemplateView):
         context = super(IndexView, self).get_context_data(**kwargs)
         context["vehiculos"] = Vehiculo.objects.order_by("id")
         context["clientes"] = Cliente.objects.order_by("nombre")
+        context["tarjetas_comerciales"] = TarjetaCredito.objects.get_tarjetas_comerciales()
+        context["tarjetas_bancarias"] = TarjetaCredito.objects.get_tarjetas_bancarias()
+        context["productos"] = Producto.objects.exclude(tipo_producto_id = 3)
 
         return context
 
@@ -42,6 +46,7 @@ class ObtenerGuiaDespacho(View):
         #guia = GuiaDespacho.objects.get(numero = numero_guia)
         #lote = StockVehiculo.objects.filter(vehiculo = guia.vehiculo)
         id_vehiculo = int(req.GET.get("id_vehiculo"))
+        vehiculo = Vehiculo.objects.get(pk = id_vehiculo)
         lote = StockVehiculo.objects.filter(vehiculo_id = id_vehiculo)
         productos = []
 
@@ -54,9 +59,11 @@ class ObtenerGuiaDespacho(View):
             })
 
         datos = {
-            #'numero_guia': guia.numero,
-            'id_vehiculo': id_vehiculo,
-            'productos': productos
+            "vehiculo" : {
+                "id" : id_vehiculo,
+                "km" : vehiculo.km
+            },
+            "productos" : productos
         }
 
         return HttpResponse(json.dumps(datos), content_type="application/json")

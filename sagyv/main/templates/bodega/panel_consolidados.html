@@ -1,1 +1,22 @@
-panel_consolidados.html
+<div class="panel panel-default">
+    <table class="table center table-striped">
+        <tr>
+            <td>Código</td>
+            <td>Stock</td>
+            <td>Vehiculos</td>
+        </tr>
+        {% for producto in total_stock  %}
+        <tr>
+            <td>{{ producto.codigo }}</td>
+            <td>
+                <span id="stock_{{ producto.id }}">
+                    {{ producto.cantidad }}
+                </span>
+            </td>
+            <td>
+               somewhere
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>

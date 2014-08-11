@@ -10,6 +10,7 @@
         this.descuentos = 0;
         this.total = 0;
         this.cliente = {};
+        this.vehiculo = {};
 
         var _this = this;
 
@@ -21,6 +22,7 @@
 
             $http.get(url).success(function(data){
                 _this.productos = data.productos;
+                _this.vehiculo = data.vehiculo;
             });
         };
 
@@ -87,5 +89,11 @@
 
             return producto.llenos;
         };
+    });
+})();
+
+(function(){
+    $("button[data-accion=abre_modal]").on("click", function(evt){
+        common.mostrarModal($(this).data("modal"));
     });
 })();
