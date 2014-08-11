@@ -11,6 +11,7 @@ App.Views.Cliente = function(){
     this.situacionComercial = null;
     this.credito = null;
     this.dispensador = null;
+    this.es_lipigas = null;
     this.observacion = null;
     this.cantidad = null;
     this.tipo = null;
@@ -151,6 +152,7 @@ App.Views.Cliente.prototype = {
         this.situacionComercial = $("#sit_comercial_add");
         this.credito = $("#credito_add");
         this.dispensador = $("#dispensador_add");
+        this.es_lipigas = $("#es_lipigas_add");
         this.observacion = $("#obs_add");
         this.cantidad = $("#numero_add");
         this.tipo = $("#tipo_add");
@@ -164,6 +166,7 @@ App.Views.Cliente.prototype = {
             rut : this.rut.val(),
             situacionComercial : this.situacionComercial.val(),
             credito : this.credito.val(),
+            es_lipigas : this.es_lipigas.val(),
             dispensador : this.dispensador.val(),
             observacion : this.observacion.val(),
             cantidad : this.cantidad.val(),
@@ -183,6 +186,7 @@ App.Views.Cliente.prototype = {
         this.rut = $("#rut_update");
         this.situacionComercial = $("#sit_comercial_update");
         this.credito = $("#credito_update");
+        this.es_lipigas = $("#es_lipigas_update");
         this.dispensador = $("#dispensador_update");
         this.observacion = $("#obs_update");
         this.cantidad = $("#numero_update");
@@ -198,6 +202,7 @@ App.Views.Cliente.prototype = {
             situacionComercial : this.situacionComercial.val(),
             credito : this.credito.val(),
             dispensador : this.dispensador.val(),
+            es_lipigas : this.es_lipigas.val(),
             observacion : this.observacion.val(),
             cantidad : this.cantidad.val(),
             tipo : this.tipo.val(),
@@ -282,6 +287,7 @@ App.Views.Cliente.prototype = {
             situacionComercial : this.situacionComercial,
             credito : this.credito,
             dispensador : this.dispensador,
+            es_lipigas : this.es_lipigas,
             observacion : this.observacion,
             cantidad : this.cantidad,
             tipo : this.tipo,

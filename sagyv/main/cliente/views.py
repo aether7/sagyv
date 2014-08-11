@@ -49,6 +49,7 @@ class ObtenerCliente(View):
             'situacion_comercial' : cliente.situacion_comercial.id,
             'credito' : cliente.credito,
             'dispensador' : cliente.dispensador,
+            'es_lipigas' : cliente.es_lipigas,
             'obs' : cliente.observacion
         }
 
@@ -120,7 +121,12 @@ class CrearCliente(View):
         telefono = self.request.POST.get('telefono')
         credito = self.request.POST.get('credito')
         dispensador = self.request.POST.get("dispensador")
+        es_lipigas = self.request.POST.get('es_lipigas')
         obs = self.request.POST.get('obs')
+
+        print "es lipi"+str(es_lipigas)
+        print "cretido"+str(credito)
+        print "dispensador"+str(dispensador)
 
         cliente = Cliente()
         cliente.nombre = nombre
@@ -131,8 +137,9 @@ class CrearCliente(View):
         cliente.situacion_comercial = situacion_comercial
         cliente.observacion = obs
 
-        cliente.credito = (credito != "false") and True or False
-        cliente.dispensador = (dispensador != "false") and True or False
+        cliente.es_lipigas = (es_lipigas != "") and True or False
+        cliente.credito = (credito != "") and True or False
+        cliente.dispensador = (dispensador != "") and True or False
 
         cliente.save()
 
@@ -181,6 +188,7 @@ class ModificarCliente(View):
         telefono = self.request.POST.get('telefono')
         credito = self.request.POST.get('credito')
         dispensador = self.request.POST.get('dispensador')
+        es_lipigas = self.request.POST.get('es_lipigas')
         obs = self.request.POST.get('obs')
 
         cliente = Cliente.objects.get(pk = id_cliente)
@@ -191,8 +199,9 @@ class ModificarCliente(View):
         cliente.observacion = obs
         cliente.situacion_comercial = situacion_comercial
 
-        cliente.credito = (credito != "false") and True or False
-        cliente.dispensador = (dispensador != "false") and True or False
+        cliente.es_lipigas = (es_lipigas != '') and True or False
+        cliente.credito = (credito != "") and True or False
+        cliente.dispensador = (dispensador != "") and True or False
         cliente.save()
 
         return cliente

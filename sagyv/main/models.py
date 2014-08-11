@@ -388,6 +388,7 @@ class Cliente(models.Model):
     situacion_comercial = models.ForeignKey(DescuentoCliente)
     credito = models.NullBooleanField()
     dispensador = models.NullBooleanField()
+    es_lipigas = models.NullBooleanField()
     observacion = models.CharField(max_length=500, null=True)
 
     objects = ClienteManager()

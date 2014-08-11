@@ -8,6 +8,7 @@ App.Models.Cliente = function(){
     this.situacionComercial = null;
     this.credito = null;
     this.dispensador = null;
+    this.es_lipigas = null;
     this.observacion = null;
     this.cantidad = null;
     this.tipo = null;
@@ -106,6 +107,7 @@ App.Models.Cliente.prototype = {
             credito : this.credito,
             dispensador : this.dispensador,
             id_cliente : this.idCliente,
+            es_lipigas : this.es_lipigas,
             obs : this.observacion,
             cantidad : this.cantidad.replace(/[\.,]/g, ""),
             tipo : this.tipo,
