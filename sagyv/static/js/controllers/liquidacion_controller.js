@@ -10,7 +10,10 @@
         this.descuentos = 0;
         this.total = 0;
         this.cliente = {};
-        this.vehiculo = {};
+        this.vehiculo = {
+            kilometrosRecorridos : 0,
+            kmActual : 0
+        };
 
         var _this = this;
 
@@ -23,6 +26,7 @@
             $http.get(url).success(function(data){
                 _this.productos = data.productos;
                 _this.vehiculo = data.vehiculo;
+                _this.vehiculo.kilometrosRecorridos = 0;
             });
         };
 
@@ -36,6 +40,10 @@
                 _this.cliente.rut = data.rut;
                 _this.cliente.situacionComercial = data.situacion_comercial;
             });
+        };
+
+        this.actualizarKilometraje = function(){
+            this.vehiculo.kilometrosRecorridos = this.vehiculo.kmActual - this.vehiculo.km;
         };
 
         this.calcularSubTotal = function(){

@@ -2,9 +2,11 @@
 {% load static %}
 
 {% block content %}
-    <section id="liquidacion" data-ng-app="liquidacionApp" data-ng-controller="LiquidacionController as liqCtrl">
+    <section id="liquidacion" class="panel-liquidacion"
+        data-ng-app="liquidacionApp" data-ng-controller="LiquidacionController as liqCtrl">
+
         <section class="panel-busqueda">
-            <label for="lista_vehiculos" >Vehículo:</label>
+            <label for="lista_vehiculos" >Vehículo</label>
             <select name="lista_vehiculos" id="lista_vehiculos" data-ng-model="liqCtrl.idVehiculo">
                 {% for vehiculo in vehiculos %}
                 <option value="{{ vehiculo.id }}">{{ vehiculo.numero }} - {{ vehiculo.patente }}</option>
@@ -13,25 +15,37 @@
             <button class="btn btn-primary" data-ng-click="liqCtrl.buscarGuia()">Buscar</button>
         </section>
 
-        <section class="panel-cabecera">
-                <div>
-                    <div>
-                        <label for="numero_guia">Numero guía:</label>
-                        <input id="numero_guia" type="text" value="" data-ng-model="liqCtrl.numeroGuia" />
-                        <label for="fecha">Fecha</label>
-                        <input id="fecha" type="date" value="" />
-                        <label for="">Chofer:</label>
-                        <input type="text" value="juanito" />
-                        <label for="kilometraje">KM</label>
-                        <input id="kilometraje" type="text" value="" data-ng-model="liqCtrl.vehiculo.km" readonly />
-                        <label for="">KM recorridos</label>
-                        <input type="text" readonly value="1023012031023">
-                    </div>
-                </div>
-                <div>
-                    <label for="">numero de boleta</label>
-                    <input type="text">(ajaxazo)
-                </div>
+        <section class="panel panel-default panel-cabecera">
+            <div class="panel-heading">
+                <h3 class="panel-title">Datos del chofer</h3>
+            </div>
+            <div>
+                <label for="numero_guia">Nº guía</label>
+                <input id="numero_guia" type="text" value="" data-ng-model="liqCtrl.numeroGuia" />
+
+                <label for="fecha">Fecha</label>
+                <input id="fecha" type="date" value="" />
+
+                <label for="numero_boleta">Nº de boleta</label>
+                <input id="numero_boleta" type="text" value="" data-ng-model="liqCtrl.numeroBoleta" />
+            </div>
+
+            <div>
+                <label for="nombre_chofer">Chofer</label>
+                <input id="nombre_chofer" type="text" data-ng-model="liqCtrl.vehiculo.chofer" readonly value="" />
+
+                <label for="kilometraje">KM actual</label>
+
+                <input id="kilometraje" type="text" value=""
+                    data-ng-model="liqCtrl.vehiculo.kmActual"
+                    data-ng-keyup="liqCtrl.actualizarKilometraje()" />
+
+                <label for="km_recorridos">KM recorridos</label>
+
+                <input id="km_recorridos" type="text"
+                    value="" readonly
+                    data-ng-model="liqCtrl.vehiculo.kilometrosRecorridos" />
+            </div>
         </section>
 
         <section class="panel-detalle">
@@ -64,14 +78,12 @@
                         </td>
                     </tr>
                 </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="2">Subtotal: {{ liqCtrl.subTotal | currency }}</td>
-                        <td colspan="2">Descuentos: {{ liqCtrl.descuentos | currency }}</td>
-                        <td colspan="2">Total: {{ liqCtrl.total | currency }}</td>
-                    </tr>
-                </tfoot>
             </table>
+
+            <div>
+                Subtotal : {{ liqCtrl.subTotal | currency }}
+            </div>
+
             {% endverbatim %}
         </section>
 

@@ -8,6 +8,9 @@ body{font-size:16px}
 #modal_ver .form-group .control-label{background:#f0f0f0;width:40%}
 #modal_ver .form-group .form-control-static{width:59%}
 #liquidacion .panel-busqueda,#liquidacion .panel-cabecera,#liquidacion .panel-detalle{padding:2em 1em}
+#liquidacion .panel-cabecera{margin:0 1em;}
+#liquidacion .panel-cabecera div{padding:1em;}
+#liquidacion .panel-cabecera div label{text-align:right;width:100px}
 #liquidacion .table .fila-desglose td{text-align:right}
 #my_tab{margin:2em 0}
 .auto-margin{margin:auto}

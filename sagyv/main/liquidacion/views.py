@@ -61,7 +61,8 @@ class ObtenerGuiaDespacho(View):
         datos = {
             "vehiculo" : {
                 "id" : id_vehiculo,
-                "km" : vehiculo.km
+                "km" : vehiculo.km,
+                "chofer" : vehiculo.get_nombre_ultimo_chofer()
             },
             "productos" : productos
         }
