@@ -165,9 +165,9 @@ App.Views.Cliente.prototype = {
             telefono : this.telefono.val(),
             rut : this.rut.val(),
             situacionComercial : this.situacionComercial.val(),
-            credito : this.credito.val(),
-            es_lipigas : this.es_lipigas.val(),
-            dispensador : this.dispensador.val(),
+            credito : this.credito.is(":checked"),
+            es_lipigas : this.es_lipigas.is(":checked"),
+            dispensador : this.dispensador.is(":checked"),
             observacion : this.observacion.val(),
             cantidad : this.cantidad.val(),
             tipo : this.tipo.val(),
@@ -200,9 +200,9 @@ App.Views.Cliente.prototype = {
             telefono : this.telefono.val(),
             rut : this.rut.val(),
             situacionComercial : this.situacionComercial.val(),
-            credito : this.credito.val(),
-            dispensador : this.dispensador.val(),
-            es_lipigas : this.es_lipigas.val(),
+            credito : this.credito.is(":checked"),
+            dispensador : this.dispensador.is(":checked"),
+            es_lipigas : this.es_lipigas.is(":checked"),
             observacion : this.observacion.val(),
             cantidad : this.cantidad.val(),
             tipo : this.tipo.val(),
@@ -253,6 +253,11 @@ App.Views.Cliente.prototype = {
         if(data.dispensador){
             $("#dispensador_update").get(0).checked = true;
         }
+
+        if(data.es_lipigas){
+            $("#es_lipigas_update").get(0).checked = true;
+        }
+
     },
 
     eliminarCliente: function(){

@@ -124,10 +124,6 @@ class CrearCliente(View):
         es_lipigas = self.request.POST.get('es_lipigas')
         obs = self.request.POST.get('obs')
 
-        print "es lipi"+str(es_lipigas)
-        print "cretido"+str(credito)
-        print "dispensador"+str(dispensador)
-
         cliente = Cliente()
         cliente.nombre = nombre
         cliente.giro = giro
@@ -137,9 +133,9 @@ class CrearCliente(View):
         cliente.situacion_comercial = situacion_comercial
         cliente.observacion = obs
 
-        cliente.es_lipigas = (es_lipigas != "") and True or False
-        cliente.credito = (credito != "") and True or False
-        cliente.dispensador = (dispensador != "") and True or False
+        cliente.es_lipigas = (es_lipigas != "false") and True or False
+        cliente.credito = (credito != "false") and True or False
+        cliente.dispensador = (dispensador != "false") and True or False
 
         cliente.save()
 
@@ -199,9 +195,9 @@ class ModificarCliente(View):
         cliente.observacion = obs
         cliente.situacion_comercial = situacion_comercial
 
-        cliente.es_lipigas = (es_lipigas != '') and True or False
-        cliente.credito = (credito != "") and True or False
-        cliente.dispensador = (dispensador != "") and True or False
+        cliente.es_lipigas = (es_lipigas != "false") and True or False
+        cliente.credito = (credito != "false") and True or False
+        cliente.dispensador = (dispensador != "false") and True or False
         cliente.save()
 
         return cliente
