@@ -18,6 +18,7 @@ class IndexView(TemplateView):
         context["productos_transito"] = self.get_productos_transito()
         context["total_stock"] = self.get_stock_total()
         context["vehiculos"] = Vehiculo.objects.all().order_by("id")
+        context["guias"] = self.get_guias()
 
         return context
 
@@ -32,6 +33,11 @@ class IndexView(TemplateView):
     def get_stock_total(self):
         total = StockVehiculo.objects.get_stock_consolidado()
         return total
+
+    def get_guias(self):
+        guias = GuiaDespacho.objects.filter(tipo_guia = 0)
+        print guias
+        return guias
 
 
 class CrearGuiaDespachoView(View):

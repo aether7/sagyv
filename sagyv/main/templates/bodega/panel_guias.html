@@ -1,1 +1,18 @@
-panel_guias.html
+<div class="panel panel-default">
+    <table class="table center table-striped">
+        <tr>
+            <td>Numero Guia</td>
+            <td>Vehiculo</td>
+            <td>fecha</td>
+            <td>Otros</td>
+        </tr>
+        {% for guia in guias  %}
+        <tr>
+            <td>{{guia.numero}}</td>
+            <td>{{guia.vehiculo.numero}}</td>
+            <td>{{guia.fecha}}</td>
+            <td> <a href="">Ver</a> </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
