@@ -81,18 +81,17 @@ App.Controllers.Bodega.prototype = {
             evt.preventDefault();
             var id = $(this).data("guiaid"),
                 url = App.urls.get("bodega:obtener_guia"),
-                modalBody = $("#modal_ver_detalle .modal-body");
+                modalBody = $("#modal_mostrar_guia .modal-body");
 
             modalBody.empty();
 
             $.get(url, {guia_id : id}, function(data){
-                console.log(data);
                 var html,
-                    dato = { resultados: data};
+                    dato = { resultados: data.productos };
 
                 html = _this.renderVerDetalleGuia(dato);
                 modalBody.html(html);
-                common.mostrarModal('ver_detalle');
+                common.mostrarModal('mostrar_guia');
             });
         });
     },
@@ -208,10 +207,7 @@ App.Controllers.Bodega.prototype = {
             precio = $("#valor_total")
             action = $("#f_carga_producto").attr("action");
 
-        console.log('pre if');
-        console.log(action);
         if(!this.esValidaCargaProducto(factura, fecha, precio)){
-            console.log('cage, por que no se..');
             return;
         }
 
