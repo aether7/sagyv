@@ -20,9 +20,10 @@ body{font-family:'Verdana','Sans-serif';font-size:16px}
 .center{text-align:center}
 .logo-index{float:left}
 .modal .modal-dialog .modal-content .modal-header{background-color:#835c94;color:#fff}
-.icon-pencil,.icon-calendar,.icon-calendar2,.icon-remove{font-family:'icomoon';speak:none;font-style:normal;font-weight:normal;font-variant:normal;text-transform:none;line-height:1;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
-.icon-pencil:hover,.icon-calendar:hover,.icon-calendar2:hover,.icon-remove:hover{color:#f00}
+.icon-pencil,.icon-calendar,.icon-calendar2,.icon-remove,.icon-search{font-family:'icomoon';speak:none;font-style:normal;font-weight:normal;font-variant:normal;text-transform:none;line-height:1;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
+.icon-pencil:hover,.icon-calendar:hover,.icon-calendar2:hover,.icon-remove:hover,.icon-search:hover{color:#f00}
 .icon-pencil:before{content:"\e600"}
 .icon-calendar:before{content:"\e601"}
 .icon-calendar2:before{content:"\e602"}
+.icon-search:before{content:"\e604"}
 .icon-remove:before{content:"\e603"}

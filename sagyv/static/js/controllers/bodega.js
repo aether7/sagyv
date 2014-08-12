@@ -84,10 +84,11 @@ App.Controllers.Bodega.prototype = {
                 modalBody = $("#modal_ver_detalle .modal-body");
 
             modalBody.empty();
+
             $.get(url, {guia_id : id}, function(data){
                 console.log(data);
                 var html,
-                    dato = {resultados: data};
+                    dato = { resultados: data};
 
                 html = _this.renderVerDetalleGuia(dato);
                 modalBody.html(html);

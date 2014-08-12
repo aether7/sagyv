@@ -25,9 +25,9 @@
             <td data-campo="rut">{{ trabajador.rut }}</td>
             <td data-campo="estado_vacaciones">{{ trabajador.get_vacacion }}</td>
             <td>
-                <a href="#" data-accion="ver" data-id="{{ trabajador.id }}">Ver detalle</a>
-                <a href="#" data-accion="editar" data-id="{{ trabajador.id }}">Editar</a>
-                <a href="#" data-accion="eliminar" data-id="{{ trabajador.id }}">Elimina</a>
+                <a href="#" class="icon-search" data-accion="ver" data-id="{{ trabajador.id }}"></a>
+                <a href="#" class="icon-pencil" data-accion="editar" data-id="{{ trabajador.id }}"></a>
+                <a href="#" class="icon-remove" data-accion="eliminar" data-id="{{ trabajador.id }}"></a>
                 <a href="#" data-accion="anexar" data-id="{{ trabajador.id }}">Anexar carga</a>
             </td>
         </tr>

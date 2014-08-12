@@ -20,10 +20,11 @@
     </td>
     <td data-nombre-chofer="{{ vehiculo.get_ultimo_chofer }}">{{ vehiculo.get_ultimo_chofer }}</td>
     <td>
+        <a href="#" class="icon-pencil" data-id="{{ vehiculo.id }}"
+            data-accion="editar" class="block btn-acciones"></a>
+
         <a href="#" data-id="{{ vehiculo.id }}"
             data-accion="anexar" class="block btn-acciones">Anexar chofer</a>
-        <a href="#" data-id="{{ vehiculo.id }}"
-            data-accion="editar" class="block btn-acciones">Editar vehiculo</a>
     </td>
 </tr>
 {% endverbatim %}
