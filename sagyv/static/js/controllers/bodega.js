@@ -80,12 +80,19 @@ App.Controllers.Bodega.prototype = {
         $("#tbl_guias").on("click", "a[data-accion=mostrar_detalle]", function(evt){
             evt.preventDefault();
             var id = $(this).data("guiaid"),
-                url = App.urls.get("bodega:obtener_guia");
+                url = App.urls.get("bodega:obtener_guia"),
+                modalBody = $("#modal_ver_detalle .modal-body");
+
+            modalBody.empty();
             $.get(url, {guia_id : id}, function(data){
                 console.log(data);
-            });
+                var html,
+                    dato = {resultados: data};
 
-            alert('Hello~'+id);
+                html = _this.renderVerDetalleGuia(dato);
+                modalBody.html(html);
+                common.mostrarModal('ver_detalle');
+            });
         });
     },
 
