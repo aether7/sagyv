@@ -81,17 +81,17 @@ App.Controllers.Bodega.prototype = {
             evt.preventDefault();
             var id = $(this).data("guiaid"),
                 url = App.urls.get("bodega:obtener_guia"),
-                modalBody = $("#modal_ver_detalle .modal-body");
+                modalBody = $("#modal_mostrar_guia .modal-body");
 
             modalBody.empty();
             $.get(url, {guia_id : id}, function(data){
-                console.log(data);
+                console.log(data.productos);
                 var html,
-                    dato = {resultados: data};
+                    dato = {resultados: data.productos};
 
                 html = _this.renderVerDetalleGuia(dato);
                 modalBody.html(html);
-                common.mostrarModal('ver_detalle');
+                common.mostrarModal('mostrar_guia');
             });
         });
     },
