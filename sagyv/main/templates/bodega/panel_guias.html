@@ -1,5 +1,5 @@
 <div class="panel panel-default">
-    <table class="table center table-striped">
+    <table id="tbl_guias" class="table center table-striped">
         <tr>
             <td>Numero Guia</td>
             <td>Vehiculo</td>
@@ -11,7 +11,11 @@
             <td>{{guia.numero}}</td>
             <td>{{guia.vehiculo.numero}}</td>
             <td>{{guia.fecha}}</td>
-            <td> <a href="">Ver</a> </td>
+            <td>
+                <a href="#" data-accion="mostrar_detalle" data-guiaId="{{guia.id}}">
+                    Ver
+                </a>
+            </td>
         </tr>
         {% endfor %}
     </table>

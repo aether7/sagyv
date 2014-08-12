@@ -177,6 +177,30 @@ class ObtenerVehiculosPorProductoView(View):
         return HttpResponse(json.dumps(resultados), content_type="application/json")
 
 
+class ObtenerGuiaDespasho(View):
+
+    def get(self, req):
+        guia_id = int(req.GET.get("guia_id"))
+        productos = []
+
+        guia = GuiaDespacho.objects.get(pk = guia_id)
+        items = HistorialStock.objects.filter(guia_despacho = guia)
+
+        for item in items:
+            productos.append({
+                "codigo" : item.producto.codigo,
+                "cantidad" : item.cantidad
+            })
+
+        potato = {
+            "status" : "ok",
+            "productos" : productos
+        }
+
+        return HttpResponse(json.dumps(potato), content_type="application/json")
+
+
 index = IndexView.as_view()
 crea_guia = CrearGuiaDespachoView.as_view()
+obtener_guia = ObtenerGuiaDespasho.as_view()
 obtener_vehiculos_por_producto = ObtenerVehiculosPorProductoView.as_view()
