@@ -8,6 +8,7 @@ App.Controllers.Bodega = function(){
     this.renderProducto = Handlebars.compile($("#tpl_nuevo_producto").html());
     this.renderCargaProducto = Handlebars.compile($("#tpl_carga_producto").html());
     this.renderVerDetalleProducto = Handlebars.compile($("#tpl_ver_detalle").html());
+    this.renderVerDetalleGuia = Handlebars.compile($("#tpl_carga_guia").html());
 };
 
 App.Controllers.Bodega.prototype = {
@@ -74,6 +75,17 @@ App.Controllers.Bodega.prototype = {
                 modalBody.html(html);
                 common.mostrarModal("ver_detalle");
             });
+        });
+
+        $("#tbl_guias").on("click", "a[data-accion=mostrar_detalle]", function(evt){
+            evt.preventDefault();
+            var id = $(this).data("guiaid"),
+                url = App.urls.get("bodega:obtener_guia");
+            $.get(url, {guia_id : id}, function(data){
+                console.log(data);
+            });
+
+            alert('Hello~'+id);
         });
     },
 
