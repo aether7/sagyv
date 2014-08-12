@@ -1,26 +1,30 @@
 <div class="panel panel-default">
-    <table id="lista_productos" class="table center table-striped">
-        <tr>
-            <td>codigo</td>
-            <td>Tipo</td>
-            <td>Stock</td>
-            <td>Precio actual</td>
-        </tr>
+    <table id="lista_productos" class="table table-striped center">
+        <thead>
+            <tr>
+                <td>codigo</td>
+                <td>Tipo</td>
+                <td>Stock</td>
+                <td>Precio actual</td>
+            </tr>
+        </thead>
+        <tbody>
         {% for producto in productos %}
-        <tr data-producto="{{ producto.id }}">
-            <td data-columna="codigo">{{ producto.codigo }}</td>
-            <td data-columna="tipo_producto">{{ producto.tipo_producto.nombre }}</td>
-            <td data-columna="stock">
-                <span id="stock_{{ producto.id }}" class="{{ producto.get_clase_nivel_alerta }}">
-                    {{ producto.stock }}
-                </span>
-            </td>
-            <td data-columna="precio">
-                $ <span id="precio_{{ producto.id }}">
-                    {{ producto.get_precio_producto }}
-                </span>
-            </td>
-        </tr>
+            <tr data-producto="{{ producto.id }}">
+                <td data-columna="codigo">{{ producto.codigo }}</td>
+                <td data-columna="tipo_producto">{{ producto.tipo_producto.nombre }}</td>
+                <td data-columna="stock">
+                    <span id="stock_{{ producto.id }}" class="{{ producto.get_clase_nivel_alerta }}">
+                        {{ producto.stock }}
+                    </span>
+                </td>
+                <td data-columna="precio">
+                    $ <span id="precio_{{ producto.id }}">
+                        {{ producto.get_precio_producto }}
+                    </span>
+                </td>
+            </tr>
         {% endfor %}
+        </tbody>
     </table>
 </div>
