@@ -224,7 +224,6 @@ App.Controllers.Vehiculo.prototype = {
             }
 
             fecha = fecha.join("-");
-            console.log("SEC : "+(data.estado_sec)?1:2);
             $("#numero_vehiculo_editar").val(data.numero);
             $("#patente_vehiculo_editar").val(data.patente);
             $("#revision_tecnica_vehiculo_editar").val(fecha);
