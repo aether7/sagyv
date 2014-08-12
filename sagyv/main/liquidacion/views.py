@@ -79,10 +79,55 @@ class BuscarCliente(View):
             "id" : cliente.id,
             "direccion" : cliente.direccion,
             "rut" : cliente.rut,
-            "situacion_comercial" : cliente.situacion_comercial.get_json_string()
+            "situacion_comercial" : {
+                "texto" : cliente.situacion_comercial.get_json_string(),
+                "con_credito" : cliente.credito,
+                "descripcion_descuento" : None,
+                "simbolo" : None,
+                "monto" : None
+            }
         }
 
+        opciones = self.get_situacion_comercial(cliente)
+        data["situacion_comercial"]["descripcion_descuento"] = opciones["descripcion_descuento"]
+        data["situacion_comercial"]["simbolo"] = opciones["simbolo"]
+        data["situacion_comercial"]["monto"] = opciones["monto"]
+
         return HttpResponse(json.dumps(data), content_type="application/json")
+
+    def get_situacion_comercial(self, cliente):
+        opciones = {}
+        params = None
+        simbolo = None
+        monto = str(cliente.situacion_comercial.monto_descuento)
+        texto = ""
+
+        if cliente.situacion_comercial.id == 1:
+            texto = "Sin descuento"
+        else:
+            if cliente.situacion_comercial.tipo_descuento_id == 1:
+                simbolo = "$"
+                params = [simbolo, monto]
+            else:
+                simbolo = "%"
+                params = [monto, simbolo]
+
+            if cliente.credito:
+                texto = "El cliente posee crédito y se descuenta {0} {1} de la compra total"
+            else:
+                texto = "El cliente posee {0} {1} en ({2})"
+                opciones["codigo"] = cliente.situacion_comercial.producto.codigo
+                params.append(opciones["codigo"])
+
+            for i in range(len(params)):
+                param = params[i]
+                texto = texto.replace("{" + str(i) + "}", str(param))
+
+        opciones["descripcion_descuento"] = texto
+        opciones["simbolo"] = simbolo
+        opciones["monto"] = monto
+
+        return opciones
 
 
 index = IndexView.as_view()

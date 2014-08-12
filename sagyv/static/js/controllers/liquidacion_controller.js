@@ -4,12 +4,10 @@
     app.controller("LiquidacionController", ["$http",function($http){
         this.productos = [];
         this.idVehiculo = null;
-        this.idCliente = null;
         this.numeroGuia = null;
         this.subTotal = 0;
         this.descuentos = 0;
         this.total = 0;
-        this.cliente = {};
         this.vehiculo = {
             kilometrosRecorridos : 0,
             kmActual : 0
@@ -27,18 +25,6 @@
                 _this.productos = data.productos;
                 _this.vehiculo = data.vehiculo;
                 _this.vehiculo.kilometrosRecorridos = 0;
-            });
-        };
-
-        this.buscarCliente = function(){
-            var url = App.urls.get("liquidacion:buscar_cliente");
-            url += "?id_cliente=" + this.idCliente;
-
-            $http.get(url).success(function(data){
-                _this.cliente.id = data.id;
-                _this.cliente.direccion = data.direccion;
-                _this.cliente.rut = data.rut;
-                _this.cliente.situacionComercial = data.situacion_comercial;
             });
         };
 
@@ -98,6 +84,27 @@
             return producto.llenos;
         };
     });
+
+    app.controller("ClienteController", ["$http", function($http){
+        var _this = this;
+
+        this.idCliente = null;
+        this.descripcionDescuento = "nada";
+        this.cliente = {};
+
+        this.buscarCliente = function(){
+            var url = App.urls.get("liquidacion:buscar_cliente");
+            url += "?id_cliente=" + this.idCliente;
+
+            $http.get(url).success(function(data){
+                _this.cliente.id = data.id;
+                _this.cliente.direccion = data.direccion;
+                _this.cliente.rut = data.rut;
+                _this.situacionComercial = data.situacion_comercial;
+                _this.descripcionDescuento = data.situacion_comercial.descripcion_descuento;
+            });
+        };
+    }]);
 })();
 
 (function(){
