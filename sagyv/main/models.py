@@ -251,11 +251,12 @@ class TipoProducto(models.Model):
 
 class Producto(models.Model):
     codigo = models.IntegerField()
-    nombre = models.CharField(max_length=140)
-    peso = models.IntegerField(null=True)
+    nombre = models.CharField(max_length = 140)
+    peso = models.IntegerField(null = True)
     tipo_producto = models.ForeignKey(TipoProducto)
-    stock = models.IntegerField(default=0)
-    orden =  models.IntegerField(default=0)
+    stock = models.IntegerField(default = 0)
+    nivel_critico = models.IntegerField(null = True)
+    orden =  models.IntegerField(default = 0)
 
     def __unicode__(self):
         return str(self.codigo) + " " +self.nombre
@@ -275,11 +276,14 @@ class Producto(models.Model):
     def get_clase_nivel_alerta(self):
         clase_alerta = "text-"
 
-        if self.stock < 10:
+        if self.nivel_critico is None:
+            nivel_critico = 50
+        else:
+            nivel_critico = self.nivel_critico
+
+        if self.stock <= nivel_critico:
             clase_alerta += "danger"
-        elif self.stock >= 10 and self.stock < 20:
-            clase_alerta += "warning"
-        elif self.stock >= 20:
+        else:
             clase_alerta += "success"
 
         return clase_alerta
@@ -306,18 +310,13 @@ class GuiaDespacho(models.Model):
 class HistorialStock(models.Model):
     producto = models.ForeignKey(Producto)
     cantidad = models.IntegerField()
-    fecha = models.DateField(auto_now_add=True)
+    fecha = models.DateField(auto_now_add = True)
     tipo_operacion = models.BooleanField()
     guia_despacho = models.ForeignKey(GuiaDespacho)
 
     def __unicode__(self):
         return ""
 
-class RecargaVehiculo(models.Model):
-    producto = models.ForeignKey(Producto)
-    guia_despacho = models.ForeignKey(GuiaDespacho)
-    cantidad = models.IntegerField()
-    fecha = models.DateField(auto_now_add=True)
 
 class TipoTarjeta(models.Model):
     nombre = models.CharField(max_length=140)
