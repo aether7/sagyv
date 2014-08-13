@@ -313,6 +313,11 @@ class HistorialStock(models.Model):
     def __unicode__(self):
         return ""
 
+class RecargaVehiculo(models.Model):
+    producto = models.ForeignKey(Producto)
+    guia_despacho = models.ForeignKey(GuiaDespacho)
+    cantidad = models.IntegerField()
+    fecha = models.DateField(auto_now_add=True)
 
 class TipoTarjeta(models.Model):
     nombre = models.CharField(max_length=140)

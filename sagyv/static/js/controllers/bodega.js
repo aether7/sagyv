@@ -3,6 +3,7 @@ App.Controllers.Bodega = function(){
     this.btnAgregarCarga = $("#btn_agregar_carga");
     this.btnGuardar = $("#btn_guardar_guia");
     this.btnGuardarCarga = $("#btn_guardar_carga_producto");
+    this.btnRecargar = $("#btn_guia_despacho_recarga");
     this.listaDespacho = $("#lista_despacho tbody");
     this.listaCargaDespacho = $("#lista_carga tbody");
     this.renderProducto = Handlebars.compile($("#tpl_nuevo_producto").html());
@@ -24,6 +25,12 @@ App.Controllers.Bodega.prototype = {
 
         $("#btn_guia_despacho").on("click", function(evt){
             common.mostrarModal("guia_despacho");
+            _this.listaDespacho.empty();
+        });
+
+        this.btnRecargar.on("click", function(evt){
+            common.mostrarModal("recargar_guia");
+            /* limpia las cosas. */
             _this.listaDespacho.empty();
         });
 
