@@ -74,8 +74,6 @@ class CrearGuiaDespachoView(View):
 
     def crear_guia_despacho(self):
         guia_despacho = GuiaDespacho()
-        
-        print self.factura
 
         if self.id_vehiculo != None:
             guia_despacho.numero = self.numero_guia
@@ -94,7 +92,6 @@ class CrearGuiaDespachoView(View):
 
     def carga_datos_ingreso(self, guia, lista):
         for item in lista:
-            print "lista :"+str(item["id"])
             cantidad = int(item["cantidad"])
             producto = Producto.objects.get(pk = item["id"])
             
@@ -138,6 +135,7 @@ class CrearGuiaDespachoView(View):
         historico.cantidad = cantidad
         historico.tipo_operacion = tipo_operacion
         historico.guia_despacho = guia
+        historico.es_recarga = False
         historico.save()
 
     def modificar_stock_vehiculo(self, vehiculo, producto, cantidad):
