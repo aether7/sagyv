@@ -16,7 +16,7 @@ def crear_nueva_situacion(cantidad, tipo_id, producto_id):
     descuento_cliente.producto = producto
     descuento_cliente.save()
 
-    return descuento_cliente.id
+    return descuento_cliente
 
 
 class Index(TemplateView):
@@ -56,7 +56,21 @@ class ObtenerCliente(View):
         return HttpResponse(json.dumps(dato),content_type="application/json")
 
 
-class CrearCliente(View):
+class CrearEditarCliente(View):
+    def obtener_situacion_comercial(self, texto_situacion):
+        if texto_situacion == "otro":
+            cantidad = self.request.POST.get("cantidad")
+            tipo = self.request.POST.get("tipo")
+            producto_id = self.request.POST.get("producto")
+
+            sc = crear_nueva_situacion(cantidad, tipo, producto_id)
+        else:
+            sc = DescuentoCliente.objects.get(pk = int(texto_situacion))
+
+        return sc
+
+
+class CrearCliente(CrearEditarCliente):
 
     @transaction.commit_on_success
     def post(self, req):
@@ -100,20 +114,6 @@ class CrearCliente(View):
 
         return existe
 
-    def obtener_situacion_comercial(self, situacion_comercial):
-        if situacion_comercial == "otro":
-            cantidad = self.request.POST.get("cantidad")
-            tipo = self.request.POST.get("tipo")
-            producto_id = self.request.POST.get("producto")
-
-            sc = crear_nueva_situacion(cantidad, tipo, producto_id)
-        elif situacion_comercial != '':
-            sc = DescuentoCliente.objects.get(pk = situacion_comercial)
-        else:
-            sc = None
-
-        return sc
-
     def crear_cliente(self, situacion_comercial):
         nombre = self.request.POST.get('nombre')
         giro = self.request.POST.get('giro')
@@ -142,7 +142,7 @@ class CrearCliente(View):
         return cliente
 
 
-class ModificarCliente(View):
+class ModificarCliente(CrearEditarCliente):
 
     @transaction.commit_on_success
     def post(self,req):
@@ -161,20 +161,6 @@ class ModificarCliente(View):
         }
 
         return HttpResponse(json.dumps(dato), content_type="application/json")
-
-    def obtener_situacion_comercial(self, situacion_comercial):
-        if situacion_comercial == "otro":
-            cantidad = self.request.POST.get("cantidad")
-            tipo = self.request.POST.get("tipo")
-            producto_id = self.request.POST.get("producto")
-
-            situacion_comercial = crear_nueva_situacion(cantidad, tipo, producto_id)
-
-        #revisar por si acaso, mas adelante
-        if situacion_comercial != '':
-            sc = DescuentoCliente.objects.get(pk = situacion_comercial)
-
-        return sc
 
     def modificar_cliente(self, situacion_comercial):
         id_cliente = self.request.POST.get('id_cliente')
@@ -212,8 +198,8 @@ class EliminarCliente(View):
         rut = cliente.rut
         cliente.delete()
 
-        dato = { 
-            "status": "ok", 
+        dato = {
+            "status": "ok",
             "id": id_cliente,
             "rut":  rut
         }
@@ -321,7 +307,9 @@ class BuscarCliente(View):
 
     def get(self, request):
         busqueda = request.GET.get("busqueda")
-        clientes = Cliente.objects.busqueda_por_campo(busqueda)
+        opcion = request.GET.get("opcion")
+
+        clientes = Cliente.objects.busqueda_por_campo(busqueda, opcion)
         data = []
 
         for cliente in clientes:

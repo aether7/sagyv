@@ -39,6 +39,12 @@
         <form id="f_buscar_cliente" action="{% url 'cliente:buscar_cliente' %}" method="get">
             <div class="col-xs-6" style="text-align:right">
                 <input id="cliente_busqueda" type="text" value="" />
+                <select id="cliente_opcion">
+                    <option value="">Seleccione</option>
+                    <option value="nombre">Buscar por nombre</option>
+                    <option value="giro">Buscar por giro</option>
+                    <option value="rut">Buscar por RUT</option>
+                </select>
                 <button class="btn btn-primary">Buscar</button>
             </div>
         </form>

@@ -11,10 +11,14 @@ App.Controllers.Cliente.prototype = {
         this.rutList.push(rut);
     },
 
-    buscarCliente: function(busqueda, action){
-        var _this = this;
+    buscarCliente: function(busqueda, opcion, action){
+        var _this = this,
+            json = {
+                busqueda : busqueda,
+                opcion : opcion
+            };
 
-        $.get(action, { busqueda: busqueda }, function(data){
+        $.get(action, json, function(data){
             pubsub.publish("cliente:buscar", [ data ]);
         });
     },

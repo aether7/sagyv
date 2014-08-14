@@ -218,9 +218,10 @@ App.Views.Cliente.prototype = {
             evt.preventDefault();
 
             var busqueda = $("#cliente_busqueda").val(),
+                opcion = $("#cliente_opcion").val(),
                 action = $(this).attr("action");
 
-            _this.controller.buscarCliente(busqueda, action);
+            _this.controller.buscarCliente(busqueda, opcion, action);
         };
     },
 
