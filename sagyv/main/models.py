@@ -313,6 +313,7 @@ class HistorialStock(models.Model):
     fecha = models.DateField(auto_now_add = True)
     tipo_operacion = models.BooleanField()
     guia_despacho = models.ForeignKey(GuiaDespacho)
+    es_recarga = models.BooleanField()
 
     def __unicode__(self):
         return ""
