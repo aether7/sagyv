@@ -1,12 +1,14 @@
-<div class="panel panel-default">
-    <table id="tbl_guias" class="table center table-striped">
+<table id="tbl_guias" class="table center table-striped">
+    <thead>
         <tr>
             <td>Numero Guia</td>
             <td>Vehiculo</td>
             <td>fecha</td>
             <td>Otros</td>
         </tr>
-        {% for guia in guias  %}
+    </thead>
+    <tbody>
+    {% for guia in guias %}
         <tr>
             <td>{{guia.numero}}</td>
             <td>{{guia.vehiculo.numero}}</td>
@@ -17,6 +19,6 @@
                 </a>
             </td>
         </tr>
-        {% endfor %}
-    </table>
-</div>
+    {% endfor %}
+    </tbody>
+</table>

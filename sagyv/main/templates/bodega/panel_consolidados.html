@@ -1,26 +1,24 @@
-<div class="panel panel-default">
-    <table class="table table-striped cafe">
-        <thead>
-            <tr>
-                <td>Código</td>
-                <td>Stock</td>
-                <td>Vehiculos</td>
-            </tr>
-        </thead>
-        <tbody>
-        {% for producto in total_stock  %}
-            <tr>
-                <td>{{ producto.codigo }}</td>
-                <td>
-                    <span id="stock_{{ producto.id }}">
-                        {{ producto.cantidad }}
-                    </span>
-                </td>
-                <td>
-                   somewhere
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-</div>
+<table class="table table-striped cafe">
+    <thead>
+        <tr>
+            <td>Código</td>
+            <td>Stock</td>
+            <td>Vehiculos</td>
+        </tr>
+    </thead>
+    <tbody>
+    {% for producto in total_stock  %}
+        <tr>
+            <td>{{ producto.codigo }}</td>
+            <td>
+                <span id="stock_{{ producto.id }}">
+                    {{ producto.cantidad }}
+                </span>
+            </td>
+            <td>
+               somewhere
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
