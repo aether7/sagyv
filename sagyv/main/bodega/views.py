@@ -204,7 +204,26 @@ class ObtenerGuiaDespasho(View):
         return HttpResponse(json.dumps(data), content_type="application/json")
 
 
+class RecargaGuia(View):
+
+    def post(self, req):
+        print(req.POST);
+
+        id_guia = req.POST.get("id_guia");
+        productos = json.loads(req.POST.get("productos"))
+
+        guia = GuiaDespacho.objects.get(pk = id_guia)
+        print productos
+
+        resultados = {
+            "status" : "ok"
+        }
+
+        return HttpResponse(json.dumps(resultados), content_type="application/json")
+
+
 index = IndexView.as_view()
 crea_guia = CrearGuiaDespachoView.as_view()
 obtener_guia = ObtenerGuiaDespasho.as_view()
 obtener_vehiculos_por_producto = ObtenerVehiculosPorProductoView.as_view()
+recargar_guia = RecargaGuia.as_view()

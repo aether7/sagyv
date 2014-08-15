@@ -15,6 +15,8 @@ App.Controllers.Bodega = function(){
     this.despacho = $("#despacho tbody");
     this.btnAgregarRecarga = $("#btn_agregar_recarga");
     this.listaRecarga = $("#lista_despacho_recarga tbody");
+    this.btnGuardarRecarga = $("#btn_guardar_recarga");
+    this.idGuiaDespacho = null;
 };
 
 App.Controllers.Bodega.prototype = {
@@ -52,6 +54,10 @@ App.Controllers.Bodega.prototype = {
 
         this.btnGuardar.on("click", function(evt){
             _this.guardar();
+        });
+
+        this.btnGuardarRecarga.on("click", function(evt){
+            _this.guardarRecarga();
         });
 
         this.btnGuardarCarga.on("click", function(evt){
@@ -116,6 +122,8 @@ App.Controllers.Bodega.prototype = {
             var id = $(this).data("guiaid"),
                 url = App.urls.get("bodega:obtener_guia");
 
+                _this.idGuiaDespacho = id;
+
             $.get(url, {guia_id : id}, function(data){
                 $("#numero_despacho_rec").text(data.numero_guia);
                 $("#movil_despasho_rec").text(data.movil);
@@ -133,6 +141,39 @@ App.Controllers.Bodega.prototype = {
 
             });
             common.mostrarModal('recargar_guia');
+        });
+    },
+
+    guardarRecarga: function(){
+        $("#mensajes_lista_productos_recarga span").text("").parent().removeClass("has-error");
+        url = App.urls.get("bodega:recargar_guia");
+
+        json = {
+            id_guia : this.idGuiaDespacho,
+            productos : []
+        };
+
+        if(!this.listaRecarga.find("tr").length){
+            $("#mensajes_lista_productos_recarga span").
+                text("se debe agregar al menos 1 producto a la lista de productos").
+                parent().addClass("has-error");
+            return;
+        }
+
+        this.listaRecarga.find("tr").each(function(){
+            var id = $(this).data("id"),
+                cantidad = $(this).data("cantidad");
+
+            json.productos.push({
+                id_producto : id,
+                cantidad : cantidad
+            });
+        });
+
+        json.productos = JSON.stringify(json.productos);
+
+        $.post(url, json, function(data){
+            console.log(data);
         });
     },
 
