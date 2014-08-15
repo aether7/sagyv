@@ -67,6 +67,22 @@ var common = {
                 dia = parseInt(aux[2]) < 10 ? "0" + aux[2] : aux[2];
 
             return dia + "-" + mes + "-" + anio;
+        },
+
+        convertirFechaTextual: function(txt){
+            var mes,
+                aux = txt.split("-"),
+                anio = aux[0],
+                dia = aux[2],
+                meses = [
+                    "Enero", "Febrero", "Marzo",
+                    "Abril", "Mayo", "Junio",
+                    "Julio", "Agosto", "Septiembre",
+                    "Octubre", "Noviembre", "Diciembre"
+                ];
+
+            mes = "de " + meses[parseInt(aux[1]) - 1] + " de"
+            return dia + " " + mes + " " + anio;
         }
     }
 };

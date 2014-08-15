@@ -10,6 +10,7 @@ App.Controllers.Vehiculo = function(){
 App.Controllers.Vehiculo.prototype = {
     constructor: App.Controllers.Vehiculo,
     init: function(){
+        /*
         var _this = this;
 
         this.btnNuevoVehiculo.on("click",function(){
@@ -35,6 +36,7 @@ App.Controllers.Vehiculo.prototype = {
             evt.preventDefault();
             _this.guardarAnexar();
         });
+        */
     },
 
     agregarVehiculo: function(vehiculoNumero, vehiculoPatente){

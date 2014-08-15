@@ -35,7 +35,7 @@ class VehiculoList(ListView):
 
 class AgregarNuevoVehiculoView(View):
     def post(self, request):
-        fecha = request.POST.get('revision_tecnica')
+        fecha = request.POST.get('fecha_revision_tecnica')
 
         self.numero = request.POST.get('numero')
         self.patente = request.POST.get('patente')
@@ -52,7 +52,19 @@ class AgregarNuevoVehiculoView(View):
         else:
             name_chofer = "No anexado"
 
-        data = { "status" : "ok", "id_vehiculo" : vehiculo.id, "chofer" : name_chofer }
+        data = {
+            "status" : "ok",
+            "vehiculo": {
+                "id": vehiculo.id,
+                "numero": vehiculo.numero,
+                "patente": vehiculo.patente,
+                "km": vehiculo.km,
+                "fecha_revision_tecnica": fecha,
+                "estado_sec": vehiculo.estado_sec,
+                "estado_pago": vehiculo.estado_pago,
+                "get_ultimo_chofer": vehiculo.get_nombre_ultimo_chofer()
+            }
+        }
 
         return HttpResponse(json.dumps(data),content_type="application/json")
 
@@ -136,7 +148,8 @@ class AnexarVehiculoView(View):
         data = {
             "status" : "ok",
             "nombre_chofer" : chofer.get_nombre_completo(),
-            "numero_vehiculo" : vehiculo.numero
+            "numero_vehiculo" : vehiculo.numero,
+            "id" : vehiculo.id
         }
 
         return HttpResponse(json.dumps(data), mimetype="application/json")
@@ -150,7 +163,7 @@ class ModificarView(View):
         fecha_revision_tecnica = req.POST.get('fecha_revision_tecnica')
         estado_sec = req.POST.get('estado_sec')
         estado_pago = req.POST.get('estado_pago')
-        id_chofer = req.POST.get('id_chofer')
+        id_chofer = req.POST.get('chofer')
 
         vehiculo = Vehiculo.objects.get(pk = id_vehiculo)
         chofer_actual = vehiculo.get_ultimo_chofer()
@@ -172,11 +185,23 @@ class ModificarView(View):
 
         vehiculo.save()
 
-        data = { "status" : "ok" }
-
         if id_chofer != "":
             if (not(chofer_actual is None) and chofer_actual.id != id_chofer) or chofer_actual is None:
                 self.anexar_chofer_vehiculo(id_chofer, vehiculo, fecha_revision_tecnica)
+
+        data = {
+            "status": "ok",
+            "vehiculo": {
+                "id": vehiculo.id,
+                "numero": vehiculo.numero,
+                "patente": vehiculo.patente,
+                "km": vehiculo.km,
+                "fecha_revision_tecnica": convierte_fecha_texto(vehiculo.fecha_revision_tecnica),
+                "estado_sec": vehiculo.estado_sec,
+                "estado_pago": vehiculo.estado_pago,
+                "get_nombre_ultimo_chofer": vehiculo.get_nombre_ultimo_chofer()
+            }
+        }
 
         return HttpResponse(json.dumps(data), content_type="application/json")
 

@@ -4,7 +4,8 @@
 {% block content %}
 <h1 class="center">Vehículos</h1>
 
-<div id="mensaje" class="alert alert-success center" style="visibility:hidden"></div>
+{% include "mensaje.html" %}
+
 {% if es_admin %}
 <button id="btn_nuevo_vehiculo" class="btn btn-primary">Nuevo</button>
 {% endif %}
@@ -26,7 +27,28 @@
     </thead>
     <tbody>
         {% for vehiculo in vehiculos %}
-        {% include "vehiculos/components/vehiculo_item.html" %}
+        <tr id="vehiculo_{{ vehiculo.id }}">
+            <td data-numero="{{ vehiculo.numero }}">{{ vehiculo.numero }}</td>
+            <td data-patente="{{ vehiculo.patente }}">{{ vehiculo.patente }}</td>
+            <td data-km="{{ vehiculo.km }}">{{ vehiculo.km }}</td>
+            <td data-fecha-revision-tecnica="{{ vehiculo.fecha_revision_tecnica }}">{{ vehiculo.fecha_revision_tecnica }}</td>
+            <td data-estado-sec="{{ vehiculo.estado_sec }}">
+                {% if vehiculo.estado_sec %}Sí{% else %}No{% endif %}
+            </td>
+            <td data-estado-pago="{{ vehiculo.estado_pago }}">
+                {% if vehiculo.estado_pago %}Sí{% else %}No{% endif %}
+            </td>
+            <td data-nombre-chofer="{{ vehiculo.get_nombre_ultimo_chofer }}">{{ vehiculo.get_nombre_ultimo_chofer }}</td>
+            {% if es_admin %}
+            <td>
+                <a href="#" class="icon-pencil" data-id="{{ vehiculo.id }}"
+                    data-accion="editar" class="btn-acciones"></a>
+
+                <a href="#" data-id="{{ vehiculo.id }}"
+                    data-accion="anexar" class="btn-acciones">Anexar chofer</a>
+            </td>
+            {% endif %}
+        </tr>
         {% endfor %}
     </tbody>
 </table>
@@ -40,21 +62,26 @@
 
 {% block js %}
 <script src="{% static 'js/vendor/handlebars.min.js' %}"></script>
-<script src="{% static 'js/controllers/vehiculo.js' %}"></script>
+<script src="{% static 'js/common_functions.js' %}"></script>
+<script src="{% static 'js/models/vehiculo_model.js' %}"></script>
+<script src="{% static 'js/controllers/vehiculo_controller.js' %}"></script>
+<script src="{% static 'js/views/vehiculo_view.js' %}"></script>
 <script id="tmpl_nuevo_vehiculo" type="x-template/javascript">
     {% include "vehiculos/components/tpl_vehiculo_item.html" %}
 </script>
 <script>
-    App.urls.set("vehiculos:obtener","{% url 'vehiculos:obtener' 0 %}");
-    App.urls.set("vehiculos:obtener_vehiculos","{% url 'vehiculos:obtener_vehiculos' %}");
+    App.urls.set("vehiculos:nuevo", "{% url 'vehiculos:agregar_nuevo_vehiculo' %}");
+    App.urls.set("vehiculos:editar", "{% url 'vehiculos:modificar' %}");
+    App.urls.set("vehiculos:obtener", "{% url 'vehiculos:obtener' 0 %}");
+    App.urls.set("vehiculos:obtener_vehiculos", "{% url 'vehiculos:obtener_vehiculos' %}");
+    App.urls.set("vehiculos:anexar", "{% url 'vehiculos:anexar_vehiculo' %}");
 
-    App.vehiculoController = new App.Controllers.Vehiculo();
+    App.vehiculoView = new App.Views.Vehiculo();
+    App.vehiculoView.init();
 
     {% for vehiculo in vehiculos %}
-    App.vehiculoController.agregarVehiculo({{ vehiculo.numero }}, '{{ vehiculo.patente }}');
+    App.vehiculoView.agregarVehiculo({{ vehiculo.numero }}, '{{ vehiculo.patente }}');
     {% endfor %}
-
-    App.vehiculoController.init();
 </script>
 {% endblock %}
 
