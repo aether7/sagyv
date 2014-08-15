@@ -1,18 +1,18 @@
 App.Controllers.Bodega = function(){
     this.btnAgregar = $("#btn_agregar");
-    this.btnAgregarRecarga = $("#btn_agregar_recarga");
     this.btnAgregarCarga = $("#btn_agregar_carga");
     this.btnGuardar = $("#btn_guardar_guia");
     this.btnGuardarCarga = $("#btn_guardar_carga_producto");
-    this.btnRecargar = $("#btn_guia_despacho_recarga");
     this.listaDespacho = $("#lista_despacho tbody");
-    this.despacho = $("#despacho tbody");
     this.listaCargaDespacho = $("#lista_carga tbody");
     this.renderProducto = Handlebars.compile($("#tpl_nuevo_producto").html());
-    this.renderProductoDespacho = Handlebars.compile($("#tpl_despacho_producto").html());
     this.renderCargaProducto = Handlebars.compile($("#tpl_carga_producto").html());
     this.renderVerDetalleProducto = Handlebars.compile($("#tpl_ver_detalle").html());
     this.renderVerDetalleGuia = Handlebars.compile($("#tpl_carga_guia").html());
+
+    /*Datos Guia*/
+    this.renderProductoDespacho = Handlebars.compile($("#tpl_despacho_producto").html());
+    this.despacho = $("#despacho tbody");
 };
 
 App.Controllers.Bodega.prototype = {
@@ -31,12 +31,6 @@ App.Controllers.Bodega.prototype = {
             _this.listaDespacho.empty();
         });
 
-        this.btnRecargar.on("click", function(evt){
-            common.mostrarModal("recargar_guia");
-            /* limpia las cosas. */
-            _this.listaDespacho.empty();
-        });
-
         $("#btn_guia_cargar_producto").on("click", function(evt){
             common.mostrarModal("carga_producto");
             _this.listaDespacho.empty();
@@ -44,11 +38,6 @@ App.Controllers.Bodega.prototype = {
 
         this.btnAgregar.on("click", function(evt){
             _this.agregarProducto();
-        });
-
-        this.btnAgregarRecarga.on("click", function(evt){
-            _this.agregarProducto($("#guia_producto_recarga"),
-                                    $("#cantidad_producto_recarga"));
         });
 
         this.btnAgregarCarga.on("click", function(evt){
@@ -92,6 +81,7 @@ App.Controllers.Bodega.prototype = {
             });
         });
 
+        /*Codigo Guias*/
         $("#tbl_guias").on("click", "a[data-accion=mostrar_detalle]", function(evt){
             evt.preventDefault();
             var id = $(this).data("guiaid"),
@@ -101,7 +91,6 @@ App.Controllers.Bodega.prototype = {
             modalBody.empty();
 
             $.get(url, {guia_id : id}, function(data){
-                console.log(data);
                 var html,
                     dato = { resultados: data.productos };
 
@@ -129,19 +118,17 @@ App.Controllers.Bodega.prototype = {
                     });
 
                     _this.despacho.append(html);
-                    console.log(producto);
                 });
 
             });
             common.mostrarModal('recargar_guia');
         });
-
     },
 
-    agregarProducto: function(producto, cantidad){
+    agregarProducto: function(){
         var html,
-            producto = producto || $("#guia_producto"),
-            cantidad = cantidad || $("#cantidad_producto"),
+            producto = $("#guia_producto"),
+            cantidad = $("#cantidad_producto"),
             codigo = producto.find("option:selected").text().trim();
 
         if(this.listaDespacho.find("tr[data-id={0}]".format(producto.val())).length){
@@ -368,4 +355,3 @@ App.Controllers.Bodega.prototype = {
         return valido;
     }
 };
-
