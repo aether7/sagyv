@@ -38,7 +38,7 @@
                 <div class="form-group">
                     <label for="fecha_nacimiento_edit" class="control-label">Fecha nacimiento</label>
                     <input id="fecha_nacimiento_edit" name="fecha_nacimiento"
-                        type="date" class="form-control" value="" />
+                        type="date" class="form-control" max="{% now 'Y-m-d' %}" value="" />
                     <span class="help-block"></span>
                 </div>
 

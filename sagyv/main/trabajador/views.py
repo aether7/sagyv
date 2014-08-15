@@ -101,7 +101,7 @@ class ModificarTrabajadorView(View):
         self.sistema_salud_id = req.POST.get("sistema_salud")
         self.estado_civil_id = req.POST.get("estado_civil")
 
-        self.edit_trabajador(id_trabajador)
+        trabajador = self.edit_trabajador(self.id_trabajador)
 
         dato = {
             "status" : "ok",
@@ -130,6 +130,8 @@ class ModificarTrabajadorView(View):
         trabajador.sistema_salud = sistema_salud
         trabajador.estado_civil = estado_civil
         trabajador.save()
+
+        return trabajador
 
 
 class ObtenerTrabajadorView(View):

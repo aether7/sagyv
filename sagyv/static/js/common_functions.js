@@ -2,7 +2,8 @@ var common = {
     constantes: {
         regex : {
             direccion : /^[A-záéíóúñÁÉÍÓÚÑ\s]+\s((#|Nº|No)\d+)|(s\/n)$/i,
-            noNombre : /[^A-záéíóúñÁÉÍÓÚÑ\s]+/g
+            noNombre : /[^A-záéíóúñÁÉÍÓÚÑ\s]+/g,
+            nombre : /^[A-Za-záéíóúñÁÉÍÓÚÑ\s]$/i,
         },
 
         mensajes : {

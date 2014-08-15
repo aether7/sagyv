@@ -153,7 +153,7 @@ App.Controllers.Trabajador.prototype = {
         json += "&id=" + this.id;
 
         $.post(action, json, function(data){
-            $("#modal_edit").modal("hide");
+            $("#modal_editar").modal("hide");
             common.agregarMensaje("Se editó el trabajador exitosamente");
         });
     },
@@ -161,10 +161,9 @@ App.Controllers.Trabajador.prototype = {
     validarCampos: function(nombre, apellido, rut, domicilio, fechaNacimiento,
         inicioContrato, vigenciaLicencia, afp, sistemaSalud, estadoCivil, estadoVacacion){
 
-        $(".has-error").removeClass("has-error");
-        $(".help-block").text("");
+        var valido = true,
+            regexNombre = common.constantes.regex.nombre;
 
-        var valido = true;
         $(".has-error").removeClass("has-error");
         $(".help-block").text("");
 
@@ -172,7 +171,7 @@ App.Controllers.Trabajador.prototype = {
             valido = false;
             nombre.siblings("span").text("campo obligatorio");
             nombre.parent().addClass("has-error");
-        }else if(common.constantes.regex.noNombre.test(nombre.val())){
+        }else if(!regexNombre.test(nombre.val())){
             valido = false;
             nombre.siblings("span").text("nombre no válido");
             nombre.parent().addClass("has-error");
@@ -182,8 +181,7 @@ App.Controllers.Trabajador.prototype = {
             valido = false;
             apellido.siblings("span").text("campo obligatorio");
             apellido.parent().addClass("has-error");
-        }else if(common.constantes.regex.noNombre.test(apellido.val())){
-            console.log("asdfasdf");
+        }else if(!regexNombre.test(apellido.val())){
             valido = false;
             apellido.siblings("span").text("apellido no válido");
             apellido.parent().addClass("has-error");
