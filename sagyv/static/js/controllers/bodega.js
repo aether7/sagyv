@@ -13,6 +13,8 @@ App.Controllers.Bodega = function(){
     /*Datos Guia*/
     this.renderProductoDespacho = Handlebars.compile($("#tpl_despacho_producto").html());
     this.despacho = $("#despacho tbody");
+    this.btnAgregarRecarga = $("#btn_agregar_recarga");
+    this.listaRecarga = $("#lista_despacho_recarga tbody");
 };
 
 App.Controllers.Bodega.prototype = {
@@ -40,6 +42,10 @@ App.Controllers.Bodega.prototype = {
             _this.agregarProducto();
         });
 
+        this.btnAgregarRecarga.on("click", function(evt){
+            _this.agregarProductoRecarga();
+        });
+
         this.btnAgregarCarga.on("click", function(evt){
             _this.agregarCargaProducto();
         });
@@ -53,6 +59,11 @@ App.Controllers.Bodega.prototype = {
         });
 
         this.listaDespacho.on("click","i[data-accion=eliminar]", function(evt){
+            evt.preventDefault();
+            $(this).closest("tr").remove();
+        });
+
+        this.listaRecarga.on("click","i[data-accion=eliminar]", function(evt){
             evt.preventDefault();
             $(this).closest("tr").remove();
         });
@@ -125,13 +136,35 @@ App.Controllers.Bodega.prototype = {
         });
     },
 
+    agregarProductoRecarga: function(){
+        var html,
+            producto = $("#guia_producto_recarga"),
+            cantidad = $("#cantidad_producto_recarga"),
+            codigo = producto.find("option:selected").text().trim();
+
+        if(!this.listaRecarga.find("tr[data-id={0}]".format(producto.val()).length)){
+            alert("EL producto {0} ya fue ingresado, revise nuevamente".format(codigo));
+            return;
+        }
+
+        html = this.renderProducto({
+            id : producto.val(),
+            cantidad : cantidad.val(),
+            codigo : codigo
+        });
+
+        this.listaRecarga.append(html);
+        cantidad.val('');
+
+    },
+
     agregarProducto: function(){
         var html,
             producto = $("#guia_producto"),
             cantidad = $("#cantidad_producto"),
             codigo = producto.find("option:selected").text().trim();
 
-        if(this.listaDespacho.find("tr[data-id={0}]".format(producto.val())).length){
+        if(!this.listaDespacho.find("tr[data-id={0}]".format(producto.val())).length){
             alert("EL producto {0} ya fue ingresado, revise nuevamente".format(codigo));
             return;
         }
