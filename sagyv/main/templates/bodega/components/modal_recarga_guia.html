@@ -8,15 +8,61 @@
                 <h4 class="modal-title">Recarga</h4>
             </div>
             <div class="modal-body">
-                <div class="form-group">
-                    <label for="busqueda_guia" class="control-label">Guía</label>
-                    <input id="busqueda_guia" class="form-control" type="text" value="" />
+                <form id="f_guia_despacho" action="{% url 'bodega:crea_guia' %}" method="post" style="overflow:hidden">
+
+                    <div class="form-group">
+                        <label for="numero_despacho_rec" class="control-label">Numero Guia</label>
+                        <span id="numero_despacho_rec" class="form-control-static"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="movil_despasho_rec" class="control-label">Móvil</label>
+                        <span id="movil_despasho_rec" class="form-control-static"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fecha_despacho_rec" class="control-label">Fecha</label>
+                        <span id="fecha_despacho_rec" class="form-control-static"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                            <label for="guia_producto" class="control-label">Producto</label>
+                            <select id="guia_producto" class="form-control">
+                                {% for producto in productos_guia %}
+                                <option value="{{ producto.id }}">{{ producto.codigo }}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="help-block"></span>
+                        </div>
+
+                        <div class="col-xs-4">
+                            <label for="cantidad_producto" class="contol-label">Cantidad</label>
+                            <input id="cantidad_producto" class="form-control" type="text" value="" />
+                            <span class="help-block"></span>
+                        </div>
+
+                        <div class="col-xs-2 btn-productos">
+                            <button id="btn_agregar" type="button" class="btn btn-default btn-agregar">+</button>
+                        </div>
+                    </div>
+                </form>
+
+                <div id="mensajes_lista_productos" class="form-group center">
                     <span class="help-block"></span>
-                    <button>Buscar</button>
                 </div>
-                <div id="contenedor-guia">
-                    
-                </div>
+
+                <table id="lista_despacho" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Código Producto</th>
+                            <th>Cantidad</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-default" data-dismiss="modal">Cancelar</button>

@@ -4,6 +4,7 @@ import json
 from django.views.generic import TemplateView,View
 from django.db import transaction
 from django.http import HttpResponse
+from main.helpers.fecha import convierte_texto_fecha, convierte_fecha_texto
 from main.models import Producto, TipoCambioStock, HistorialStock
 from main.models import PrecioProducto, StockVehiculo, Vehiculo
 from main.models import GuiaDespacho
@@ -80,7 +81,7 @@ class CrearGuiaDespachoView(View):
             movil = Vehiculo.objects.get(pk = self.id_vehiculo)
             guia_despacho.tipo_guia = False
             guia_despacho.vehiculo = movil
-        
+
         elif self.factura != None:
             guia_despacho.factura = self.factura
             guia_despacho.tipo_guia = True
@@ -94,7 +95,7 @@ class CrearGuiaDespachoView(View):
         for item in lista:
             cantidad = int(item["cantidad"])
             producto = Producto.objects.get(pk = item["id"])
-            
+
             if producto.stock is None:
                 producto.stock = cantidad
             else:
@@ -192,7 +193,10 @@ class ObtenerGuiaDespasho(View):
 
         potato = {
             "status" : "ok",
-            "productos" : productos
+            "productos" : productos,
+            "fecha" : convierte_fecha_texto(guia.fecha),
+            "movil" : guia.vehiculo.numero,
+            "numero_guia" : guia.numero
         }
 
         return HttpResponse(json.dumps(potato), content_type="application/json")

@@ -93,6 +93,7 @@ App.Controllers.Bodega.prototype = {
             modalBody.empty();
 
             $.get(url, {guia_id : id}, function(data){
+                console.log(data);
                 var html,
                     dato = { resultados: data.productos };
 
@@ -101,6 +102,20 @@ App.Controllers.Bodega.prototype = {
                 common.mostrarModal('mostrar_guia');
             });
         });
+
+        $("#tbl_guias").on("click", "a[data-accion=recargar_guia]", function(evt){
+            evt.preventDefault();
+            var id = $(this).data("guiaid"),
+                url = App.urls.get("bodega:obtener_guia");
+
+            $.get(url, {guia_id : id}, function(data){
+                $("#numero_despacho_rec").text(data.numero_guia);
+                $("#movil_despasho_rec").text(data.movil);
+                $("#fecha_despacho_rec").text(data.fecha);
+            });
+            common.mostrarModal('recargar_guia');
+        });
+
     },
 
     agregarProducto: function(){
@@ -333,3 +348,4 @@ App.Controllers.Bodega.prototype = {
         return valido;
     }
 };
+
