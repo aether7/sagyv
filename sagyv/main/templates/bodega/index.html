@@ -94,6 +94,10 @@
     {% include "bodega/components/tpl_carga_guia.html" %}
 </script>
 
+<script id="tpl_despacho_producto" type="text/x-template">
+    {% include "bodega/components/tpl_despacho_producto.html" %}
+</script>
+
 <script>
     App.urls.set("bodega:obtener_vehiculos_por_producto", "{% url 'bodega:obtener_vehiculos_por_producto' %}");
     App.urls.set("bodega:obtener_guia", "{% url 'bodega:obtener_guia' %}");

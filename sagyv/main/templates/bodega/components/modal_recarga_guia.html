@@ -25,10 +25,21 @@
                         <span id="fecha_despacho_rec" class="form-control-static"></span>
                     </div>
 
+                    <table id="despacho" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Código Producto</th>
+                                <th>Cantidad</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+
                     <div class="form-group">
                         <div class="col-xs-6">
-                            <label for="guia_producto" class="control-label">Producto</label>
-                            <select id="guia_producto" class="form-control">
+                            <label for="guia_producto_recarga" class="control-label">Producto</label>
+                            <select id="guia_producto_recarga" class="form-control">
                                 {% for producto in productos_guia %}
                                 <option value="{{ producto.id }}">{{ producto.codigo }}</option>
                                 {% endfor %}
@@ -37,13 +48,13 @@
                         </div>
 
                         <div class="col-xs-4">
-                            <label for="cantidad_producto" class="contol-label">Cantidad</label>
-                            <input id="cantidad_producto" class="form-control" type="text" value="" />
+                            <label for="cantidad_producto_recarga" class="contol-label">Cantidad</label>
+                            <input id="cantidad_producto_recarga" class="form-control" type="text" value="" />
                             <span class="help-block"></span>
                         </div>
 
                         <div class="col-xs-2 btn-productos">
-                            <button id="btn_agregar" type="button" class="btn btn-default btn-agregar">+</button>
+                            <button id="btn_agregar_recarga" type="button" class="btn btn-default btn-agregar">+</button>
                         </div>
                     </div>
                 </form>

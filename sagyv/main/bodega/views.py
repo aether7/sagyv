@@ -188,10 +188,12 @@ class ObtenerGuiaDespasho(View):
         for item in items:
             productos.append({
                 "codigo" : item.producto.codigo,
-                "cantidad" : item.cantidad
+                "cantidad" : item.cantidad,
+                "es_recarga" : item.es_recarga,
+                "id_producto" : item.producto.id
             })
 
-        potato = {
+        data = {
             "status" : "ok",
             "productos" : productos,
             "fecha" : convierte_fecha_texto(guia.fecha),
@@ -199,7 +201,7 @@ class ObtenerGuiaDespasho(View):
             "numero_guia" : guia.numero
         }
 
-        return HttpResponse(json.dumps(potato), content_type="application/json")
+        return HttpResponse(json.dumps(data), content_type="application/json")
 
 
 index = IndexView.as_view()
