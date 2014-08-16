@@ -53,7 +53,6 @@ class CrearGuiaDespachoView(View):
         lista_producto = req.POST.get("productos")
 
         lista = json.loads(lista_producto)
-
         guia = self.crear_guia_despacho()
 
         if(self.id_vehiculo != None):
@@ -103,11 +102,9 @@ class CrearGuiaDespachoView(View):
 
             producto.save()
 
-            print cantidad
-
             this_prod = {
                 'id': producto.id,
-                'cantidad' : producto.stock
+                'cantidad': producto.stock
             }
 
             self.productosActualizados.append(this_prod)
@@ -207,9 +204,7 @@ class ObtenerGuiaDespasho(View):
 class RecargaGuia(View):
 
     def post(self, req):
-        print(req.POST);
-
-        id_guia = req.POST.get("id_guia");
+        id_guia = req.POST.get("id_guia")
         productos = json.loads(req.POST.get("productos"))
 
         #1 - Obtener la guia
@@ -227,7 +222,6 @@ class RecargaGuia(View):
 
     def historial(self, productos, guia):
         for producto in productos:
-            print producto
             prod = Producto.objects.get(pk = int(producto['id_producto']))
             cant = int(producto['cantidad'])
 
@@ -244,13 +238,11 @@ class RecargaGuia(View):
 
             self.actualizar_stock(prod, guia.vehiculo, cant)
 
-
     def actualizar_stock(self, producto_obj, vehiculo_obj, cantidad):
         try:
             stock_vehiculo = StockVehiculo.objects.get(producto = producto_obj)
             stock_vehiculo.cantidad = stock_vehiculo.cantidad + cantidad
             stock_vehiculo.save()
-
         except StockVehiculo.DoesNotExist:
             stock_vehiculo = StockVehiculo()
             stock_vehiculo.vehiculo = vehiculo_obj

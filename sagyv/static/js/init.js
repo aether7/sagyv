@@ -148,3 +148,12 @@ String.prototype.format = function(){
         unsuscribe : unsuscribe
     };
 })();
+
+App.getAjaxConfig = function(){
+    var config =  {
+        xsrfCookieName: "andreacsrftoken",
+        xsrfHeaderName: "X-CSRFToken"
+    };
+
+    return config;
+};

@@ -1,5 +1,5 @@
 <div id="modal_nuevo" class="modal fade">
-    <form id="f_nuevo" action="{% url 'trabajador:crear' %}" method="post">
+    <form action="">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -12,91 +12,142 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label for="nombre_add" class="control-label">Nombre</label>
-                    <input id="nombre_add" name="nombre" type="text" class="form-control" value="" />
-                    <span class="help-block"></span>
+
+                    <input id="nombre_add" name="nombre" type="text"
+                        class="form-control" value=""
+                        data-ng-model="tc.trabajador.nombre">
+
+                    <span class="text-danger"
+                        data-ng-show="tc.trabajador.mensajes.nombre"
+                        data-ng-bind="tc.trabajador.mensajes.nombre"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="apellido_add" class="control-label">Apellido</label>
-                    <input id="apellido_add" name="apellido" type="text" class="form-control" value="" />
-                    <span class="help-block"></span>
+                    <input id="apellido_add" name="apellido" type="text"
+                        class="form-control" value=""
+                        data-ng-model="tc.trabajador.apellido" />
+
+                    <span class="text-danger"
+                        data-ng-show="tc.trabajador.mensajes.apellido"
+                        data-ng-bind="tc.trabajador.mensajes.apellido"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="rut_add" class="control-label">Rut</label>
-                    <input id="rut_add" name="rut" type="text" class="form-control" value="" />
-                    <span class="help-block"></span>
+                    <input id="rut_add" name="rut" type="text"
+                        class="form-control" value=""
+                        data-ng-model="tc.trabajador.rut" />
+
+                    <span class="text-danger"
+                        data-ng-show="tc.trabajador.mensajes.rut"
+                        data-ng-bind="tc.trabajador.mensajes.rut"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="domicilio_add" class="control-label">Domicilio</label>
-                    <input id="domicilio_add" name="domicilio" type="text" class="form-control" value="" />
-                    <span class="help-block"></span>
+                    <input id="domicilio_add" name="domicilio" type="text"
+                        class="form-control" value=""
+                        data-ng-model="tc.trabajador.domicilio" />
+
+                    <span class="text-danger"
+                        data-ng-show="tc.trabajador.mensajes.domicilio"
+                        data-ng-bind="tc.trabajador.mensajes.domicilio"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="fecha_nacimiento_add" class="control-label">Fecha nacimiento</label>
                     <input id="fecha_nacimiento_add" name="fecha_nacimiento" type="date"
-                        class="form-control" max="{% now 'Y-m-d' %}" />
-                    <span class="help-block"></span>
+                        class="form-control" max="{% now 'Y-m-d' %}"
+                        data-ng-model="tc.trabajador.fechaNacimiento" />
+
+                    <span class="text-danger"
+                        data-ng-show="tc.trabajador.mensajes.fechaNacimiento"
+                        data-ng-bind="tc.trabajador.mensajes.fechaNacimiento"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="inicio_contrato_add" class="control-label">Inicio contrato</label>
-                    <input id="inicio_contrato_add" name="inicio_contrato" type="date" class="form-control" value="" />
-                    <span class="help-block"></span>
+                    <input id="inicio_contrato_add" name="inicio_contrato" type="date"
+                        class="form-control" value=""
+                        data-ng-model="tc.trabajador.inicioContrato" />
+
+                    <span class="text-danger"
+                        data-ng-show="tc.trabajador.mensajes.inicioContrato"
+                        data-ng-bind="tc.trabajador.mensajes.inicioContrato"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="vigencia_licencia_add" class="control-label">Vigencia licencia:</label>
-                    <input id="vigencia_licencia_add" name="vigencia_licencia" type="date" class="form-control" value="" />
-                    <span class="help-block"></span>
+                    <input id="vigencia_licencia_add" name="vigencia_licencia" type="date"
+                        class="form-control" value=""
+                        data-ng-model="tc.trabajador.vigenciaLicencia" />
+
+                    <span class="text-danger"
+                        data-ng-show="tc.trabajador.mensajes.vigenciaLicencia"
+                        data-ng-bind="tc.trabajador.mensajes.vigenciaLicencia"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="afp_add" class="control-label">AFP</label>
-                    <select name="afp" id="afp_add" class="form-control">
+                    <select name="afp" id="afp_add"
+                        class="form-control" data-ng-model="tc.trabajador.afp">
                         {% for afp in lista_afps %}
                         <option value="{{ afp.id }}">{{ afp.nombre }}</option>
                         {% endfor %}
                     </select>
-                    <span class="help-block"></span>
+
+                    <span class="text-danger"
+                        data-ng-show="tc.trabajador.mensajes.afp"
+                        data-ng-bind="tc.trabajador.mensajes.afp"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="sistema_salud_add" class="control-label">Sistema salud</label>
-                    <select name="sistema_salud" id="sistema_salud_add" class="form-control">
+                    <select name="sistema_salud" id="sistema_salud_add"
+                        class="form-control" data-ng-model="tc.trabajador.sistemaSalud">
                         {% for sistema_salud in lista_sistema_salud %}
                         <option value="{{ sistema_salud.id }}">{{ sistema_salud.nombre }}</option>
                         {% endfor %}
                     </select>
-                    <span class="help-block"></span>
+
+                    <span class="text-danger"
+                        data-ng-show="tc.trabajador.mensajes.sistemaSalud"
+                        data-ng-bind="tc.trabajador.mensajes.sistemaSalud"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="estado_civil_add" class="control-label">Estado civil</label>
-                    <select name="estado_civil" id="estado_civil_add" class="form-control">
+                    <select name="estado_civil" id="estado_civil_add"
+                        class="form-control" data-ng-model="tc.trabajador.estadoCivil">
                         {% for estado_civil in estados_civiles %}
                         <option value="{{ estado_civil.id }}">{{ estado_civil.nombre }}</option>
                         {% endfor %}
                     </select>
-                    <span class="help-block"></span>
+
+                    <span class="text-danger"
+                        data-ng-show="tc.trabajador.mensajes.estadoCivil"
+                        data-ng-bind="tc.trabajador.mensajes.estadoCivil"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="estado_vacacion_add" class="control-label">Estado vacaciones</label>
-                    <select id="estado_vacacion_add" name="estado_vacacion" class="form-control">
+                    <select id="estado_vacacion_add" name="estado_vacacion"
+                        class="form-control" data-ng-model="tc.trabajador.estadoVacacion">
                         {% for estado_vacacion in estados_vacacion %}
                         <option value="{{ estado_vacacion.id }}">{{ estado_vacacion.nombre }}</option>
                         {% endfor %}
                     </select>
-                    <span class="help-block"></span>
+
+                    <span class="text-danger"
+                        data-ng-show="tc.trabajador.mensajes.estadoVacacion"
+                        data-ng-bind="tc.trabajador.mensajes.estadoVacacion"></span>
                 </div>
             </div>
 
             <div class="modal-footer">
                 <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <button class="btn btn-primary">Guardar</button>
+                <button class="btn btn-primary" data-ng-click="tc.crearTrabajador()">Guardar</button>
             </div>
         </div>
     </div>

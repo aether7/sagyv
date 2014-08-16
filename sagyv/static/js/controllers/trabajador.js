@@ -1,7 +1,6 @@
 App.Controllers.Trabajador = function(){
     this.fNuevo = $("#f_nuevo");
     this.fEdit = $("#f_edit");
-    this.btnNuevo = $("#btn_nuevo_trabajador");
     this.listaTrabajadores = $("#lista_trabajadores tbody");
     this.id = null;
 };
@@ -12,20 +11,19 @@ App.Controllers.Trabajador.prototype = {
     init: function(){
         var _this = this;
 
-        this.btnNuevo.on("click", function(){
-            common.mostrarModal("nuevo");
-        });
-
-        this.fNuevo.on("submit", function(evt){
+        /*this.fNuevo.on("submit", function(evt){
             evt.preventDefault();
             _this.guardarNuevo($(this).attr("action"), $(this));
-        });
+        });*/
 
+        /*
         this.fEdit.on("submit", function(evt){
             evt.preventDefault();
             _this.guardarUpdate($(this).attr("action"), $(this));
         });
+        */
 
+        /*
         this.listaTrabajadores.on("click", "a[data-accion]", function(evt){
             evt.preventDefault();
 
@@ -35,6 +33,7 @@ App.Controllers.Trabajador.prototype = {
             common.mostrarModal(accion);
             _this[accion + "Trabajador"]($(this).data("id"));
         });
+        */
     },
 
     verTrabajador: function(id){

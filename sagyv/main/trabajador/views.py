@@ -40,8 +40,8 @@ class CrearTrabajadorView(View):
         self.afp_id = req.POST.get("afp")
         self.sistema_salud_id = req.POST.get("sistema_salud")
         self.estado_civil_id = req.POST.get("estado_civil")
-
         self.estado_vacacion_id = req.POST.get("estado_vacacion")
+
         estado_vacaciones = EstadoVacacion.objects.get(pk = self.estado_vacacion_id)
 
         trabajador = self.crear_trabajador()

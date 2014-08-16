@@ -5,7 +5,9 @@
 
 {% include "mensaje.html" %}
 
-<button id="btn_nuevo_trabajador" class="btn btn-primary">Nuevo</button>
+<section data-ng-app="trabajadorApp" data-ng-controller="TrabajadorController as tc">
+
+<button id="btn_nuevo_trabajador" class="btn btn-primary" data-ng-click="tc.mostrar()">Nuevo</button>
 
 <table id="lista_trabajadores" class="table table-striped">
     <thead>
@@ -25,10 +27,16 @@
             <td data-campo="rut">{{ trabajador.rut }}</td>
             <td data-campo="estado_vacaciones">{{ trabajador.get_vacacion }}</td>
             <td>
-                <a href="#" class="icon-search" data-accion="ver" data-id="{{ trabajador.id }}"></a>
-                <a href="#" class="icon-pencil" data-accion="editar" data-id="{{ trabajador.id }}"></a>
-                <a href="#" class="icon-remove" data-accion="eliminar" data-id="{{ trabajador.id }}"></a>
-                <a href="#" data-accion="anexar" data-id="{{ trabajador.id }}">Anexar carga</a>
+                <a href class="icon-search"
+                    data-accion="ver" data-id="{{ trabajador.id }}"
+                    data-ng-click="tc.verTrabajador({{ trabajador.id }})"></a>
+
+                <a href class="icon-pencil"
+                    data-accion="editar" data-id="{{ trabajador.id }}"
+                    data-ng-click="tc.editarTrabajador({{ trabajador.id }})"></a>
+
+                <a href class="icon-remove" data-accion="eliminar" data-id="{{ trabajador.id }}"></a>
+                <a href data-accion="anexar" data-id="{{ trabajador.id }}">Anexar carga</a>
             </td>
         </tr>
         {% endfor %}
@@ -39,19 +47,26 @@
 {% include "trabajador/components/modal_ver_trabajador.html" %}
 {% include "trabajador/components/modal_editar_trabajador.html" %}
 
+</section>
+
 {% endblock %}
 
 {% block js %}
+<script src="{% static 'js/vendor/angular.min.js' %}"></script>
 <script src="{% static 'js/vendor/handlebars.min.js' %}"></script>
 <script src="{% static 'js/plugins/jquery.rut.min.js' %}"></script>
 <script src="{% static 'js/common_functions.js' %}"></script>
+<script src="{% static 'js/models/trabajador_model.js' %}"></script>
 <script src="{% static 'js/controllers/trabajador.js' %}"></script>
+<script src="{% static 'js/controllers/trabajador_controller.js' %}"></script>
 <script id="tpl_nuevo_trabajador" type="text/x-template">
     {% include "trabajador/components/tpl_nuevo_trabajador.html" %}
 </script>
 <script>
     App.urls.set("trabajador:obtener","{% url 'trabajador:obtener' %}");
     App.urls.set("trabajador:eliminar","{% url 'trabajador:eliminar' %}");
+    App.urls.set("trabajador:actualizar","{% url 'trabajador:modificar' %}");
+    App.urls.set("trabajador:crear", "{% url 'trabajador:crear' %}");
 
     App.trabajadorController = new App.Controllers.Trabajador();
     App.trabajadorController.init();

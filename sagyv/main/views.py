@@ -9,6 +9,16 @@ from django.contrib.auth import login as log_in
 from django.contrib.auth import logout as log_out
 from django.core.urlresolvers import reverse
 
+class IndexView(TemplateView):
+    template_name = "index.html"
+
+    def get(self, req):
+        if req.user.is_authenticated():
+            return redirect(reverse("panel_control"))
+
+        return render(req, self.template_name)
+
+
 class LoginView(View):
     def post(self, request):
         usuario = request.POST.get("usuario")
@@ -37,7 +47,7 @@ class LogoutView(View):
         log_out(request)
         return redirect(reverse("index"))
 
-index = TemplateView.as_view(template_name="index.html")
+index = IndexView.as_view()
 login = LoginView.as_view()
 panel_control = login_required(TemplateView.as_view(template_name="panel_control.html"))
 logout = LogoutView.as_view()

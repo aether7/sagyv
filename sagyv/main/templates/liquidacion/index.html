@@ -63,7 +63,7 @@
                 </thead>
                 <tbody>
                     <tr data-ng-repeat="producto in liqCtrl.productos"
-                        data-ng-controller="ProductoController as productoCtrl">
+                        data-ng-controller="ProductoController as productoCtrl" class="ng-cloak">
                         <td>{{ producto.codigo }}</td>
                         <td>{{ producto.cantidad }}</td>
                         <td>{{ productoCtrl.calcularRestante(producto) }}</td>
