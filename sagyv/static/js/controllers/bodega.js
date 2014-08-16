@@ -173,7 +173,8 @@ App.Controllers.Bodega.prototype = {
         json.productos = JSON.stringify(json.productos);
 
         $.post(url, json, function(data){
-            console.log(data);
+            $("#modal_guia_despacho").modal("hide");
+            common.agregarMensaje("Se ha recargado la nueva guía exitosamente");
         });
     },
 
