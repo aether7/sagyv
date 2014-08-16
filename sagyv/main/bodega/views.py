@@ -212,14 +212,51 @@ class RecargaGuia(View):
         id_guia = req.POST.get("id_guia");
         productos = json.loads(req.POST.get("productos"))
 
+        #1 - Obtener la guia
+        #2 - Refrescar el stock del vehiculo
+        #3 - añadir registros al historial
+
         guia = GuiaDespacho.objects.get(pk = id_guia)
-        print productos
+        historico = self.historial(productos, guia)
 
         resultados = {
             "status" : "ok"
         }
 
         return HttpResponse(json.dumps(resultados), content_type="application/json")
+
+    def historial(self, productos, guia):
+        for producto in productos:
+            print producto
+            prod = Producto.objects.get(pk = int(producto['id_producto']))
+            cant = int(producto['cantidad'])
+
+            historico = HistorialStock()
+            historico.producto = prod
+            historico.cantidad = cant
+            historico.tipo_operacion = False
+            historico.guia_despacho = guia
+            historico.es_recarga = True
+            historico.save()
+
+            prod.stock = prod.stock - cant
+            prod.save()
+
+            self.actualizar_stock(prod, guia.vehiculo, cant)
+
+
+    def actualizar_stock(self, producto_obj, vehiculo_obj, cantidad):
+        try:
+            stock_vehiculo = StockVehiculo.objects.get(producto = producto_obj)
+            stock_vehiculo.cantidad = stock_vehiculo.cantidad + cantidad
+            stock_vehiculo.save()
+
+        except StockVehiculo.DoesNotExist:
+            stock_vehiculo = StockVehiculo()
+            stock_vehiculo.vehiculo = vehiculo_obj
+            stock_vehiculo.producto = producto_obj
+            stock_vehiculo.cantidad = cantidad
+            stock_vehiculo.save()
 
 
 index = IndexView.as_view()

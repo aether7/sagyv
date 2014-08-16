@@ -122,8 +122,8 @@ App.Controllers.Bodega.prototype = {
             var id = $(this).data("guiaid"),
                 url = App.urls.get("bodega:obtener_guia");
 
-                _this.idGuiaDespacho = id;
-
+            _this.idGuiaDespacho = id;
+            _this.despacho.text('');
             $.get(url, {guia_id : id}, function(data){
                 $("#numero_despacho_rec").text(data.numero_guia);
                 $("#movil_despasho_rec").text(data.movil);
@@ -205,7 +205,7 @@ App.Controllers.Bodega.prototype = {
             cantidad = $("#cantidad_producto"),
             codigo = producto.find("option:selected").text().trim();
 
-        if(!this.listaDespacho.find("tr[data-id={0}]".format(producto.val())).length){
+        if(this.listaDespacho.find("tr[data-id={0}]".format(producto.val())).length){
             alert("EL producto {0} ya fue ingresado, revise nuevamente".format(codigo));
             return;
         }
