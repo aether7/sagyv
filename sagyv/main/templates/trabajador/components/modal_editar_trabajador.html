@@ -1,5 +1,5 @@
 <div id="modal_editar" class="modal fade">
-    <form id="f_edit" action="{% url 'trabajador:modificar' %}" method="post">
+    <form id="f_edit" action="" method="post" data-action="{% url 'trabajador:modificar' %}">
     {% csrf_token %}
     <div class="modal-dialog">
         <div class="modal-content">
@@ -148,7 +148,7 @@
 
             <div class="modal-footer">
                 <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <button class="btn btn-primary">Guardar</button>
+                <button class="btn btn-primary" data-ng-click="tc.actualizarTrabajador()">Guardar</button>
             </div>
         </div>
     </div>

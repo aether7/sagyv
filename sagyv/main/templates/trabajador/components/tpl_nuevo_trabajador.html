@@ -5,10 +5,16 @@
     <td data-columna="rut">{{ rut }}</td>
     <td data-columna="estado_vacaciones">{{ estado_vacaciones }}</td>
     <td>
-        <a href="#" class="icon-search" data-accion="ver" data-id="{{ id }}"></a>
-        <a href="#" class="icon-pencil" data-accion="editar" data-id="{{ id }}"></a>
-        <a href="#" class="icon-remove" data-accion="eliminar" data-id="{{ id }}"></a>
-        <a href="#" data-accion="anexar" data-id="{{ id }}">Anexar carga</a>
+        <a href class="icon-search" data-accion="ver" data-id="{{ id }}"
+            data-ng-click="tc.verTrabajador({{ id }})"></a>
+
+        <a href class="icon-pencil" data-accion="editar" data-id="{{ id }}"
+            data-ng-click="tc.editarTrabajador({{ id }})"></a>
+
+        <a href class="icon-remove" data-accion="eliminar" data-id="{{ id }}"
+            data-ng-click="tc.eliminarTrabajador({{ id }})"></a>
+
+        <a href data-accion="anexar" data-id="{{ id }}">Anexar carga</a>
     </td>
 </tr>
 {% endverbatim %}
