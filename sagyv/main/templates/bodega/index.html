@@ -98,6 +98,9 @@
     {% include "bodega/components/tpl_despacho_producto.html" %}
 </script>
 
+<script src="{% static 'js/models/guia_model.js' %}"></script>
+<script src="{% static 'js/controllers/bodega_controller.js' %}"></script>
+
 <script>
     App.urls.set("bodega:obtener_vehiculos_por_producto", "{% url 'bodega:obtener_vehiculos_por_producto' %}");
     App.urls.set("bodega:obtener_guia", "{% url 'bodega:obtener_guia' %}");
