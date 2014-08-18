@@ -133,7 +133,8 @@ App.Controllers.Bodega.prototype = {
                     html = _this.renderProductoDespacho({
                         id : producto.id_producto,
                         cantidad : producto.cantidad,
-                        codigo : producto.codigo
+                        codigo : producto.codigo,
+                        es_recarga : producto.es_recarga
                     });
 
                     _this.despacho.append(html);
