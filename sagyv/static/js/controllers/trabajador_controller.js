@@ -45,6 +45,8 @@ TrabajadorController.prototype = {
 
         action += "?id=" + id;
 
+        this.trabajador = new App.Models.Trabajador();
+
         this.http.get(action).success(function(data){
             common.mostrarModal("ver");
             _this.procesarTrabajador(data);
@@ -55,10 +57,12 @@ TrabajadorController.prototype = {
         var action = App.urls.get("trabajador:obtener"),
             _this = this;
 
+        this.trabajador = new App.Models.Trabajador();
         action += "?id=" + id;
 
         this.http.get(action).success(function(data){
             common.mostrarModal("editar");
+
             _this.procesarTrabajador(data, "id");
             _this.trabajador.id = id;
         });
@@ -109,7 +113,6 @@ TrabajadorController.prototype = {
             fechaInicio = new Date(common.fecha.agregarCeros(data.fecha_inicio_contrato) + " 00:00:00"),
             fechaVigencia = new Date(common.fecha.agregarCeros(data.vigencia_licencia) + " 00:00:00");
 
-        this.trabajador = new App.Models.Trabajador();
         this.trabajador.nombre = data.nombre;
         this.trabajador.apellido = data.apellido;
         this.trabajador.rut = data.rut;
