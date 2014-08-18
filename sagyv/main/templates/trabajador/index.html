@@ -60,7 +60,6 @@
 <script src="{% static 'js/plugins/jquery.rut.min.js' %}"></script>
 <script src="{% static 'js/common_functions.js' %}"></script>
 <script src="{% static 'js/models/trabajador_model.js' %}"></script>
-<script src="{% static 'js/controllers/trabajador.js' %}"></script>
 <script src="{% static 'js/controllers/trabajador_controller.js' %}"></script>
 <script id="tpl_nuevo_trabajador" type="text/x-template">
     {% include "trabajador/components/tpl_nuevo_trabajador.html" %}
@@ -70,8 +69,5 @@
     App.urls.set("trabajador:eliminar","{% url 'trabajador:eliminar' %}");
     App.urls.set("trabajador:actualizar","{% url 'trabajador:modificar' %}");
     App.urls.set("trabajador:crear", "{% url 'trabajador:crear' %}");
-
-    App.trabajadorController = new App.Controllers.Trabajador();
-    App.trabajadorController.init();
 </script>
 {% endblock %}

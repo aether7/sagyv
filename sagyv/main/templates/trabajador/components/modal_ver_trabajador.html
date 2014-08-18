@@ -7,7 +7,7 @@
                 </button>
                 <h4 class="modal-title">Detalle trabajador</h4>
             </div>
-
+            {% verbatim %}
             <div class="modal-body">
                 <div class="form-group">
                     <label for="nombre_ver" class="control-label">Nombre</label>
@@ -36,19 +36,19 @@
                 <div class="form-group">
                     <label for="fecha_nacimiento_ver" class="control-label">Fecha nacimiento</label>
                     <span id="fecha_nacimiento_ver" class="form-control-static"
-                        data-ng-bind="tc.trabajador.fechaNacimiento"></span>
+                        data-ng-bind-template="{{ tc.trabajador.fechaNacimiento | date:'yyyy-MM-dd' }}"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="inicio_contrato_ver" class="control-label">Inicio contrato</label>
                     <span id="inicio_contrato_ver" class="form-control-static"
-                        data-ng-bind="tc.trabajador.inicioContrato"></span>
+                        data-ng-bind-template="{{ tc.trabajador.inicioContrato | date:'yyyy-MM-dd' }}"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="vigencia_licencia_ver" class="control-label">Vigencia licencia</label>
                     <span id="vigencia_licencia_ver" class="form-control-static"
-                        data-ng-bind="tc.trabajador.vigenciaLicencia"></span>
+                        data-ng-bind-template="{{ tc.trabajador.vigenciaLicencia | date:'yyyy-MM-dd' }}"></span>
                 </div>
 
                 <div class="form-group">
@@ -75,6 +75,7 @@
                         data-ng-bind="tc.trabajador.estadoVacacion"></span>
                 </div>
             </div>
+            {% endverbatim %}
 
             <div class="modal-footer">
                 <button class="btn btn-default" data-dismiss="modal">Cerrar</button>
