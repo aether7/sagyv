@@ -22,7 +22,10 @@ App.Models.Guia.prototype = {
 
         this.mensajes.producto = "";
 
-        if(!producto.id || _.find(this.productos, fn)){
+        if(!producto.id || !producto.codigo || !producto.cantidad){
+            valido = false;
+            this.mensajes.producto = "El producto debe ingresarse tanto el código como la cantidad";
+        }else if(_.find(this.productos, fn)){
             valido = false;
             this.mensajes.producto = "El producto que intenta ingresar ya se encuentra en la lista";
         }else{
