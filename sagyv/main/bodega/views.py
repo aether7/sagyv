@@ -64,10 +64,12 @@ class CrearGuiaDespachoView(View):
 
         data = {
             "status" : "ok",
-            "productos" : self.productosActualizados,
             "guia" : {
                 "id" : guia.id,
-                "numero" : guia.numero
+                "numero" : guia.numero,
+                "vehiculo" : guia.vehiculo.numero,
+                "fecha" : convierte_fecha_texto(guia.fecha),
+                "productos" : self.productosActualizados,
             }
         }
 
