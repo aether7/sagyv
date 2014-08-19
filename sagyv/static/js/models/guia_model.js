@@ -108,5 +108,21 @@ App.Models.Guia.prototype = {
         valido = this.esProductosValido() && valido;
 
         return valido;
+    },
+
+    getJSON: function(){
+        var json = {
+            numero: this.numero,
+            factura: this.factura,
+            vehiculo: this.vehiculo,
+            fecha: this.fecha,
+            productos: JSON.stringify(this.productos)
+        };
+
+        if(this.id){
+            json.id = this.id;
+        }
+
+        return json;
     }
 };
