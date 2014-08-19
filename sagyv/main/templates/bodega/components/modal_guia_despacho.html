@@ -12,41 +12,66 @@
                 <form id="f_guia_despacho" action="{% url 'bodega:crea_guia' %}" method="post" style="overflow:hidden">
                     <div class="form-group">
                         <label for="numero_despacho" class="control-label">Guía</label>
-                        <input id="numero_despacho" class="form-control" type="text" value="" />
-                        <span class="help-block"></span>
+
+                        <input id="numero_despacho" class="form-control" type="text" value=""
+                            data-ng-model="bodega.guia.numero" />
+
+                        <span class="text-danger"
+                            data-ng-bind="bodega.guia.mensajes.numero"
+                            data-ng-show="bodega.guia.mensajes.numero"></span>
                     </div>
 
                     <div class="form-group">
                         <label for="movil_despacho" class="control-label">Móvil</label>
-                        <select id="movil_despacho" class="form-control">
+
+                        <select id="movil_despacho" class="form-control"
+                            data-ng-model="bodega.guia.vehiculo">
                             {% for vehiculo in vehiculos %}
                             <option value="{{ vehiculo.id }}">{{ vehiculo.numero }} - {{ vehiculo.patente }}</option>
                             {% endfor %}
                         </select>
-                        <span class="help-block"></span>
+
+                        <span class="text-danger"
+                            data-ng-bind="bodega.guia.vehiculo"
+                            data-ng-show="bodega.guia.vehiculo"></span>
                     </div>
 
                     <div class="form-group">
                         <label for="fecha_despacho" class="control-label">Fecha</label>
-                        <input id="fecha_despacho" class="form-control" type="date" value="" />
-                        <span class="help-block"></span>
+
+                        <input id="fecha_despacho" class="form-control" type="date"
+                            value="" data-ng-model="bodega.guia.fecha" />
+
+                        <span class="text-danger"
+                            data-ng-bind="bodega.guia.mensajes.fecha"
+                            data-ng-show="bodega.guia.mensajes.fecha"></span>
                     </div>
 
                     <div class="form-group">
                         <div class="col-xs-6">
                             <label for="guia_producto" class="control-label">Producto</label>
-                            <select id="guia_producto" class="form-control">
+
+                            <select id="guia_producto" class="form-control"
+                                data-ng-model="bodega.guia.producto.id">
                                 {% for producto in productos_guia %}
                                 <option value="{{ producto.id }}">{{ producto.codigo }}</option>
                                 {% endfor %}
                             </select>
-                            <span class="help-block"></span>
+
+                            <span class="text-danger"
+                                data-ng-bind="bodega.guia.mensajes.producto"
+                                data-ng-show="bodega.guia.mensajes.producto"></span>
                         </div>
 
                         <div class="col-xs-4">
                             <label for="cantidad_producto" class="contol-label">Cantidad</label>
-                            <input id="cantidad_producto" class="form-control" type="text" value="" />
-                            <span class="help-block"></span>
+
+                            <input id="cantidad_producto" class="form-control" type="text"
+                                value="" data-ng-model="bodega.guia.producto.cantidad" />
+
+                            <span class="text-danger"
+                                data-ng-bind="bodega.guia.mensajes.producto"
+                                data-ng-show="bodega.guia.mensajes.producto"></span>
                         </div>
 
                         <div class="col-xs-2 btn-productos">
@@ -56,7 +81,7 @@
                 </form>
 
                 <div id="mensajes_lista_productos" class="form-group center">
-                    <span class="help-block"></span>
+                    <span class="text-danger"></span>
                 </div>
 
                 <table id="lista_despacho" class="table table-striped">
@@ -68,13 +93,22 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <tr data-ng-repeat="producto in bodega.productos">
+                            <td data-bind="producto.codigo"></td>
+                            <td data-bind="producto.cantidad"></td>
+                            <td>
+                                <a href>eliminar</a>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
 
             <div class="modal-footer">
                 <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <button id="btn_guardar_guia" class="btn btn-primary">Guardar</button>
+
+                <button id="btn_guardar_guia" class="btn btn-primary"
+                    data-ng-click="bodega.guardarGuiaDespacho()">Guardar</button>
             </div>
         </div>
     </div>

@@ -35,9 +35,11 @@
     <li><a href="#consolidado" role="tab" data-toggle="tab">Consolidado</a></li>
 </ul>
 
-<div class="tab-content">
+<div class="tab-content" data-ng-app="bodegaApp" data-ng-controller="BodegaController as bodega">
     <div class="tab-pane active" id="bodega">
-        <button id="btn_guia_despacho" class="btn btn-primary btn-accion">
+        <button id="btn_guia_despacho"
+            class="btn btn-primary btn-accion"
+            data-ng-click="bodega.nuevaGuiaDespacho()">
             Cargar Vehiculo
         </button>
         <button id="btn_guia_cargar_producto" class="btn btn-primary btn-accion">
@@ -64,13 +66,13 @@
         </button>
         {% include "bodega/panel_recargas.html" %}
     </div>
-</div>
 
-{% include "bodega/components/modal_guia_despacho.html" %}
-{% include "bodega/components/modal_ver_detalle.html" %}
-{% include "bodega/components/modal_guia_carga_producto.html" %}
-{% include "bodega/components/modal_mostrar_guia.html" %}
-{% include "bodega/components/modal_recarga_guia.html" %}
+    {% include "bodega/components/modal_guia_despacho.html" %}
+    {% include "bodega/components/modal_ver_detalle.html" %}
+    {% include "bodega/components/modal_guia_carga_producto.html" %}
+    {% include "bodega/components/modal_mostrar_guia.html" %}
+    {% include "bodega/components/modal_recarga_guia.html" %}
+</div>
 
 {% endblock %}
 
@@ -99,6 +101,7 @@
 </script>
 
 <script src="{% static 'js/models/guia_model.js' %}"></script>
+<script src="{% static 'js/vendor/angular.min.js' %}"></script>
 <script src="{% static 'js/controllers/bodega_controller.js' %}"></script>
 
 <script>

@@ -30,10 +30,10 @@ App.Controllers.Bodega.prototype = {
             $(this).tab("show");
         });
 
-        $("#btn_guia_despacho").on("click", function(evt){
+        /*$("#btn_guia_despacho").on("click", function(evt){
             common.mostrarModal("guia_despacho");
             _this.listaDespacho.empty();
-        });
+        });*/
 
         $("#btn_guia_cargar_producto").on("click", function(evt){
             common.mostrarModal("carga_producto");
@@ -52,9 +52,11 @@ App.Controllers.Bodega.prototype = {
             _this.agregarCargaProducto();
         });
 
+        /*
         this.btnGuardar.on("click", function(evt){
             _this.guardar();
         });
+        */
 
         this.btnGuardarRecarga.on("click", function(evt){
             _this.guardarRecarga();
