@@ -23,6 +23,7 @@ App.Controllers.Bodega.prototype = {
     constructor: App.Controllers.Bodega,
 
     init: function(){
+
         var _this = this;
 
         $("#bodega_tab a").on("click", function(evt){
@@ -30,12 +31,14 @@ App.Controllers.Bodega.prototype = {
             $(this).tab("show");
         });
 
+        return;
+
         /*$("#btn_guia_despacho").on("click", function(evt){
             common.mostrarModal("guia_despacho");
             _this.listaDespacho.empty();
         });*/
 
-        $("#btn_guia_cargar_producto").on("click", function(evt){
+        /*$("#btn_guia_cargar_producto").on("click", function(evt){
             common.mostrarModal("carga_producto");
             _this.listaDespacho.empty();
         });
@@ -51,6 +54,7 @@ App.Controllers.Bodega.prototype = {
         this.btnAgregarCarga.on("click", function(evt){
             _this.agregarCargaProducto();
         });
+        */
 
         /*
         this.btnGuardar.on("click", function(evt){

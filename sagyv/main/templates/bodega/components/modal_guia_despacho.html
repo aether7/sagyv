@@ -52,36 +52,31 @@
                             <label for="guia_producto" class="control-label">Producto</label>
 
                             <select id="guia_producto" class="form-control"
-                                data-ng-model="bodega.guia.producto.id">
+                                data-ng-model="bodega.producto.id">
                                 {% for producto in productos_guia %}
                                 <option value="{{ producto.id }}">{{ producto.codigo }}</option>
                                 {% endfor %}
                             </select>
-
-                            <span class="text-danger"
-                                data-ng-bind="bodega.guia.mensajes.producto"
-                                data-ng-show="bodega.guia.mensajes.producto"></span>
                         </div>
 
                         <div class="col-xs-4">
                             <label for="cantidad_producto" class="contol-label">Cantidad</label>
 
                             <input id="cantidad_producto" class="form-control" type="text"
-                                value="" data-ng-model="bodega.guia.producto.cantidad" />
-
-                            <span class="text-danger"
-                                data-ng-bind="bodega.guia.mensajes.producto"
-                                data-ng-show="bodega.guia.mensajes.producto"></span>
+                                value="" data-ng-model="bodega.producto.cantidad" />
                         </div>
 
                         <div class="col-xs-2 btn-productos">
-                            <button id="btn_agregar" type="button" class="btn btn-default btn-agregar">+</button>
+                            <button id="btn_agregar" type="button"
+                                class="btn btn-default btn-agregar"
+                                data-ng-click="bodega.agregarProducto('guia_producto')">+</button>
                         </div>
                     </div>
                 </form>
 
                 <div id="mensajes_lista_productos" class="form-group center">
-                    <span class="text-danger"></span>
+                    <span class="text-danger"
+                        data-ng-bind="bodega.guia.mensajes.producto"></span>
                 </div>
 
                 <table id="lista_despacho" class="table table-striped">
@@ -97,7 +92,7 @@
                             <td data-ng-bind="producto.codigo"></td>
                             <td data-ng-bind="producto.cantidad"></td>
                             <td>
-                                <a href>eliminar</a>
+                                <a href data-ng-click="bodega.eliminarProducto($index)">eliminar</a>
                             </td>
                         </tr>
                     </tbody>

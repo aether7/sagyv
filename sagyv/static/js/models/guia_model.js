@@ -12,6 +12,26 @@ App.Models.Guia = function(){
 App.Models.Guia.prototype = {
     construtor: App.Models.Guia,
 
+    agregarProducto: function(producto){
+        var fn,
+            valido = true;
+
+        fn = function(p){
+            return p.codigo === producto.codigo && p.id === producto.id;
+        };
+
+        this.mensajes.producto = "";
+
+        if(!producto.id || _.find(this.productos, fn)){
+            valido = false;
+            this.mensajes.producto = "El producto que intenta ingresar ya se encuentra en la lista";
+        }else{
+            this.productos.push(producto);
+        }
+
+        return valido;
+    },
+
     _esNumeroValido: function(campo){
         var valido = true
 
@@ -66,8 +86,11 @@ App.Models.Guia.prototype = {
     esProductosValido:function(){
         var valido = true;
 
+        this.mensajes.productos = "";
+
         if(this.productos.length < 1){
             valido = false;
+            this.mensajes.producto = "Al menos debe haber un producto ingresado";
         }
 
         return valido;

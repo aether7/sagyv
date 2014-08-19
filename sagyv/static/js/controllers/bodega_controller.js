@@ -5,6 +5,7 @@ var app = angular.module("bodegaApp", []);
 
 function BodegaController(){
     this.guia = null;
+    this.producto = {};
 };
 
 BodegaController.prototype = {
@@ -15,6 +16,21 @@ BodegaController.prototype = {
         this.guia.fecha = new Date();
 
         common.mostrarModal("guia_despacho");
+    },
+
+    agregarProducto: function(idSelect){
+        if(this.producto.id && this.producto.cantidad){
+            this.producto.codigo = $("#" + idSelect + " option:selected").text();
+        }
+
+        if(this.guia.agregarProducto(this.producto)){
+            this.producto = {};
+        }
+    },
+
+    eliminarProducto: function(indice){
+        console.log(indice);
+        this.guia.productos.splice(indice, 1);
     },
 
     guardarGuiaDespacho: function(){
