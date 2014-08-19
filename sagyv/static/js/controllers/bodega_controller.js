@@ -18,8 +18,12 @@ BodegaController.prototype = {
     },
 
     guardarGuiaDespacho: function(){
-        console.log("ASDFASDFASDF");
+        var valido = this.guia.esValida();
         console.log(this.guia);
+
+        if(!valido){
+            return;
+        }
     }
 };
 
