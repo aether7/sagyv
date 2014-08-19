@@ -46,8 +46,9 @@ class CrearGuiaDespachoView(View):
     @transaction.commit_on_success
     def post(self,req):
         self.productosActualizados = []
+
         self.numero_guia = req.POST.get("numero")
-        self.id_vehiculo = req.POST.get("movil")
+        self.id_vehiculo = req.POST.get("vehiculo")
         self.factura = req.POST.get("factura")
         self.fecha_creacion = req.POST.get("fecha")
         lista_producto = req.POST.get("productos")
