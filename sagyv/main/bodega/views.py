@@ -8,6 +8,7 @@ from main.helpers.fecha import convierte_texto_fecha, convierte_fecha_texto
 from main.models import Producto, TipoCambioStock, HistorialStock
 from main.models import PrecioProducto, StockVehiculo, Vehiculo
 from main.models import GuiaDespacho
+from django.views.decorators.csrf import csrf_exempt
 
 class IndexView(TemplateView):
     template_name = "bodega/index.html"
@@ -37,7 +38,6 @@ class IndexView(TemplateView):
 
     def get_guias(self):
         guias = GuiaDespacho.objects.filter(tipo_guia = 0)
-        print guias
         return guias
 
 
@@ -252,7 +252,7 @@ class RecargaGuia(View):
 
 
 index = IndexView.as_view()
-crea_guia = CrearGuiaDespachoView.as_view()
+crea_guia = csrf_exempt(CrearGuiaDespachoView.as_view())
 obtener_guia = ObtenerGuiaDespasho.as_view()
 obtener_vehiculos_por_producto = ObtenerVehiculosPorProductoView.as_view()
 recargar_guia = RecargaGuia.as_view()
