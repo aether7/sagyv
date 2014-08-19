@@ -114,5 +114,10 @@
 
     App.bodegaController = new App.Controllers.Bodega();
     App.bodegaController.init();
+
+    App.productos = {};
+    {% for producto in productos %}
+        App.productos["{{ producto.id }}"] = {{ producto.stock }};
+    {% endfor %}
 </script>
 {% endblock %}

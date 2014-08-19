@@ -12,7 +12,7 @@ App.Models.Guia = function(){
 App.Models.Guia.prototype = {
     construtor: App.Models.Guia,
 
-    agregarProducto: function(producto){
+    agregarProductoDescuento: function(producto){
         var fn,
             valido = true;
 
@@ -28,6 +28,9 @@ App.Models.Guia.prototype = {
         }else if(_.find(this.productos, fn)){
             valido = false;
             this.mensajes.producto = "El producto que intenta ingresar ya se encuentra en la lista";
+        }else if(parseInt(App.productos[producto.id]) < parseInt(producto.cantidad)){
+            valido = false;
+            this.mensajes.producto = "No se pueden agregar mas productos de los que hay en stock";
         }else{
             this.productos.push(producto);
         }

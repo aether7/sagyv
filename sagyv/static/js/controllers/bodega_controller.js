@@ -19,18 +19,17 @@ BodegaController.prototype = {
         common.mostrarModal("guia_despacho");
     },
 
-    agregarProducto: function(idSelect){
+    agregarProductoDescuento: function(idSelect){
         if(this.producto.id && this.producto.cantidad){
             this.producto.codigo = $("#" + idSelect + " option:selected").text();
         }
 
-        if(this.guia.agregarProducto(this.producto)){
+        if(this.guia.agregarProductoDescuento(this.producto)){
             this.producto = {};
         }
     },
 
     eliminarProducto: function(indice){
-        console.log(indice);
         this.guia.productos.splice(indice, 1);
     },
 
@@ -45,10 +44,8 @@ BodegaController.prototype = {
 
         action = App.urls.get("bodega:crea_guia");
         json = this.guia.getJSON();
-        console.log(json);
 
         this.http.post(action, json).success(function(data){
-            console.log(data);
             common.agregarMensaje("Se ha actualizado el vehiculo exitosamente");
         });
     }
