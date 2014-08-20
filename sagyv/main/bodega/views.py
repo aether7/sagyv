@@ -252,7 +252,7 @@ class RecargaGuia(View):
 
 class ObtenerIdGuia(View):
 
-    def get():
+    def get(self, req):
         try:
             guia = GuiaDespacho.objects.latest('id')
             result = {
