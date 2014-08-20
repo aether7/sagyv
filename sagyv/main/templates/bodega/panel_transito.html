@@ -14,8 +14,9 @@
             <td>{{ item.nombre }}</td>
             <td>{{ item.cantidad }}</td>
             <td>
-                <a href="#" data-accion="ver_detalle"
-                    data-producto-id="{{ item.producto_id }}">ver vehículos</a>
+                <a href
+                    class="icon-search"
+                    data-ng-click="transito.verDetalle({{ item.producto_id }})"></a>
             </td>
         </tr>
     {% endfor %}

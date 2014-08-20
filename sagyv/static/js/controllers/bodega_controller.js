@@ -94,8 +94,6 @@ BodegaController.prototype = {
     },
 
     actualizarProductos: function(data){
-        console.warn(data);
-
         data.guia.productos.forEach(function(producto){
             $("#stock_" + producto.id).text(producto.cantidad);
             App.productos[producto.id] = producto.cantidad;
@@ -135,8 +133,31 @@ GuiaController.prototype = {
             $("#modal_mostrar_guia").modal("show");
         });
     }
+};
+
+function TransitoController($http){
+    this.resultados = null;
+    this.http = $http;
 }
+
+TransitoController.prototype = {
+    constructor: TransitoController,
+
+    verDetalle: function(id){
+        var action = App.urls.get("bodega:obtener_vehiculos_por_producto"),
+            _this = this;
+
+        action += "?producto_id=" + id;
+
+        this.http.get(action).success(function(data){
+            _this.resultados = data;
+            $("#modal_ver_detalle").modal("show");
+        });
+    }
+};
 
 app.controller("BodegaController", ["$http", BodegaController]);
 app.controller("GuiaController", ["$http", GuiaController]);
+app.controller("TransitoController", ["$http", TransitoController]);
+
 })();

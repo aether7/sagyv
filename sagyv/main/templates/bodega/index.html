@@ -50,8 +50,9 @@
         {% include "bodega/panel_bodega.html" %}
     </div>
 
-    <div class="tab-pane" id="transito">
+    <div class="tab-pane" id="transito" data-ng-controller="TransitoController as transito">
         {% include "bodega/panel_transito.html" %}
+        {% include "bodega/components/modal_ver_detalle.html" %}
     </div>
 
     <div class="tab-pane" id="consolidado">
@@ -71,7 +72,6 @@
     </div>
 
     {% include "bodega/components/modal_guia_despacho.html" %}
-    {% include "bodega/components/modal_ver_detalle.html" %}
     {% include "bodega/components/modal_guia_carga_producto.html" %}
     {% include "bodega/components/modal_recarga_guia.html" %}
 </div>
@@ -84,10 +84,6 @@
 <script src="{% static 'js/controllers/bodega.js' %}"></script>
 <script id="tpl_nuevo_producto" type="text/x-template">
     {% include "bodega/components/tpl_nuevo_producto.html" %}
-</script>
-
-<script id="tpl_ver_detalle" type="text/x-template">
-    {% include "bodega/components/tpl_ver_detalle.html" %}
 </script>
 
 <script id="tpl_carga_producto" type="text/x-template">
