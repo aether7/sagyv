@@ -106,8 +106,22 @@
 <script src="{% static 'js/models/guia_model.js' %}"></script>
 <script src="{% static 'js/controllers/bodega_controller.js' %}"></script>
 
+<script id="tpl_nueva_guia" type="text/x-template">
+    {% verbatim %}
+    <tr>
+        <td>{{ numero_guia }}</td>
+        <td>{{ numero_vehiculo }}</td>
+        <td>{{ fecha_guia }}</td>
+        <td>
+            <a href class="icon-search"></a>
+            <a href >Recargar</a>
+        </td>
+    </tr>
+    {% endverbatim %}
+</script>
+
 <script>
-    App.urls.set("bodega:obtener_id_guia", "");
+    App.urls.set("bodega:obtener_id_guia", "{% url 'bodega:obtener_id_guia' %}");
     App.urls.set("bodega:crea_guia", "{% url 'bodega:crea_guia' %}");
     App.urls.set("bodega:obtener_vehiculos_por_producto", "{% url 'bodega:obtener_vehiculos_por_producto' %}");
     App.urls.set("bodega:obtener_guia", "{% url 'bodega:obtener_guia' %}");

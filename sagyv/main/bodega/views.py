@@ -257,7 +257,7 @@ class ObtenerIdGuia(View):
             guia = GuiaDespacho.objects.latest('id')
             result = {
                 "status" : "ok",
-                "next" : int(guia.numero)+1
+                "next" : int(guia.numero) + 1
             }
         except GuiaDespacho, e:
             result = {

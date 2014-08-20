@@ -1,15 +1,15 @@
 (function(){
 "use strict";
 
-var app = angular.module("bodegaApp", [], App.provider);
+var app = angular.module("bodegaApp", [], App.httpProvider);
 
 function BodegaController($http){
     this.guia = new App.Models.Guia();
     this.producto = {};
     this.http = $http;
-    this.idGuia = null;
+    this.numeroGuia = null;
 
-    this.refrescarIdGuia();
+    this.refrescarNumeroGuia();
 };
 
 BodegaController.prototype = {
@@ -17,7 +17,9 @@ BodegaController.prototype = {
 
     nuevaGuiaDespacho: function(){
         this.guia = new App.Models.Guia();
+        this.guia.numero = this.numeroGuia;
         this.producto = {};
+
         $("#modal_guia_despacho").modal("show");
     },
 
@@ -52,21 +54,32 @@ BodegaController.prototype = {
             console.log(data);
             $("#modal_guia_despacho").modal("hide");
             common.agregarMensaje("Se ha actualizado el vehiculo exitosamente");
+
+            var html,
+                tpl = $("#tpl_nueva_guia").html(),
+                fx = Handlebars.compile(tpl);
+
+            html = fx({
+                numero_guia: _this.guia.numero,
+                numero_vehiculo: _this.guia.vehiculo,
+                fecha_guia: _this.guia.fecha
+            });
+
+            console.log(html);
+
+            $("#tbl_guias tbody").append(html);
         });
     },
 
-    refrescarIdGuia: function(){
+    refrescarNumeroGuia: function(){
         var _this = this,
             action = App.urls.get("bodega:obtener_id_guia");
 
         this.http.get(action).success(function(data){
-            if(!_this.guia.numero){
-                console.log("aqui");
-                _this.guia.numero = data.next;
-            }
+            _this.numeroGuia = data.next;
 
             setTimeout(function(){
-                _this.refrescarIdGuia();
+                _this.refrescarNumeroGuia();
             }, 10000);
         });
     }

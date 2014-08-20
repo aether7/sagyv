@@ -44,5 +44,5 @@ function provider($httpProvider) {
   }];
 }
 
-context.provider = provider;
+context.httpProvider = provider;
 })(App);
