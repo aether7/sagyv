@@ -42,7 +42,9 @@
             data-ng-click="bodega.nuevaGuiaDespacho()">
             Cargar Vehiculo
         </button>
-        <button id="btn_guia_cargar_producto" class="btn btn-primary btn-accion">
+        <button id="btn_guia_cargar_producto"
+            class="btn btn-primary btn-accion"
+            data-ng-click="bodega.nuevaFactura()">
             Cargar Productos
         </button>
         {% include "bodega/panel_bodega.html" %}
@@ -100,6 +102,7 @@
 <script src="{% static 'js/vendor/angular.min.js' %}"></script>
 <script src="{% static 'js/plugins/angular.provider.js' %}"></script>
 <script src="{% static 'js/models/guia_model.js' %}"></script>
+<script src="{% static 'js/models/factura_model.js' %}"></script>
 <script src="{% static 'js/controllers/bodega_controller.js' %}"></script>
 
 <script id="tpl_nueva_guia" type="text/x-template">

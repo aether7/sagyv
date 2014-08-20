@@ -9,68 +9,68 @@
             </div>
 
             <div class="modal-body">
-                    <div class="form-group">
-                        <label for="numero_despacho" class="control-label">Guía</label>
+                <div class="form-group">
+                    <label for="numero_despacho" class="control-label">Guía</label>
 
-                        <input id="numero_despacho" class="form-control" type="text" value=""
-                            data-ng-model="bodega.guia.numero" />
+                    <input id="numero_despacho" class="form-control" type="text" value=""
+                        data-ng-model="bodega.guia.numero" />
 
-                        <span class="text-danger"
-                            data-ng-bind="bodega.guia.mensajes.numero"
-                            data-ng-show="bodega.guia.mensajes.numero"></span>
-                    </div>
+                    <span class="text-danger"
+                        data-ng-bind="bodega.guia.mensajes.numero"
+                        data-ng-show="bodega.guia.mensajes.numero"></span>
+                </div>
 
-                    <div class="form-group">
-                        <label for="movil_despacho" class="control-label">Móvil</label>
+                <div class="form-group">
+                    <label for="movil_despacho" class="control-label">Móvil</label>
 
-                        <select id="movil_despacho" class="form-control"
-                            data-ng-model="bodega.guia.vehiculo">
-                            {% for vehiculo in vehiculos %}
-                            <option value="{{ vehiculo.id }}">{{ vehiculo.numero }} - {{ vehiculo.patente }}</option>
+                    <select id="movil_despacho" class="form-control"
+                        data-ng-model="bodega.guia.vehiculo">
+                        {% for vehiculo in vehiculos %}
+                        <option value="{{ vehiculo.id }}">{{ vehiculo.numero }} - {{ vehiculo.patente }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <span class="text-danger"
+                        data-ng-bind="bodega.guia.mensajes.vehiculo"
+                        data-ng-show="bodega.guia.mensajes.vehiculo"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="fecha_despacho" class="control-label">Fecha</label>
+
+                    <input id="fecha_despacho" class="form-control" type="date"
+                        value="" data-ng-model="bodega.guia.fecha" />
+
+                    <span class="text-danger"
+                        data-ng-bind="bodega.guia.mensajes.fecha"
+                        data-ng-show="bodega.guia.mensajes.fecha"></span>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-xs-6">
+                        <label for="guia_producto" class="control-label">Producto</label>
+
+                        <select id="guia_producto" class="form-control"
+                            data-ng-model="bodega.producto.id">
+                            {% for producto in productos_guia %}
+                            <option value="{{ producto.id }}">{{ producto.codigo }}</option>
                             {% endfor %}
                         </select>
-
-                        <span class="text-danger"
-                            data-ng-bind="bodega.guia.mensajes.vehiculo"
-                            data-ng-show="bodega.guia.mensajes.vehiculo"></span>
                     </div>
 
-                    <div class="form-group">
-                        <label for="fecha_despacho" class="control-label">Fecha</label>
+                    <div class="col-xs-4">
+                        <label for="cantidad_producto" class="contol-label">Cantidad</label>
 
-                        <input id="fecha_despacho" class="form-control" type="date"
-                            value="" data-ng-model="bodega.guia.fecha" />
-
-                        <span class="text-danger"
-                            data-ng-bind="bodega.guia.mensajes.fecha"
-                            data-ng-show="bodega.guia.mensajes.fecha"></span>
+                        <input id="cantidad_producto" class="form-control" type="text"
+                            value="" data-ng-model="bodega.producto.cantidad" />
                     </div>
 
-                    <div class="form-group">
-                        <div class="col-xs-6">
-                            <label for="guia_producto" class="control-label">Producto</label>
-
-                            <select id="guia_producto" class="form-control"
-                                data-ng-model="bodega.producto.id">
-                                {% for producto in productos_guia %}
-                                <option value="{{ producto.id }}">{{ producto.codigo }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-
-                        <div class="col-xs-4">
-                            <label for="cantidad_producto" class="contol-label">Cantidad</label>
-
-                            <input id="cantidad_producto" class="form-control" type="text"
-                                value="" data-ng-model="bodega.producto.cantidad" />
-                        </div>
-
-                        <div class="col-xs-2 btn-productos">
-                            <button id="btn_agregar" type="button"
-                                class="btn btn-default btn-agregar"
-                                data-ng-click="bodega.agregarProductoDescuento('guia_producto')">+</button>
-                        </div>
+                    <div class="col-xs-2 btn-productos">
+                        <button id="btn_agregar" type="button"
+                            class="btn btn-default btn-agregar"
+                            data-ng-click="bodega.agregarProductoDescuento('guia_producto')">+</button>
                     </div>
+                </div>
 
                 <div id="mensajes_lista_productos" class="form-group center">
                     <span class="text-danger"

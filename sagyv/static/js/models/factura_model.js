@@ -1,22 +1,28 @@
-App.Models.Guia = function(){
+App.Models.Factura = function(){
     this.id = null;
-    this.numero = null;
-    this.vehiculo = null;
+    this.factura = null;
+    this.valor = null;
     this.fecha = new Date();
     this.productos = []; //siempre debe comenzar con una nueva lista de productos
 
     this.mensajes = {};
 };
 
-App.Models.Guia.prototype = {
-    construtor: App.Models.Guia,
+App.Models.Factura.prototype ={
+    construtor: App.Models.Factura,
 
-    agregarProductoDescuento: function(producto){
+    esValida: function(){
+        var valido = true;
+        //TO-DO : agregar vals.
+        return valido;
+    },
+
+    agregarProducto: function(producto){
         var fn,
             valido = true;
 
         fn = function(p){
-            return p.codigo === producto.codigo && p.id === producto.id;
+            return p.codigo === producto.codigo && p.id === producto.id && p.precio === producto.precio;
         };
 
         this.mensajes.producto = "";
@@ -27,9 +33,6 @@ App.Models.Guia.prototype = {
         }else if(_.find(this.productos, fn)){
             valido = false;
             this.mensajes.producto = "El producto que intenta ingresar ya se encuentra en la lista";
-        }else if(parseInt(App.productos[producto.id]) < parseInt(producto.cantidad)){
-            valido = false;
-            this.mensajes.producto = "No se pueden agregar mas productos de los que hay en stock";
         }else{
             this.productos.push(producto);
         }
@@ -72,19 +75,19 @@ App.Models.Guia.prototype = {
         return valido;
     },
 
-    esNumeroValido: function(){
-        return this._esNumeroValido('numero');
+    esFacturaValida: function(){
+        return this._esNumeroValido('factura');
     },
 
-    esVehiculoValido:function(){
-        return this._esNumeroValido('vehiculo');
+    esValorValido: function(){
+        return this._esNumeroValido('valor');
     },
 
-    esFechaValida:function(){
+    esFechaValida: function(){
         return this._esFechaValida('fecha');
     },
 
-    esProductosValido:function(){
+    esProductoValid: function(){
         var valido = true;
 
         this.mensajes.productos = "";
@@ -93,17 +96,6 @@ App.Models.Guia.prototype = {
             valido = false;
             this.mensajes.producto = "Al menos debe haber un producto ingresado";
         }
-
-        return valido;
-    },
-
-    esValida: function(){
-        var valido = true;
-
-        valido = this.esNumeroValido() && valido;
-        valido = this.esVehiculoValido() && valido;
-        valido = this.esFechaValida() && valido;
-        valido = this.esProductosValido() && valido;
 
         return valido;
     },
@@ -119,9 +111,8 @@ App.Models.Guia.prototype = {
         }
 
         var json = {
-            numero: this.numero,
             factura: this.factura,
-            vehiculo: this.vehiculo,
+            valor: this.valor,
             fecha: convierteFechaJSON(this.fecha),
             productos: JSON.stringify(this.productos)
         };
@@ -132,4 +123,4 @@ App.Models.Guia.prototype = {
 
         return json;
     }
-};
+}
