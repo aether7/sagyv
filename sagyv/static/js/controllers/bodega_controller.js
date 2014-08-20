@@ -5,6 +5,7 @@ var app = angular.module("bodegaApp", [], App.httpProvider);
 
 function BodegaController($http){
     this.guia = new App.Models.Guia();
+    this.factura = new App.Models.Factura();
     this.producto = {};
     this.http = $http;
     this.numeroGuia = null;
@@ -23,6 +24,13 @@ BodegaController.prototype = {
         $("#modal_guia_despacho").modal("show");
     },
 
+    nuevaFactura:function(){
+        this.factura = new App.Models.Factura();
+        this.producto = {}
+
+        $("#modal_carga_producto").modal("show");
+    },
+
     agregarProductoDescuento: function(idSelect){
         if(this.producto.id && this.producto.cantidad){
             this.producto.codigo = $("#" + idSelect + " option:selected").text();
@@ -31,6 +39,19 @@ BodegaController.prototype = {
         if(this.guia.agregarProductoDescuento(this.producto)){
             this.producto = {};
         }
+
+    },
+
+    agregarProducto: function(idSelect){
+        if(this.producto.id && this.producto.cantidad){
+            this.producto.codigo = $("#" + idSelect + " option:selected").text();
+            this.producto.precio = $("#" + idSelect + " option:selected").data("precio");
+        }
+
+        if(this.factura.agregarProducto(this.producto)){
+            this.producto = {};
+        }
+
     },
 
     eliminarProducto: function(indice){
