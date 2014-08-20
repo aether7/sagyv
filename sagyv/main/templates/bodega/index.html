@@ -56,8 +56,9 @@
         {% include "bodega/panel_consolidados.html" %}
     </div>
 
-    <div class="tab-pane" id="guias">
+    <div class="tab-pane" id="guias" data-ng-controller="GuiaController as guia">
         {% include "bodega/panel_guias.html" %}
+        {% include "bodega/components/modal_mostrar_guia.html" %}
     </div>
 
     <div class="tab-pane" id="recargas">
@@ -70,7 +71,6 @@
     {% include "bodega/components/modal_guia_despacho.html" %}
     {% include "bodega/components/modal_ver_detalle.html" %}
     {% include "bodega/components/modal_guia_carga_producto.html" %}
-    {% include "bodega/components/modal_mostrar_guia.html" %}
     {% include "bodega/components/modal_recarga_guia.html" %}
 </div>
 
@@ -90,10 +90,6 @@
 
 <script id="tpl_carga_producto" type="text/x-template">
     {% include "bodega/components/tpl_carga_producto.html" %}
-</script>
-
-<script id="tpl_carga_guia" type="text/x-template">
-    {% include "bodega/components/tpl_carga_guia.html" %}
 </script>
 
 <script id="tpl_despacho_producto" type="text/x-template">
@@ -126,9 +122,6 @@
     App.urls.set("bodega:obtener_vehiculos_por_producto", "{% url 'bodega:obtener_vehiculos_por_producto' %}");
     App.urls.set("bodega:obtener_guia", "{% url 'bodega:obtener_guia' %}");
     App.urls.set("bodega:recargar_guia", "{% url 'bodega:recargar_guia' %}");
-
-    App.bodegaController = new App.Controllers.Bodega();
-    App.bodegaController.init();
 
     App.productos = {};
     {% for producto in productos %}

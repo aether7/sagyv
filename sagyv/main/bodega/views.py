@@ -92,7 +92,6 @@ class CrearGuiaDespachoView(View):
 
         return guia_despacho
 
-
     def carga_datos_ingreso(self, guia, lista):
         for item in lista:
             cantidad = int(item["cantidad"])

@@ -50,24 +50,34 @@ BodegaController.prototype = {
         action = App.urls.get("bodega:crea_guia");
         json = this.guia.getJSON();
 
-        this.http.post(action, json).success(function(data){
-            console.log(data);
-            $("#modal_guia_despacho").modal("hide");
-            common.agregarMensaje("Se ha actualizado el vehiculo exitosamente");
+        this.http.post(action, json)
+            .success(this.procesarGuardarGuiaDespacho.bind(this));
+    },
 
-            var html,
-                tpl = $("#tpl_nueva_guia").html(),
-                fx = Handlebars.compile(tpl);
+    procesarGuardarGuiaDespacho: function(data){
+        var html,
+            tpl = $("#tpl_nueva_guia").html(),
+            fx = Handlebars.compile(tpl);
 
-            html = fx({
-                numero_guia: _this.guia.numero,
-                numero_vehiculo: _this.guia.vehiculo,
-                fecha_guia: _this.guia.fecha
-            });
+        html = fx({
+            numero_guia: this.guia.numero,
+            numero_vehiculo: this.guia.vehiculo,
+            fecha_guia: this.guia.fecha
+        });
 
-            console.log(html);
+        this.actualizarProductos(data);
 
-            $("#tbl_guias tbody").append(html);
+        $("#tbl_guias tbody").append(html);
+        $("#modal_guia_despacho").modal("hide");
+        common.agregarMensaje("Se ha actualizado el vehiculo exitosamente");
+    },
+
+    actualizarProductos: function(data){
+        console.warn(data);
+
+        data.guia.productos.forEach(function(producto){
+            $("#stock_" + producto.id).text(producto.cantidad);
+            App.productos[producto.id] = producto.cantidad;
         });
     },
 
@@ -85,6 +95,27 @@ BodegaController.prototype = {
     }
 };
 
-app.controller("BodegaController", ["$http", BodegaController]);
+function GuiaController($http){
+    this.http = $http;
+    this.productos = [];
+}
 
+GuiaController.prototype = {
+    constructor: GuiaController,
+
+    verGuia: function(id){
+        var action = App.urls.get("bodega:obtener_guia"),
+            _this = this;
+
+        action += "?guia_id=" + id;
+
+        this.http.get(action).success(function(data){
+            _this.productos = data.productos;
+            $("#modal_mostrar_guia").modal("show");
+        });
+    }
+}
+
+app.controller("BodegaController", ["$http", BodegaController]);
+app.controller("GuiaController", ["$http", GuiaController]);
 })();
