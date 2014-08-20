@@ -136,16 +136,5 @@ App.Models.Guia.prototype = {
         }
 
         return json;
-    },
-
-    reset: function(){
-        this.id = null;
-        this.numero = null;
-        this.factura = null;
-        this.vehiculo = null;
-        this.fecha = new Date();
-        this.productos = []; //siempre debe comenzar con una nueva lista de productos
-
-        this.mensajes = {};
     }
 };

@@ -3,11 +3,13 @@
 
 var app = angular.module("bodegaApp", [], App.provider);
 
-function BodegaController($http, $scope){
+function BodegaController($http){
     this.guia = new App.Models.Guia();
     this.producto = {};
     this.http = $http;
-    this.scope = $scope;
+    this.idGuia = null;
+
+    this.refrescarIdGuia();
 };
 
 BodegaController.prototype = {
@@ -47,12 +49,29 @@ BodegaController.prototype = {
         json = this.guia.getJSON();
 
         this.http.post(action, json).success(function(data){
+            console.log(data);
             $("#modal_guia_despacho").modal("hide");
             common.agregarMensaje("Se ha actualizado el vehiculo exitosamente");
+        });
+    },
+
+    refrescarIdGuia: function(){
+        var _this = this,
+            action = App.urls.get("bodega:obtener_id_guia");
+
+        this.http.get(action).success(function(data){
+            if(!_this.guia.numero){
+                console.log("aqui");
+                _this.guia.numero = data.next;
+            }
+
+            setTimeout(function(){
+                _this.refrescarIdGuia();
+            }, 10000);
         });
     }
 };
 
-app.controller("BodegaController", ["$http", "$scope", BodegaController]);
+app.controller("BodegaController", ["$http", BodegaController]);
 
 })();
