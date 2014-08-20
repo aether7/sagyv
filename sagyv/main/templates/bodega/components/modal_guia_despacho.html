@@ -9,7 +9,6 @@
             </div>
 
             <div class="modal-body">
-                <form id="f_guia_despacho" action="{% url 'bodega:crea_guia' %}" method="post" style="overflow:hidden">
                     <div class="form-group">
                         <label for="numero_despacho" class="control-label">Guía</label>
 
@@ -72,7 +71,6 @@
                                 data-ng-click="bodega.agregarProductoDescuento('guia_producto')">+</button>
                         </div>
                     </div>
-                </form>
 
                 <div id="mensajes_lista_productos" class="form-group center">
                     <span class="text-danger"
