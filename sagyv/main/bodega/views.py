@@ -40,6 +40,67 @@ class IndexView(TemplateView):
         guias = GuiaDespacho.objects.filter(tipo_guia = 0)
         return guias
 
+class GuardarFactura(View):
+
+    @transaction.commit_on_success
+    def post(self, req):
+        self.productosActualizados = []
+
+        factura = req.POST.get('factura')
+        fecha = req.POST.get('fecha')
+        productos = req.POST.get('productos')
+
+        guia_despacho = GuiaDespacho()
+        guia_despacho.factura = factura
+        #guia_despacho.fecha =
+        guia_despacho.tipo_guia = True
+        guia_despacho.save()
+
+        lista = json.loads(lista_producto)
+        self.carga_datos_ingreso(guia_despacho, lista)
+
+        data = {
+            "status" : "ok",
+            "guia" : {
+                "id" : guia_despacho.id,
+                "numero" : guia_despacho.numero,
+                "vehiculo" : guia_despacho.vehiculo.numero,
+                "fecha" : convierte_fecha_texto(guia_despacho.fecha),
+                "productos" : self.productosActualizados,
+            }
+        }
+
+        return HttpResponse(json.dumps(data), content_type="application/json")
+
+    def carga_datos_ingreso(self, guia, lista):
+        for item in lista:
+            cantidad = int(item["cantidad"])
+            producto = Producto.objects.get(pk = item["id"])
+
+            if producto.stock is None:
+                producto.stock = cantidad
+            else:
+                producto.stock += cantidad
+
+            producto.save()
+
+            this_prod = {
+                'id': producto.id,
+                'cantidad': producto.stock
+            }
+
+            self.productosActualizados.append(this_prod)
+            self.crear_historico(producto, cantidad, guia, True)
+
+    def crear_historico(self, producto, cantidad, guia, tipo_operacion):
+        historico = HistorialStock()
+        historico.producto = producto
+        historico.cantidad = cantidad
+        historico.tipo_operacion = tipo_operacion
+        historico.guia_despacho = guia
+        historico.es_recarga = False
+        historico.save()
+
 
 class CrearGuiaDespachoView(View):
 
@@ -58,9 +119,6 @@ class CrearGuiaDespachoView(View):
 
         if(self.id_vehiculo != None):
             self.carga_datos_salida(guia, lista)
-
-        elif(self.factura != None):
-            self.carga_datos_ingreso(guia, lista)
 
         data = {
             "status" : "ok",
@@ -91,26 +149,6 @@ class CrearGuiaDespachoView(View):
         guia_despacho.save()
 
         return guia_despacho
-
-    def carga_datos_ingreso(self, guia, lista):
-        for item in lista:
-            cantidad = int(item["cantidad"])
-            producto = Producto.objects.get(pk = item["id"])
-
-            if producto.stock is None:
-                producto.stock = cantidad
-            else:
-                producto.stock += cantidad
-
-            producto.save()
-
-            this_prod = {
-                'id': producto.id,
-                'cantidad': producto.stock
-            }
-
-            self.productosActualizados.append(this_prod)
-            self.crear_historico(producto, cantidad, guia, True)
 
     def carga_datos_salida(self, guia, lista):
 
@@ -270,6 +308,7 @@ class ObtenerIdGuia(View):
 
 index = IndexView.as_view()
 crea_guia = csrf_exempt(CrearGuiaDespachoView.as_view())
+guardar_factura = csrf_exempt(GuardarFactura.as_view())
 obtener_guia = ObtenerGuiaDespasho.as_view()
 obtener_vehiculos_por_producto = ObtenerVehiculosPorProductoView.as_view()
 recargar_guia = RecargaGuia.as_view()

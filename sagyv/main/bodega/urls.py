@@ -7,4 +7,5 @@ urlpatterns = patterns("main.bodega.views",
     url(r"^obtener\-guia/$", "obtener_guia", name="obtener_guia"),
     url(r"^recargar\-guia/$", "recargar_guia", name="recargar_guia"),
     url(r"^obtener\-id\-guia/$", "obtener_id_guia", name="obtener_id_guia"),
+    url(r"^guardar\-factura/$", "guardar_factura", name="guardar_factura"),
 )
