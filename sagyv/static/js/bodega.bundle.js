@@ -85,6 +85,7 @@ BodegaController.prototype = {
 
         $("#tbl_guias tbody").append(html);
         $("#modal_guia_despacho").modal("hide");
+
         common.agregarMensaje("Se ha actualizado el vehiculo exitosamente");
     },
 
@@ -136,12 +137,13 @@ GuiaController.prototype = {
 module.exports = GuiaController;
 
 },{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guia_producto_controller.js":[function(require,module,exports){
-var BodegaController = require("./bodega_controller.js"),
-    proto;
+var BodegaController = require("./bodega_controller.js");
 
 function GuiaProductoController($http){
     BodegaController.call(this, $http, true);
     this.guia = new App.Models.Factura();
+    this.paso = 1;
+    this.garantias = null;
 }
 
 GuiaProductoController.mixin(BodegaController,{
@@ -166,7 +168,33 @@ GuiaProductoController.mixin(BodegaController,{
         }
     },
 
-    guardarFactura: function(){
+    sumarGarantias: function(){
+        var garantias,
+            porRegistrar = [];
+
+        garantias = { "3105": 0, "3111": 0, "3115": 0, "3145": 0 };
+
+        this.guia.productos.forEach(function(producto){
+            var codigo = producto.codigo.split("").slice(2).join("");
+
+            if("31" + codigo in garantias){
+                garantias["31" + codigo] += parseInt(producto.cantidad);
+            }
+        });
+
+        Object.keys(garantias).forEach(function(key){
+            if(garantias[key]){
+                porRegistrar.push({
+                    codigo: key,
+                    cantidad: garantias[key]
+                });
+            }
+        });
+
+        return porRegistrar;
+    },
+
+    guardarPaso1: function(){
         var json,
             action,
             valido = this.guia.esValida(),
@@ -180,7 +208,24 @@ GuiaProductoController.mixin(BodegaController,{
         json = this.guia.getJSON();
 
         this.http.post(action, json)
-            .success(this.procesarGuardarGuiaDespacho.bind(this));
+            .success(this.procesarPaso1.bind(this));
+    },
+
+    procesarPaso1: function(data){
+        this.garantias = this.sumarGarantias();
+        this.paso = 2;
+    },
+
+    guardarPaso2: function(){
+        this.paso = 3;
+    },
+
+    guardarPaso3: function(){
+        alert("FELICIDADES COMPLETASTE EL PUTO LVL");
+    },
+
+    esPaso: function(numeroPaso){
+        return this.paso === numeroPaso;
     }
 });
 

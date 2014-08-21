@@ -3,7 +3,7 @@ App.Models.Factura = function(){
     this.factura = null;
     this.valor = null;
     this.fecha = new Date();
-    this.productos = []; //siempre debe comenzar con una nueva lista de productos
+    this.productos = [];
 
     this.mensajes = {};
 };
@@ -13,10 +13,12 @@ App.Models.Factura.prototype ={
 
     esValida: function(){
         var valido = true;
+
         valido = this.esFacturaValida() && valido;
         valido = this.esValorValido() && valido;
         valido = this.esFechaValida() && valido;
         valido = this.esProductoValid() && valido;
+
         return valido;
     },
 

@@ -10,16 +10,34 @@
             </div>
 
             <div class="modal-body">
-                <div>
+                <div data-ng-show="guiaCtrl.esPaso(1)">
                     {% include "bodega/components/paso1.html" %}
+                </div>
+                <div data-ng-show="guiaCtrl.esPaso(2)">
+                    {% include "bodega/components/paso2.html" %}
+                </div>
+                <div data-ng-show="guiaCtrl.esPaso(3)">
+                    {% include "bodega/components/paso3.html" %}
                 </div>
             </div>
 
             <div class="modal-footer">
                 <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <span>
-                    <button id="btn_guardar_carga_producto" class="btn btn-primary"
-                        data-ng-click="guiaCtrl.guardarFactura()" >Guardar</button>
+
+                <span data-ng-show="guiaCtrl.esPaso(1)">
+                    <button id="btn_guardar_carga_producto"
+                        class="btn btn-primary"
+                        data-ng-click="guiaCtrl.guardarPaso1()">Guardar</button>
+                </span>
+                <span data-ng-show="guiaCtrl.esPaso(2)">
+                    <button
+                        class="btn btn-primary"
+                        data-ng-click="guiaCtrl.guardarPaso2()">Guardar</button>
+                </span>
+                <span data-ng-show="guiaCtrl.esPaso(3)">
+                    <button
+                        class="btn btn-primary"
+                        data-ng-click="guiaCtrl.guardarPaso3()">Guardar</button>
                 </span>
             </div>
         </div>

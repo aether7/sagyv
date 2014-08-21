@@ -84,6 +84,7 @@ BodegaController.prototype = {
 
         $("#tbl_guias tbody").append(html);
         $("#modal_guia_despacho").modal("hide");
+
         common.agregarMensaje("Se ha actualizado el vehiculo exitosamente");
     },
 
