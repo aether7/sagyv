@@ -81,6 +81,7 @@
                         <tr data-ng-repeat="producto in bodega.factura.productos">
                             <td data-ng-bind="producto.codigo"></td>
                             <td data-ng-bind="producto.cantidad"></td>
+                            <td data-ng-bind="producto.precio"></td>
                             <td>
                                 <i class="glyphicon glyphicon-remove" data-ng-click="bodega.eliminarProducto($index)"></i>
                             </td>
@@ -93,7 +94,8 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <button id="btn_guardar_carga_producto" class="btn btn-primary">Guardar</button>
+                <button id="btn_guardar_carga_producto" class="btn btn-primary"
+                    data-ng-click="bodega.guardarFactura()" >Guardar</button>
             </div>
         </div>
     </div>

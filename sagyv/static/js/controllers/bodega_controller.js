@@ -45,7 +45,7 @@ BodegaController.prototype = {
     agregarProducto: function(idSelect){
         if(this.producto.id && this.producto.cantidad){
             this.producto.codigo = $("#" + idSelect + " option:selected").text();
-            this.producto.precio = $("#" + idSelect + " option:selected").data("precio");
+            this.producto.precio = $("#" + idSelect + " option:selected").data("precio") * this.producto.cantidad;
         }
 
         if(this.factura.agregarProducto(this.producto)){
@@ -62,6 +62,23 @@ BodegaController.prototype = {
         var json,
             action,
             valido = this.guia.esValida(),
+            _this = this;
+
+        if(!valido){
+            return;
+        }
+
+        action = App.urls.get("bodega:crea_guia");
+        json = this.guia.getJSON();
+
+        this.http.post(action, json)
+            .success(this.procesarGuardarGuiaDespacho.bind(this));
+    },
+
+    guardarFactura: function(){
+        var json,
+            action,
+            valido = this.factura.esValida(),
             _this = this;
 
         if(!valido){
