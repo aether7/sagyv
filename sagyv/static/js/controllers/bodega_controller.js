@@ -43,15 +43,17 @@ BodegaController.prototype = {
     },
 
     agregarProducto: function(idSelect){
+        var select;
+
         if(this.producto.id && this.producto.cantidad){
-            this.producto.codigo = $("#" + idSelect + " option:selected").text();
-            this.producto.precio = $("#" + idSelect + " option:selected").data("precio") * this.producto.cantidad;
+            select = $("#" + idSelect + " option:selected");
+            this.producto.codigo = select.text();
+            this.producto.precio = select.data("precio") * this.producto.cantidad;
         }
 
         if(this.factura.agregarProducto(this.producto)){
             this.producto = {};
         }
-
     },
 
     eliminarProducto: function(indice){
