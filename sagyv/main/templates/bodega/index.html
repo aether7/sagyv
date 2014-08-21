@@ -47,7 +47,10 @@
             data-ng-click="bodega.nuevaFactura()">
             Cargar Productos
         </button>
+
         {% include "bodega/panel_bodega.html" %}
+        {% include "bodega/components/modal_guia_despacho.html" %}
+        {% include "bodega/components/modal_guia_carga_producto.html" %}
     </div>
 
     <div class="tab-pane" id="transito" data-ng-controller="TransitoController as transito">
@@ -71,8 +74,6 @@
         {% include "bodega/panel_recargas.html" %}
     </div>
 
-    {% include "bodega/components/modal_guia_despacho.html" %}
-    {% include "bodega/components/modal_guia_carga_producto.html" %}
     {% include "bodega/components/modal_recarga_guia.html" %}
 </div>
 
@@ -99,7 +100,7 @@
 <script src="{% static 'js/plugins/angular.provider.js' %}"></script>
 <script src="{% static 'js/models/guia_model.js' %}"></script>
 <script src="{% static 'js/models/factura_model.js' %}"></script>
-<script src="{% static 'js/controllers/bodega_controller.js' %}"></script>
+<script src="{% static 'js/bodega_bundle.js' %}"></script>
 
 <script id="tpl_nueva_guia" type="text/x-template">
     {% verbatim %}
