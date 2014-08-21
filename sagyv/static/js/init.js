@@ -86,6 +86,7 @@ context.type = type;
 
 //se agregan metodos nuevos a string
 (function(){
+
 String.prototype.trim = function(){
     return this.replace(/^\s+|\s+$/gi, "");
 };
@@ -101,6 +102,37 @@ String.prototype.format = function(){
 
     return s;
 };
+
+Function.prototype.mixin = function(klass, newProperties){
+    var args, proto;
+
+    args = [].slice.call(arguments);
+    newProperties = args.pop();
+    klass = args[0] || null;
+    proto = klass && Object.create(klass.prototype) || {};
+
+    for(var property in newProperties){
+        if(!newProperties.hasOwnProperty(property)){
+            continue;
+        }
+
+        if(typeof proto[property] === "function"){
+            proto[property] = (function(oldFn, fn){
+                return function(){
+                    this._super = oldFn;
+                    var ret = fn.apply(this, arguments);
+                    return ret;
+                };
+            })(proto[property], newProperties[property]);
+        }else{
+            proto[property] = newProperties[property];
+        }
+    }
+
+    proto.constructor = this;
+    this.prototype = proto;
+};
+
 })();
 
 (function(){

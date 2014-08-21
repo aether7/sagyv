@@ -11,90 +11,7 @@
 
             <div class="modal-body">
                 <div>
-
-                <div class="form-group">
-                    <label for="factura" class="control-label">Factura</label>
-                    <input id="factura" class="form-control" type="text" value=""
-                        data-ng-model="bodega.factura.factura" />
-                    <span class="text-danger"
-                        data-ng-bind="bodega.factura.mensajes.factura"
-                        data-ng-show="bodega.factura.mensajes.factura" ></span>
-                </div>
-
-                <div class="form-group">
-                    <label for="fecha_ingreso" class="control-label">Fecha</label>
-                    <input id="fecha_ingreso" class="form-control" type="date"
-                        value="" data-ng-model="bodega.factura.fecha" />
-                    <span class="text-danger"
-                        data-ng-bind="bodega.factura.mensajes.fecha"
-                        data-ng-show="bodega.factura.mensajes.fecha" ></span>
-                </div>
-
-                <div class="form-group">
-                    <label for="valor_total" class="control-label">Valor total</label>
-                    <input id="valor_total" class="form-control" type="text" value=""
-                        data-ng-model="bodega.factura.valor"/>
-                    <span class="text-danger"
-                        data-ng-bind="bodega.factura.mensajes.valor"
-                        data-ng-show="bodega.factura.mensajes.valor" ></span>
-                </div>
-
-                <div class="form-group">
-                    <div class="col-xs-6">
-                        <label for="guia_carga_producto">Producto</label>
-                        <select id="guia_carga_producto" class="form-control"
-                            data-ng-model="bodega.producto.id" >
-                            {% for producto in productos_guia %}
-                            <option value="{{producto.id}}" data-precio="{{producto.get_precio_producto}}">{{producto.codigo}}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-
-                    <div class="col-xs-4">
-                        <label for="cantidad_carga_producto" class="control-label">cantidad</label>
-                        <input id="cantidad_carga_producto" class="form-control" type="text"
-                            value="" data-ng-model="bodega.producto.cantidad" />
-                    </div>
-
-                    <div class="col-xs-2 btn-productos">
-                        <button id="btn_agregar_carga" type="button"
-                            class="btn btn-default btn-agregar"
-                            data-ng-click="bodega.agregarProducto('guia_carga_producto')" >+</button>
-                    </div>
-                </div>
-
-                <div id="mensajes_lista_productos" class="form-group center">
-                    <span class="text-danger"
-                        data-ng-bind="bodega.factura.mensajes.producto"></span>
-                </div>
-
-                <div id="mensajes_carga_lista_productos" class="form-group center">
-                    <span class="help-block"></span>
-                </div>
-
-                <table id="lista_carga" class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Código Producto</th>
-                            <th>Cantidad</th>
-                            <th>Precio</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr data-ng-repeat="producto in bodega.factura.productos">
-                            <td data-ng-bind="producto.codigo"></td>
-                            <td data-ng-bind="producto.cantidad"></td>
-                            <td data-ng-bind="producto.precio"></td>
-                            <td>
-                                <i class="glyphicon glyphicon-remove" data-ng-click="bodega.eliminarProducto($index)"></i>
-                            </td>
-                        </tr>
-                    </tbody>
-                    <tbody>
-                    </tbody>
-                </table>
-
+                    {% include "bodega/components/paso1.html" %}
                 </div>
             </div>
 
@@ -102,7 +19,7 @@
                 <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
                 <span>
                     <button id="btn_guardar_carga_producto" class="btn btn-primary"
-                        data-ng-click="bodega.guardarFactura()" >Guardar</button>
+                        data-ng-click="guiaCtrl.guardarFactura()" >Guardar</button>
                 </span>
             </div>
         </div>

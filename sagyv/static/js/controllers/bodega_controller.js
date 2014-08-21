@@ -1,16 +1,12 @@
-(function(){
-"use strict";
-
-var app = angular.module("bodegaApp", [], App.httpProvider);
-
-function BodegaController($http){
+function BodegaController($http, stop){
     this.guia = new App.Models.Guia();
-    this.factura = new App.Models.Factura();
     this.producto = {};
     this.http = $http;
     this.numeroGuia = null;
 
-    this.refrescarNumeroGuia();
+    if(!stop){
+        this.refrescarNumeroGuia();
+    }
 };
 
 BodegaController.prototype = {
@@ -24,34 +20,12 @@ BodegaController.prototype = {
         $("#modal_guia_despacho").modal("show");
     },
 
-    nuevaFactura:function(){
-        this.factura = new App.Models.Factura();
-        this.producto = {}
-
-        $("#modal_carga_producto").modal("show");
-    },
-
     agregarProductoDescuento: function(idSelect){
         if(this.producto.id && this.producto.cantidad){
             this.producto.codigo = $("#" + idSelect + " option:selected").text();
         }
 
         if(this.guia.agregarProductoDescuento(this.producto)){
-            this.producto = {};
-        }
-
-    },
-
-    agregarProducto: function(idSelect){
-        var select;
-
-        if(this.producto.id && this.producto.cantidad){
-            select = $("#" + idSelect + " option:selected");
-            this.producto.codigo = select.text();
-            this.producto.precio = select.data("precio") * this.producto.cantidad;
-        }
-
-        if(this.factura.agregarProducto(this.producto)){
             this.producto = {};
         }
     },
@@ -64,23 +38,6 @@ BodegaController.prototype = {
         var json,
             action,
             valido = this.guia.esValida(),
-            _this = this;
-
-        if(!valido){
-            return;
-        }
-
-        action = App.urls.get("bodega:crea_guia");
-        json = this.guia.getJSON();
-
-        this.http.post(action, json)
-            .success(this.procesarGuardarGuiaDespacho.bind(this));
-    },
-
-    guardarFactura: function(){
-        var json,
-            action,
-            valido = this.factura.esValida(),
             _this = this;
 
         if(!valido){
@@ -133,50 +90,4 @@ BodegaController.prototype = {
     }
 };
 
-function GuiaController($http){
-    this.http = $http;
-    this.productos = [];
-}
-
-GuiaController.prototype = {
-    constructor: GuiaController,
-
-    verGuia: function(id){
-        var action = App.urls.get("bodega:obtener_guia"),
-            _this = this;
-
-        action += "?guia_id=" + id;
-
-        this.http.get(action).success(function(data){
-            _this.productos = data.productos;
-            $("#modal_mostrar_guia").modal("show");
-        });
-    }
-};
-
-function TransitoController($http){
-    this.resultados = null;
-    this.http = $http;
-}
-
-TransitoController.prototype = {
-    constructor: TransitoController,
-
-    verDetalle: function(id){
-        var action = App.urls.get("bodega:obtener_vehiculos_por_producto"),
-            _this = this;
-
-        action += "?producto_id=" + id;
-
-        this.http.get(action).success(function(data){
-            _this.resultados = data;
-            $("#modal_ver_detalle").modal("show");
-        });
-    }
-};
-
-app.controller("BodegaController", ["$http", BodegaController]);
-app.controller("GuiaController", ["$http", GuiaController]);
-app.controller("TransitoController", ["$http", TransitoController]);
-
-})();
+module.exports = BodegaController;

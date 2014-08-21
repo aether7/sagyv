@@ -1,0 +1,82 @@
+<div class="form-group">
+    <label for="factura" class="control-label">Factura</label>
+    <input id="factura" class="form-control" type="text" value=""
+        data-ng-model="guiaCtrl.guia.factura" />
+    <span class="text-danger"
+        data-ng-bind="guiaCtrl.guia.mensajes.factura"
+        data-ng-show="guiaCtrl.guia.mensajes.factura" ></span>
+</div>
+
+<div class="form-group">
+    <label for="fecha_ingreso" class="control-label">Fecha</label>
+    <input id="fecha_ingreso" class="form-control" type="date"
+        value="" data-ng-model="guiaCtrl.guia.fecha" />
+    <span class="text-danger"
+        data-ng-bind="guiaCtrl.guia.mensajes.fecha"
+        data-ng-show="guiaCtrl.guia.mensajes.fecha" ></span>
+</div>
+
+<div class="form-group">
+    <label for="valor_total" class="control-label">Valor total</label>
+    <input id="valor_total" class="form-control" type="text" value=""
+        data-ng-model="guiaCtrl.guia.valor"/>
+    <span class="text-danger"
+        data-ng-bind="guiaCtrl.guia.mensajes.valor"
+        data-ng-show="guiaCtrl.guia.mensajes.valor" ></span>
+</div>
+
+<div class="form-group">
+    <div class="col-xs-6">
+        <label for="guia_carga_producto">Producto</label>
+        <select id="guia_carga_producto" class="form-control"
+            data-ng-model="guiaCtrl.producto.id" >
+            {% for producto in productos_guia %}
+            <option value="{{producto.id}}" data-precio="{{producto.get_precio_producto}}">{{producto.codigo}}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="col-xs-4">
+        <label for="cantidad_carga_producto" class="control-label">cantidad</label>
+        <input id="cantidad_carga_producto" class="form-control" type="text"
+            value="" data-ng-model="guiaCtrl.producto.cantidad" />
+    </div>
+
+    <div class="col-xs-2 btn-productos">
+        <button id="btn_agregar_carga" type="button"
+            class="btn btn-default btn-agregar"
+            data-ng-click="guiaCtrl.agregarProducto('guia_carga_producto')" >+</button>
+    </div>
+</div>
+
+<div id="mensajes_lista_productos" class="form-group center">
+    <span class="text-danger"
+        data-ng-bind="guiaCtrl.guia.mensajes.producto"></span>
+</div>
+
+<div id="mensajes_carga_lista_productos" class="form-group center">
+    <span class="help-block"></span>
+</div>
+
+<table id="lista_carga" class="table table-striped">
+    <thead>
+        <tr>
+            <th>Código Producto</th>
+            <th>Cantidad</th>
+            <th>Precio</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr data-ng-repeat="producto in guiaCtrl.guia.productos">
+            <td data-ng-bind="producto.codigo"></td>
+            <td data-ng-bind="producto.cantidad"></td>
+            <td data-ng-bind="producto.precio"></td>
+            <td>
+                <i class="glyphicon glyphicon-remove" data-ng-click="guiaCtrl.eliminarProducto($index)"></i>
+            </td>
+        </tr>
+    </tbody>
+    <tbody>
+    </tbody>
+</table>

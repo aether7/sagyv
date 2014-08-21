@@ -36,7 +36,7 @@
 </ul>
 
 <div class="tab-content" data-ng-app="bodegaApp" data-ng-controller="BodegaController as bodega">
-    <div class="tab-pane active" id="bodega">
+    <div class="tab-pane active" id="bodega" data-ng-controller="GuiaProductoController as guiaCtrl">
         <button id="btn_guia_despacho"
             class="btn btn-primary btn-accion"
             data-ng-click="bodega.nuevaGuiaDespacho()">
@@ -44,7 +44,7 @@
         </button>
         <button id="btn_guia_cargar_producto"
             class="btn btn-primary btn-accion"
-            data-ng-click="bodega.nuevaFactura()">
+            data-ng-click="guiaCtrl.nuevaFactura()">
             Cargar Productos
         </button>
 
@@ -100,7 +100,7 @@
 <script src="{% static 'js/plugins/angular.provider.js' %}"></script>
 <script src="{% static 'js/models/guia_model.js' %}"></script>
 <script src="{% static 'js/models/factura_model.js' %}"></script>
-<script src="{% static 'js/bodega_bundle.js' %}"></script>
+<script src="{% static 'js/bodega.bundle.js' %}"></script>
 
 <script id="tpl_nueva_guia" type="text/x-template">
     {% verbatim %}
