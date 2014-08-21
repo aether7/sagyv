@@ -70,6 +70,24 @@ BodegaController.prototype = {
             .success(this.procesarGuardarGuiaDespacho.bind(this));
     },
 
+    guardarFactura: function(){
+        var json,
+            action,
+            valido = this.factura.esValida(),
+            _this = this;
+
+        if(!valido){
+            return;
+        }
+
+        action = App.urls.get("bodega:guardar_factura");
+        json = this.factura.getJSON();
+        console.log(json);
+
+        this.http.post(action, json);
+            //.success(this.procesarGuardarGuiaDespacho.bind(this));
+    },
+
     procesarGuardarGuiaDespacho: function(data){
         var html,
             tpl = $("#tpl_nueva_guia").html(),
