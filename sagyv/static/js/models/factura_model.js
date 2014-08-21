@@ -13,7 +13,10 @@ App.Models.Factura.prototype ={
 
     esValida: function(){
         var valido = true;
-        //TO-DO : agregar vals.
+        valido = this.esFacturaValida() && valido;
+        valido = this.esValorValido() && valido;
+        valido = this.esFechaValida() && valido;
+        valido = this.esProductoValid() && valido;
         return valido;
     },
 
