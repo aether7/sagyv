@@ -168,6 +168,7 @@ GuiaProductoController.mixin(BodegaController,{
     nuevaFactura: function(){
         this.guia = new App.Models.Factura();
         this.producto = {}
+        this.paso = 1;
 
         $("#modal_carga_producto").modal("show");
     },
@@ -190,6 +191,8 @@ GuiaProductoController.mixin(BodegaController,{
         var garantias,
             porRegistrar = [];
 
+        console.log("sumando garantias");
+
         garantias = { "3105": 0, "3111": 0, "3115": 0, "3145": 0 };
 
         this.guia.productos.forEach(function(producto){
@@ -209,10 +212,17 @@ GuiaProductoController.mixin(BodegaController,{
             }
         });
 
+        console.log("por registrar");
+        console.log(porRegistrar);
+
         return porRegistrar;
     },
 
     guardarPaso1: function(){
+        this.paso = 2;
+        this.procesarPaso1();
+        return;
+
         var json,
             action,
             valido = this.guia.esValida(),
@@ -222,7 +232,7 @@ GuiaProductoController.mixin(BodegaController,{
             return;
         }
 
-        action = App.urls.get("bodega:crea_guia");
+        action = App.urls.get("bodega:guardar_factura");
         json = this.guia.getJSON();
 
         this.http.post(action, json)
@@ -230,8 +240,9 @@ GuiaProductoController.mixin(BodegaController,{
     },
 
     procesarPaso1: function(data){
-        this.garantias = this.sumarGarantias();
         this.paso = 2;
+        console.log("entre aqui");
+        this.garantias = this.sumarGarantias();
     },
 
     guardarPaso2: function(){
