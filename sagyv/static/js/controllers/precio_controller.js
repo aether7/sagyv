@@ -11,7 +11,7 @@ App.Controllers.Precio.prototype = {
         $("[data-columna-normal]").on("keyup", this.moverInputs("Normal"));
         $("[data-columna-garantias]").on("keyup", this.moverInputs("Garantias"));
 
-        $("#f_stock").on("submit", this.actualizarStocks);
+        $("#f_stock").on("submit", this.actualizarStocks());
         $("#f_precio_masivo").on("submit", this.actualizarPrecios("normal", "f_precio_masivo"));
         $("#f_precio_masivo_garantias").on("submit", this.actualizarPrecios("garantias", "f_precio_masivo_garantias"));
     },
@@ -90,25 +90,36 @@ App.Controllers.Precio.prototype = {
         };
     },
 
-    actualizarStocks: function(evt){
-        evt.preventDefault();
-        var stocks = [],
-            action = $(this).attr("action");
+    actualizarStocks: function(){
+        var _this = this;
 
-        $(this).find("input[type=text]").each(function(){
-            var id = $(this).data("id"),
-                nuevoStock = parseInt($(this).val());
+        return function(evt){
+            evt.preventDefault();
 
-            stocks.push({
-                id: id,
-                stock: nuevoStock
+            var stocks = [],
+                action = $(this).attr("action");
+
+            $(this).find("input[type=text]").each(function(){
+                var id = $(this).data("id"),
+                    nuevoStock = parseInt($(this).val());
+
+                stocks.push({
+                    id: id,
+                    stock: nuevoStock
+                });
             });
-        });
 
-        console.log(action);
-        $.post(action, { productos: JSON.stringify(stocks) }, function(data){
-            console.log(data);
-            common.agregarMensaje("Los stocks han sido actualizados exitosamente");
+            $.post(action, { productos: JSON.stringify(stocks) }, function(data){
+                _this.procesarActualizacionStock(stocks);
+                common.agregarMensaje("Los stocks han sido actualizados exitosamente");
+            });
+        }
+    },
+
+    procesarActualizacionStock: function(stocks){
+        stocks.forEach(function(producto){
+            var fila = $("#producto_stock_" + producto.id).closest("tr");
+            fila.find("td:eq(1)").text(producto.stock);
         });
     }
 };
