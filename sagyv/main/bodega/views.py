@@ -49,27 +49,30 @@ class GuardarFactura(View):
         factura = req.POST.get('factura')
         fecha = req.POST.get('fecha')
         productos = req.POST.get('productos')
+        garantias = req.POST.get('garantias')
 
-        guia_despacho = GuiaDespacho()
-        guia_despacho.factura = factura
-        guia_despacho.tipo_guia = True
-        guia_despacho.save()
+        factura = GuiaDespacho()
+        factura.factura = factura
+        factura.tipo_guia = True
+        factura.save()
 
-        lista = json.loads(productos)
-        self.carga_datos_ingreso(guia_despacho, lista)
+        lista_producto = json.loads(productos)
+        lista_garantias = json.loads(garantias)
+        self.ingreso_productos(factura, lista_producto)
+        self.salida_garantias(factura, lista_garantias)
 
         data = {
             "status" : "ok",
             "guia" : {
-                "id" : guia_despacho.id,
-                "fecha" : convierte_fecha_texto(guia_despacho.fecha),
+                "id" : factura.id,
+                "fecha" : convierte_fecha_texto(factura.fecha),
                 "productos" : self.productosActualizados,
             }
         }
 
         return HttpResponse(json.dumps(data), content_type="application/json")
 
-    def carga_datos_ingreso(self, guia, lista):
+    def ingreso_productos(self, guia, lista):
         for item in lista:
             cantidad = int(item["cantidad"])
             producto = Producto.objects.get(pk = item["id"])
@@ -89,6 +92,21 @@ class GuardarFactura(View):
             self.productosActualizados.append(this_prod)
             self.crear_historico(producto, cantidad, guia, True)
 
+    def salida_garantias(self, guia, lista):
+        for item in lista:
+            cantidad = int(item[""])
+            producto = Producto.objects.get(pk = item[""])
+            producto.stock -= cantidad
+            producto.save()
+
+            this_garantia = {
+                'id' : producto.id,
+                'cantidad' producto.stock
+            }
+
+            self.productosActualizados.append(this_garantia)
+            self.crear_historico(producto, cantidad, guia, True)
+
     def crear_historico(self, producto, cantidad, guia, tipo_operacion):
         historico = HistorialStock()
         historico.producto = producto
@@ -97,6 +115,7 @@ class GuardarFactura(View):
         historico.guia_despacho = guia
         historico.es_recarga = False
         historico.save()
+
 
 
 class CrearGuiaDespachoView(View):
