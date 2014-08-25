@@ -69,7 +69,6 @@ GuiaProductoController.mixin(BodegaController,{
     guardarPaso1: function(){
         this.paso = 2;
         this.procesarPaso1();
-        return;
 
         var json,
             action,

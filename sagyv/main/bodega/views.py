@@ -52,19 +52,16 @@ class GuardarFactura(View):
 
         guia_despacho = GuiaDespacho()
         guia_despacho.factura = factura
-        #guia_despacho.fecha =
         guia_despacho.tipo_guia = True
         guia_despacho.save()
 
-        lista = json.loads(lista_producto)
+        lista = json.loads(productos)
         self.carga_datos_ingreso(guia_despacho, lista)
 
         data = {
             "status" : "ok",
             "guia" : {
                 "id" : guia_despacho.id,
-                "numero" : guia_despacho.numero,
-                "vehiculo" : guia_despacho.vehiculo.numero,
                 "fecha" : convierte_fecha_texto(guia_despacho.fecha),
                 "productos" : self.productosActualizados,
             }
