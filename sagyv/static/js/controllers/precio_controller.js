@@ -8,12 +8,11 @@ App.Controllers.Precio.prototype = {
     constructor: App.Controllers.Precio,
 
     init: function(){
-        var _this = this;
+        $("[data-columna-normal]").on("keyup", this.moverInputs("Normal"));
+        $("[data-columna-garantias]").on("keyup", this.moverInputs("Garantias"));
 
-        $("[data-columna-normal]").on("keyup",this.moverInputs("Normal"));
-        $("[data-columna-garantias]").on("keyup",this.moverInputs("Garantias"));
-
-        $("#f_precio_masivo").on("submit",this.actualizarPrecios("normal", "f_precio_masivo"));
+        $("#f_stock").on("submit", this.actualizarStocks);
+        $("#f_precio_masivo").on("submit", this.actualizarPrecios("normal", "f_precio_masivo"));
         $("#f_precio_masivo_garantias").on("submit", this.actualizarPrecios("garantias", "f_precio_masivo_garantias"));
     },
 
@@ -89,5 +88,27 @@ App.Controllers.Precio.prototype = {
                 $("#" + idForm).get(0).reset();
             });
         };
+    },
+
+    actualizarStocks: function(evt){
+        evt.preventDefault();
+        var stocks = [],
+            action = $(this).attr("action");
+
+        $(this).find("input[type=text]").each(function(){
+            var id = $(this).data("id"),
+                nuevoStock = parseInt($(this).val());
+
+            stocks.push({
+                id: id,
+                stock: nuevoStock
+            });
+        });
+
+        console.log(action);
+        $.post(action, { productos: JSON.stringify(stocks) }, function(data){
+            console.log(data);
+            common.agregarMensaje("Los stocks han sido actualizados exitosamente");
+        });
     }
 };

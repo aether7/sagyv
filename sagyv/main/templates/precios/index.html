@@ -4,12 +4,16 @@
 {% block content %}
 
 {% include "mensaje.html" %}
+
 <ul class="nav nav-tabs" role="tablist" id="my_tab">
     <li class="active">
         <a href="#cargas" role="tab" data-toggle="tab">Cargas</a>
     </li>
     <li>
         <a href="#garantias" role="tab" data-toggle="tab">Garantias</a>
+    </li>
+    <li>
+        <a href="#stocks" role="tab" data-toggle="tab">Stocks</a>
     </li>
 </ul>
 
@@ -21,6 +25,10 @@
     <div class="tab-pane" id="garantias">
         {% include "precios/components/lista_precios_garantias.html" %}
     </div>
+
+    <div class="tab-pane" id="stocks">
+        {% include "precios/components/lista_stocks.html" %}
+    </div>
 </div>
 
 
@@ -28,9 +36,9 @@
 
 {% block js %}
 <script src="{% static 'js/common_functions.js' %}"></script>
-<script src="{% static 'js/controllers/precio.js' %}"></script>
+<script src="{% static 'js/controllers/precio_controller.js' %}"></script>
 <script>
     App.precioController = new App.Controllers.Precio();
-    App.precioController.init("sadf");
+    App.precioController.init();
 </script>
 {% endblock %}

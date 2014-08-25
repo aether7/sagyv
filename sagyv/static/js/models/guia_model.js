@@ -5,6 +5,7 @@ App.Models.Guia = function(){
     this.fecha = new Date();
     this.productos = []; //siempre debe comenzar con una nueva lista de productos
     this.garantias = null;
+    this.observaciones = null;
 
     this.mensajes = {};
 };
@@ -125,7 +126,8 @@ App.Models.Guia.prototype = {
             vehiculo: this.vehiculo,
             fecha: convierteFechaJSON(this.fecha),
             productos: JSON.stringify(this.productos),
-            garantias: JSON.stringify(this.garantias)
+            garantias: JSON.stringify(this.garantias),
+            observaciones: this.observaciones
         };
 
         if(this.id){

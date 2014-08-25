@@ -22,6 +22,7 @@ class IndexView(TemplateView):
 
 class UpdatePrecioProductoView(View):
 
+    @transaction.commit_on_success
     def post(self,req):
         cambios = req.POST.get("precios")
         cambios_productos = json.loads(cambios)
@@ -38,5 +39,27 @@ class UpdatePrecioProductoView(View):
         return HttpResponse(json.dumps(dato), content_type="application/json")
 
 
+class UpdateStock(View):
+
+    @transaction.commit_on_success
+    def post(self, req):
+        print req.POST.get("productos")
+
+        productos_list = req.POST.get("productos")
+        productos_list = json.loads(productos_list)
+
+        print productos_list
+
+        for prod in productos_list:
+            producto = Producto.objects.get(pk = int(prod.get("id")))
+            producto.nivel_critico = int(prod.get("stock", 0))
+            print "producto nivel critico : " + str(producto.nivel_critico)
+            producto.save()
+
+        dato = { "status": "ok" }
+        return HttpResponse(json.dumps(dato), content_type="application/json")
+
+
 index = permiso_admin(IndexView.as_view())
 update_precios = UpdatePrecioProductoView.as_view()
+update_stock = UpdateStock.as_view()

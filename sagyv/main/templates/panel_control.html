@@ -15,14 +15,15 @@
                         <a href="{% url 'trabajador:index' %}" role="menuitem" tabindex="-1">Trabajadores</a>
                     </li>
                     <li role="presentation">
-                        <a href="{% url 'cliente:index' %}" tabindex="-1" role="menuitem">Clientes</a>
+                        <a href="{% url 'cliente:index' %}"
+                            tabindex="-1" role="menuitem">Clientes / Situación Comercial</a>
                     </li>
                     <li role="presentation">
                         <a href="{% url 'vehiculos:index' %}" tabindex="-1" role="menuitem">Vehículos</a>
                     </li>
                     {% if es_admin %}
                     <li role="presentation">
-                        <a href="{% url 'precios:index' %}" tabindex="-1" role="menuitem">Precios</a>
+                        <a href="{% url 'precios:index' %}" tabindex="-1" role="menuitem">Precios / Stock</a>
                     </li>
                     {% endif %}
                 </ul>
