@@ -94,8 +94,8 @@ class GuardarFactura(View):
 
     def salida_garantias(self, guia, lista):
         for item in lista:
-            cantidad = int(item[""])
-            producto = Producto.objects.get(pk = item[""])
+            cantidad = int(item["cantidad"])
+            producto = Producto.objects.get("codigo" = item["codigo"])
             producto.stock -= cantidad
             producto.save()
 
