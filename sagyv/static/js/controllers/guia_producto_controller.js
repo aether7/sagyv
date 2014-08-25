@@ -78,7 +78,9 @@ GuiaProductoController.mixin(BodegaController,{
     },
 
     guardarPaso2: function(){
-        if(this.versionAnterior !== JSON.stringify(this.garantias)){
+        var nuevoHash = JSON.stringify(this.garantias).replace(/\,\"\$\$hashKey\":\d+/g,'');
+
+        if(this.versionAnterior !== nuevoHash){
             this.paso = 3;
             return;
         }

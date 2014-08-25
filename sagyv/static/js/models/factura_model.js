@@ -4,6 +4,7 @@ App.Models.Factura = function(){
     this.valor = null;
     this.fecha = new Date();
     this.productos = [];
+    this.garantias = null;
 
     this.mensajes = {};
 };
@@ -119,7 +120,9 @@ App.Models.Factura.prototype ={
             factura: this.factura,
             valor: this.valor,
             fecha: convierteFechaJSON(this.fecha),
-            productos: JSON.stringify(this.productos)
+            productos: JSON.stringify(this.productos),
+            garantias: JSON.stringify(this.garantias),
+            observaciones: this.observaciones
         };
 
         if(this.id){
