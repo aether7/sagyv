@@ -51,21 +51,21 @@ class GuardarFactura(View):
         productos = req.POST.get('productos')
         garantias = req.POST.get('garantias')
 
-        factura = GuiaDespacho()
-        factura.factura = factura
-        factura.tipo_guia = True
-        factura.save()
+        nueva_factura = GuiaDespacho()
+        nueva_factura.factura = int(factura)
+        nueva_factura.tipo_guia = True
+        nueva_factura.save()
 
         lista_producto = json.loads(productos)
         lista_garantias = json.loads(garantias)
-        self.ingreso_productos(factura, lista_producto)
-        self.salida_garantias(factura, lista_garantias)
+        self.ingreso_productos(nueva_factura, lista_producto)
+        self.salida_garantias(nueva_factura, lista_garantias)
 
         data = {
             "status" : "ok",
             "guia" : {
-                "id" : factura.id,
-                "fecha" : convierte_fecha_texto(factura.fecha),
+                "id" : nueva_factura.id,
+                "fecha" : convierte_fecha_texto(nueva_factura.fecha),
                 "productos" : self.productosActualizados,
             }
         }
