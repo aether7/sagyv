@@ -162,6 +162,8 @@ function GuiaProductoController($http){
     this.guia = new App.Models.Factura();
     this.paso = 1;
     this.garantias = null;
+    this.valorCalculado = 0;
+    this.producto = {};
 }
 
 GuiaProductoController.mixin(BodegaController,{
@@ -169,6 +171,7 @@ GuiaProductoController.mixin(BodegaController,{
         this.guia = new App.Models.Factura();
         this.producto = {}
         this.paso = 1;
+        this.valorCalculado = 0;
 
         $("#modal_carga_producto").modal("show");
     },
@@ -183,15 +186,20 @@ GuiaProductoController.mixin(BodegaController,{
         }
 
         if(this.guia.agregarProducto(this.producto)){
+            this.valorCalculado += this.producto.precio;
             this.producto = {};
         }
+    },
+
+    eliminarProducto: function(index){
+        var producto = this.guia.productos[index];
+        this.valorCalculado -= producto.precio;
+        this.guia.productos.splice(index, 1);
     },
 
     sumarGarantias: function(){
         var garantias,
             porRegistrar = [];
-
-        console.log("sumando garantias");
 
         garantias = { "3105": 0, "3111": 0, "3115": 0, "3145": 0 };
 
@@ -211,9 +219,6 @@ GuiaProductoController.mixin(BodegaController,{
                 });
             }
         });
-
-        console.log("por registrar");
-        console.log(porRegistrar);
 
         return porRegistrar;
     },
@@ -241,7 +246,6 @@ GuiaProductoController.mixin(BodegaController,{
 
     procesarPaso1: function(data){
         this.paso = 2;
-        console.log("entre aqui");
         this.garantias = this.sumarGarantias();
     },
 
