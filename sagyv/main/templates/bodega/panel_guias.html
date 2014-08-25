@@ -15,9 +15,11 @@
             <td>{{guia.fecha}}</td>
             <td>
                 <a href class="icon-search" data-accion="mostrar_detalle"
-                    data-guiaId="{{guia.id}}"
+                    data-guia-id="{{guia.id}}"
                     data-ng-click="guia.verGuia({{ guia.id }})"></a>
-                <a href data-accion="recargar_guia" data-guiaId="{{guia.id}}">
+                <a href data-accion="recargar_guia"
+                    data-guia-id="{{guia.id}}"
+                    data-ng-click="recarga.iniciarRecarga()">
                     Recargar
                 </a>
             </td>

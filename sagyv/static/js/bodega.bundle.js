@@ -6,17 +6,18 @@ var app = angular.module("bodegaApp", [], App.httpProvider),
     BodegaController = require("./controllers/bodega_controller.js"),
     GuiaController = require("./controllers/guia_controller.js"),
     TransitoController = require("./controllers/transito_controller.js"),
-    GuiaProductoController = require("./controllers/guia_producto_controller.js");
-
+    GuiaProductoController = require("./controllers/guia_producto_controller.js"),
+    RecargaController = require("./controllers/recarga_controller.js");
 
 app.controller("BodegaController", ["$http", BodegaController]);
 app.controller("GuiaController", ["$http", GuiaController]);
 app.controller("TransitoController", ["$http", TransitoController]);
 app.controller("GuiaProductoController", ["$http", GuiaProductoController]);
+app.controller("RecargaController", ["$http", RecargaController]);
 
 })();
 
-},{"./controllers/bodega_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega_controller.js","./controllers/guia_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guia_controller.js","./controllers/guia_producto_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guia_producto_controller.js","./controllers/transito_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/transito_controller.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega_controller.js":[function(require,module,exports){
+},{"./controllers/bodega_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega_controller.js","./controllers/guia_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guia_controller.js","./controllers/guia_producto_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guia_producto_controller.js","./controllers/recarga_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/recarga_controller.js","./controllers/transito_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/transito_controller.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega_controller.js":[function(require,module,exports){
 function BodegaController($http, stop){
     this.guia = new App.Models.Guia();
     this.producto = {};
@@ -273,7 +274,21 @@ GuiaProductoController.mixin(BodegaController,{
 
 module.exports = GuiaProductoController;
 
-},{"./bodega_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega_controller.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/transito_controller.js":[function(require,module,exports){
+},{"./bodega_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega_controller.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/recarga_controller.js":[function(require,module,exports){
+function RecargaController($http){
+    this.http = $http;
+}
+
+RecargaController.mixin({
+    iniciarRecarga: function(){
+        console.log("iniciando recarga");
+        $("#modal_recargar_guia").modal("show");
+    }
+});
+
+module.exports = RecargaController;
+
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/transito_controller.js":[function(require,module,exports){
 function TransitoController($http){
     this.resultados = null;
     this.http = $http;
