@@ -117,7 +117,6 @@ class GuardarFactura(View):
         historico.save()
 
 
-
 class CrearGuiaDespachoView(View):
 
     @transaction.commit_on_success

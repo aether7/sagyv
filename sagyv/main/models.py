@@ -244,6 +244,7 @@ class TrabajadorVehiculo(models.Model):
 
 
 class TipoProducto(models.Model):
+    GARANTIA = 3
     nombre = models.CharField(max_length=140)
 
     def __unicode__(self):
@@ -287,7 +288,13 @@ class Producto(models.Model):
         else:
             clase_alerta += "success"
 
+        if self.es_garantia():
+            clase_alerta = ""
+
         return clase_alerta
+
+    def es_garantia(self):
+        return self.tipo_producto_id == TipoProducto.GARANTIA
 
 
 class TipoCambioStock(models.Model):
