@@ -227,7 +227,6 @@ GuiaProductoController.mixin(BodegaController,{
         this.paso = 2;
         this.procesarPaso1();
 
-        //
         return;
 
         var json,
