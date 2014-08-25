@@ -2,6 +2,7 @@
 import json
 from django.db import models
 from main.managers import StockManager, ClienteManager, TarjetaCreditoManager
+from main.managers import GuiaDespachoManager
 
 """
 Como nota adicional: Todos los ingresos que sean representados como booleanos
@@ -302,6 +303,8 @@ class GuiaDespacho(models.Model):
     factura = models.IntegerField(null=True)
     fecha = models.DateTimeField(auto_now_add=True)
     tipo_guia = models.NullBooleanField()
+
+    objects = GuiaDespachoManager()
 
     def __unicode__(self):
         return str(self.numero)

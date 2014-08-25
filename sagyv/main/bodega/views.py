@@ -288,7 +288,8 @@ class ObtenerIdGuia(View):
 
     def get(self, req):
         try:
-            guia = GuiaDespacho.objects.latest('id')
+            guia = GuiaDespacho.objects.get_ultimo_despacho_id()
+
             result = {
                 "status" : "ok",
                 "next" : int(guia.numero) + 1
@@ -300,7 +301,6 @@ class ObtenerIdGuia(View):
             }
 
         return HttpResponse(json.dumps(result), content_type="application/json")
-
 
 
 index = IndexView.as_view()

@@ -7,6 +7,7 @@ function GuiaProductoController($http){
     this.garantias = null;
     this.valorCalculado = 0;
     this.producto = {};
+    this.versionAnterior = null;
 }
 
 GuiaProductoController.mixin(BodegaController,{
@@ -67,38 +68,43 @@ GuiaProductoController.mixin(BodegaController,{
     },
 
     guardarPaso1: function(){
-        this.paso = 2;
-        this.procesarPaso1();
-
-        return;
-
-        var json,
-            action,
-            valido = this.guia.esValida(),
-            _this = this;
-
-        if(!valido){
+        if(!this.guia.esValida()){
             return;
         }
 
-        action = App.urls.get("bodega:guardar_factura");
-        json = this.guia.getJSON();
-
-        this.http.post(action, json)
-            .success(this.procesarPaso1.bind(this));
-    },
-
-    procesarPaso1: function(data){
         this.paso = 2;
         this.garantias = this.sumarGarantias();
+        this.versionAnterior = JSON.stringify(this.garantias);
     },
 
     guardarPaso2: function(){
-        this.paso = 3;
+        if(this.versionAnterior !== JSON.stringify(this.garantias)){
+            this.paso = 3;
+            return;
+        }
+
+        this.procesarGuardado();
     },
 
     guardarPaso3: function(){
         alert("FELICIDADES COMPLETASTE EL PUTO LVL");
+        this.procesarGuardado();
+    },
+
+    procesarGuardado: function(){
+        var json,
+            action,
+            _this = this;
+
+        action = App.urls.get("bodega:guardar_factura");
+        this.guia.garantias = this.garantias;
+        json = this.guia.getJSON();
+
+        this.http.post(action, json).success(function(data){
+            console.log(data);
+            $("#modal_carga_producto").modal("hide");
+            common.agregarMensaje("La guía ha sido guardada exitosamente");
+        });
     },
 
     esPaso: function(numeroPaso){
