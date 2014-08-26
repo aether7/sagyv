@@ -1,4 +1,4 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/Aether/Proyectos/sagyv/sagyv/static/js/bodega_bundle.js":[function(require,module,exports){
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/home/worker8/proyectos/sagyv/sagyv/static/js/bodega_bundle.js":[function(require,module,exports){
 (function(){
 "use strict";
 
@@ -131,8 +131,9 @@ BodegaController.prototype = {
 
 module.exports = BodegaController;
 
-},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guia_controller.js":[function(require,module,exports){
+},{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/guia_controller.js":[function(require,module,exports){
 function GuiaController($http){
+    this.recarga = new App.Models.Recarga();
     this.http = $http;
     this.productos = [];
 }
@@ -150,12 +151,30 @@ GuiaController.prototype = {
             _this.productos = data.productos;
             $("#modal_mostrar_guia").modal("show");
         });
-    }
+    },
+
+    recargarGuia: function(id){
+        var url = App.urls.get("bodega:obtener_guia")
+        _this =this,
+
+        $.get(url, {guia_id : id}, function(data){
+            _this.recarga.id = id;
+            _this.recarga.numero  = data.numero_guia;
+            _this.recarga.vehiculo = data.movil;
+            _this.recarga.fecha = data.fecha;
+            _this.recarga.productos = data.productos;
+
+            console.log(_this.recarga);
+            //recarga.productos_recarga = data.
+            //recarga.observaciones = data.
+        });
+        common.mostrarModal('recargar_guia');
+    },
 };
 
 module.exports = GuiaController;
 
-},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guia_producto_controller.js":[function(require,module,exports){
+},{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/guia_producto_controller.js":[function(require,module,exports){
 var BodegaController = require("./bodega_controller.js");
 
 function GuiaProductoController($http){
@@ -312,4 +331,4 @@ TransitoController.prototype = {
 
 module.exports = TransitoController;
 
-},{}]},{},["/Users/Aether/Proyectos/sagyv/sagyv/static/js/bodega_bundle.js"]);
+},{}]},{},["/home/worker8/proyectos/sagyv/sagyv/static/js/bodega_bundle.js"]);

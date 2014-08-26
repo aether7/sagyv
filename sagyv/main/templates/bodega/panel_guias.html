@@ -14,14 +14,9 @@
             <td>{{guia.vehiculo.numero}}</td>
             <td>{{guia.fecha}}</td>
             <td>
-                <a href class="icon-search" data-accion="mostrar_detalle"
-                    data-guia-id="{{guia.id}}"
-                    data-ng-click="guia.verGuia({{ guia.id }})"></a>
-                <a href data-accion="recargar_guia"
-                    data-guia-id="{{guia.id}}"
-                    data-ng-click="recarga.iniciarRecarga()">
-                    Recargar
-                </a>
+
+                <a href class="icon-search" data-ng-click="guia.verGuia({{ guia.id }})"></a>
+                <a href data-ng-click="guia.recargarGuia({{ guia.id }})">Recargar</a>
             </td>
         </tr>
     {% endfor %}
