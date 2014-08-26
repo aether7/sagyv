@@ -89,7 +89,6 @@ GuiaProductoController.mixin(BodegaController,{
     },
 
     guardarPaso3: function(){
-        alert("FELICIDADES COMPLETASTE EL PUTO LVL");
         this.procesarGuardado();
     },
 

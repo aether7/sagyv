@@ -89,6 +89,15 @@ App.Models.Cliente.prototype = {
             });
         }
 
+        if(this.situacionComercial === "otro" && !this.cantidad){
+            valido = false;
+
+            this.errorList.push({
+                campo: "cantidad",
+                mensaje: "Debe ingresar cantidad"
+            });
+        }
+
         return valido;
     },
 

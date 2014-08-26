@@ -50,39 +50,8 @@
                                 {{ situacion }}
                             </option>
                             {% endfor%}
-                            <option value="otro">Otro...</option>
                         </select>
                         <span class="help-block"></span>
-                    </div>
-
-                    <div id="nueva_situacion_add" class="form-group row hidden">
-                        <div class="col-xs-2">
-                            <label for="numero_add" class="control-label">Cantidad:</label>
-                        </div>
-                        <div class="col-xs-2 form-group">
-                            <input id="numero_add" class="form-control" type="text" value="" />
-                            <span class="help-block"></span>
-                        </div>
-                        <div class="col-xs-2">
-                            <label for="tipo_add" class="control-label">Tipo</label>
-                        </div>
-                        <div class="col-xs-2">
-                            <select name="tipo_add" id="tipo_add" class="form-control">
-                            {% for tipo_descuento in tipos_descuento %}
-                                <option value="{{ tipo_descuento.id }}">{{ tipo_descuento.tipo }}</option>
-                            {% endfor %}
-                            </select>
-                        </div>
-                        <div class="col-xs-2">
-                            <label for="sel_producto_add" class="control-label">Producto</label>
-                        </div>
-                        <div class="col-xs-2">
-                            <select name="selc_producto_add" id="sel_producto_add" class="form-control">
-                                {% for producto in productos %}
-                                <option value="{{ producto.id }}">{{ producto.codigo }} - {{ producto.nombre }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
                     </div>
 
                     <div class="checkbox">

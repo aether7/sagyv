@@ -21,6 +21,11 @@ TrabajadorController.prototype = {
             return;
         }
 
+        if(existeTrabajador(this.trabajador.rut)){
+            this.trabajador.mensajes.rut = "El rut está siendo utilizado por otro trabajador";
+            return;
+        }
+
         var action = App.urls.get("trabajador:crear"),
             json = this.trabajador.getJSON();
 
@@ -130,3 +135,16 @@ TrabajadorController.prototype = {
 app.controller("TrabajadorController",["$http", TrabajadorController]);
 
 })();
+
+
+function existeTrabajador(rut){
+    var duplicado = false;
+
+    $("#lista_trabajadores tbody tr[data-id] td[data-campo=rut]").each(function(){
+        if(rut === $(this).text().trim()){
+            duplicado = true;
+        }
+    });
+
+    return duplicado;
+}
