@@ -30,7 +30,7 @@ GuiaController.prototype = {
             _this.recarga.id = id;
             _this.recarga.numero = data.numero_guia;
             _this.recarga.vehiculo = data.movil;
-            _this.recarga.fecha = data.fecha;
+            _this.recarga.fecha = common.fecha.agregarCeros(data.fecha);
             _this.recarga.productos = data.productos;
 
             common.mostrarModal('recargar_guia');
