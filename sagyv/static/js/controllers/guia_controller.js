@@ -2,6 +2,7 @@ function GuiaController($http){
     this.recarga = new App.Models.Recarga();
     this.http = $http;
     this.productos = [];
+    console.log("lo hice");
 }
 
 GuiaController.prototype = {
@@ -33,9 +34,15 @@ GuiaController.prototype = {
             _this.recarga.fecha = common.fecha.agregarCeros(data.fecha);
             _this.recarga.productos = data.productos;
 
-            common.mostrarModal('recargar_guia');
+            $("#modal_recargar_guia").modal("show");
         });
     },
+
+    agregarRecarga: function(){
+        if(this.producto.id && this.producto.cantidad){
+            this.producto.codigo = $("#" + idSelect + " option:selected").text();
+        }
+    }
 };
 
 module.exports = GuiaController;

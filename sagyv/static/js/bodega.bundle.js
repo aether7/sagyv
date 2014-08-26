@@ -1,4 +1,4 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/home/worker8/proyectos/sagyv/sagyv/static/js/bodega_bundle.js":[function(require,module,exports){
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/Aether/Proyectos/sagyv/sagyv/static/js/bodega_bundle.js":[function(require,module,exports){
 (function(){
 "use strict";
 
@@ -6,18 +6,16 @@ var app = angular.module("bodegaApp", [], App.httpProvider),
     BodegaController = require("./controllers/bodega_controller.js"),
     GuiaController = require("./controllers/guia_controller.js"),
     TransitoController = require("./controllers/transito_controller.js"),
-    GuiaProductoController = require("./controllers/guia_producto_controller.js"),
-    RecargaController = require("./controllers/recarga_controller.js");
+    GuiaProductoController = require("./controllers/guia_producto_controller.js");
 
 app.controller("BodegaController", ["$http", BodegaController]);
 app.controller("GuiaController", ["$http", GuiaController]);
 app.controller("TransitoController", ["$http", TransitoController]);
 app.controller("GuiaProductoController", ["$http", GuiaProductoController]);
-app.controller("RecargaController", ["$http", RecargaController]);
 
 })();
 
-},{"./controllers/bodega_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/bodega_controller.js","./controllers/guia_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/guia_controller.js","./controllers/guia_producto_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/guia_producto_controller.js","./controllers/recarga_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/recarga_controller.js","./controllers/transito_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/transito_controller.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/bodega_controller.js":[function(require,module,exports){
+},{"./controllers/bodega_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega_controller.js","./controllers/guia_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guia_controller.js","./controllers/guia_producto_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guia_producto_controller.js","./controllers/transito_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/transito_controller.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega_controller.js":[function(require,module,exports){
 function BodegaController($http, stop){
     this.guia = new App.Models.Guia();
     this.producto = {};
@@ -129,11 +127,12 @@ BodegaController.prototype = {
 
 module.exports = BodegaController;
 
-},{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/guia_controller.js":[function(require,module,exports){
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guia_controller.js":[function(require,module,exports){
 function GuiaController($http){
     this.recarga = new App.Models.Recarga();
     this.http = $http;
     this.productos = [];
+    console.log("lo hice");
 }
 
 GuiaController.prototype = {
@@ -165,14 +164,20 @@ GuiaController.prototype = {
             _this.recarga.fecha = common.fecha.agregarCeros(data.fecha);
             _this.recarga.productos = data.productos;
 
-            common.mostrarModal('recargar_guia');
+            $("#modal_recargar_guia").modal("show");
         });
     },
+
+    agregarRecarga: function(){
+        if(this.producto.id && this.producto.cantidad){
+            this.producto.codigo = $("#" + idSelect + " option:selected").text();
+        }
+    }
 };
 
 module.exports = GuiaController;
 
-},{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/guia_producto_controller.js":[function(require,module,exports){
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guia_producto_controller.js":[function(require,module,exports){
 var BodegaController = require("./bodega_controller.js");
 
 function GuiaProductoController($http){
@@ -290,31 +295,7 @@ GuiaProductoController.mixin(BodegaController,{
 
 module.exports = GuiaProductoController;
 
-},{"./bodega_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/bodega_controller.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/recarga_controller.js":[function(require,module,exports){
-function RecargaController($http){
-    this.http = $http;
-    this.recarga = null;
-    this.producto = {};
-}
-
-RecargaController.mixin({
-    iniciarRecarga: function(){
-        this.recarga = new App.Models.Recarga();
-        $("#modal_recargar_guia").modal("show");
-    },
-
-    agregarRecarga: function(){
-        if(this.producto.id && this.producto.cantidad){
-            this.producto.codigo = $("#" + idSelect + " option:selected").text();
-        }
-
-        console.log(this.producto);
-    }
-});
-
-module.exports = RecargaController;
-
-},{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/transito_controller.js":[function(require,module,exports){
+},{"./bodega_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega_controller.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/transito_controller.js":[function(require,module,exports){
 function TransitoController($http){
     this.resultados = null;
     this.http = $http;
@@ -338,4 +319,4 @@ TransitoController.prototype = {
 
 module.exports = TransitoController;
 
-},{}]},{},["/home/worker8/proyectos/sagyv/sagyv/static/js/bodega_bundle.js"]);
+},{}]},{},["/Users/Aether/Proyectos/sagyv/sagyv/static/js/bodega_bundle.js"]);
