@@ -63,10 +63,8 @@ BodegaController.prototype = {
 
         action = App.urls.get("bodega:guardar_factura");
         json = this.factura.getJSON();
-        console.log(json);
 
         this.http.post(action, json);
-            //.success(this.procesarGuardarGuiaDespacho.bind(this));
     },
 
     procesarGuardarGuiaDespacho: function(data){

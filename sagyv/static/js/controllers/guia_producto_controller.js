@@ -103,7 +103,6 @@ GuiaProductoController.mixin(BodegaController,{
         json = this.guia.getJSON();
 
         this.http.post(action, json).success(function(data){
-            console.log(data);
             $("#modal_carga_producto").modal("hide");
             common.agregarMensaje("La guía ha sido guardada exitosamente");
         });

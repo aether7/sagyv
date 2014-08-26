@@ -36,6 +36,12 @@
                                 <th>Recarga</th>
                             </tr>
                         </thead>
+                            <tr data-ng-repeat="producto in guia.recarga.productos">
+                                <td data-ng-bind="producto.codigo"></td>
+                                <td data-ng-bind="producto.cantidad"></td>
+                                <td data-ng-show="producto.es_recarga">Sí</td>
+                                <td data-ng-hide="producto.es_recarga">No</td>
+                            </tr>
                         <tbody>
                         </tbody>
                     </table>
@@ -58,7 +64,11 @@
                         </div>
 
                         <div class="col-xs-2 btn-productos">
-                            <button id="btn_agregar_recarga" type="button" class="btn btn-default btn-agregar">+</button>
+                            <button id="btn_agregar_recarga"
+                                type="button"
+                                class="btn btn-default btn-agregar"
+
+                                >+</button>
                         </div>
                     </div>
                 </form>
@@ -76,6 +86,11 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <tr data-ng-repeat="elem in guia.recarga.productos_recarga">
+                            <td data-ng-bind="elem.codigo"></td>
+                            <td data-ng-bind="elem.cantidad"></td>
+                            <td data-ng-show="elem.es_recarga">Accion eliminar</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
