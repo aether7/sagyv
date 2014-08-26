@@ -129,3 +129,7 @@ body
 
 .icon-remove:before
     content "\e603"
+
+for num in (10..90)
+    if num %5 == 0
+        s(".w%s{width:%s%}", num, num)
