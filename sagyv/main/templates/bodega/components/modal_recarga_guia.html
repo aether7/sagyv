@@ -12,17 +12,20 @@
 
                     <div class="form-group">
                         <label for="numero_despacho_rec" class="control-label">Numero Guia</label>
-                        <span id="numero_despacho_rec" class="form-control-static"></span>
+                        <span id="numero_despacho_rec" class="form-control-static"
+                            data-ng-bind="guia.recarga.numero"></span>
                     </div>
 
                     <div class="form-group">
                         <label for="movil_despasho_rec" class="control-label">Móvil</label>
-                        <span id="movil_despasho_rec" class="form-control-static"></span>
+                        <span id="movil_despasho_rec" class="form-control-static"
+                            data-ng-bind="guia.recarga.vehiculo"></span>
                     </div>
 
                     <div class="form-group">
                         <label for="fecha_despacho_rec" class="control-label">Fecha</label>
-                        <span id="fecha_despacho_rec" class="form-control-static"></span>
+                        <span id="fecha_despacho_rec" class="form-control-static"
+                            data-ng-bind="guia.recarga.fecha"></span>
                     </div>
 
                     <table id="despacho" class="table table-striped">

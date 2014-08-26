@@ -1,4 +1,4 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/home/worker8/proyectos/sagyv/sagyv/static/js/bodega_bundle.js":[function(require,module,exports){
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/Aether/Proyectos/sagyv/sagyv/static/js/bodega_bundle.js":[function(require,module,exports){
 (function(){
 "use strict";
 
@@ -131,7 +131,7 @@ BodegaController.prototype = {
 
 module.exports = BodegaController;
 
-},{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/guia_controller.js":[function(require,module,exports){
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guia_controller.js":[function(require,module,exports){
 function GuiaController($http){
     this.recarga = new App.Models.Recarga();
     this.http = $http;
@@ -154,27 +154,27 @@ GuiaController.prototype = {
     },
 
     recargarGuia: function(id){
-        var url = App.urls.get("bodega:obtener_guia")
-        _this =this,
+        var action = App.urls.get("bodega:obtener_guia"),
+            _this =this;
 
-        $.get(url, {guia_id : id}, function(data){
+        this.recarga = new App.Models.Recarga();
+        action += "?guia_id=" + id;
+
+        this.http.get(action).success(function(data){
             _this.recarga.id = id;
-            _this.recarga.numero  = data.numero_guia;
+            _this.recarga.numero = data.numero_guia;
             _this.recarga.vehiculo = data.movil;
             _this.recarga.fecha = data.fecha;
             _this.recarga.productos = data.productos;
 
-            console.log(_this.recarga);
-            //recarga.productos_recarga = data.
-            //recarga.observaciones = data.
+            common.mostrarModal('recargar_guia');
         });
-        common.mostrarModal('recargar_guia');
     },
 };
 
 module.exports = GuiaController;
 
-},{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/guia_producto_controller.js":[function(require,module,exports){
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guia_producto_controller.js":[function(require,module,exports){
 var BodegaController = require("./bodega_controller.js");
 
 function GuiaProductoController($http){
@@ -296,10 +296,13 @@ module.exports = GuiaProductoController;
 },{"./bodega_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega_controller.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/recarga_controller.js":[function(require,module,exports){
 function RecargaController($http){
     this.http = $http;
+    this.recarga = null;
 }
 
 RecargaController.mixin({
     iniciarRecarga: function(){
+        this.recarga = new App.Models.Recarga();
+
         console.log("iniciando recarga");
         $("#modal_recargar_guia").modal("show");
     }
@@ -331,4 +334,4 @@ TransitoController.prototype = {
 
 module.exports = TransitoController;
 
-},{}]},{},["/home/worker8/proyectos/sagyv/sagyv/static/js/bodega_bundle.js"]);
+},{}]},{},["/Users/Aether/Proyectos/sagyv/sagyv/static/js/bodega_bundle.js"]);

@@ -65,11 +65,9 @@
     </div>
 
     <div class="tab-pane" id="guias" data-ng-controller="GuiaController as guia">
-        <div data-ng-controller="RecargaController as recarga">
-            {% include "bodega/panel_guias.html" %}
-            {% include "bodega/components/modal_mostrar_guia.html" %}
-            {% include "bodega/components/modal_recarga_guia.html" %}
-        </div>
+        {% include "bodega/panel_guias.html" %}
+        {% include "bodega/components/modal_mostrar_guia.html" %}
+        {% include "bodega/components/modal_recarga_guia.html" %}
     </div>
 
     <div class="tab-pane" id="recargas">
@@ -91,6 +89,7 @@
 <script src="{% static 'js/plugins/angular.provider.js' %}"></script>
 <script src="{% static 'js/models/guia_model.js' %}"></script>
 <script src="{% static 'js/models/factura_model.js' %}"></script>
+<script src="{% static 'js/models/recarga_model.js' %}"></script>
 <script src="{% static 'js/bodega.bundle.js' %}"></script>
 
 <script id="tpl_nueva_guia" type="text/x-template">
