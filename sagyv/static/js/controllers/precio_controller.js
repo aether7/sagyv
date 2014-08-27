@@ -97,17 +97,34 @@ App.Controllers.Precio.prototype = {
             evt.preventDefault();
 
             var stocks = [],
-                action = $(this).attr("action");
+                action = $(this).attr("action"),
+                valido = true;
+
+            $(this).find(".text-danger").text("");
 
             $(this).find("input[type=text]").each(function(){
                 var id = $(this).data("id"),
                     nuevoStock = parseInt($(this).val());
+
+                if(isNaN(nuevoStock)){
+                    $(this).siblings("span").text("Número no válido");
+                    valido = false;
+                    return;
+                }else if(nuevoStock < 1){
+                    valido = false;
+                    $(this).siblings("span").text("La cantidad debe al menos ser 1");
+                    return;
+                }
 
                 stocks.push({
                     id: id,
                     stock: nuevoStock
                 });
             });
+
+            if(!valido){
+                return;
+            }
 
             $.post(action, { productos: JSON.stringify(stocks) }, function(data){
                 _this.procesarActualizacionStock(stocks);

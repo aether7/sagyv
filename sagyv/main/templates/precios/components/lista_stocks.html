@@ -15,12 +15,13 @@
                 <td>{{ producto.nivel_critico }}</td>
                 <td>
                     <input id="producto_stock_{{ producto.id }}" data-id="{{ producto.id }}" type="text" value="" />
+                    <span class="text-danger"></span>
                 </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-    <div>
-        <button class="btn btn-primary">Guardad</button>
+    <div class="center" style="padding: 1em">
+        <button class="btn btn-primary">Guardar</button>
     </div>
 </form>
