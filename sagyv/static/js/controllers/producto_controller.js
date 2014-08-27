@@ -1,4 +1,5 @@
-function ProductoController(){
+function ProductoController($scope){
+    this.scope = $scope;
 }
 
 ProductoController.prototype = {
@@ -25,9 +26,8 @@ ProductoController.prototype = {
         }
 
         producto.llenos = aux;
-        calculaValorTotal(producto);
-
-        return producto.llenos;
+        this.calculaValorTotal(producto);
+        this.scope.$emit("guia:calcularSubTotal");
     }
 };
 

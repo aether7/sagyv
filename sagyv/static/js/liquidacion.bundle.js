@@ -1,17 +1,20 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion_controller.js":[function(require,module,exports){
-function LiquidacionController($http){
+function LiquidacionController($http, $scope){
     this.productos = [];
+
+    this.guia = {};
+
     this.idVehiculo = null;
-    this.numeroGuia = null;
     this.subTotal = 0;
     this.descuentos = 0;
     this.total = 0;
-    this.http = $http;
+    this.fecha = null;
+    this.vehiculo = null;
 
-    this.vehiculo = {
-        kilometrosRecorridos : 0,
-        kmActual : 0
-    };
+    this.http = $http;
+    this.scope = $scope;
+
+    this.suscribeEvents();
 }
 
 LiquidacionController.prototype = {
@@ -22,13 +25,20 @@ LiquidacionController.prototype = {
             _this = this;
 
         url += "?id_vehiculo=" + this.idVehiculo;
-        this.resetearValores();
 
-        this.http.get(url).success(function(data){
-            _this.productos = data.productos;
-            _this.vehiculo = data.vehiculo;
-            _this.vehiculo.kilometrosRecorridos = 0;
-        });
+        this.resetearValores();
+        this.http.get(url).success(this.cargaDatosCabecera.bind(this));
+    },
+
+    cargaDatosCabecera: function(data){
+        this.guia = data.guia;
+        this.guia.fecha = new Date();
+
+        this.productos = data.productos;
+
+        this.vehiculo = data.vehiculo;
+        this.vehiculo.kilometrosRecorridos = 0;
+        this.vehiculo.kmActual = 0;
     },
 
     actualizarKilometraje: function(){
@@ -36,6 +46,8 @@ LiquidacionController.prototype = {
     },
 
     calcularSubTotal: function(){
+        var _this = this;
+
         this.subTotal = 0;
 
         this.productos.forEach(function(producto){
@@ -51,17 +63,22 @@ LiquidacionController.prototype = {
 
     resetearValores: function(){
         this.idCliente = null;
-        this.numeroGuia = null;
+        this.guia = {};
         this.subTotal = 0;
         this.descuentos = 0;
         this.total = 0;
+    },
+
+    suscribeEvents: function(){
+        this.scope.$on("guia:calcularSubTotal", this.calcularSubTotal.bind(this));
     }
 };
 
 module.exports = LiquidacionController;
 
 },{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/producto_controller.js":[function(require,module,exports){
-function ProductoController(){
+function ProductoController($scope){
+    this.scope = $scope;
 }
 
 ProductoController.prototype = {
@@ -88,9 +105,8 @@ ProductoController.prototype = {
         }
 
         producto.llenos = aux;
-        calculaValorTotal(producto);
-
-        return producto.llenos;
+        this.calculaValorTotal(producto);
+        this.scope.$emit("guia:calcularSubTotal");
     }
 };
 
@@ -107,6 +123,8 @@ var app = angular.module("liquidacionApp",[]),
 function ClienteController($http){
     this.idCliente = null;
     this.descripcionDescuento = "nada";
+    this.http = $http;
+
     this.cliente = {};
 }
 
@@ -117,18 +135,20 @@ ClienteController.prototype = {
         var url = App.urls.get("liquidacion:buscar_cliente");
         url += "?id_cliente=" + this.idCliente;
 
-        $http.get(url).success(function(data){
-            _this.cliente.id = data.id;
-            _this.cliente.direccion = data.direccion;
-            _this.cliente.rut = data.rut;
-            _this.situacionComercial = data.situacion_comercial;
-            _this.descripcionDescuento = data.situacion_comercial.descripcion_descuento;
-        });
+        this.http.get(url).success(this.procesarCliente.bind(this));
+    },
+
+    procesarCliente: function(data){
+        this.cliente.id = data.id;
+        this.cliente.direccion = data.direccion;
+        this.cliente.rut = data.rut;
+        this.situacionComercial = data.situacion_comercial;
+        this.descripcionDescuento = data.situacion_comercial.descripcion_descuento;
     }
 };
 
-app.controller("LiquidacionController", ["$http", LiquidacionController]);
-app.controller("ProductoController", ["$http", ProductoController]);
+app.controller("LiquidacionController", ["$http","$scope", LiquidacionController]);
+app.controller("ProductoController", ["$scope", ProductoController]);
 app.controller("ClienteController", ["$http", ClienteController]);
 
 })();

@@ -1,16 +1,19 @@
-function LiquidacionController($http){
+function LiquidacionController($http, $scope){
     this.productos = [];
+
+    this.guia = {};
+
     this.idVehiculo = null;
-    this.numeroGuia = null;
     this.subTotal = 0;
     this.descuentos = 0;
     this.total = 0;
-    this.http = $http;
+    this.fecha = null;
+    this.vehiculo = null;
 
-    this.vehiculo = {
-        kilometrosRecorridos : 0,
-        kmActual : 0
-    };
+    this.http = $http;
+    this.scope = $scope;
+
+    this.suscribeEvents();
 }
 
 LiquidacionController.prototype = {
@@ -21,13 +24,20 @@ LiquidacionController.prototype = {
             _this = this;
 
         url += "?id_vehiculo=" + this.idVehiculo;
-        this.resetearValores();
 
-        this.http.get(url).success(function(data){
-            _this.productos = data.productos;
-            _this.vehiculo = data.vehiculo;
-            _this.vehiculo.kilometrosRecorridos = 0;
-        });
+        this.resetearValores();
+        this.http.get(url).success(this.cargaDatosCabecera.bind(this));
+    },
+
+    cargaDatosCabecera: function(data){
+        this.guia = data.guia;
+        this.guia.fecha = new Date();
+
+        this.productos = data.productos;
+
+        this.vehiculo = data.vehiculo;
+        this.vehiculo.kilometrosRecorridos = 0;
+        this.vehiculo.kmActual = 0;
     },
 
     actualizarKilometraje: function(){
@@ -35,6 +45,8 @@ LiquidacionController.prototype = {
     },
 
     calcularSubTotal: function(){
+        var _this = this;
+
         this.subTotal = 0;
 
         this.productos.forEach(function(producto){
@@ -50,10 +62,14 @@ LiquidacionController.prototype = {
 
     resetearValores: function(){
         this.idCliente = null;
-        this.numeroGuia = null;
+        this.guia = {};
         this.subTotal = 0;
         this.descuentos = 0;
         this.total = 0;
+    },
+
+    suscribeEvents: function(){
+        this.scope.$on("guia:calcularSubTotal", this.calcularSubTotal.bind(this));
     }
 };
 

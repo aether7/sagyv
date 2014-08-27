@@ -1,10 +1,11 @@
 #-*- coding: utf-8 -*-
+
 import json
 from django.http import HttpResponse
 from django.views.generic import TemplateView,View
 from main.models import Trabajador, Producto, Vehiculo, StockVehiculo
 from main.models import GuiaDespacho, HistorialStock, Cliente
-from main.models import TarjetaCredito, Producto
+from main.models import TarjetaCredito, Producto, GuiaDespacho
 
 
 class IndexView(TemplateView):
@@ -21,32 +22,29 @@ class IndexView(TemplateView):
         return context
 
 
-class BalanceLiquidacionView(View):
-    def post(self, req):
-        guia_despacho = req.POST.get('guia_despacho')
-        id_trabajador = req.POST.get('id_trabajador')
-        productos_json = req.POST.get('productos')
-        productos = json.loads(productos_json)
-        valor_total = 0
-
-        for obj in productos:
-            producto = Producto.objects.get(pk = obj["id"])
-            precio = producto.get_precio_producto()
-            valor_tmp = precio * int(obj["cantidad"])
-            valor_total += valor_tmp
-
-        dato = { 'valor': valor_total }
-
-        return HttpResponse(json.dumps(dato), content_type="application/json")
-
-
 class ObtenerGuiaDespacho(View):
     def get(self, req):
-        #numero_guia = req.GET.get('numero_guia')
-        #guia = GuiaDespacho.objects.get(numero = numero_guia)
-        #lote = StockVehiculo.objects.filter(vehiculo = guia.vehiculo)
         id_vehiculo = int(req.GET.get("id_vehiculo"))
         vehiculo = Vehiculo.objects.get(pk = id_vehiculo)
+        productos = self.obtener_productos(id_vehiculo)
+        guia = GuiaDespacho.objects.filter(vehiculo = vehiculo).order_by("-id")[0]
+
+        datos = {
+            "vehiculo" : {
+                "id" : id_vehiculo,
+                "km" : vehiculo.km,
+                "chofer" : vehiculo.get_nombre_ultimo_chofer()
+            },
+            "guia": {
+                "numero" : guia.numero,
+                "id" : guia.id
+            },
+            "productos" : productos
+        }
+
+        return HttpResponse(json.dumps(datos), content_type="application/json")
+
+    def obtener_productos(self, id_vehiculo):
         lote = StockVehiculo.objects.filter(vehiculo_id = id_vehiculo)
         productos = []
 
@@ -58,16 +56,7 @@ class ObtenerGuiaDespacho(View):
                 'precio': item.producto.get_precio_producto()
             })
 
-        datos = {
-            "vehiculo" : {
-                "id" : id_vehiculo,
-                "km" : vehiculo.km,
-                "chofer" : vehiculo.get_nombre_ultimo_chofer()
-            },
-            "productos" : productos
-        }
-
-        return HttpResponse(json.dumps(datos), content_type="application/json")
+        return productos
 
 
 class BuscarCliente(View):
@@ -128,6 +117,25 @@ class BuscarCliente(View):
         opciones["monto"] = monto
 
         return opciones
+
+
+class BalanceLiquidacionView(View):
+    def post(self, req):
+        guia_despacho = req.POST.get('guia_despacho')
+        id_trabajador = req.POST.get('id_trabajador')
+        productos_json = req.POST.get('productos')
+        productos = json.loads(productos_json)
+        valor_total = 0
+
+        for obj in productos:
+            producto = Producto.objects.get(pk = obj["id"])
+            precio = producto.get_precio_producto()
+            valor_tmp = precio * int(obj["cantidad"])
+            valor_total += valor_tmp
+
+        dato = { 'valor': valor_total }
+
+        return HttpResponse(json.dumps(dato), content_type="application/json")
 
 
 index = IndexView.as_view()

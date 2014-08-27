@@ -8,6 +8,8 @@ var app = angular.module("liquidacionApp",[]),
 function ClienteController($http){
     this.idCliente = null;
     this.descripcionDescuento = "nada";
+    this.http = $http;
+
     this.cliente = {};
 }
 
@@ -18,18 +20,20 @@ ClienteController.prototype = {
         var url = App.urls.get("liquidacion:buscar_cliente");
         url += "?id_cliente=" + this.idCliente;
 
-        $http.get(url).success(function(data){
-            _this.cliente.id = data.id;
-            _this.cliente.direccion = data.direccion;
-            _this.cliente.rut = data.rut;
-            _this.situacionComercial = data.situacion_comercial;
-            _this.descripcionDescuento = data.situacion_comercial.descripcion_descuento;
-        });
+        this.http.get(url).success(this.procesarCliente.bind(this));
+    },
+
+    procesarCliente: function(data){
+        this.cliente.id = data.id;
+        this.cliente.direccion = data.direccion;
+        this.cliente.rut = data.rut;
+        this.situacionComercial = data.situacion_comercial;
+        this.descripcionDescuento = data.situacion_comercial.descripcion_descuento;
     }
 };
 
-app.controller("LiquidacionController", ["$http", LiquidacionController]);
-app.controller("ProductoController", ["$http", ProductoController]);
+app.controller("LiquidacionController", ["$http","$scope", LiquidacionController]);
+app.controller("ProductoController", ["$scope", ProductoController]);
 app.controller("ClienteController", ["$http", ClienteController]);
 
 })();

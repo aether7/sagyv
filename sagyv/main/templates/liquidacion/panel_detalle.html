@@ -1,0 +1,35 @@
+<section class="panel-detalle">
+    {% verbatim %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Cantidad en Tránsito</th>
+                <th>Llenos</th>
+                <th>Vacíos</th>
+                <th>Precio Unitario</th>
+                <th>Cantidad a pagar</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-ng-repeat="producto in liqCtrl.productos"
+                data-ng-controller="ProductoController as productoCtrl" class="ng-cloak">
+
+                <td data-ng-bind="producto.codigo"></td>
+                <td data-ng-bind="producto.cantidad"></td>
+                <td data-ng-bind="producto.llenos"></td>
+                <td>
+                    <input type="text" value=""
+                        data-ng-model="producto.vacios"
+                        data-ng-keyup="productoCtrl.calcularRestante(producto)" />
+                </td>
+                <td data-ng-bind-template="{{ producto.precio | currency }}"></td>
+                <td style="text-align:right" data-ng-bind-template="{{ producto.valorTotal | currency }}"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div data-ng-bind-template="Subtotal : {{ liqCtrl.subTotal | currency }}"></div>
+
+    {% endverbatim %}
+</section>

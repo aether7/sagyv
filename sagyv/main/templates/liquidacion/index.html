@@ -15,73 +15,8 @@
             <button class="btn btn-primary" data-ng-click="liqCtrl.buscarGuia()">Buscar</button>
         </section>
 
-        <section class="panel panel-default panel-cabecera">
-            <div class="panel-heading">
-                <h3 class="panel-title">Datos del chofer</h3>
-            </div>
-            <div>
-                <label for="numero_guia">Nº guía</label>
-                <input id="numero_guia" type="text" value="" data-ng-model="liqCtrl.numeroGuia" />
-
-                <label for="fecha">Fecha</label>
-                <input id="fecha" type="date" value="" />
-
-                <label for="numero_boleta">Nº de boleta</label>
-                <input id="numero_boleta" type="text" value="" data-ng-model="liqCtrl.numeroBoleta" />
-            </div>
-
-            <div>
-                <label for="nombre_chofer">Chofer</label>
-                <input id="nombre_chofer" type="text" data-ng-model="liqCtrl.vehiculo.chofer" readonly value="" />
-
-                <label for="kilometraje">KM actual</label>
-
-                <input id="kilometraje" type="text" value=""
-                    data-ng-model="liqCtrl.vehiculo.kmActual"
-                    data-ng-keyup="liqCtrl.actualizarKilometraje()" />
-
-                <label for="km_recorridos">KM recorridos</label>
-
-                <input id="km_recorridos" type="text"
-                    value="" readonly
-                    data-ng-model="liqCtrl.vehiculo.kilometrosRecorridos" />
-            </div>
-        </section>
-
-        <section class="panel-detalle">
-            {% verbatim %}
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Código</th>
-                        <th>Cantidad en Tránsito</th>
-                        <th>Llenos</th>
-                        <th>Vacíos</th>
-                        <th>Precio Unitario</th>
-                        <th>Cantidad a pagar</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr data-ng-repeat="producto in liqCtrl.productos"
-                        data-ng-controller="ProductoController as productoCtrl" class="ng-cloak">
-                        <td data-ng-bind="producto.codigo"></td>
-                        <td data-ng-bind="producto.cantidad"></td>
-                        <td></td>
-                        <td>
-                            <input type="text" value="" />
-                        </td>
-                        <td></td>
-                        <td style="text-align:right"></td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <div>
-                Subtotal :
-            </div>
-
-            {% endverbatim %}
-        </section>
+        {% include "liquidacion/panel_cabecera.html" %}
+        {% include "liquidacion/panel_detalle.html" %}
 
         <div class="center">
             <button type="button" class="btn btn-default" data-accion="abre_modal"
