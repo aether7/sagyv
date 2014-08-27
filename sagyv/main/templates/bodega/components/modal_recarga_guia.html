@@ -8,76 +8,74 @@
                 <h4 class="modal-title">Recarga</h4>
             </div>
             <div class="modal-body">
-                <form id="f_guia_recargar" action="{% url 'bodega:recargar_guia' %}" method="post" style="overflow:hidden">
+                <div class="form-group">
+                    <label for="numero_despacho_rec" class="control-label w25">Numero Guia</label>
+                    <span id="numero_despacho_rec" class="form-control-static"
+                        data-ng-bind="guia.recarga.numero"></span>
+                </div>
 
-                    <div class="form-group">
-                        <label for="numero_despacho_rec" class="control-label w25">Numero Guia</label>
-                        <span id="numero_despacho_rec" class="form-control-static"
-                            data-ng-bind="guia.recarga.numero"></span>
+                <div class="form-group">
+                    <label for="movil_despasho_rec" class="control-label w25">Móvil</label>
+                    <span id="movil_despasho_rec" class="form-control-static"
+                        data-ng-bind="guia.recarga.vehiculo"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="fecha_despacho_rec" class="control-label w25">Fecha</label>
+                    <span id="fecha_despacho_rec" class="form-control-static"
+                        data-ng-bind="guia.recarga.fecha"></span>
+                </div>
+
+                <table id="despacho" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Código Producto</th>
+                            <th>Cantidad</th>
+                            <th>Recarga</th>
+                        </tr>
+                    </thead>
+                        <tr data-ng-repeat="producto in guia.recarga.productos">
+                            <td data-ng-bind="producto.codigo"></td>
+                            <td data-ng-bind="producto.cantidad"></td>
+                            <td data-ng-show="producto.es_recarga">Sí</td>
+                            <td data-ng-hide="producto.es_recarga">No</td>
+                        </tr>
+                    <tbody>
+                    </tbody>
+                </table>
+
+                <div class="form-group">
+                    <div class="col-xs-6">
+                        <label for="guia_producto_recarga" class="control-label">Producto</label>
+                        <select id="guia_producto_recarga" class="form-control"
+                            data-ng-model="guia.producto.id">
+                            {% for producto in productos_guia %}
+                            <option value="{{ producto.id }}">{{ producto.codigo }}</option>
+                            {% endfor %}
+                        </select>
+                        <span class="help-block"></span>
                     </div>
 
-                    <div class="form-group">
-                        <label for="movil_despasho_rec" class="control-label w25">Móvil</label>
-                        <span id="movil_despasho_rec" class="form-control-static"
-                            data-ng-bind="guia.recarga.vehiculo"></span>
+                    <div class="col-xs-4">
+                        <label for="cantidad_producto_recarga" class="contol-label">Cantidad</label>
+                        <input id="cantidad_producto_recarga"
+                            class="form-control" type="text"
+                            value="" data-ng-model="guia.producto.cantidad"/>
+                        <span class="help-block"></span>
                     </div>
 
-                    <div class="form-group">
-                        <label for="fecha_despacho_rec" class="control-label w25">Fecha</label>
-                        <span id="fecha_despacho_rec" class="form-control-static"
-                            data-ng-bind="guia.recarga.fecha"></span>
+                    <div class="col-xs-2 btn-productos">
+                        <button id="btn_agregar_recarga"
+                            type="button"
+                            class="btn btn-default btn-agregar"
+                            data-ng-click="guia.agregarRecarga('guia_producto_recarga')"
+                            >+</button>
                     </div>
-
-                    <table id="despacho" class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Código Producto</th>
-                                <th>Cantidad</th>
-                                <th>Recarga</th>
-                            </tr>
-                        </thead>
-                            <tr data-ng-repeat="producto in guia.recarga.productos">
-                                <td data-ng-bind="producto.codigo"></td>
-                                <td data-ng-bind="producto.cantidad"></td>
-                                <td data-ng-show="producto.es_recarga">Sí</td>
-                                <td data-ng-hide="producto.es_recarga">No</td>
-                            </tr>
-                        <tbody>
-                        </tbody>
-                    </table>
-
-                    <div class="form-group">
-                        <div class="col-xs-6">
-                            <label for="guia_producto_recarga" class="control-label">Producto</label>
-                            <select id="guia_producto_recarga" class="form-control"
-                                data-ng-model="guia.recargar.producto.id">
-                                {% for producto in productos_guia %}
-                                <option value="{{ producto.id }}">{{ producto.codigo }}</option>
-                                {% endfor %}
-                            </select>
-                            <span class="help-block"></span>
-                        </div>
-
-                        <div class="col-xs-4">
-                            <label for="cantidad_producto_recarga" class="contol-label">Cantidad</label>
-                            <input id="cantidad_producto_recarga"
-                                class="form-control" type="text"
-                                value="" data-ng-model="guia.recargar.producto.cantidad"/>
-                            <span class="help-block"></span>
-                        </div>
-
-                        <div class="col-xs-2 btn-productos">
-                            <button id="btn_agregar_recarga"
-                                type="button"
-                                class="btn btn-default btn-agregar"
-                                data-ng-click="guia.agregarRecarga()"
-                                >+</button>
-                        </div>
-                    </div>
-                </form>
+                </div>
 
                 <div id="mensajes_lista_productos_recarga" class="form-group center">
-                    <span class="help-block"></span>
+                    <span class="text-danger"
+                        data-ng-bind="guia.recarga.mensajes.producto"></span>
                 </div>
 
                 <table id="lista_despacho_recarga" class="table table-striped">
@@ -92,14 +90,20 @@
                         <tr data-ng-repeat="elem in guia.recarga.productos_recarga">
                             <td data-ng-bind="elem.codigo"></td>
                             <td data-ng-bind="elem.cantidad"></td>
-                            <td data-ng-show="elem.es_recarga">Accion eliminar</td>
+                            <td>
+                                <i class="glyphicon glyphicon-remove"
+                                    data-ng-click="guia.eliminarProducto($index)"></i>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <button id="btn_guardar_recarga" class="btn btn-primary">Guardar</button>
+                <button id="btn_guardar_recarga"
+                    class="btn btn-primary" data-ng-click="guia.guardarRecarga()">
+                    Guardar
+                </button>
             </div>
         </div>
     </div>

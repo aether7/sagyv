@@ -262,6 +262,9 @@ class RecargaGuia(View):
         id_guia = req.POST.get("id_guia")
         productos = json.loads(req.POST.get("productos"))
 
+        print productos
+
+
         guia = GuiaDespacho.objects.get(pk = id_guia)
         historico = self.historial(productos, guia)
 
@@ -273,7 +276,7 @@ class RecargaGuia(View):
 
     def historial(self, productos, guia):
         for producto in productos:
-            prod = Producto.objects.get(pk = int(producto['id_producto']))
+            prod = Producto.objects.get(pk = int(producto['id']))
             cant = int(producto['cantidad'])
 
             historico = HistorialStock()
@@ -326,5 +329,5 @@ crea_guia = csrf_exempt(CrearGuiaDespachoView.as_view())
 guardar_factura = csrf_exempt(GuardarFactura.as_view())
 obtener_guia = ObtenerGuiaDespasho.as_view()
 obtener_vehiculos_por_producto = ObtenerVehiculosPorProductoView.as_view()
-recargar_guia = RecargaGuia.as_view()
+recargar_guia = csrf_exempt(RecargaGuia.as_view())
 obtener_id_guia = ObtenerIdGuia.as_view()
