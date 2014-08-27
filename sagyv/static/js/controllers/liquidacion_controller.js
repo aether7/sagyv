@@ -17,7 +17,8 @@ LiquidacionController.prototype = {
     constructor: LiquidacionController,
 
     buscarGuia: function(){
-        var url = App.urls.get("liquidacion:obtener_guia");
+        var url = App.urls.get("liquidacion:obtener_guia"),
+            _this = this;
 
         url += "?id_vehiculo=" + this.idVehiculo;
         this.resetearValores();
