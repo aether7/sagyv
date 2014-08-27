@@ -259,17 +259,16 @@ class ObtenerGuiaDespasho(View):
 class RecargaGuia(View):
 
     def post(self, req):
+        self.productosActualizados = []
         id_guia = req.POST.get("id_guia")
         productos = json.loads(req.POST.get("productos"))
-
-        print productos
-
 
         guia = GuiaDespacho.objects.get(pk = id_guia)
         historico = self.historial(productos, guia)
 
         resultados = {
-            "status" : "ok"
+            "status" : "ok",
+            "productos" : self.productosActualizados
         }
 
         return HttpResponse(json.dumps(resultados), content_type="application/json")
@@ -290,6 +289,11 @@ class RecargaGuia(View):
             prod.stock = prod.stock - cant
             prod.save()
 
+            this_prod = {
+                'id': prod.id,
+                'cantidad': prod.stock
+            }
+            self.productosActualizados.append(this_prod)
             self.actualizar_stock(prod, guia.vehiculo, cant)
 
     def actualizar_stock(self, producto_obj, vehiculo_obj, cantidad):

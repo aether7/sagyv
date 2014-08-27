@@ -170,7 +170,6 @@ GuiaController.prototype = {
 
     agregarRecarga: function(idSelect){
         if(this.producto.id && this.producto.cantidad){
-            console.log('take');
             this.producto.codigo = $("#" + idSelect + " option:selected").text();
         }
 
@@ -180,9 +179,7 @@ GuiaController.prototype = {
     },
 
     eliminarProducto: function(indice){
-        console.log(this.recarga);
         this.recarga.productos_recarga.splice(indice, 1);
-        console.log(this.recarga);
     },
 
     guardarRecarga: function(){
@@ -196,8 +193,18 @@ GuiaController.prototype = {
 
         action = App.urls.get("bodega:recargar_guia");
         json = this.recarga.getJSON();
-        this.http.post(action, json);
-        //actualizar datos anexos.
+        this.http.post(action, json)
+            .success(this.procesarRecarga.bind(this));
+    },
+
+    procesarRecarga: function(data){
+        data.productos.forEach(function(producto){
+            $("#stock_"+producto.id).text(producto.cantidad);
+            App.productos[producto.id] = producto.cantidad;
+        });
+
+        $("#modal_recargar_guia").modal("hide");
+        common.agregarMensaje("Se ha actualizado el vehiculo exitosamente");
     }
 };
 
