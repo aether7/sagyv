@@ -64,24 +64,20 @@
                 <tbody>
                     <tr data-ng-repeat="producto in liqCtrl.productos"
                         data-ng-controller="ProductoController as productoCtrl" class="ng-cloak">
-                        <td>{{ producto.codigo }}</td>
-                        <td>{{ producto.cantidad }}</td>
-                        <td>{{ productoCtrl.calcularRestante(producto) }}</td>
+                        <td data-ng-bind="producto.codigo"></td>
+                        <td data-ng-bind="producto.cantidad"></td>
+                        <td></td>
                         <td>
-                            <input type="text" value="{{ producto.vacios }}"
-                                data-ng-model="producto.vacios"
-                                data-ng-keyup="liqCtrl.calcularSubTotal()" />
+                            <input type="text" value="" />
                         </td>
-                        <td>{{ producto.precio | currency }}</td>
-                        <td style="text-align:right">
-                            {{ producto.valorTotal | currency }}
-                        </td>
+                        <td></td>
+                        <td style="text-align:right"></td>
                     </tr>
                 </tbody>
             </table>
 
             <div>
-                Subtotal : {{ liqCtrl.subTotal | currency }}
+                Subtotal :
             </div>
 
             {% endverbatim %}
