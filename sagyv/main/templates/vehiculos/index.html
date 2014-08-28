@@ -78,10 +78,6 @@
 
     App.vehiculoView = new App.Views.Vehiculo();
     App.vehiculoView.init();
-
-    {% for vehiculo in vehiculos %}
-    App.vehiculoView.agregarVehiculo({{ vehiculo.numero }}, '{{ vehiculo.patente }}');
-    {% endfor %}
 </script>
 {% endblock %}
 

@@ -92,14 +92,9 @@ App.Views.Vehiculo.prototype = {
         }
     },
 
-    agregarVehiculo: function(vehiculoNumero, vehiculoPatente){
-        this.controller.vehiculos.push({
-            numero : vehiculoNumero,
-            patente : vehiculoPatente
-        });
-    },
-
     validarNuevoVehiculo: function(){
+        var patentes = this.obtenerPatentes();
+
         this.numero = $("#numero_vehiculo_nuevo");
         this.patente = $("#patente_vehiculo_nuevo");
         this.fechaRev = $("#revision_tecnica_vehiculo_nuevo");
@@ -119,7 +114,18 @@ App.Views.Vehiculo.prototype = {
             estadoSec: this.estadoSec.val(),
             estadoPago: this.estadoPago.val(),
             chofer: this.chofer.val()
+        }, patentes);
+    },
+
+    obtenerPatentes: function(){
+        var lista = $("#lista_vehiculos tbody tr td[data-patente]"),
+            patentes = [];
+
+        lista.each(function(){
+            patentes.push($(this).data("patente"));
         });
+
+        return patentes;
     },
 
     validarEdicionVehiculo: function(){

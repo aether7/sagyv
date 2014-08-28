@@ -7,7 +7,7 @@ App.Controllers.Vehiculo = function(){
 App.Controllers.Vehiculo.prototype = {
     constructor: App.Controllers.Vehiculo,
 
-    validarNuevoVehiculo: function(viewData){
+    validarNuevoVehiculo: function(viewData, patentes){
         var action,
             vehiculo = new App.Models.Vehiculo();
 
@@ -21,6 +21,9 @@ App.Controllers.Vehiculo.prototype = {
 
         if(!vehiculo.esValido()){
             pubsub.publish("vehiculo:noValido", [ vehiculo.getErrorList() ]);
+            return;
+        }else if(_.indexOf(patentes, vehiculo.patente) !== -1){
+            alert("La patente ya está siendo utilizada");
             return;
         }
 
