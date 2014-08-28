@@ -77,14 +77,17 @@ class BuscarCliente(View):
             }
         }
 
-        opciones = self.get_situacion_comercial(cliente)
-        data["situacion_comercial"]["descripcion_descuento"] = opciones["descripcion_descuento"]
-        data["situacion_comercial"]["simbolo"] = opciones["simbolo"]
-        data["situacion_comercial"]["monto"] = opciones["monto"]
+        #opciones = self.get_situacion_comercial(cliente)
+        data["situacion_comercial"]["descripcion_descuento"] = "sadsa"#opciones["descripcion_descuento"]
+        data["situacion_comercial"]["simbolo"] = "eaea"#opciones["simbolo"]
+        data["situacion_comercial"]["monto"] = 1313#opciones["monto"]
 
         return HttpResponse(json.dumps(data), content_type="application/json")
 
+    """
     def get_situacion_comercial(self, cliente):
+        return ""
+
         opciones = {}
         params = None
         simbolo = None
@@ -117,6 +120,7 @@ class BuscarCliente(View):
         opciones["monto"] = monto
 
         return opciones
+    """
 
 
 class BalanceLiquidacionView(View):

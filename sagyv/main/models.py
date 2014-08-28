@@ -1,4 +1,5 @@
 #-*- coding: utf-8 -*-
+
 import json
 from django.db import models
 from main.managers import StockManager, ClienteManager, TarjetaCreditoManager
@@ -373,6 +374,7 @@ class DescuentoCliente(models.Model):
         return self.id == 1
 
     def get_json_string(self):
+        """
         if self.id == 1:
             return "Sin descuento"
 
@@ -382,6 +384,8 @@ class DescuentoCliente(models.Model):
             texto = "%s % (%s)"
 
         return texto % (self.monto_descuento, self.producto.codigo)
+        """
+        return "eaea"
 
     def __unicode__(self):
         if self.id == 1:
