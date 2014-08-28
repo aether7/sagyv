@@ -1,0 +1,9 @@
+{
+  "name": "sagyv",
+  "version": "0.0.1",
+  "devDependencies": {
+    "grunt": "~0.4.5",
+    "uglifyjs": "~2.3.6",
+    "grunt-contrib-uglify": "~0.5.1"
+  }
+}
