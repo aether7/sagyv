@@ -2,6 +2,7 @@
 
 import json
 from django.db import models
+from django.contrib.auth.models import User
 from main.managers import StockManager, ClienteManager, TarjetaCreditoManager
 from main.managers import GuiaDespachoManager
 
@@ -545,3 +546,15 @@ class StockVehiculo(models.Model):
 
     def __unicode__(self):
         return str(self.vehiculo.patente) + " -> (cod " + str(self.producto.codigo) + ": " + str(self.cantidad) + ")"
+
+
+class LogSistema(models.Model):
+    CREAR = 1
+    ACTUALIZAR = 2
+    BORRAR = 3
+    descripcion = models.TextField(null = True)
+    fecha = models.DateTimeField(auto_now_add = True)
+    tipo_accion = models.IntegerField()
+    user = models.ForeignKey(User)
+    tabla = models.CharField(max_length = 140)
+    registro_id = models.IntegerField()
