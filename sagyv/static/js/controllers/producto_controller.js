@@ -15,17 +15,17 @@ ProductoController.prototype = {
     },
 
     calcularRestante: function(producto){
-        var aux = parseInt(producto.cantidad) - parseInt(producto.vacios);
+        var aux = parseInt(producto.cantidad) - parseInt(producto.llenos);
 
         if(isNaN(aux) || aux < 0){
             aux = 0;
         }
 
-        if(producto.cantidad < parseInt(producto.vacios)){
-            producto.vacios = producto.cantidad;
+        if(producto.cantidad < parseInt(producto.llenos)){
+            producto.llenos = producto.cantidad;
         }
 
-        producto.llenos = aux;
+        producto.vacios = aux;
         this.calculaValorTotal(producto);
         this.scope.$emit("guia:calcularSubTotal");
     }

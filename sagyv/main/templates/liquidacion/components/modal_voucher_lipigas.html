@@ -17,27 +17,29 @@
 
                 <div class="form-group">
                     <label for="terminal_lipigas" class="control-label">Terminal</label>
-                    <input id="terminal_lipigas" class="form-control" type="text" value="" />
-                    <span class="help-block"></span>
-                </div>
-
-                <div class="form-group">
-                    <label for="descuentos_lipigas" class="control-label">Descuentos</label>
-                    <input id="descuentos_lipigas" class="form-control" type="text" value="" />
-                    <span class="help-block"></span>
-                </div>
-
-                <div class="form-group">
-                    <label for="tarjeta_comercial_lipigas" class="control-label">Tarjeta Comercial</label>
-                    <select id="tarjeta_comercial_lipigas" class="form-control">
-                        {% for tarjeta_comercial in tarjetas_comerciales %}
-                        <option value="{{ tarjeta_comercial.id }}">{{ tarjeta_comercial.nombre }}</option>
-                        {% endfor %}
+                    <select id="" class="form-control">
                     </select>
+                    <span class="help-block"></span>
+                </div>
 
-                    <label for="monto_lipigas" class="control-label">Monto</label>
-                    <input id="monto_lipigas" class="form-control" type="text" value="" />
-                    <button class="btn btn-default">+</button>
+                <div class="form-group">
+                    <div class="col-xs-6">
+                        <label for="tarjeta_comercial_lipigas" class="control-label">Tarjeta Comercial</label>
+                        <select id="tarjeta_comercial_lipigas" class="form-control">
+                            {% for tarjeta_comercial in tarjetas_comerciales %}
+                            <option value="{{ tarjeta_comercial.id }}">{{ tarjeta_comercial.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-xs-4">
+                        <label for="monto_lipigas" class="control-label">Monto</label>
+                        <input id="monto_lipigas" class="form-control" type="text" value="" />
+                    </div>
+
+                    <div class="col-xs-2 col-ajustada">
+                        <button class="btn btn-default">+</button>
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -52,6 +54,17 @@
                         <tbody>
                         </tbody>
                     </table>
+                </div>
+
+                <div class="form-group">
+                    <label for="descuentos_lipigas" class="control-label">Descuentos</label>
+                    <input id="descuentos_lipigas" class="form-control" type="text" value="" />
+                    <span class="help-block"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="" class="control-label">Total</label>
+                    <span class="form-control-static"></span>
                 </div>
             </div>
 

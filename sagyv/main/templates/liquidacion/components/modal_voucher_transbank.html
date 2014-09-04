@@ -5,40 +5,31 @@
                 <button type="button" class="close" data-dismiss="modal">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4>Vouchers de Lipigas</h4>
+                <h4>Vouchers de Transbank</h4>
             </div>
 
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="numero_cierre_transbank" class="control-label">Numero Cierre</label>
-                    <input id="numero_cierre_transbank" class="form-control" type="text" value="" />
-                    <span class="help-block"></span>
-                </div>
+                    <div class="col-xs-4">
+                        <label for="tarjeta_comercial_transbank" class="control-label">Tipo de tarjeta</label>
+                        <select id="tarjeta_comercial_transbank" class="form-control">
+                            {% for tarjeta_bancaria in tarjetas_bancarias %}
+                            <option value="{{ tarjeta_bancaria.id }}">{{ tarjeta_bancaria.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
 
-                <div class="form-group">
-                    <label for="terminal_transbank" class="control-label">Terminal</label>
-                    <input id="terminal_transbank" class="form-control" type="text" value="" />
-                    <span class="help-block"></span>
-                </div>
-
-                <div class="form-group">
-                    <label for="descuentos_transbank" class="control-label">Descuentos</label>
-                    <input id="descuentos_transbank" class="form-control" type="text" value="" />
-                </div>
-
-                <div class="form-group">
-                    <label for="tarjeta_comercial_transbank" class="control-label">Tipo de tarjeta</label>
-                    <select id="tarjeta_comercial_transbank" class="form-control">
-                        {% for tarjeta_bancaria in tarjetas_bancarias %}
-                        <option value="{{ tarjeta_bancaria.id }}">{{ tarjeta_bancaria.nombre }}</option>
-                        {% endfor %}
-                    </select>
-
-                    <label for="monto_transbank" class="control-label">Monto</label>
-                    <input id="monto_transbank" class="form-control" type="text" value="" />
-                    <label for="cuotas_transbank" class="control-label">Cuotas</label>
-                    <input id="cuotas_transbank" class="form-control" type="text" value="" />
-                    <button class="btn btn-default">+</button>
+                    <div class="col-xs-4">
+                        <label for="monto_transbank" class="control-label">Monto</label>
+                        <input id="monto_transbank" class="form-control" type="text" value="" />
+                    </div>
+                    <div class="col-xs-3">
+                        <label for="cuotas_transbank" class="control-label">Cuotas</label>
+                        <input id="cuotas_transbank" class="form-control" type="text" value="" />
+                    </div>
+                    <div class="col-xs-1 col-ajustada">
+                        <button class="btn btn-default">+</button>
+                    </div>
                 </div>
 
                 <div class="form-group">
