@@ -81,8 +81,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
-STATIC_ROOT = "/home/rlay/webapps/sagyv_assets/"
-MEDIA_ROOT = "/home/rlay/webapps/sagyv_assets/"
+STATIC_ROOT = "/home/rlay/webapps/sagyv_assets_static/"
+MEDIA_ROOT = "/home/rlay/webapps/sagyv_assets_media/"
 
 CSRF_COOKIE_NAME = "andreacsrftoken"
 
