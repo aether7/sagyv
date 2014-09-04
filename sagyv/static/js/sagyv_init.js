@@ -87,11 +87,11 @@ context.type = type;
 //se agregan metodos nuevos a string
 (function(){
 
-String.prototype.trim = function(){
-    return this.replace(/^\s+|\s+$/gi, "");
+Function.prototype.method = function(method, func){
+    this.prototype[method] = func;
 };
 
-String.prototype.format = function(){
+String.method('format', function(){
     var args = Array.prototype.slice.apply(arguments),
         s = this,
         i = 0;
@@ -101,9 +101,9 @@ String.prototype.format = function(){
     }
 
     return s;
-};
+});
 
-Function.prototype.mixin = function(klass, newProperties){
+Function.method('mixin', function(klass, newProperties){
     var args, proto;
 
     args = [].slice.call(arguments);
@@ -131,13 +131,12 @@ Function.prototype.mixin = function(klass, newProperties){
 
     proto.constructor = this;
     this.prototype = proto;
-};
+});
 
 })();
 
-(function(){
-    var context = (function(){ return this; }).call(),
-        channels = {};
+(function(context){
+    var channels = {};
 
     function publish(channel, args){
         var _this = this;
@@ -179,7 +178,8 @@ Function.prototype.mixin = function(klass, newProperties){
         suscribe : suscribe,
         unsuscribe : unsuscribe
     };
-})();
+
+})(window);
 
 App.getAjaxConfig = function(){
     var config =  {

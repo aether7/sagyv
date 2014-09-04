@@ -11,7 +11,7 @@ App.Views.Cliente = function(){
     this.situacionComercial = null;
     this.credito = null;
     this.dispensador = null;
-    this.es_lipigas = null;
+    this.esLipigas = null;
     this.observacion = null;
     this.cantidad = null;
     this.tipo = null;
@@ -152,11 +152,13 @@ App.Views.Cliente.prototype = {
         this.situacionComercial = $("#sit_comercial_add");
         this.credito = $("#credito_add");
         this.dispensador = $("#dispensador_add");
-        this.es_lipigas = $("#es_lipigas_add");
+        this.esLipigas = $("#es_lipigas_add");
+        this.esPropio = $("#es_propio_add");
         this.observacion = $("#obs_add");
         this.cantidad = $("#numero_add");
         this.tipo = $("#tipo_add");
         this.producto = $("#sel_producto_add");
+        this.esPropio = $("#es_propio_add");
 
         this.controller.guardarAdd({
             nombre : this.nombre.val(),
@@ -166,7 +168,8 @@ App.Views.Cliente.prototype = {
             rut : this.rut.val(),
             situacionComercial : this.situacionComercial.val(),
             credito : this.credito.is(":checked"),
-            es_lipigas : this.es_lipigas.is(":checked"),
+            es_lipigas : this.esLipigas.is(":checked"),
+            es_propio: this.esPropio.is(':checked'),
             dispensador : this.dispensador.is(":checked"),
             observacion : this.observacion.val(),
             cantidad : this.cantidad.val(),
@@ -186,7 +189,8 @@ App.Views.Cliente.prototype = {
         this.rut = $("#rut_update");
         this.situacionComercial = $("#sit_comercial_update");
         this.credito = $("#credito_update");
-        this.es_lipigas = $("#es_lipigas_update");
+        this.esLipigas = $("#es_lipigas_update");
+        this.esPropio = $("#es_propio_update");
         this.dispensador = $("#dispensador_update");
         this.observacion = $("#obs_update");
         this.cantidad = $("#numero_update");
@@ -202,7 +206,8 @@ App.Views.Cliente.prototype = {
             situacionComercial : this.situacionComercial.val(),
             credito : this.credito.is(":checked"),
             dispensador : this.dispensador.is(":checked"),
-            es_lipigas : this.es_lipigas.is(":checked"),
+            es_lipigas : this.esLipigas.is(":checked"),
+            es_propio: this.esPropio.is(':checked'),
             observacion : this.observacion.val(),
             cantidad : this.cantidad.val(),
             tipo : this.tipo.val(),
@@ -293,7 +298,7 @@ App.Views.Cliente.prototype = {
             situacionComercial : this.situacionComercial,
             credito : this.credito,
             dispensador : this.dispensador,
-            es_lipigas : this.es_lipigas,
+            es_lipigas : this.esLipigas,
             observacion : this.observacion,
             cantidad : this.cantidad,
             tipo : this.tipo,
