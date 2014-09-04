@@ -17,12 +17,12 @@
 
                 <td data-ng-bind="producto.codigo"></td>
                 <td data-ng-bind="producto.cantidad"></td>
-                <td data-ng-bind="producto.llenos"></td>
                 <td>
                     <input type="text" value=""
-                        data-ng-model="producto.vacios"
-                        data-ng-keyup="productoCtrl.calcularRestante(producto)" />
+                        data-ng-model="producto.llenos"
+                        data-ng-keyup="productoCtrl.calcularRestante(producto)">
                 </td>
+                <td data-ng-bind="producto.vacios"></td>
                 <td data-ng-bind-template="{{ producto.precio | currency }}"></td>
                 <td style="text-align:right" data-ng-bind-template="{{ producto.valorTotal | currency }}"></td>
             </tr>

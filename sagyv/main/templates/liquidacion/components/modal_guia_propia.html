@@ -1,4 +1,4 @@
-<div id="modal_guia_propia" class="modal fade" data-ng-controller="ClienteController as cliente">
+<div id="modal_guia_propia" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -12,7 +12,8 @@
                 <div class="form-group">
                     <label for="cliente_guia_propia" class="control-label">Cliente</label>
                     <select id="cliente_guia_propia" class="form-control"
-                        data-ng-model="cliente.idCliente" data-ng-change="cliente.buscarCliente()">
+                        data-ng-model="cliente.idCliente"
+                        data-ng-change="cliente.buscarCliente()">
                         {% for cliente in clientes %}
                         <option value="{{ cliente.id }}">{{ cliente.giro }}</option>
                         {% endfor %}

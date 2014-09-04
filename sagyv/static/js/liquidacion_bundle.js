@@ -16,6 +16,11 @@ function ClienteController($http){
 ClienteController.prototype = {
     constructor: ClienteController,
 
+    resetearCliente: function(){
+        this.idCliente = null;
+        this.descripcionDescuento = "nada";
+    },
+
     buscarCliente: function(){
         var url = App.urls.get("liquidacion:buscar_cliente");
         url += "?id_cliente=" + this.idCliente;
@@ -38,8 +43,6 @@ app.controller("ClienteController", ["$http", ClienteController]);
 
 })();
 
-(function(){
-    $("button[data-accion=abre_modal]").on("click", function(evt){
-        common.mostrarModal($(this).data("modal"));
-    });
-})();
+$("button[data-accion=abre_modal]").on("click", function(evt){
+    $("#modal_" + $(this).data("modal")).modal("show");
+});

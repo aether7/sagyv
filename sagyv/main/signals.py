@@ -21,7 +21,7 @@ def obtener_create_update(kwargs):
 
     return texto
 
-def save(texto, instance, fue_creado):
+def save(texto, instance, tipo_accion):
     user = get_request().user
     texto += instance.__class__.__name__ + " por el usuario " + user.username
 
@@ -42,11 +42,11 @@ def save_situacion_comercial(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=Cliente, dispatch_uid="save:cliente")
-def save_cliente(sender, **kwargs):
+def save_cliente(sender, instance, **kwargs):
     tipo_accion = kwargs["created"] and LogSistema.CREAR or LogSistema.ACTUALIZAR
     texto = obtener_create_update(kwargs)
     save(texto, instance, tipo_accion)
 
 @receiver(post_delete, sender=Cliente, dispatch_uid="delete:cliente")
-def delete_cliente(sender, **kwargs):
+def delete_cliente(sender, instance, **kwargs):
     save(DELETE_REGISTRO, instance, LogSistema.BORRAR)

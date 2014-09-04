@@ -1,5 +1,5 @@
 {% extends "panel_control.html" %}
-{% load staticfiles %}
+{% load static from staticfiles %}
 
 {% block content %}
     <section id="liquidacion" class="panel-liquidacion"
@@ -18,39 +18,45 @@
         {% include "liquidacion/panel_cabecera.html" %}
         {% include "liquidacion/panel_detalle.html" %}
 
-        <div class="center">
-            <button type="button" class="btn btn-default" data-accion="abre_modal"
-                data-modal="guia_propia">Guia propia</button>
+        <div data-ng-controller="ClienteController as cliente">
+            <button type="button" class="btn btn-default"
+                data-accion="abre_modal"
+                data-modal="guia_propia"
+                data-ng-click="cliente.resetearCliente()">Guia propia</button>
 
-            <button type="button" class="btn btn-default" data-accion="abre_modal"
+            <button type="button" class="btn btn-default"
+                data-accion="abre_modal"
                 data-modal="guia_lipigas">Guia Lipigas</button>
 
-            <button type="button" class="btn btn-default" data-accion="abre_modal"
+            <button type="button" class="btn btn-default"
+                data-accion="abre_modal"
                 data-modal="voucher_lipigas">Voucher Lipigas</button>
 
-            <button type="button" class="btn btn-default" data-accion="abre_modal"
+            <button type="button" class="btn btn-default"
+                data-accion="abre_modal"
                 data-modal="voucher_transbank">Voucher Transbank</button>
 
-            <button type="button" class="btn btn-default" data-accion="abre_modal"
+            <button type="button" class="btn btn-default"
+                data-accion="abre_modal"
                 data-modal="cupones_prepago">Cupones de prepago</button>
 
-            <button type="button" class="btn btn-default" data-accion="abre_modal"
+            <button type="button" class="btn btn-default"
+                data-accion="abre_modal"
                 data-modal="otros">Otros</button>
+
+            {% include "liquidacion/components/modal_guia_propia.html" %}
+            {% include "liquidacion/components/modal_guia_lipigas.html" %}
+            {% include "liquidacion/components/modal_voucher_lipigas.html" %}
+            {% include "liquidacion/components/modal_voucher_transbank.html" %}
+            {% include "liquidacion/components/modal_cupones_prepago.html" %}
+            {% include "liquidacion/components/modal_otros.html" %}
+
         </div>
 
-        <button class="btn btn-default" data-accion="abre_modal" data-modal="abono">ABONO</button>
         <button class="btn btn-default" data-accion="abre_modal" data-modal="cheques">CHEQUES</button>
-
         <button class="btn btn-primary" data-modal="">Guardar</button>
         <button class="btn btn-default" data-modal="">VENTA GARANTIAS</button>
         <button class="btn btn-primary" data-modal="">CERRAR LIQUIDACIÓN</button>
-
-        {% include "liquidacion/components/modal_guia_propia.html" %}
-        {% include "liquidacion/components/modal_guia_lipigas.html" %}
-        {% include "liquidacion/components/modal_voucher_lipigas.html" %}
-        {% include "liquidacion/components/modal_voucher_transbank.html" %}
-        {% include "liquidacion/components/modal_cupones_prepago.html" %}
-        {% include "liquidacion/components/modal_otros.html" %}
 
         (Cerrada la liquidación, se puede mostrar la información resumen y exportar info a EXCEL).
     </section>

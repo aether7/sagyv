@@ -94,17 +94,17 @@ ProductoController.prototype = {
     },
 
     calcularRestante: function(producto){
-        var aux = parseInt(producto.cantidad) - parseInt(producto.vacios);
+        var aux = parseInt(producto.cantidad) - parseInt(producto.llenos);
 
         if(isNaN(aux) || aux < 0){
             aux = 0;
         }
 
-        if(producto.cantidad < parseInt(producto.vacios)){
-            producto.vacios = producto.cantidad;
+        if(producto.cantidad < parseInt(producto.llenos)){
+            producto.llenos = producto.cantidad;
         }
 
-        producto.llenos = aux;
+        producto.vacios = aux;
         this.calculaValorTotal(producto);
         this.scope.$emit("guia:calcularSubTotal");
     }
@@ -131,6 +131,11 @@ function ClienteController($http){
 ClienteController.prototype = {
     constructor: ClienteController,
 
+    resetearCliente: function(){
+        this.idCliente = null;
+        this.descripcionDescuento = "nada";
+    },
+
     buscarCliente: function(){
         var url = App.urls.get("liquidacion:buscar_cliente");
         url += "?id_cliente=" + this.idCliente;
@@ -153,10 +158,8 @@ app.controller("ClienteController", ["$http", ClienteController]);
 
 })();
 
-(function(){
-    $("button[data-accion=abre_modal]").on("click", function(evt){
-        common.mostrarModal($(this).data("modal"));
-    });
-})();
+$("button[data-accion=abre_modal]").on("click", function(evt){
+    $("#modal_" + $(this).data("modal")).modal("show");
+});
 
 },{"./controllers/liquidacion_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion_controller.js","./controllers/producto_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/producto_controller.js"}]},{},["/Users/Aether/Proyectos/sagyv/sagyv/static/js/liquidacion_bundle.js"]);

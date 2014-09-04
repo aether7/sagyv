@@ -117,10 +117,7 @@ App.Models.Cliente.prototype = {
             dispensador : this.dispensador,
             id_cliente : this.idCliente,
             es_lipigas : this.es_lipigas,
-            obs : this.observacion,
-            cantidad : this.cantidad.replace(/[\.,]/g, ""),
-            tipo : this.tipo,
-            producto : this.producto
+            obs : this.observacion
         };
 
         if(this.idCliente){
