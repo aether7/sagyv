@@ -21,12 +21,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = '*k#9n$x8&_5s)p=p*rd2e5o*dv*3qp=nfq&5jilgq%w9otww)o'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
-ALLOWED_HOSTS = ["*"]
-
+ALLOWED_HOSTS = [".rlay.cl"]
 
 # Application definition
 
@@ -38,7 +36,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "main",
-    "south",
+    'south',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -83,11 +81,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
-STATIC_URL = '/static/'
-MEDIA_URL = "/media/"
-
-STATIC_ROOT = "/home/rlay/webapps/andrea_static/"
-MEDIA_ROOT = "/home/rlay/webapps/andrea_media/"
+STATIC_ROOT = "/home/rlay/webapps/sagyv_assets/"
+MEDIA_ROOT = "/home/rlay/webapps/sagyv_assets/"
 
 CSRF_COOKIE_NAME = "andreacsrftoken"
 
