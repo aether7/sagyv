@@ -309,9 +309,9 @@ class TipoCambioStock(models.Model):
 class GuiaDespacho(models.Model):
     numero = models.IntegerField(null = True)
     vehiculo = models.ForeignKey(Vehiculo, null=True)
-    factura = models.IntegerField(null=True)
     fecha = models.DateTimeField(auto_now_add=True)
-    tipo_guia = models.NullBooleanField()
+    valor_total = models.IntegerField(default=0)
+    estado = models.NullBooleanField()
 
     objects = GuiaDespachoManager()
 
@@ -319,13 +319,31 @@ class GuiaDespacho(models.Model):
         return str(self.numero)
 
 
+class AbonoGuia(models.Model):
+    guia_despacho = models.ForeignKey(GuiaDespacho)
+    monto = models.IntegerField()
+    fecha = models.DateField(auto_now_add=True)
+
+    def __unicode__(self):
+        return str(self.guia_despacho.numero)
+
+
+class Factura(models.Model):
+    numero_factura = models.IntegerField()
+    fecha = models.DateTimeField(auto_now_add=True)
+    precio = models.IntegerField()
+
+    def __unicode__(self):
+        return str(self.numero_factura)
+
+
 class HistorialStock(models.Model):
+    guia_despacho = models.ForeignKey(GuiaDespacho, null=True)
+    factura = models.ForeignKey(Factura, null=True)
     producto = models.ForeignKey(Producto)
     cantidad = models.IntegerField()
     fecha = models.DateField(auto_now_add = True)
-    tipo_operacion = models.NullBooleanField()
-    guia_despacho = models.ForeignKey(GuiaDespacho)
-    es_recarga = models.NullBooleanField()
+    es_recarga = models.BooleanField()
 
     def __unicode__(self):
         return ""
