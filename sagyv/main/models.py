@@ -409,6 +409,7 @@ class Cliente(models.Model):
     credito = models.NullBooleanField()
     dispensador = models.NullBooleanField()
     es_lipigas = models.NullBooleanField()
+    es_propio = models.NullBooleanField()
     observacion = models.CharField(max_length=500, null=True)
 
     objects = ClienteManager()

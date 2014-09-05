@@ -50,6 +50,7 @@ class ObtenerCliente(View):
             'credito' : cliente.credito,
             'dispensador' : cliente.dispensador,
             'es_lipigas' : cliente.es_lipigas,
+            'es_propio' : cliente.es_propio,
             'obs' : cliente.observacion
         }
 
@@ -122,6 +123,7 @@ class CrearCliente(CrearEditarCliente):
         credito = self.request.POST.get('credito')
         dispensador = self.request.POST.get("dispensador")
         es_lipigas = self.request.POST.get('es_lipigas')
+        es_propio = self.request.POST.get('es_propio')
         obs = self.request.POST.get('obs')
 
         cliente = Cliente()
@@ -133,9 +135,10 @@ class CrearCliente(CrearEditarCliente):
         cliente.situacion_comercial = situacion_comercial
         cliente.observacion = obs
 
-        cliente.es_lipigas = (es_lipigas != "false") and True or False
-        cliente.credito = (credito != "false") and True or False
-        cliente.dispensador = (dispensador != "false") and True or False
+        cliente.es_lipigas = (es_lipigas != 'false') and True or False
+        cliente.credito = (credito != 'false') and True or False
+        cliente.dispensador = (dispensador != 'false') and True or False
+        cliente.es_propio = (es_propio != 'false') and True or False
 
         cliente.save()
 
@@ -171,6 +174,7 @@ class ModificarCliente(CrearEditarCliente):
         credito = self.request.POST.get('credito')
         dispensador = self.request.POST.get('dispensador')
         es_lipigas = self.request.POST.get('es_lipigas')
+        es_propio = self.request.POST.GET('es_propio')
         obs = self.request.POST.get('obs')
 
         cliente = Cliente.objects.get(pk = id_cliente)
@@ -184,6 +188,8 @@ class ModificarCliente(CrearEditarCliente):
         cliente.es_lipigas = (es_lipigas != "false") and True or False
         cliente.credito = (credito != "false") and True or False
         cliente.dispensador = (dispensador != "false") and True or False
+        cliente.es_propio = (es_propio != 'false') and True or False
+
         cliente.save()
 
         return cliente

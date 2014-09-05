@@ -264,6 +264,10 @@ App.Views.Cliente.prototype = {
             $("#es_lipigas_update").get(0).checked = true;
         }
 
+        if(data.es_propio){
+            $("#es_propio_update").get(0).checked = true;
+        }
+
     },
 
     eliminarCliente: function(){
@@ -302,7 +306,8 @@ App.Views.Cliente.prototype = {
             observacion : this.observacion,
             cantidad : this.cantidad,
             tipo : this.tipo,
-            producto : this.producto
+            producto : this.producto,
+            es_propio: this.esPropio
         };
     }
 };
