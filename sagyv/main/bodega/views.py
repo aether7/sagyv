@@ -312,18 +312,13 @@ class RecargaGuia(View):
 class ObtenerIdGuia(View):
 
     def get(self, req):
-        try:
-            guia = GuiaDespacho.objects.get_ultimo_despacho_id()
+        guia = GuiaDespacho.objects.get_ultimo_despacho_id()
+        numero = not(guia is None) and guia.numero or 0
 
-            result = {
-                "status" : "ok",
-                "next" : int(guia.numero) + 1
-            }
-        except GuiaDespacho, e:
-            result = {
-                "status" : "ok",
-                "next" : 1
-            }
+        result = {
+            "status" : "ok",
+            "next" : int(numero) + 1
+        }
 
         return HttpResponse(json.dumps(result), content_type="application/json")
 
