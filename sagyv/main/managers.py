@@ -110,4 +110,4 @@ class TarjetaCreditoManager(models.Manager):
 
 class GuiaDespachoManager(models.Manager):
     def get_ultimo_despacho_id(self):
-        return self.exclude(numero = None).latest('id')
+        return self.latest('id')

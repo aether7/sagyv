@@ -7,7 +7,7 @@ from django.http import HttpResponse
 from main.helpers.fecha import convierte_texto_fecha, convierte_fecha_texto
 from main.models import Producto, TipoCambioStock, HistorialStock
 from main.models import PrecioProducto, StockVehiculo, Vehiculo
-from main.models import GuiaDespacho
+from main.models import GuiaDespacho, Factura
 from django.views.decorators.csrf import csrf_exempt
 
 class IndexView(TemplateView):
@@ -37,7 +37,7 @@ class IndexView(TemplateView):
         return total
 
     def get_guias(self):
-        guias = GuiaDespacho.objects.filter(tipo_guia = 0)
+        guias = GuiaDespacho.objects.all()
         return guias
 
 class GuardarFactura(View):
@@ -48,26 +48,38 @@ class GuardarFactura(View):
 
         factura = req.POST.get('factura')
         fecha = req.POST.get('fecha')
+        precio = req.POST.get('valor')
         productos = req.POST.get('productos')
         garantias = req.POST.get('garantias')
 
-        nueva_factura = GuiaDespacho()
-        nueva_factura.factura = int(factura)
-        nueva_factura.tipo_guia = True
+        nueva_factura = Factura()
+        nueva_factura.numero_factura = int(factura)
+        nueva_factura.fecha = convierte_texto_fecha(fecha)
+        nueva_factura.precio = int(precio)
         nueva_factura.save()
 
-        lista_producto = json.loads(productos)
-        lista_garantias = json.loads(garantias)
-        self.ingreso_productos(nueva_factura, lista_producto)
-        self.salida_garantias(nueva_factura, lista_garantias)
+
+        #nueva_factura = GuiaDespacho()
+        #nueva_factura.factura = int(factura)
+        #nueva_factura.tipo_guia = True
+        #nueva_factura.save()
+
+        #lista_producto = json.loads(productos)
+        #lista_garantias = json.loads(garantias)
+        #self.ingreso_productos(nueva_factura, lista_producto)
+        #self.salida_garantias(nueva_factura, lista_garantias)
+
+        #data = {
+        #    "status" : "ok",
+        #    "guia" : {
+        #        "id" : nueva_factura.id,
+        #        "fecha" : convierte_fecha_texto(nueva_factura.fecha),
+        #        "productos" : self.productosActualizados,
+        #    }
+        #}
 
         data = {
-            "status" : "ok",
-            "guia" : {
-                "id" : nueva_factura.id,
-                "fecha" : convierte_fecha_texto(nueva_factura.fecha),
-                "productos" : self.productosActualizados,
-            }
+            "status" : "dummy"
         }
 
         return HttpResponse(json.dumps(data), content_type="application/json")
