@@ -54,32 +54,22 @@ class GuardarFactura(View):
 
         nueva_factura = Factura()
         nueva_factura.numero_factura = int(factura)
-        nueva_factura.fecha = convierte_texto_fecha(fecha)
-        nueva_factura.precio = int(precio)
+        #nueva_factura.fecha = convierte_fecha_texto(fecha)
+        nueva_factura.precio = precio
         nueva_factura.save()
 
-
-        #nueva_factura = GuiaDespacho()
-        #nueva_factura.factura = int(factura)
-        #nueva_factura.tipo_guia = True
-        #nueva_factura.save()
-
-        #lista_producto = json.loads(productos)
-        #lista_garantias = json.loads(garantias)
-        #self.ingreso_productos(nueva_factura, lista_producto)
-        #self.salida_garantias(nueva_factura, lista_garantias)
-
-        #data = {
-        #    "status" : "ok",
-        #    "guia" : {
-        #        "id" : nueva_factura.id,
-        #        "fecha" : convierte_fecha_texto(nueva_factura.fecha),
-        #        "productos" : self.productosActualizados,
-        #    }
-        #}
+        lista_producto = json.loads(productos)
+        lista_garantias = json.loads(garantias)
+        self.ingreso_productos(nueva_factura, lista_producto)
+        self.salida_garantias(nueva_factura, lista_garantias)
 
         data = {
-            "status" : "dummy"
+            "status" : "ok",
+            "guia" : {
+                "id" : nueva_factura.id,
+                "fecha" : convierte_fecha_texto(nueva_factura.fecha),
+                "productos" : self.productosActualizados,
+            }
         }
 
         return HttpResponse(json.dumps(data), content_type="application/json")
@@ -121,10 +111,10 @@ class GuardarFactura(View):
 
     def crear_historico(self, producto, cantidad, guia, tipo_operacion):
         historico = HistorialStock()
+        historico.guia_despacho = None
+        historico.factura = guia
         historico.producto = producto
         historico.cantidad = cantidad
-        historico.tipo_operacion = tipo_operacion
-        historico.guia_despacho = guia
         historico.es_recarga = False
         historico.save()
 
