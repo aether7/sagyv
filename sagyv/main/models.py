@@ -343,7 +343,7 @@ class HistorialStock(models.Model):
     producto = models.ForeignKey(Producto)
     cantidad = models.IntegerField()
     fecha = models.DateField(auto_now_add = True)
-    es_recarga = models.BooleanField()
+    es_recarga = models.NullBooleanField()
 
     def __unicode__(self):
         return ""
