@@ -114,3 +114,8 @@ class GuiaDespachoManager(models.Manager):
             return self.exclude(numero = None).latest('id')
         else:
             return None
+
+
+class VehiculoManager(models.Manager):
+    def get_vehiculos_con_chofer(self):
+        return self.filter(trabajadorvehiculo__activo = 1)

@@ -4,7 +4,7 @@ import json
 from django.db import models
 from django.contrib.auth.models import User
 from main.managers import StockManager, ClienteManager, TarjetaCreditoManager
-from main.managers import GuiaDespachoManager
+from main.managers import GuiaDespachoManager, VehiculoManager
 
 """
 Como nota adicional: Todos los ingresos que sean representados como booleanos
@@ -54,6 +54,8 @@ class Vehiculo(models.Model):
     km = models.IntegerField()
     estado_sec = models.NullBooleanField()
     estado_pago = models.NullBooleanField()
+
+    objects = VehiculoManager()
 
     def get_nombre_ultimo_chofer(self):
         trabajador_vehiculo = TrabajadorVehiculo.objects.filter(vehiculo_id = self.id, activo = True)

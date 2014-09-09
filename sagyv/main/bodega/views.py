@@ -19,7 +19,7 @@ class IndexView(TemplateView):
         context["productos_guia"] = Producto.objects.exclude(tipo_producto_id = 3).order_by("id")
         context["productos_transito"] = self.get_productos_transito()
         context["total_stock"] = self.get_stock_total()
-        context["vehiculos"] = Vehiculo.objects.all().order_by("id")
+        context["vehiculos"] = Vehiculo.objects.get_vehiculos_con_chofer()
         context["guias"] = self.get_guias()
 
         return context
