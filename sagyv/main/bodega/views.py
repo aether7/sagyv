@@ -127,7 +127,6 @@ class CrearGuiaDespachoView(View):
 
         self.numero_guia = req.POST.get("numero")
         self.id_vehiculo = req.POST.get("vehiculo")
-        self.factura = req.POST.get("factura")
         self.fecha_creacion = req.POST.get("fecha")
         lista_producto = req.POST.get("productos")
 
@@ -151,18 +150,13 @@ class CrearGuiaDespachoView(View):
         return HttpResponse(json.dumps(data), content_type="application/json")
 
     def crear_guia_despacho(self):
+        movil = Vehiculo.objects.get(pk = self.id_vehiculo)
+
         guia_despacho = GuiaDespacho()
-
-        if self.id_vehiculo != None:
-            guia_despacho.numero = self.numero_guia
-            movil = Vehiculo.objects.get(pk = self.id_vehiculo)
-            guia_despacho.tipo_guia = False
-            guia_despacho.vehiculo = movil
-
-        elif self.factura != None:
-            guia_despacho.factura = self.factura
-            guia_despacho.tipo_guia = True
-
+        guia_despacho.numero = self.numero_guia
+        guia_despacho.vehiculo = movil
+        guia_despacho.valor_total = 0
+        guia_despacho.estado = False
         guia_despacho.save()
 
         return guia_despacho
@@ -181,15 +175,15 @@ class CrearGuiaDespachoView(View):
             }
 
             self.productosActualizados.append(this_prod)
-            self.crear_historico(producto, cantidad, guia, False)
+            self.crear_historico(producto, cantidad, guia)
             self.modificar_stock_vehiculo(guia.vehiculo, producto, cantidad)
 
-    def crear_historico(self, producto, cantidad, guia, tipo_operacion):
+    def crear_historico(self, producto, cantidad, guia):
         historico = HistorialStock()
+        historico.guia_despacho = guia
+        historico.factura = None
         historico.producto = producto
         historico.cantidad = cantidad
-        historico.tipo_operacion = tipo_operacion
-        historico.guia_despacho = guia
         historico.es_recarga = False
         historico.save()
 
