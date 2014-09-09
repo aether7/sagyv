@@ -7,7 +7,7 @@ from django.http import HttpResponse
 from main.helpers.fecha import convierte_texto_fecha, convierte_fecha_texto
 from main.models import Producto, TipoCambioStock, HistorialStock
 from main.models import PrecioProducto, StockVehiculo, Vehiculo
-from main.models import GuiaDespacho
+from main.models import GuiaDespacho, Factura
 from django.views.decorators.csrf import csrf_exempt
 
 class IndexView(TemplateView):
@@ -37,7 +37,7 @@ class IndexView(TemplateView):
         return total
 
     def get_guias(self):
-        guias = GuiaDespacho.objects.filter(tipo_guia = 0)
+        guias = GuiaDespacho.objects.all()
         return guias
 
 class GuardarFactura(View):
@@ -48,12 +48,14 @@ class GuardarFactura(View):
 
         factura = req.POST.get('factura')
         fecha = req.POST.get('fecha')
+        precio = req.POST.get('valor')
         productos = req.POST.get('productos')
         garantias = req.POST.get('garantias')
 
-        nueva_factura = GuiaDespacho()
-        nueva_factura.factura = int(factura)
-        nueva_factura.tipo_guia = True
+        nueva_factura = Factura()
+        nueva_factura.numero_factura = int(factura)
+        #nueva_factura.fecha = convierte_fecha_texto(fecha)
+        nueva_factura.precio = precio
         nueva_factura.save()
 
         lista_producto = json.loads(productos)
@@ -109,10 +111,10 @@ class GuardarFactura(View):
 
     def crear_historico(self, producto, cantidad, guia, tipo_operacion):
         historico = HistorialStock()
+        historico.guia_despacho = None
+        historico.factura = guia
         historico.producto = producto
         historico.cantidad = cantidad
-        historico.tipo_operacion = tipo_operacion
-        historico.guia_despacho = guia
         historico.es_recarga = False
         historico.save()
 
