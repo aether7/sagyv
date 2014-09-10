@@ -576,3 +576,14 @@ class LogSistema(models.Model):
     user = models.ForeignKey(User)
     tabla = models.CharField(max_length = 140)
     registro_id = models.IntegerField()
+
+
+class BoletaTrabajador(models.Model):
+    boleta_inicial = models.IntegerField()
+    boleta_final = models.IntegerField()
+    trabajador = models.ForeignKey(Trabajador)
+    fecha_creacion = models.DateTimeField(auto_now_add = True)
+    fecha_modificacion = models.DateTimeField(auto_now = True)
+    activo = models.NullBooleanField()
+
+

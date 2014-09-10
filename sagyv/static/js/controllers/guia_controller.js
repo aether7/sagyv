@@ -58,8 +58,9 @@ GuiaController.prototype = {
             valido = this.recarga.esValida(),
             _this = this;
 
-        if(!valido)
+        if(!valido){
             return;
+        }
 
         action = App.urls.get("bodega:recargar_guia");
         json = this.recarga.getJSON();

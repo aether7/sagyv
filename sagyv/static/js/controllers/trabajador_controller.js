@@ -129,6 +129,10 @@ TrabajadorController.prototype = {
         this.trabajador.sistemaSalud = data.sistema_salud[campo];
         this.trabajador.estadoCivil = data.estado_civil[campo];
         this.trabajador.estadoVacacion = data.estado_vacacion[campo];
+    },
+
+    anexarBoleta: function(){
+        $('#modal_anexar_boleta').modal('show');
     }
 };
 

@@ -39,6 +39,10 @@
                     data-accion="eliminar" data-id="{{ trabajador.id }}"
                     data-ng-click="tc.eliminarTrabajador({{ trabajador.id }})"></a>
 
+                <a href
+                    data-accion="anexar_boleta" data-id="{{ trabajador.id }}"
+                    data-ng-click="tc.anexarBoleta({{ trabajador.id }})">Anexar boleta</a>
+
                 <a href data-accion="anexar" data-id="{{ trabajador.id }}">Anexar carga</a>
             </td>
         </tr>
@@ -49,6 +53,7 @@
 {% include "trabajador/components/modal_nuevo_trabajador.html" %}
 {% include "trabajador/components/modal_ver_trabajador.html" %}
 {% include "trabajador/components/modal_editar_trabajador.html" %}
+{% include "trabajador/components/modal_anexar_boleta.html" %}
 
 </section>
 

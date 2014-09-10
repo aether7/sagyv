@@ -14,6 +14,10 @@
         <a href class="icon-remove" data-accion="eliminar" data-id="{{ id }}"
             data-ng-click="tc.eliminarTrabajador({{ id }})"></a>
 
+        <a href
+            data-accion="anexar_boleta" data-id="{{ id }}"
+            data-ng-click="tc.anexarBoleta({{ id }})">Anexar boleta</a>
+
         <a href data-accion="anexar" data-id="{{ id }}">Anexar carga</a>
     </td>
 </tr>
