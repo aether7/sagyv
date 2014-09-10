@@ -26,6 +26,15 @@
                         data-ng-bind="guia.recarga.fecha"></span>
                 </div>
 
+                <div class="form-group">
+                    <label for="monto" class="control-label">Monto</label>
+                    <input id="monto" class="form-control" type="text" value=""
+                        data-ng-model="guia.recarga.monto"/>
+                    <span class="text-danger"
+                        data-ng-bind="guia.recarga.mensajes.monto"
+                        data-ng-show="guia.recarga.mensajes.monto" ></span>
+                </div>
+
                 <table id="despacho" class="table table-striped">
                     <thead>
                         <tr>

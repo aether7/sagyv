@@ -5,6 +5,7 @@ App.Models.Recarga = function(){
     this.fecha = new Date().toLocaleString();
     this.productos = [];
     this.productos_recarga = [];
+    this.monto = null;
     this.observaciones = null;
 
     this.mensajes = {};
@@ -38,6 +39,24 @@ App.Models.Recarga.prototype = {
         return valido;
     },
 
+    esMontoValido: function(){
+        var valido = true;
+        if(this.monto){
+
+            if(isNaN(this.monto)){
+                valido = false;
+                this.mensajes.monto = "el valor debe ser numérico";
+            }else if(parseInt(this.monto) < 0){
+                valido = false;
+                this.mensajes.monto = "el valor debe ser positivo";
+            }
+        }
+
+        console.log(valido);
+
+        return valido;
+    },
+
     esProductosValido:function(){
         var valido = true;
 
@@ -54,6 +73,7 @@ App.Models.Recarga.prototype = {
     esValida: function(){
         var valido = true;
         valido = this.esProductosValido() && valido;
+        valido = this.esMontoValido() && valido;
 
         return valido;
     },
@@ -61,6 +81,7 @@ App.Models.Recarga.prototype = {
     getJSON: function(){
         var json = {
             id_guia: this.id,
+            monto: this.monto,
             productos: JSON.stringify(this.productos_recarga)
         }
 

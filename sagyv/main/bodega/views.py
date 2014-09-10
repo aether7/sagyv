@@ -7,7 +7,7 @@ from django.http import HttpResponse
 from main.helpers.fecha import convierte_texto_fecha, convierte_fecha_texto
 from main.models import Producto, TipoCambioStock, HistorialStock
 from main.models import PrecioProducto, StockVehiculo, Vehiculo
-from main.models import GuiaDespacho, Factura
+from main.models import GuiaDespacho, Factura, AbonoGuia
 from django.views.decorators.csrf import csrf_exempt
 
 class IndexView(TemplateView):
@@ -258,6 +258,7 @@ class RecargaGuia(View):
         self.productosActualizados = []
         id_guia = req.POST.get("id_guia")
         productos = json.loads(req.POST.get("productos"))
+        monto = req.POST.get("monto")
 
         guia = GuiaDespacho.objects.get(pk = id_guia)
         historico = self.historial(productos, guia)
@@ -266,6 +267,11 @@ class RecargaGuia(View):
             "status" : "ok",
             "productos" : self.productosActualizados
         }
+
+        abono = AbonoGuia()
+        abono.guia_despacho = guia
+        abono.monto = int(monto)
+        abono.save()
 
         return HttpResponse(json.dumps(resultados), content_type="application/json")
 
