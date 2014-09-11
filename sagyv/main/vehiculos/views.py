@@ -129,11 +129,11 @@ class ObtenerView(View):
 class AnexarVehiculoView(View):
 
     def post(self, req):
-        id = int(req.POST.get("id"))
+        id_vehiculo = int(req.POST.get("id"))
         chofer_id = int(req.POST.get("chofer"))
         fecha = req.POST.get("fecha")
 
-        vehiculo = Vehiculo.objects.get(pk = id)
+        vehiculo = Vehiculo.objects.get(pk = id_vehiculo)
         chofer = Trabajador.objects.get(pk = chofer_id)
 
         actualizar_estado_vehiculos(vehiculo, chofer)
@@ -152,7 +152,7 @@ class AnexarVehiculoView(View):
             "id" : vehiculo.id
         }
 
-        return HttpResponse(json.dumps(data), mimetype="application/json")
+        return HttpResponse(json.dumps(data), content_type="application/json")
 
 
 class ModificarView(View):
