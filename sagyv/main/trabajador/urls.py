@@ -5,5 +5,6 @@ urlpatterns = patterns("main.trabajador.views",
     url(r"^obtener/$","obtener",name="obtener"),
     url(r"^crear/$","crear",name="crear"),
     url(r"^modificar/$","modificar",name="modificar"),
-    url(r"^eliminar/$","eliminar",name="eliminar")
+    url(r"^eliminar/$","eliminar",name="eliminar"),
+    url(r"^buscar\-boleta/$","buscar_boleta",name="buscar_boleta"),
 )

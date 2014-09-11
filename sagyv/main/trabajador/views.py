@@ -181,8 +181,25 @@ class EliminarTrabajadorView(View):
         return HttpResponse(json.dumps(dato), content_type="application/json")
 
 
+class BuscarBoleta(View):
+    def get(self, req):
+        trabajador_id = int(req.GET.get("id"))
+        trabajador = Trabajador.objects.get(pk = trabajador_id)
+        boleta = Trabajador.objects.get_talonario_activo(trabajador)
+
+        data = { "boleta_actual": 0, "boleta_inicial": 0, "boleta_final": 0 }
+
+        if not(boleta is None):
+            data["boleta_actual"] = boleta.actual
+            data["boleta_inicial"] = boleta.boleta_inicial
+            data["boleta_final"] = boleta.boleta_final
+
+        return HttpResponse(json.dumps(data), content_type="application/json")
+
+
 index = IndexList.as_view()
 obtener = ObtenerTrabajadorView.as_view()
 crear = CrearTrabajadorView.as_view()
 modificar = ModificarTrabajadorView.as_view()
 eliminar = EliminarTrabajadorView.as_view()
+buscar_boleta = BuscarBoleta.as_view()

@@ -6,6 +6,11 @@ var app = angular.module("trabajadorApp",[]);
 function TrabajadorController($http){
     this.trabajador = new App.Models.Trabajador();
     this.http = $http;
+    this.boleta = {
+        numeroAnterior: 0,
+        boletaInicial: 1,
+        boletaFinal: null
+    };
 }
 
 TrabajadorController.prototype = {
@@ -131,8 +136,31 @@ TrabajadorController.prototype = {
         this.trabajador.estadoVacacion = data.estado_vacacion[campo];
     },
 
-    anexarBoleta: function(){
-        $('#modal_anexar_boleta').modal('show');
+    anexarBoleta: function(id){
+        this.boleta = {
+            numeroAnterior: 0,
+            boletaInicial: 1,
+            boletaFinal: null
+        };
+
+        var url = App.urls.get("trabajador:buscar_boleta"),
+            _this = this;
+
+        url += "?id=" + id;
+
+        this.http.get(url).success(function(data){
+            _this.boleta.numeroAnterior = data.boleta_actual;
+            _this.boleta.boletaInicial = data.boleta_final + 1;
+            _this.boleta.boletaFinal = 0;
+            _this.boleta.id_trabajador = id;
+
+            $('#modal_anexar_boleta').modal('show');
+        });
+    },
+
+    guardarTalonario: function(){
+        $('#modal_anexar_boleta').modal('hide');
+        common.agregarMensaje("Se ha anexado el talonario de boletas al trabajador exitosamente");
     }
 };
 

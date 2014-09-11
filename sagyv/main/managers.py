@@ -119,3 +119,11 @@ class GuiaDespachoManager(models.Manager):
 class VehiculoManager(models.Manager):
     def get_vehiculos_con_chofer(self):
         return self.filter(trabajadorvehiculo__activo = 1)
+
+
+class TrabajadorManager(models.Manager):
+    def get_talonario_activo(self, trabajador):
+        talonarios = self.filter(boletatrabajador__trabajador = trabajador,
+            boletatrabajador__activo = True).order_by("-id")
+
+        return len(talonarios) > 0 and talonarios[0] or None
