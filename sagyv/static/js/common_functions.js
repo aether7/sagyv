@@ -53,8 +53,6 @@ var common = {
         },
 
         formatearFecha: function(txt){
-            console.log(txt);
-
             var aux = txt.split("-"),
                 anio = aux[0],
                 mes = parseInt(aux[1], 10) < 10 ? "0" + aux[1].replace(/^0/, "") : aux[1],
