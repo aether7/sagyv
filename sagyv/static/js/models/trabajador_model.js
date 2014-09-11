@@ -103,7 +103,7 @@ App.Models.Trabajador.prototype = {
 
     getJSON: function(){
         function convierteFechaJSON(fecha){
-            var aux = fecha.toLocaleDateString().split("/");
+            var aux = fecha.toLocaleDateString().split("-");
 
             aux[1] = parseInt(aux[1]) < 10 ? "0" + aux[1] : aux[1];
             aux[0] = parseInt(aux[0]) < 10 ? "0" + aux[0] : aux[0];
