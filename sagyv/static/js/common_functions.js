@@ -42,30 +42,23 @@ var common = {
         $(".help-block").text("");
     },
 
-    formatearFecha: function(txt){
-        var aux = txt.split("-"),
-            anio = aux[0],
-            mes = parseInt(aux[1]) < 10 ? "0" + aux[1] : aux[1],
-            dia = parseInt(aux[2]) < 10 ? "0" + aux[2] : aux[2];
-
-        return dia + "-" + mes + "-" + anio;
-    },
-
     fecha: {
         agregarCeros: function(txt){
             var aux = txt.split("-"),
                 anio = aux[0],
-                mes = parseInt(aux[1]) < 10 ? "0" + aux[1] : aux[1],
-                dia = parseInt(aux[2]) < 10 ? "0" + aux[2] : aux[2];
+                mes = parseInt(aux[1], 10) < 10 ? "0" + aux[1].replace(/^0/, "") : aux[1],
+                dia = parseInt(aux[2], 10) < 10 ? "0" + aux[2].replace(/^0/, "") : aux[2];
 
             return anio + "-" + mes + "-" + dia;
         },
 
         formatearFecha: function(txt){
+            console.log(txt);
+
             var aux = txt.split("-"),
                 anio = aux[0],
-                mes = parseInt(aux[1]) < 10 ? "0" + aux[1] : aux[1],
-                dia = parseInt(aux[2]) < 10 ? "0" + aux[2] : aux[2];
+                mes = parseInt(aux[1], 10) < 10 ? "0" + aux[1].replace(/^0/, "") : aux[1],
+                dia = parseInt(aux[2], 10) < 10 ? "0" + aux[2].replace(/^0/, "") : aux[2];
 
             return dia + "-" + mes + "-" + anio;
         },
