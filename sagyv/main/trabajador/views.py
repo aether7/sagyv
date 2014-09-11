@@ -197,9 +197,15 @@ class BuscarBoleta(View):
         return HttpResponse(json.dumps(data), content_type="application/json")
 
 
+class GuardarBoleta(View):
+    def post(self, req):
+        pass
+
+
 index = IndexList.as_view()
 obtener = ObtenerTrabajadorView.as_view()
 crear = CrearTrabajadorView.as_view()
 modificar = ModificarTrabajadorView.as_view()
 eliminar = EliminarTrabajadorView.as_view()
 buscar_boleta = BuscarBoleta.as_view()
+guardar_boleta = GuardarBoleta.as_view()

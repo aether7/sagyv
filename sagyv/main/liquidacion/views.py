@@ -139,7 +139,13 @@ class BalanceLiquidacionView(View):
         return HttpResponse(json.dumps(dato), content_type="application/json")
 
 
+class Cerrar(TemplateView):
+    def post(self, req):
+        pass
+
+
 index = IndexView.as_view()
 obtener_guia = ObtenerGuiaDespacho.as_view()
 balance_liquidacion = BalanceLiquidacionView.as_view()
 buscar_cliente = BuscarCliente.as_view()
+cerrar = Cerrar.as_view()

@@ -70,6 +70,11 @@ LiquidacionController.prototype = {
 
     suscribeEvents: function(){
         this.scope.$on("guia:calcularSubTotal", this.calcularSubTotal.bind(this));
+    },
+
+    cerrarLiquidacion: function(){
+        var url = App.urls.get("liquidacion:cerrar");
+        window.location.href = url;
     }
 };
 
