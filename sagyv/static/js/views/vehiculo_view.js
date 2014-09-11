@@ -62,7 +62,9 @@ App.Views.Vehiculo.prototype = {
         var action = App.urls.get("vehiculos:obtener").replace("0", this.idVehiculo);
 
         $.get(action, function(data){
-            var fecha = common.fecha.agregarCeros(data.fecha_revision_tecnica);
+
+            var fecha = common.fecha.formatearFecha(new Date().toLocaleDateString("es-CL"));
+            //common.fecha.agregarCeros(data.fecha_revision_tecnica);
 
             $("#anexar_numero").val(data.numero);
             $("#anexar_chofer").val(data.chofer);
