@@ -6,7 +6,6 @@
 {% include "mensaje.html" %}
 
 <section data-ng-app="trabajadorApp" data-ng-controller="TrabajadorController as tc">
-
 <button id="btn_nuevo_trabajador" class="btn btn-primary" data-ng-click="tc.mostrar()">Nuevo</button>
 
 <table id="lista_trabajadores" class="table table-striped">
@@ -61,10 +60,13 @@
 
 {% block js %}
 <script src="{% static 'js/vendor/angular.min.js' %}"></script>
+<script src="{% static 'js/plugins/angular.provider.js' %}"></script>
 <script src="{% static 'js/vendor/handlebars.min.js' %}"></script>
+<script src="{% static 'js/vendor/underscore.min.js' %}"></script>
 <script src="{% static 'js/plugins/jquery.rut.min.js' %}"></script>
 <script src="{% static 'js/common_functions.js' %}"></script>
 <script src="{% static 'js/models/trabajador_model.js' %}"></script>
+<script src="{% static 'js/models/boleta_model.js' %}"></script>
 <script src="{% static 'js/controllers/trabajador_controller.js' %}"></script>
 <script id="tpl_nuevo_trabajador" type="text/x-template">
     {% include "trabajador/components/tpl_nuevo_trabajador.html" %}
@@ -75,5 +77,6 @@
     App.urls.set("trabajador:actualizar","{% url 'trabajador:modificar' %}");
     App.urls.set("trabajador:crear", "{% url 'trabajador:crear' %}");
     App.urls.set("trabajador:buscar_boleta", "{% url 'trabajador:buscar_boleta' %}");
+    App.urls.set("trabajador:guardar_boleta", "{% url 'trabajador:guardar_boleta' %}");
 </script>
 {% endblock %}

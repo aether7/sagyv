@@ -5,6 +5,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from main.managers import StockManager, ClienteManager, TarjetaCreditoManager
 from main.managers import GuiaDespachoManager, VehiculoManager, TrabajadorManager
+from main.managers import BoletaTrabajadorManager
 
 """
 Como nota adicional: Todos los ingresos que sean representados como booleanos
@@ -588,3 +589,5 @@ class BoletaTrabajador(models.Model):
     fecha_creacion = models.DateTimeField(auto_now_add = True)
     fecha_modificacion = models.DateTimeField(auto_now = True)
     activo = models.NullBooleanField()
+
+    objects = BoletaTrabajadorManager()

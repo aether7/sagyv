@@ -8,20 +8,21 @@ from django.views.generic import View, TemplateView, ListView
 
 from main.helpers.fecha import convierte_texto_fecha, convierte_fecha_texto
 from main.models import Trabajador, Afp, SistemaSalud, EstadoCivil, EstadoVacacion, Vacacion
+from main.models import BoletaTrabajador
 
 class IndexList(ListView):
     model = Trabajador
-    queryset = Trabajador.objects.all().order_by("id")
+    queryset = Trabajador.objects.order_by("id")
     context_object_name = "trabajadores"
     template_name = "trabajador/index.html"
 
     def get_context_data(self,*args,**kwargs):
         data = super(IndexList, self).get_context_data(*args, **kwargs)
 
-        data["lista_afps"] = Afp.objects.all().order_by("id")
-        data["lista_sistema_salud"] = SistemaSalud.objects.all().order_by("id")
-        data["estados_civiles"] = EstadoCivil.objects.all().order_by("id")
-        data["estados_vacacion"] = EstadoVacacion.objects.all().order_by("id")
+        data["lista_afps"] = Afp.objects.order_by("id")
+        data["lista_sistema_salud"] = SistemaSalud.objects.order_by("id")
+        data["estados_civiles"] = EstadoCivil.objects.order_by("id")
+        data["estados_vacacion"] = EstadoVacacion.objects.order_by("id")
 
         return data
 
@@ -85,9 +86,12 @@ class CrearTrabajadorView(View):
         vacacion.estado_vacacion = estado_vacacion
         vacacion.save()
 
+        return vacacion
+
 
 class ModificarTrabajadorView(View):
 
+    @transaction.commit_on_success
     def post(self, req):
         self.id_trabajador = req.POST.get("id")
         self.nombre = req.POST.get("nombre")
@@ -184,12 +188,13 @@ class EliminarTrabajadorView(View):
 class BuscarBoleta(View):
     def get(self, req):
         trabajador_id = int(req.GET.get("id"))
-        trabajador = Trabajador.objects.get(pk = trabajador_id)
-        boleta = Trabajador.objects.get_talonario_activo(trabajador)
+        boleta = BoletaTrabajador.objects.get_talonario_activo(trabajador_id)
 
         data = { "boleta_actual": 0, "boleta_inicial": 0, "boleta_final": 0 }
 
         if not(boleta is None):
+            print type(boleta)
+
             data["boleta_actual"] = boleta.actual
             data["boleta_inicial"] = boleta.boleta_inicial
             data["boleta_final"] = boleta.boleta_final
@@ -198,8 +203,33 @@ class BuscarBoleta(View):
 
 
 class GuardarBoleta(View):
+
+    @transaction.commit_on_success
     def post(self, req):
-        pass
+        boleta_inicial = int(req.POST.get('boleta_inicial'))
+        boleta_final = int(req.POST.get('boleta_final'))
+        trabajador_id = int(req.POST.get('id'))
+        boleta_trabajador = None
+
+        if not(BoletaTrabajador.objects.filter(activo = True, trabajador_id = trabajador_id).exists()):
+            boleta_trabajador = BoletaTrabajador()
+        else:
+            boleta_trabajador = BoletaTrabajador.objects.get(activo = True, trabajador_id = trabajador_id)
+
+        trabajador = Trabajador.objects.get(pk = trabajador_id)
+
+        boleta_trabajador.boleta_inicial = boleta_inicial
+        boleta_trabajador.boleta_final = boleta_final
+        boleta_trabajador.trabajador = trabajador
+        boleta_trabajador.activo = True
+        boleta_trabajador.save()
+
+        data = {
+            "status": "ok",
+            "mensaje": ""
+        }
+
+        return HttpResponse(json.dumps(data), content_type="application/json")
 
 
 index = IndexList.as_view()
