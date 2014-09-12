@@ -194,12 +194,12 @@ class Trabajador(models.Model):
         return json.dumps(data)
 
     def get_vacacion(self):
-        ultima_vacacion = self.vacacion_set.all().order_by("-id")[0]
+        ultima_vacacion = self.vacacion_set.order_by("-id")[0]
 
         return ultima_vacacion.__unicode__()
 
     def get_id_vacacion(self):
-        ultima_vacacion = self.vacacion_set.all().order_by("-id")[0]
+        ultima_vacacion = self.vacacion_set.order_by("-id")[0]
 
         return ultima_vacacion.estado_vacacion.id
 

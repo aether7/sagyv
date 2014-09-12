@@ -131,6 +131,9 @@ TrabajadorController.prototype = {
         this.trabajador.sistemaSalud = data.sistema_salud[campo];
         this.trabajador.estadoCivil = data.estado_civil[campo];
         this.trabajador.estadoVacacion = data.estado_vacacion[campo];
+        this.trabajador.boleta.boletaInicial = data.boleta.boleta_inicial;
+        this.trabajador.boleta.boletaFinal = data.boleta.boleta_final;
+        this.trabajador.boleta.boletaActual = data.boleta.boleta_actual;
     },
 
     anexarBoleta: function(id){
@@ -160,7 +163,6 @@ TrabajadorController.prototype = {
             json = this.boleta.getJSON();
 
         $.post(url, json).success(function(data){
-            console.log(data);
             $('#modal_anexar_boleta').modal('hide');
             common.agregarMensaje("Se ha anexado el talonario de boletas al trabajador exitosamente");
         });

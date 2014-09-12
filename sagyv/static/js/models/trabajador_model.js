@@ -12,6 +12,7 @@ App.Models.Trabajador = function(){
     this.estadoCivil = null;
     this.estadoVacacion = null;
 
+    this.boleta = {};
     this.mensajes = {};
 };
 

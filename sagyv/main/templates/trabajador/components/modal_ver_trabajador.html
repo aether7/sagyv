@@ -76,7 +76,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="boleta_inicial_ver" class="control-label">Boleta Inicial</label>
+                    <label for="boleta_inicial_ver" class="control-label">Boleta inicial</label>
                     <span id="boleta_inicial_ver" class="form-control-static"
                         data-ng-bind="tc.trabajador.boleta.boletaInicial"></span>
                 </div>
@@ -84,7 +84,13 @@
                 <div class="form-group">
                     <label for="boleta_actual_ver" class="control-label">Boleta actual</label>
                     <span id="boleta_actual_ver" class="form-control-static"
-                        data-ng-bind="tc.trabajador."></span>
+                        data-ng-bind="tc.trabajador.boleta.boletaActual"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="boleta_final_ver" class="control-label">Boleta final</label>
+                    <span id="boleta_final_ver" class="form-control-static"
+                        data-ng-bind="tc.trabajador.boleta.boletaFinal"></span>
                 </div>
             </div>
             {% endverbatim %}

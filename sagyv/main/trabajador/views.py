@@ -152,25 +152,55 @@ class ObtenerTrabajadorView(View):
             "nacimiento" : convierte_fecha_texto(worker.nacimiento),
             "fecha_inicio_contrato" : convierte_fecha_texto(worker.fecha_inicio_contrato),
             "vigencia_licencia" : convierte_fecha_texto(worker.vigencia_licencia),
-            "afp" : {
-                "id" : worker.afp.id,
-                "nombre" : worker.afp.nombre,
-            },
-            "sistema_salud" : {
-                "id" : worker.sistema_salud.id,
-                "nombre" : worker.sistema_salud.nombre
-            },
-            "estado_civil" : {
-                "id" : worker.estado_civil.id,
-                "nombre" : worker.estado_civil.nombre
-            },
-            "estado_vacacion" : {
-                "id" : worker.get_id_vacacion(),
-                "nombre" : worker.get_vacacion()
-            }
+            "afp" : self.get_afp(worker),
+            "sistema_salud" : self.get_sistema_salud(worker),
+            "estado_civil" : self.get_estado_civil(worker),
+            "estado_vacacion" : self.get_estado_vacacion(worker),
+            "boleta": self.get_boleta(worker)
         }
 
         return HttpResponse(json.dumps(dato),content_type="application/json")
+
+    def get_afp(self, worker):
+        return {
+            "id" : worker.afp.id,
+            "nombre" : worker.afp.nombre,
+        }
+
+    def get_sistema_salud(self, worker):
+        return {
+            "id" : worker.sistema_salud.id,
+            "nombre" : worker.sistema_salud.nombre
+        }
+
+    def get_estado_civil(self, worker):
+        return {
+            "id" : worker.estado_civil.id,
+            "nombre" : worker.estado_civil.nombre
+        }
+
+    def get_estado_vacacion(self, worker):
+        return {
+            "id" : worker.get_id_vacacion(),
+            "nombre" : worker.get_vacacion()
+        }
+
+    def get_boleta(self, worker):
+        json_boleta = {
+            "boleta_inicial": None,
+            "boleta_actual": None,
+            "boleta_final": None
+        }
+
+        try:
+            boleta = worker.boletatrabajador_set.filter(activo = True).order_by("id")[0]
+            json_boleta["boleta_inicial"] = boleta.boleta_inicial
+            json_boleta["boleta_actual"] = boleta.actual
+            json_boleta["boleta_final"] = boleta.boleta_final
+        except:
+            pass
+
+        return json_boleta
 
 
 class EliminarTrabajadorView(View):
@@ -186,6 +216,7 @@ class EliminarTrabajadorView(View):
 
 
 class BuscarBoleta(View):
+
     def get(self, req):
         trabajador_id = int(req.GET.get("id"))
         boleta = BoletaTrabajador.objects.get_talonario_activo(trabajador_id)
@@ -193,8 +224,6 @@ class BuscarBoleta(View):
         data = { "boleta_actual": 0, "boleta_inicial": 0, "boleta_final": 0 }
 
         if not(boleta is None):
-            print type(boleta)
-
             data["boleta_actual"] = boleta.actual
             data["boleta_inicial"] = boleta.boleta_inicial
             data["boleta_final"] = boleta.boleta_final
