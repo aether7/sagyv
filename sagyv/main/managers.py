@@ -45,11 +45,9 @@ class StockManager(models.Manager):
                     mp.peso,
                     mtp.nombre,
                     mp.stock as stock,
-                    (SELECT cantidad FROM main_stockvehiculo WHERE producto_id = mp.id) as cantidad,
+                    (SELECT SUM(cantidad) FROM main_stockvehiculo WHERE producto_id = mp.id) as cantidad,
                     mp.id
-
             FROM main_producto mp
-
             INNER JOIN main_tipoproducto mtp ON(mp.tipo_producto_id = mtp.id)
             GROUP BY mp.codigo, mp.peso, mtp.nombre, mp.stock,mp.id
         """

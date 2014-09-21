@@ -3,6 +3,8 @@ function ProductoController($scope){
 }
 
 ProductoController.prototype = {
+    constructor: ProductoController,
+
     calculaValorTotal: function(producto){
         var valorTotal = 0;
         valorTotal = parseInt(producto.vacios) * parseInt(producto.precio);
