@@ -42,7 +42,7 @@ class IndexView(TemplateView):
 
 class GuardarFactura(View):
 
-    @transaction.commit_on_success
+    @transaction.atomic
     def post(self, req):
         self.productosActualizados = []
 
@@ -54,7 +54,6 @@ class GuardarFactura(View):
 
         nueva_factura = Factura()
         nueva_factura.numero_factura = int(factura)
-        #nueva_factura.fecha = convierte_fecha_texto(fecha)
         nueva_factura.precio = precio
         nueva_factura.save()
 
@@ -76,7 +75,11 @@ class GuardarFactura(View):
 
     def ingreso_productos(self, guia, lista):
         for item in lista:
-            cantidad = int(item["cantidad"])
+            if item["cantidad"] == "":
+                cantidad = 0
+            else:
+                cantidad = int(item["cantidad"])
+
             producto = Producto.objects.get(pk = item["id"])
 
             if producto.stock is None:
@@ -96,7 +99,11 @@ class GuardarFactura(View):
 
     def salida_garantias(self, guia, lista):
         for item in lista:
-            cantidad = int(item["cantidad"])
+            if item["cantidad"] == "":
+                cantidad = 0
+            else:
+                cantidad = int(item["cantidad"])
+
             producto = Producto.objects.get(codigo = item["codigo"])
             producto.stock -= cantidad
             producto.save()
@@ -121,7 +128,7 @@ class GuardarFactura(View):
 
 class CrearGuiaDespachoView(View):
 
-    @transaction.commit_on_success
+    @transaction.atomic
     def post(self,req):
         self.productosActualizados = []
 

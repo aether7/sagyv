@@ -23,7 +23,7 @@ GuiaProductoController.mixin(BodegaController,{
     agregarProducto: function(idSelect){
         var select;
 
-        if(this.producto.id && this.producto.cantidad){
+        if(this.producto.id && parseInt(this.producto.cantidad) > 0){
             select = $("#" + idSelect + " option:selected");
             this.producto.codigo = select.text();
             this.producto.precio = select.data("precio") * this.producto.cantidad;
@@ -78,7 +78,16 @@ GuiaProductoController.mixin(BodegaController,{
     },
 
     guardarPaso2: function(){
-        var nuevoHash = JSON.stringify(this.garantias).replace(/\,\"\$\$hashKey\":\d+/g,'');
+        //var nuevoHash = JSON.stringify(this.garantias).replace(/\,\"\$\$hashKey\":\d+/g,'');
+
+        var nuevoHash = JSON.stringify(this.garantias.map(function(garantia){
+            return { codigo: garantia.codigo, cantidad: garantia.cantidad };
+        }));
+
+        console.log('garantias');
+        console.log(this.versionAnterior);
+        console.log(nuevoHash);
+        return;
 
         if(this.versionAnterior !== nuevoHash){
             this.paso = 3;
@@ -102,6 +111,14 @@ GuiaProductoController.mixin(BodegaController,{
         json = this.guia.getJSON();
 
         this.http.post(action, json).success(function(data){
+            data.guia.productos.forEach(function(producto){
+                var cantidad,
+                    stock = $("#stock_" + producto.id);
+
+                cantidad = parseInt(stock.text(), 10);
+                stock.text(cantidad);
+            });
+
             $("#modal_carga_producto").modal("hide");
             common.agregarMensaje("La guía ha sido guardada exitosamente");
         });

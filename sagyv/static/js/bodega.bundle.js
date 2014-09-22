@@ -1,4 +1,4 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/home/worker8/proyectos/sagyv/sagyv/static/js/bodega_bundle.js":[function(require,module,exports){
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/Aether/Proyectos/sagyv/sagyv/static/js/bodega_bundle.js":[function(require,module,exports){
 (function(){
 "use strict";
 
@@ -15,7 +15,7 @@ app.controller("GuiaProductoController", ["$http", GuiaProductoController]);
 
 })();
 
-},{"./controllers/bodega_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/bodega_controller.js","./controllers/guia_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/guia_controller.js","./controllers/guia_producto_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/guia_producto_controller.js","./controllers/transito_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/transito_controller.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/bodega_controller.js":[function(require,module,exports){
+},{"./controllers/bodega_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega_controller.js","./controllers/guia_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guia_controller.js","./controllers/guia_producto_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guia_producto_controller.js","./controllers/transito_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/transito_controller.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega_controller.js":[function(require,module,exports){
 function BodegaController($http, stop){
     this.guia = new App.Models.Guia();
     this.producto = {};
@@ -127,7 +127,7 @@ BodegaController.prototype = {
 
 module.exports = BodegaController;
 
-},{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/guia_controller.js":[function(require,module,exports){
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guia_controller.js":[function(require,module,exports){
 function GuiaController($http){
     this.recarga = new App.Models.Recarga();
     this.http = $http;
@@ -135,9 +135,7 @@ function GuiaController($http){
     this.producto = {};
 }
 
-GuiaController.prototype = {
-    constructor: GuiaController,
-
+GuiaController.mixin({
     verGuia: function(id){
         var action = App.urls.get("bodega:obtener_guia"),
             _this = this;
@@ -169,7 +167,7 @@ GuiaController.prototype = {
     },
 
     agregarRecarga: function(idSelect){
-        if(this.producto.id && this.producto.cantidad){
+        if(this.producto.id && parseInt(this.producto.cantidad) > 0){
             this.producto.codigo = $("#" + idSelect + " option:selected").text();
         }
 
@@ -188,8 +186,9 @@ GuiaController.prototype = {
             valido = this.recarga.esValida(),
             _this = this;
 
-        if(!valido)
+        if(!valido){
             return;
+        }
 
         action = App.urls.get("bodega:recargar_guia");
         json = this.recarga.getJSON();
@@ -206,11 +205,11 @@ GuiaController.prototype = {
         $("#modal_recargar_guia").modal("hide");
         common.agregarMensaje("Se ha actualizado el vehiculo exitosamente");
     }
-};
+});
 
 module.exports = GuiaController;
 
-},{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/guia_producto_controller.js":[function(require,module,exports){
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guia_producto_controller.js":[function(require,module,exports){
 var BodegaController = require("./bodega_controller.js");
 
 function GuiaProductoController($http){
@@ -236,7 +235,7 @@ GuiaProductoController.mixin(BodegaController,{
     agregarProducto: function(idSelect){
         var select;
 
-        if(this.producto.id && this.producto.cantidad){
+        if(this.producto.id && parseInt(this.producto.cantidad) > 0){
             select = $("#" + idSelect + " option:selected");
             this.producto.codigo = select.text();
             this.producto.precio = select.data("precio") * this.producto.cantidad;
@@ -291,7 +290,16 @@ GuiaProductoController.mixin(BodegaController,{
     },
 
     guardarPaso2: function(){
-        var nuevoHash = JSON.stringify(this.garantias).replace(/\,\"\$\$hashKey\":\d+/g,'');
+        //var nuevoHash = JSON.stringify(this.garantias).replace(/\,\"\$\$hashKey\":\d+/g,'');
+
+        var nuevoHash = JSON.stringify(this.garantias.map(function(garantia){
+            return { codigo: garantia.codigo, cantidad: garantia.cantidad };
+        }));
+
+        console.log('garantias');
+        console.log(this.versionAnterior);
+        console.log(nuevoHash);
+        return;
 
         if(this.versionAnterior !== nuevoHash){
             this.paso = 3;
@@ -315,6 +323,14 @@ GuiaProductoController.mixin(BodegaController,{
         json = this.guia.getJSON();
 
         this.http.post(action, json).success(function(data){
+            data.guia.productos.forEach(function(producto){
+                var cantidad,
+                    stock = $("#stock_" + producto.id);
+
+                cantidad = parseInt(stock.text(), 10);
+                stock.text(cantidad);
+            });
+
             $("#modal_carga_producto").modal("hide");
             common.agregarMensaje("La guía ha sido guardada exitosamente");
         });
@@ -327,7 +343,7 @@ GuiaProductoController.mixin(BodegaController,{
 
 module.exports = GuiaProductoController;
 
-},{"./bodega_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/bodega_controller.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/transito_controller.js":[function(require,module,exports){
+},{"./bodega_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega_controller.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/transito_controller.js":[function(require,module,exports){
 function TransitoController($http){
     this.resultados = null;
     this.http = $http;
@@ -351,4 +367,4 @@ TransitoController.prototype = {
 
 module.exports = TransitoController;
 
-},{}]},{},["/home/worker8/proyectos/sagyv/sagyv/static/js/bodega_bundle.js"]);
+},{}]},{},["/Users/Aether/Proyectos/sagyv/sagyv/static/js/bodega_bundle.js"]);

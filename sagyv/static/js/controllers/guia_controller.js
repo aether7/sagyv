@@ -5,9 +5,7 @@ function GuiaController($http){
     this.producto = {};
 }
 
-GuiaController.prototype = {
-    constructor: GuiaController,
-
+GuiaController.mixin({
     verGuia: function(id){
         var action = App.urls.get("bodega:obtener_guia"),
             _this = this;
@@ -39,7 +37,7 @@ GuiaController.prototype = {
     },
 
     agregarRecarga: function(idSelect){
-        if(this.producto.id && this.producto.cantidad){
+        if(this.producto.id && parseInt(this.producto.cantidad) > 0){
             this.producto.codigo = $("#" + idSelect + " option:selected").text();
         }
 
@@ -77,6 +75,6 @@ GuiaController.prototype = {
         $("#modal_recargar_guia").modal("hide");
         common.agregarMensaje("Se ha actualizado el vehiculo exitosamente");
     }
-};
+});
 
 module.exports = GuiaController;
