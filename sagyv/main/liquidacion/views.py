@@ -12,6 +12,7 @@ from main.models import TarjetaCredito
 from main.models import Producto
 from main.models import GuiaDespacho
 from main.models import BoletaTrabajador
+from main.models import Banco
 
 
 class IndexView(TemplateView):
@@ -23,6 +24,7 @@ class IndexView(TemplateView):
 		context["clientes_propios"] = Cliente.objects.filter(es_propio=True).order_by("id")
 		context["clientes_lipigas"] = Cliente.objects.filter(es_lipigas=True).order_by("id")
 		context["tarjetas_comerciales"] = TarjetaCredito.objects.get_tarjetas_comerciales()
+		context["bancos"] = Banco.objects.order_by("nombre")
 		context["tarjetas_bancarias"] = TarjetaCredito.objects.get_tarjetas_bancarias()
 		context["productos"] = Producto.objects.exclude(tipo_producto_id=3)
 

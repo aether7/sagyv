@@ -11,9 +11,9 @@
                 <div class="form-group">
                     <label for="banco_cheque" class="control-label">Banco</label>
                     <select id="banco_cheque" class="form-control">
-                        {% for tarjeta_bancaria in tarjetas_bancarias %}
-                        <option value="{{ tarjeta_bancaria.id }}">
-                            {{ tarjeta_bancaria.nombre }}
+                        {% for banco in bancos %}
+                        <option value="{{ banco.id }}">
+                            {{ banco.nombre }}
                         </option>
                         {% endfor %}
                     </select>
