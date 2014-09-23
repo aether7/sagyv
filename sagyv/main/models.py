@@ -480,7 +480,6 @@ class Venta(models.Model):
     fecha = models.DateTimeField()
     tipo_pago = models.ForeignKey(TipoPago)
     descuento = models.IntegerField()
-    cupon_asociado = models.NullBooleanField()
     descripcion_descuento = models.CharField(max_length=140,null=True)
 
     def __unicode__(self):

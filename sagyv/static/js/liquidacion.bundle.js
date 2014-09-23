@@ -87,6 +87,8 @@ function ProductoController($scope){
 }
 
 ProductoController.prototype = {
+    constructor: ProductoController,
+
     calculaValorTotal: function(producto){
         var valorTotal = 0;
         valorTotal = parseInt(producto.vacios) * parseInt(producto.precio);
@@ -133,9 +135,7 @@ function ClienteController($http){
     this.cliente = {};
 }
 
-ClienteController.prototype = {
-    constructor: ClienteController,
-
+ClienteController.mixin({
     resetearCliente: function(){
         this.idCliente = null;
         this.descripcionDescuento = "nada";
@@ -155,7 +155,7 @@ ClienteController.prototype = {
         this.situacionComercial = data.situacion_comercial;
         this.descripcionDescuento = data.situacion_comercial.descripcion_descuento;
     }
-};
+});
 
 app.controller("LiquidacionController", ["$http","$scope", LiquidacionController]);
 app.controller("ProductoController", ["$scope", ProductoController]);

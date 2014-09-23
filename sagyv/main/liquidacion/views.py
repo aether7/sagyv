@@ -30,7 +30,13 @@ class ObtenerGuiaDespacho(View):
 		id_vehiculo = int(req.GET.get("id_vehiculo"))
 		vehiculo = Vehiculo.objects.get(pk=id_vehiculo)
 		productos = self.obtener_productos(id_vehiculo)
-		guia = GuiaDespacho.objects.filter(vehiculo=vehiculo).order_by("-id")[0]
+
+		print "vehiculo_id: " + str(vehiculo.id)
+
+		if GuiaDespacho.objects.filter(vehiculo=vehiculo).exists():
+			guia = GuiaDespacho.objects.filter(vehiculo=vehiculo).order_by("-id")[0]
+		else:
+			guia = None
 
 		datos = {
 			"vehiculo": {
@@ -39,8 +45,8 @@ class ObtenerGuiaDespacho(View):
 				"chofer": vehiculo.get_nombre_ultimo_chofer()
 			},
 			"guia": {
-				"numero": guia.numero,
-				"id": guia.id
+				"id": guia.id,
+				"numero": guia.numero
 			},
 			"productos": productos
 		}

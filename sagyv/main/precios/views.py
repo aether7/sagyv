@@ -22,7 +22,7 @@ class IndexView(TemplateView):
 
 class UpdatePrecioProductoView(View):
 
-    @transaction.commit_on_success
+    @transaction.atomic
     def post(self,req):
         cambios = req.POST.get("precios")
         cambios_productos = json.loads(cambios)
@@ -41,7 +41,7 @@ class UpdatePrecioProductoView(View):
 
 class UpdateStock(View):
 
-    @transaction.commit_on_success
+    @transaction.atomic
     def post(self, req):
         print req.POST.get("productos")
 
