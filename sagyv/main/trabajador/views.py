@@ -5,9 +5,14 @@ from datetime import date
 from django.http import HttpResponse
 from django.db import transaction
 from django.views.generic import View, TemplateView, ListView
-
 from main.helpers.fecha import convierte_texto_fecha, convierte_fecha_texto
-from main.models import Trabajador, Afp, SistemaSalud, EstadoCivil, EstadoVacacion, Vacacion
+
+from main.models import Trabajador
+from main.models import Afp
+from main.models import SistemaSalud
+from main.models import EstadoCivil
+from main.models import EstadoVacacion
+from main.models import Vacacion
 from main.models import BoletaTrabajador
 
 class IndexList(ListView):

@@ -5,10 +5,17 @@ from django.views.generic import TemplateView,View
 from django.db import transaction
 from django.http import HttpResponse
 from main.helpers.fecha import convierte_texto_fecha, convierte_fecha_texto
-from main.models import Producto, TipoCambioStock, HistorialStock
-from main.models import PrecioProducto, StockVehiculo, Vehiculo
-from main.models import GuiaDespacho, Factura, AbonoGuia
 from django.views.decorators.csrf import csrf_exempt
+
+from main.models import Producto
+from main.models import TipoCambioStock
+from main.models import HistorialStock
+from main.models import PrecioProducto
+from main.models import StockVehiculo
+from main.models import Vehiculo
+from main.models import GuiaDespacho
+from main.models import Factura
+from main.models import AbonoGuia
 
 class IndexView(TemplateView):
     template_name = "bodega/index.html"

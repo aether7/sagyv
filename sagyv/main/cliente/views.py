@@ -4,7 +4,10 @@ import json
 from django.db import transaction
 from django.views.generic import TemplateView,View
 from django.http import HttpResponse
-from main.models import Cliente, DescuentoCliente, TipoDescuento, Producto
+from main.models import Cliente
+from main.models import DescuentoCliente
+from main.models import TipoDescuento
+from main.models import Producto
 
 def crear_nueva_situacion(cantidad, tipo_id, producto_id):
     descuento_tipo = TipoDescuento.objects.get(pk = int(tipo_id))
