@@ -87,7 +87,8 @@ class BuscarCliente(View):
 				"con_credito": cliente.credito,
 				"descripcion_descuento": None,
 				"simbolo": None,
-				"monto": None
+				"monto": None,
+				"codigo": None
 			}
 		}
 
@@ -95,6 +96,7 @@ class BuscarCliente(View):
 		data["situacion_comercial"]["descripcion_descuento"] = opciones["descripcion_descuento"]
 		data["situacion_comercial"]["simbolo"] = opciones["simbolo"]
 		data["situacion_comercial"]["monto"] = opciones["monto"]
+		data["situacion_comercial"]["codigo"] = opciones["codigo"]
 
 		return HttpResponse(json.dumps(data), content_type="application/json")
 
@@ -130,6 +132,7 @@ class BuscarCliente(View):
 		opciones["descripcion_descuento"] = texto
 		opciones["simbolo"] = simbolo
 		opciones["monto"] = monto
+		opciones["codigo"] = cliente.situacion_comercial.producto.codigo
 
 		return opciones
 

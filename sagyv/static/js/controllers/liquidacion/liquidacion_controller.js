@@ -17,7 +17,9 @@ function LiquidacionController($http, $scope){
     this.suscribeEvents();
 }
 
-LiquidacionController.mixin({
+LiquidacionController.prototype = {
+    constructor: LiquidacionController,
+
     buscarGuia: function(){
         var url = App.urls.get("liquidacion:obtener_guia"),
             _this = this;
@@ -77,6 +79,6 @@ LiquidacionController.mixin({
         var url = App.urls.get("liquidacion:cerrar");
         window.location.href = url;
     }
-});
+};
 
 module.exports = LiquidacionController;

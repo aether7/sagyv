@@ -15,6 +15,9 @@ body{font-family:'Verdana','Sans-serif';font-size:16px}
 #liquidacion .table .fila-desglose td{text-align:right}
 #my_tab{margin:2em 0}
 .auto-margin{margin:auto}
+.btn-accion{margin:1em}
+.btn-productos{height:71px;position:relative;}
+.btn-productos .btn-agregar{bottom:11px;position:absolute}
 .box{box-sizing:border-box;display:inline-block;vertical-align:top}
 .block{display:block}
 .center{text-align:center}
