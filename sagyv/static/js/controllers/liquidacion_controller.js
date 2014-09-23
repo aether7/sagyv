@@ -1,5 +1,6 @@
 function LiquidacionController($http, $scope){
     this.productos = [];
+    this.boleta = null;
 
     this.guia = {};
 
@@ -31,6 +32,8 @@ LiquidacionController.prototype = {
 
     cargaDatosCabecera: function(data){
         this.guia = data.guia;
+        this.boleta = data.boleta;
+        this.guia.boleta = data.boleta.actual;
         this.guia.fecha = new Date();
 
         this.productos = data.productos;

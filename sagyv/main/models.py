@@ -3,8 +3,12 @@
 import json
 from django.db import models
 from django.contrib.auth.models import User
-from main.managers import StockManager, ClienteManager, TarjetaCreditoManager
-from main.managers import GuiaDespachoManager, VehiculoManager, TrabajadorManager
+from main.managers import StockManager
+from main.managers import ClienteManager
+from main.managers import TarjetaCreditoManager
+from main.managers import GuiaDespachoManager
+from main.managers import VehiculoManager
+from main.managers import TrabajadorManager
 from main.managers import BoletaTrabajadorManager
 
 """
