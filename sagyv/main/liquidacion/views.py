@@ -1,14 +1,17 @@
 # -*- coding: utf-8 -*-
-
 import json
 
 from django.http import HttpResponse
 from django.views.generic import TemplateView, View
 from reportlab.pdfgen import canvas
 
-from main.models import Vehiculo, StockVehiculo
+from main.models import Vehiculo
+from main.models import StockVehiculo
 from main.models import Cliente
-from main.models import TarjetaCredito, Producto, GuiaDespacho
+from main.models import TarjetaCredito
+from main.models import Producto
+from main.models import GuiaDespacho
+from main.models import BoletaTrabajador
 
 
 class IndexView(TemplateView):
@@ -17,7 +20,8 @@ class IndexView(TemplateView):
 	def get_context_data(self, **kwargs):
 		context = super(IndexView, self).get_context_data(**kwargs)
 		context["vehiculos"] = Vehiculo.objects.order_by("id")
-		context["clientes"] = Cliente.objects.order_by("nombre")
+		context["clientes_propios"] = Cliente.objects.filter(es_propio=True).order_by("id")
+		context["clientes_lipigas"] = Cliente.objects.filter(es_lipigas=True).order_by("id")
 		context["tarjetas_comerciales"] = TarjetaCredito.objects.get_tarjetas_comerciales()
 		context["tarjetas_bancarias"] = TarjetaCredito.objects.get_tarjetas_bancarias()
 		context["productos"] = Producto.objects.exclude(tipo_producto_id=3)
@@ -31,6 +35,7 @@ class ObtenerGuiaDespacho(View):
 		vehiculo = Vehiculo.objects.get(pk=id_vehiculo)
 		productos = self.obtener_productos(id_vehiculo)
 		guia = GuiaDespacho.objects.filter(vehiculo=vehiculo).order_by("-id")[0]
+		boleta = BoletaTrabajador.objects.obtener_por_trabajador(vehiculo.get_ultimo_chofer())
 
 		datos = {
 			"vehiculo": {
@@ -39,10 +44,16 @@ class ObtenerGuiaDespacho(View):
 				"chofer": vehiculo.get_nombre_ultimo_chofer()
 			},
 			"guia": {
-				"numero": guia.numero,
-				"id": guia.id
+				"id": guia.id,
+				"numero": guia.numero
 			},
-			"productos": productos
+			"productos": productos,
+			"boleta": {
+				"id": boleta.id,
+				"boleta_inicial": boleta.boleta_inicial,
+				"boleta_final": boleta.boleta_final,
+				"actual": boleta.actual
+			}
 		}
 
 		return HttpResponse(json.dumps(datos), content_type="application/json")

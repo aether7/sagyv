@@ -29,7 +29,7 @@ class IndexList(ListView):
 
 class CrearTrabajadorView(View):
 
-    @transaction.commit_on_success
+    @transaction.atomic
     def post(self, req):
         self.nombre = req.POST.get("nombre")
         self.apellido = req.POST.get("apellido")
@@ -91,7 +91,7 @@ class CrearTrabajadorView(View):
 
 class ModificarTrabajadorView(View):
 
-    @transaction.commit_on_success
+    @transaction.atomic
     def post(self, req):
         self.id_trabajador = req.POST.get("id")
         self.nombre = req.POST.get("nombre")
@@ -233,7 +233,7 @@ class BuscarBoleta(View):
 
 class GuardarBoleta(View):
 
-    @transaction.commit_on_success
+    @transaction.atomic
     def post(self, req):
         boleta_inicial = int(req.POST.get('boleta_inicial'))
         boleta_final = int(req.POST.get('boleta_final'))

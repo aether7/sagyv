@@ -73,7 +73,7 @@ class CrearEditarCliente(View):
 
 class CrearCliente(CrearEditarCliente):
 
-    @transaction.commit_on_success
+    @transaction.atomic
     def post(self, req):
         situacion_comercial = req.POST.get('situacion_comercial')
         rut = req.POST.get('rut')
@@ -147,7 +147,7 @@ class CrearCliente(CrearEditarCliente):
 
 class ModificarCliente(CrearEditarCliente):
 
-    @transaction.commit_on_success
+    @transaction.atomic
     def post(self,req):
         situacion_comercial = req.POST.get('situacion_comercial')
         sc = self.obtener_situacion_comercial(situacion_comercial)
@@ -197,7 +197,7 @@ class ModificarCliente(CrearEditarCliente):
 
 class EliminarCliente(View):
 
-    @transaction.commit_on_success
+    @transaction.atomic
     def post(self,req):
         id_cliente = req.POST.get('id_cliente')
         cliente = Cliente.objects.get(pk = id_cliente)
@@ -227,7 +227,7 @@ class ObtenerSituacionComercial(View):
 
 class CrearSituacionComercial(View):
 
-    @transaction.commit_on_success
+    @transaction.atomic
     def post(self, req):
         descuento_cliente = self.crear_nueva_situacion()
 
@@ -269,7 +269,7 @@ class CrearSituacionComercial(View):
 
 class ModificarSituacionComercialView(View):
 
-    @transaction.commit_on_success
+    @transaction.atomic
     def post(self, req):
         id_situacion = req.POST.get('id')
         monto_nuevo = req.POST.get('valor')

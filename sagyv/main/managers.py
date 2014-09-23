@@ -122,8 +122,12 @@ class VehiculoManager(models.Manager):
 class TrabajadorManager(models.Manager):
     pass
 
+
 class BoletaTrabajadorManager(models.Manager):
     def get_talonario_activo(self, trabajador_id):
         talonarios = self.filter(trabajador_id = trabajador_id, activo = True).order_by("-id")
 
         return len(talonarios) > 0 and talonarios[0] or None
+
+    def obtener_por_trabajador(self, trabajador):
+        return self.filter(trabajador=trabajador, activo=True).order_by("-id")[0]

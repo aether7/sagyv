@@ -10,7 +10,7 @@ from django.views.generic import View, TemplateView, ListView
 from main.helpers.fecha import convierte_texto_fecha, convierte_fecha_texto
 from main.models import Vehiculo, Trabajador, TrabajadorVehiculo
 
-@transaction.commit_on_success
+@transaction.atomic
 def actualizar_estado_vehiculos(vehiculo, chofer):
     vehiculos_antiguos = TrabajadorVehiculo.objects.filter(Q(vehiculo = vehiculo, activo = True) |
         Q(trabajador = chofer, activo = True))
@@ -68,7 +68,7 @@ class AgregarNuevoVehiculoView(View):
 
         return HttpResponse(json.dumps(data),content_type="application/json")
 
-    @transaction.commit_on_success
+    @transaction.atomic
     def __crear_nuevo_vehiculo(self):
         vehiculo = Vehiculo()
         vehiculo.numero = self.numero
@@ -157,7 +157,7 @@ class AnexarVehiculoView(View):
 
 class ModificarView(View):
 
-    @transaction.commit_on_success
+    @transaction.atomic
     def post(self, req):
         id_vehiculo = req.POST.get('id_vehiculo')
         fecha_revision_tecnica = req.POST.get('fecha_revision_tecnica')

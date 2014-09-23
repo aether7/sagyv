@@ -3,8 +3,12 @@
 import json
 from django.db import models
 from django.contrib.auth.models import User
-from main.managers import StockManager, ClienteManager, TarjetaCreditoManager
-from main.managers import GuiaDespachoManager, VehiculoManager, TrabajadorManager
+from main.managers import StockManager
+from main.managers import ClienteManager
+from main.managers import TarjetaCreditoManager
+from main.managers import GuiaDespachoManager
+from main.managers import VehiculoManager
+from main.managers import TrabajadorManager
 from main.managers import BoletaTrabajadorManager
 
 """
@@ -480,11 +484,19 @@ class Venta(models.Model):
     fecha = models.DateTimeField()
     tipo_pago = models.ForeignKey(TipoPago)
     descuento = models.IntegerField()
-    cupon_asociado = models.NullBooleanField()
     descripcion_descuento = models.CharField(max_length=140,null=True)
 
     def __unicode__(self):
         return self.monto
+
+
+class DetalleVenta(models.Model):
+    cantidad = models.IntegerField()
+    venta = models.ForeignKey(Venta)
+    producto = models.ForeignKey(Producto)
+
+    def __unicode__(self):
+        return self.producto + " " + self.cantidad
 
 
 class Cupon(models.Model):

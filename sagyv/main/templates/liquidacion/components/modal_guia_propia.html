@@ -14,7 +14,7 @@
                     <select id="cliente_guia_propia" class="form-control"
                         data-ng-model="cliente.idCliente"
                         data-ng-change="cliente.buscarCliente()">
-                        {% for cliente in clientes %}
+                        {% for cliente in clientes_propios %}
                         <option value="{{ cliente.id }}">{{ cliente.giro }}</option>
                         {% endfor %}
                     </select>

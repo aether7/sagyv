@@ -1,6 +1,7 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion_controller.js":[function(require,module,exports){
 function LiquidacionController($http, $scope){
     this.productos = [];
+    this.boleta = null;
 
     this.guia = {};
 
@@ -32,6 +33,8 @@ LiquidacionController.prototype = {
 
     cargaDatosCabecera: function(data){
         this.guia = data.guia;
+        this.boleta = data.boleta;
+        this.guia.boleta = data.boleta.actual;
         this.guia.fecha = new Date();
 
         this.productos = data.productos;
@@ -87,6 +90,8 @@ function ProductoController($scope){
 }
 
 ProductoController.prototype = {
+    constructor: ProductoController,
+
     calculaValorTotal: function(producto){
         var valorTotal = 0;
         valorTotal = parseInt(producto.vacios) * parseInt(producto.precio);
@@ -133,9 +138,7 @@ function ClienteController($http){
     this.cliente = {};
 }
 
-ClienteController.prototype = {
-    constructor: ClienteController,
-
+ClienteController.mixin({
     resetearCliente: function(){
         this.idCliente = null;
         this.descripcionDescuento = "nada";
@@ -155,7 +158,7 @@ ClienteController.prototype = {
         this.situacionComercial = data.situacion_comercial;
         this.descripcionDescuento = data.situacion_comercial.descripcion_descuento;
     }
-};
+});
 
 app.controller("LiquidacionController", ["$http","$scope", LiquidacionController]);
 app.controller("ProductoController", ["$scope", ProductoController]);

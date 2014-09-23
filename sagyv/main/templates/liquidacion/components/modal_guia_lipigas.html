@@ -19,7 +19,7 @@
                 <div class="form-group">
                     <label for="cliente_guia_lipigas" class="control-label">Cliente</label>
                     <select name="cliente_guia_lipigas" id="cliente_guia_lipigas" class="form-control">
-                        {% for cliente in clientes %}
+                        {% for cliente in clientes_lipigas %}
                         <option value="{{ cliente.id }}">{{ cliente.giro }}</option>
                         {% endfor %}
                     </select>

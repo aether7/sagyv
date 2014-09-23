@@ -290,16 +290,9 @@ GuiaProductoController.mixin(BodegaController,{
     },
 
     guardarPaso2: function(){
-        //var nuevoHash = JSON.stringify(this.garantias).replace(/\,\"\$\$hashKey\":\d+/g,'');
-
         var nuevoHash = JSON.stringify(this.garantias.map(function(garantia){
             return { codigo: garantia.codigo, cantidad: garantia.cantidad };
         }));
-
-        console.log('garantias');
-        console.log(this.versionAnterior);
-        console.log(nuevoHash);
-        return;
 
         if(this.versionAnterior !== nuevoHash){
             this.paso = 3;
