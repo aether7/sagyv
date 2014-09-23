@@ -486,6 +486,15 @@ class Venta(models.Model):
         return self.monto
 
 
+class DetalleVenta(models.Model):
+    cantidad = models.IntegerField()
+    venta = models.ForeignKey(Venta)
+    producto = models.ForeignKey(Producto)
+
+    def __unicode__(self):
+        return self.producto + " " + self.cantidad
+
+
 class Cupon(models.Model):
     numero_cupon = models.IntegerField()
     fecha = models.DateField(auto_now_add=True)
