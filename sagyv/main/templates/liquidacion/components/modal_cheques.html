@@ -1,7 +1,24 @@
-<section>
-            <h1>CHEQUES</h1>
-            <label for="">MONTO</label>
-            <label for="">Banco</label>
-            <label for="">SERIE</label>
-            <label for="">FECHA</label>
-        </section>
+<div id="modal_cheque" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4>Cheque</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="banco_cheque" class="control-label">Banco</label>
+                    <select id="banco_cheque" class="form-control">
+                        {% for tarjeta_bancaria in tarjetas_bancarias %}
+                        <option value="{{ tarjeta_bancaria.id }}">
+                            {{ tarjeta_bancaria.nombre }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
