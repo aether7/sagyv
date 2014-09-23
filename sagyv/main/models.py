@@ -563,7 +563,7 @@ class StockVehiculo(models.Model):
 
     def get_productos_vehiculos(self):
         stocks_vehiculos = StockVehiculo.objects.filter(producto = self.producto, vehiculo = self.vehiculo)
-        return stock_vehiculo
+        return stocks_vehiculos
 
     def __unicode__(self):
         return str(self.vehiculo.patente) + " -> (cod " + str(self.producto.codigo) + ": " + str(self.cantidad) + ")"
