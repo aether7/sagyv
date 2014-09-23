@@ -25,7 +25,7 @@ Producto.mixin({
         if(this.descuento.simbolo === '%'){
             neto = this._descontarPorcentual(subtotal, this.descuento.cantidad);
         }else if(this.descuento.simbolo === '$'){
-            neto = this._descontarFijo(this.descuento.cantidad);
+            neto = this._descontarFijo(subtotal, this.descuento.cantidad);
         }
 
         return neto;
@@ -35,17 +35,20 @@ Producto.mixin({
         var montoDescuento, monto;
 
         montoDescuento = (subtotal * cantidadPorcentual) / 100.0;
-        this.montoDescuento = montoDescuento;
         monto = subtotal - montoDescuento;
+        this.montoDescuento = montoDescuento;
 
         return monto;
     },
 
-    _descontarFijo: function(subtotal){
-        var monto = subtotal;
+    _descontarFijo: function(subtotal, descuento){
+        var monto = subtotal,
+            montoDescuento;
 
         if(this.codigo === this.descuento.codigo){
-            monto -= this.descuento.cantidad * this.cantidad;
+            montoDescuento = descuento * this.cantidad;
+            monto = monto - montoDescuento;
+            this.montoDescuento = montoDescuento;
         }
 
         return monto;

@@ -66,7 +66,7 @@
                             <td data-ng-bind="producto.codigo"></td>
                             <td data-ng-bind="producto.cantidad"></td>
                             <td data-ng-bind="producto.precio | currency"></td>
-                            <td data-ng-bind="producto.descuento | currency"></td>
+                            <td data-ng-bind="producto.montoDescuento | currency"></td>
                             <td data-ng-bind="producto.total | currency"></td>
                             <td>
                                 <a href data-ng-click="gpCtrl.eliminarProducto($index)">Eliminar</a>
