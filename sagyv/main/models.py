@@ -365,6 +365,13 @@ class TipoTarjeta(models.Model):
         return self.nombre
 
 
+class Banco(models.Model):
+    nombre = models.CharField(max_length=255)
+
+    def __unicode__(self):
+        return self.nombre
+
+
 class TarjetaCredito(models.Model):
     nombre = models.CharField(max_length=140)
     codigo = models.CharField(max_length=140, null=True)
