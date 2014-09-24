@@ -6,9 +6,11 @@ from django.core import serializers
 from django.http import HttpResponse
 from django.db.models import Q
 from django.views.generic import View, TemplateView, ListView
-
 from main.helpers.fecha import convierte_texto_fecha, convierte_fecha_texto
-from main.models import Vehiculo, Trabajador, TrabajadorVehiculo
+
+from main.models import Vehiculo
+from main.models import Trabajador
+from main.models import TrabajadorVehiculo
 
 @transaction.atomic
 def actualizar_estado_vehiculos(vehiculo, chofer):

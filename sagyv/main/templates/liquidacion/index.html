@@ -18,11 +18,15 @@
         {% include "liquidacion/panel_cabecera.html" %}
         {% include "liquidacion/panel_detalle.html" %}
 
-        <div data-ng-controller="ClienteController as cliente">
-            <button type="button" class="btn btn-default"
+        <div>
+            <div class="box-style" data-ng-controller="GuiaPropiaController as gpCtrl">
+                <button type="button" class="btn btn-default"
                 data-accion="abre_modal"
                 data-modal="guia_propia"
-                data-ng-click="cliente.resetearCliente()">Guia propia</button>
+                data-ng-click="gpCtrl.resetearCliente()">Guia propia</button>
+
+                {% include "liquidacion/components/modal_guia_propia.html" %}
+            </div>
 
             <button type="button" class="btn btn-default"
                 data-accion="abre_modal"
@@ -44,7 +48,14 @@
                 data-accion="abre_modal"
                 data-modal="otros">Otros</button>
 
-            {% include "liquidacion/components/modal_guia_propia.html" %}
+            <div class="box-style">
+                <button type="button" class="btn btn-default"
+                data-accion="abre_modal"
+                data-modal="cheque">CHEQUES</button>
+
+                {% include "liquidacion/components/modal_cheques.html" %}
+            </div>
+
             {% include "liquidacion/components/modal_guia_lipigas.html" %}
             {% include "liquidacion/components/modal_voucher_lipigas.html" %}
             {% include "liquidacion/components/modal_voucher_transbank.html" %}
@@ -53,7 +64,6 @@
 
         </div>
 
-        <button class="btn btn-default" data-accion="abre_modal" data-modal="cheques">CHEQUES</button>
         <button class="btn btn-primary" data-modal="">Guardar</button>
         <button class="btn btn-default" data-modal="">VENTA GARANTIAS</button>
 
