@@ -123,6 +123,29 @@
                 </tr>
             </tbody>
         </table>
+        <h3>Cheques</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Banco</th>
+                    <th>N° Cheque</th>
+                    <th>Monto</th>
+                    <th>Fecha</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="chk in liqCtrl.cheques">
+                    <td data-ng-bind="chk.banco.nombre"></td>
+                    <td data-ng-bind="chk.numero"></td>
+                    <td data-ng-bind="chk.monto"></td>
+                    <td data-ng-bind="chk.fecha | date:'yyyy-MM-d'"></td>
+                    <td>
+                        <a href data-ng-click="liqCtrl.removeCheque($index)">eliminar</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
         <button class="btn btn-primary" data-modal="">Guardar</button>
         <button class="btn btn-default" data-modal="">VENTA GARANTIAS</button>

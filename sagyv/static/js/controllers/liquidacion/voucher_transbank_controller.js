@@ -63,7 +63,7 @@ VoucherTransbankController.mixin({
 
     guardar: function(){
         console.log('guardando');
-        this.scope.$emit('guia:agregarVoucher', );
+        //this.scope.$emit('guia:agregarVoucher', );
     }
 });
 
