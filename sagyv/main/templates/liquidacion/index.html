@@ -1,4 +1,4 @@
-{% extends "panel_control.html" %}
+|{% extends "panel_control.html" %}
 {% load static from staticfiles %}
 
 {% block content %}
@@ -72,7 +72,7 @@
                 {% include "liquidacion/components/modal_otros.html" %}
             </div>
 
-            <div class="box">
+            <div class="box" data-ng-controller="ChequeController as cCtrl">
                 <button type="button" class="btn btn-default"
                 data-accion="abre_modal"
                 data-modal="cheque">CHEQUES</button>
@@ -115,6 +115,7 @@
 <script src="{% static 'js/plugins/typeahead.min.js' %}"></script>
 <script src="{% static 'js/common_functions.js' %}"></script>
 <script src="{% static 'js/liquidacion.bundle.js' %}"></script>
+
 <script>
     App.urls.set("liquidacion:obtener_guia", "{% url 'liquidacion:obtener_guia' %}");
     App.urls.set("liquidacion:buscar_cliente", "{% url 'liquidacion:buscar_cliente' %}");
