@@ -12,6 +12,11 @@
 
         <label for="numero_boleta">Nº de boleta</label>
         <input id="numero_boleta" type="text" value="" data-ng-model="liqCtrl.guia.boleta" />
+
+        <label for="kilos_vendidos">Kilos vendidos</label>
+        {% verbatim %}
+        <span data-ng-bind-template="{{ liqCtrl.kilosVendidos }} Kg."></span>
+        {% endverbatim %}
     </div>
 
     <div>

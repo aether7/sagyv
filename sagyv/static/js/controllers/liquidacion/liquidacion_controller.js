@@ -3,11 +3,13 @@ function LiquidacionController($http, $scope){
     this.boleta = null;
 
     this.guia = {};
+    this.ventas = [];
 
-    this.idVehiculo = null;
+    this.idGuiaDespacho = null;
     this.subTotal = 0;
     this.descuentos = 0;
     this.total = 0;
+    this.kilosVendidos = 0;
     this.fecha = null;
     this.vehiculo = null;
 
@@ -17,14 +19,12 @@ function LiquidacionController($http, $scope){
     this.suscribeEvents();
 }
 
-LiquidacionController.prototype = {
-    constructor: LiquidacionController,
-
+LiquidacionController.mixin({
     buscarGuia: function(){
         var url = App.urls.get("liquidacion:obtener_guia"),
             _this = this;
 
-        url += "?id_vehiculo=" + this.idVehiculo;
+        url += "?id_guia_despacho=" + this.idGuiaDespacho;
 
         this.resetearValores();
         this.http.get(url).success(this.cargaDatosCabecera.bind(this));
@@ -63,6 +63,23 @@ LiquidacionController.prototype = {
         this.total = this.subTotal - this.descuentos;
     },
 
+    calcularKilos: function(){
+        var _this = this;
+
+        this.kilosVendidos = 0;
+
+        this.productos.forEach(function(producto){
+            var vacios = parseInt(producto.vacios),
+                peso = parseInt(producto.peso);
+
+            if(isNaN(vacios)){
+                vacios = 0;
+            }
+
+            _this.kilosVendidos += vacios * peso;
+        });
+    },
+
     resetearValores: function(){
         this.idCliente = null;
         this.guia = {};
@@ -73,12 +90,18 @@ LiquidacionController.prototype = {
 
     suscribeEvents: function(){
         this.scope.$on("guia:calcularSubTotal", this.calcularSubTotal.bind(this));
+        this.scope.$on("guia:calcularKilos", this.calcularKilos.bind(this));
+        this.scope.$on("guia:agregarVenta", this.addVenta.bind(this));
+    },
+
+    addVenta: function(evt, venta){
+        this.ventas.push(venta);
     },
 
     cerrarLiquidacion: function(){
         var url = App.urls.get("liquidacion:cerrar");
         window.location.href = url;
     }
-};
+});
 
 module.exports = LiquidacionController;
