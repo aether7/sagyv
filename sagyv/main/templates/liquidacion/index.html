@@ -105,7 +105,7 @@
         </table>
 
         <h3>Vouchers</h3>
-        <table class="table table-striped">
+        <table class="table table-bordered table-condensed">
             <thead>
                 <tr>
                     <th>Tipo voucher</th>
@@ -114,13 +114,16 @@
                 </tr>
             </thead>
             <tbody>
-                <tr data-ng-if="liqCtrl.vouchers.lipigas.length">
-                    <td rowspan="liqCtrl.vouchers.lipigas.length">Lipigas</td>
+                <tr data-ng-show="liqCtrl.vouchers.lipigas.length">
+                    {% verbatim %}
+                    <td rowspan="{{ liqCtrl.vouchers.lipigas.length + 1 }}"
+                        style="text-align:center;vertical-align:middle">Lipigas</td>
+                    {% endverbatim %}
                 </tr>
 
-                <tr data-ng-repeat="voucherLipigas in liqCtrl.vouchers.lipigas">
-                    <td data-ng-bind="voucherLipigas.tarjeta.nombre"></td>
-                    <td data-ng-bind="voucherLipigas.total | currency"></td>
+                <tr data-ng-repeat="tarjeta in liqCtrl.vouchers.lipigas">
+                    <td data-ng-bind="tarjeta.nombre"></td>
+                    <td data-ng-bind="tarjeta.monto | currency"></td>
                 </tr>
 
                 <tr data-ng-if="liqCtrl.vouchers.transbank.length">
@@ -129,10 +132,11 @@
 
                 <tr data-ng-repeat="voucherTransbank in liqCtrl.vouchers.transbank">
                     <td data-ng-bind="voucherTransbank.tarjeta.nombre"></td>
-                    <td data-ng-bind="voucherTransbank.total | currency"></td>
+                    <td data-ng-bind="voucherTransbank.monto | currency"></td>
                 </tr>
             </tbody>
         </table>
+
         <h3>Cheques</h3>
         <table class="table table-striped">
             <thead>

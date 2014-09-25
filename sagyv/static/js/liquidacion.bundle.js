@@ -280,6 +280,8 @@ LiquidacionController.mixin({
     addVouchers: function(evt, voucher){
         var self = this;
 
+        console.log('add voucher');
+
         if(!(voucher.tipo in self.vouchers)){
             throw "el voucher {0} no es lipigas ni transbank es {1}".format(index, voucher.tipo);
         }
@@ -364,7 +366,7 @@ function VoucherLipigasController($http, $scope){
     this.monto = null;
     this.descuento = 0;
 
-    this.voucher = {};
+    this.voucher = null;
     this.mensajes = {};
 }
 
@@ -394,8 +396,9 @@ VoucherLipigasController.mixin({
     },
 
     guardar: function(){
+        console.log('guardando voucher lipigas');
         this.voucher.numero = this.numero;
-        this.scope.$emit("guia:agregarVouchers", this.voucher);
+        this.scope.$emit("guia:agregarVoucher", this.voucher);
 
         $('#modal_voucher_lipigas').modal('hide');
         common.agregarMensaje('El voucher de lipigas ha sido agregado exitosamente');
@@ -736,7 +739,7 @@ module.exports = Venta;
 var Voucher = require('./voucher_model.js');
 
 function VoucherLipigas(){
-    Voucher.call('lipigas');
+    Voucher.call(this, 'lipigas');
     this.descuento = 0;
     this.numero = null;
 }

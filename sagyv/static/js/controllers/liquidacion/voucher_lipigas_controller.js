@@ -9,7 +9,7 @@ function VoucherLipigasController($http, $scope){
     this.monto = null;
     this.descuento = 0;
 
-    this.voucher = {};
+    this.voucher = null;
     this.mensajes = {};
 }
 
@@ -39,8 +39,9 @@ VoucherLipigasController.mixin({
     },
 
     guardar: function(){
+        console.log('guardando voucher lipigas');
         this.voucher.numero = this.numero;
-        this.scope.$emit("guia:agregarVouchers", this.voucher);
+        this.scope.$emit("guia:agregarVoucher", this.voucher);
 
         $('#modal_voucher_lipigas').modal('hide');
         common.agregarMensaje('El voucher de lipigas ha sido agregado exitosamente');

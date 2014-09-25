@@ -111,6 +111,8 @@ LiquidacionController.mixin({
     addVouchers: function(evt, voucher){
         var self = this;
 
+        console.log('add voucher');
+
         if(!(voucher.tipo in self.vouchers)){
             throw "el voucher {0} no es lipigas ni transbank es {1}".format(index, voucher.tipo);
         }
