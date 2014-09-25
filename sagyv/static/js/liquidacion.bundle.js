@@ -346,7 +346,26 @@ VoucherLipigasController.mixin({
 
 module.exports = VoucherLipigasController;
 
-},{"./../../models/liquidacion/voucher_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/voucher_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/liquidacion_bundle.js":[function(require,module,exports){
+},{"./../../models/liquidacion/voucher_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/voucher_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/voucher_transbank_controller.js":[function(require,module,exports){
+function VoucherTransbankController($http, $scope){
+    this.scope = $scope;
+    this.vouchers = [];
+    this.voucher = {};
+}
+
+VoucherTransbankController.mixin({
+    addVoucher: function(){
+        this.vouchers.push();
+    },
+
+    removeVoucher: function(index){
+        this.vouchers.splice(index, 1);
+    }
+});
+
+module.exports = VoucherTransbankController;
+
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/liquidacion_bundle.js":[function(require,module,exports){
 (function(){
 'use strict';
 
@@ -355,13 +374,15 @@ var app = angular.module('liquidacionApp',[]),
     ProductoController = require('./controllers/liquidacion/producto_controller.js'),
     GuiaPropiaController = require('./controllers/liquidacion/guia_propia_controller.js'),
     GuiaLipigasController = require('./controllers/liquidacion/guia_lipigas_controller.js'),
-    VoucherLipigasController = require('./controllers/liquidacion/voucher_lipigas_controller.js');
+    VoucherLipigasController = require('./controllers/liquidacion/voucher_lipigas_controller.js'),
+    VoucherTransbankController = require('./controllers/liquidacion/voucher_transbank_controller.js');
 
 app.controller('LiquidacionController', ['$http','$scope', LiquidacionController]);
 app.controller('ProductoController', ['$scope', ProductoController]);
 app.controller('GuiaPropiaController', ['$http', '$scope', GuiaPropiaController]);
 app.controller('GuiaLipigasController', ['$http', '$scope', GuiaLipigasController]);
 app.controller('VoucherLipigasController', ['$http', '$scope', VoucherLipigasController]);
+app.controller('VoucherTransbankController', ['$http', '$scope', VoucherTransbankController]);
 
 })();
 
@@ -369,7 +390,7 @@ $('button[data-accion=abre_modal]').on('click', function(evt){
     $('#modal_' + $(this).data('modal')).modal('show');
 });
 
-},{"./controllers/liquidacion/guia_lipigas_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_lipigas_controller.js","./controllers/liquidacion/guia_propia_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_propia_controller.js","./controllers/liquidacion/liquidacion_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/liquidacion_controller.js","./controllers/liquidacion/producto_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/producto_controller.js","./controllers/liquidacion/voucher_lipigas_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/voucher_lipigas_controller.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/producto_model.js":[function(require,module,exports){
+},{"./controllers/liquidacion/guia_lipigas_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_lipigas_controller.js","./controllers/liquidacion/guia_propia_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_propia_controller.js","./controllers/liquidacion/liquidacion_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/liquidacion_controller.js","./controllers/liquidacion/producto_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/producto_controller.js","./controllers/liquidacion/voucher_lipigas_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/voucher_lipigas_controller.js","./controllers/liquidacion/voucher_transbank_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/voucher_transbank_controller.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/producto_model.js":[function(require,module,exports){
 function Producto(){
     this.codigo = null;
     this.cantidad = null;
