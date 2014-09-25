@@ -33,6 +33,8 @@ ChequeController.mixin({
             return;
         }
 
+        this.scope.$emit('guia:agregarCheques', this.cheque.cheques);
+
     }
 
     //se guardara 1 x 1 (?)
