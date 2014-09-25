@@ -1,27 +1,30 @@
-var Producto = require("./../../models/producto_model.js");
+var Producto = require('./../../models/liquidacion/producto_model.js'),
+    Venta = require('./../../models/liquidacion/venta_model.js');
 
 function GuiaPropiaController($http, $scope){
+    this.venta = null;
     this.idCliente = null;
-    this.descripcionDescuento = "nada";
+    this.descripcionDescuento = 'nada';
     this.http = $http;
     this.scope = $scope;
     this.cliente = {};
-    this.productoSeleccionado = {};
-    this.productosSeleccionados = [];
+    this.producto = {};
 
+    this.totalGuia = 0;
     this.descuento = {};
     this.mensajes = {};
 }
 
 GuiaPropiaController.mixin({
-    resetearCliente: function(){
+    resetearGuia: function(){
         this.idCliente = null;
-        this.descripcionDescuento = "nada";
+        this.descripcionDescuento = 'nada';
+        this.venta = new Venta();
     },
 
     buscarCliente: function(){
-        var url = App.urls.get("liquidacion:buscar_cliente");
-        url += "?id_cliente=" + this.idCliente;
+        var url = App.urls.get('liquidacion:buscar_cliente');
+        url += '?id_cliente=' + this.idCliente;
 
         this.http.get(url).success(this.procesarCliente.bind(this));
     },
@@ -47,42 +50,56 @@ GuiaPropiaController.mixin({
             return;
         }
 
-        obj = JSON.parse(this.productoSeleccionado.tipo);
+        obj = JSON.parse(this.producto.tipo);
 
         producto = new Producto();
-        producto.cantidad = this.productoSeleccionado.cantidad;
+        producto.cantidad = this.producto.cantidad;
         producto.precio = obj.precio;
         producto.codigo = obj.codigo;
         producto.descuento = this.descuento;
         producto.calcularTotal();
 
-        this.productosSeleccionados.push(producto);
-        this.productoSeleccionado = {};
+        this.venta.addProducto(producto);
+        this.producto = {};
+
+        this.venta.calcularTotal();
     },
 
     esValidoProducto: function(){
         this.mensajes = {};
 
-        if(!this.productoSeleccionado.tipo){
-            this.mensajes.producto = "No se ha seleccionado que producto se desea agregar";
+        if(!this.producto.tipo){
+            this.mensajes.producto = 'No se ha seleccionado que producto se desea agregar';
             return false;
         }
 
-        obj = JSON.parse(this.productoSeleccionado.tipo);
+        obj = JSON.parse(this.producto.tipo);
 
-        if(!this.productoSeleccionado.cantidad || parseInt(this.productoSeleccionado.cantidad) < 1){
-            this.mensajes.producto = "Se debe ingresar una cantidad de producto";
+        if(!this.producto.cantidad || parseInt(this.producto.cantidad) < 1){
+            this.mensajes.producto = 'Se debe ingresar una cantidad de producto';
             return false;
-        }else if(obj.cantidad < parseInt(this.productoSeleccionado.cantidad)){
-            this.mensajes.producto = "No se puede elegir una mayor a la disponible";
+        }else if(obj.cantidad < parseInt(this.producto.cantidad)){
+            this.mensajes.producto = 'No se puede elegir una mayor a la disponible';
             return false;
         }
 
         return true;
     },
 
-    eliminarProducto: function(index){
-        this.productosSeleccionados.splice(index, 1);
+    removeProducto: function(index){
+        this.venta.removeProducto(index);
+    },
+
+    calcularTotalGuia: function(){
+        this.venta.calcularTotal();
+    },
+
+    guardar: function(){
+        this.venta.tipoVenta = "propia";
+
+        this.scope.$emit("guia:agregarVenta", this.venta);
+        common.agregarMensaje('Se ha guardado guía propia exitosamente');
+        $('#modal_guia_propia').modal('hide');
     }
 });
 

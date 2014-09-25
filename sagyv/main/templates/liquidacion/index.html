@@ -2,14 +2,16 @@
 {% load static from staticfiles %}
 
 {% block content %}
+    {% include "mensaje.html" %}
+
     <section id="liquidacion" class="panel-liquidacion"
         data-ng-app="liquidacionApp" data-ng-controller="LiquidacionController as liqCtrl">
 
         <section class="panel-busqueda">
-            <label for="lista_vehiculos" >Vehículo</label>
-            <select name="lista_vehiculos" id="lista_vehiculos" data-ng-model="liqCtrl.idVehiculo">
-                {% for vehiculo in vehiculos %}
-                <option value="{{ vehiculo.id }}">{{ vehiculo.numero }} - {{ vehiculo.patente }}</option>
+            <label for="guias_despacho">Guía despacho</label>
+            <select id="guias_despacho" data-ng-model="liqCtrl.idGuiaDespacho">
+                {% for guia_despacho in guias_despacho %}
+                <option value="{{ guia_despacho.id }}" data-id="{{ guia_despacho.id }}">{{ guia_despacho.numero }}</option>
                 {% endfor %}
             </select>
             <button class="btn btn-primary" data-ng-click="liqCtrl.buscarGuia()">Buscar</button>
@@ -19,18 +21,23 @@
         {% include "liquidacion/panel_detalle.html" %}
 
         <div>
-            <div class="box-style" data-ng-controller="GuiaPropiaController as gpCtrl">
+            <div class="box" data-ng-controller="GuiaPropiaController as gpCtrl">
                 <button type="button" class="btn btn-default"
-                data-accion="abre_modal"
-                data-modal="guia_propia"
-                data-ng-click="gpCtrl.resetearCliente()">Guia propia</button>
+                    data-accion="abre_modal"
+                    data-modal="guia_propia"
+                    data-ng-click="gpCtrl.resetearGuia()">Guia propia</button>
 
                 {% include "liquidacion/components/modal_guia_propia.html" %}
             </div>
 
-            <button type="button" class="btn btn-default"
-                data-accion="abre_modal"
-                data-modal="guia_lipigas">Guia Lipigas</button>
+            <div class="box" data-ng-controller="GuiaLipigasController as glCtrl">
+                <button type="button" class="btn btn-default"
+                    data-accion="abre_modal"
+                    data-modal="guia_lipigas"
+                    data-ng-click="glCtrl.resetearGuia()">Guia Lipigas</button>
+
+                {% include "liquidacion/components/modal_guia_lipigas.html" %}
+            </div>
 
             <button type="button" class="btn btn-default"
                 data-accion="abre_modal"
@@ -56,13 +63,32 @@
                 {% include "liquidacion/components/modal_cheques.html" %}
             </div>
 
-            {% include "liquidacion/components/modal_guia_lipigas.html" %}
             {% include "liquidacion/components/modal_voucher_lipigas.html" %}
             {% include "liquidacion/components/modal_voucher_transbank.html" %}
             {% include "liquidacion/components/modal_cupones_prepago.html" %}
             {% include "liquidacion/components/modal_otros.html" %}
-
         </div>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Número guía</th>
+                    <th>Tipo Venta</th>
+                    <th>Total</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="venta in liqCtrl.ventas">
+                    <td data-ng-bind="venta.numero"></td>
+                    <td data-ng-bind="venta.tipoVenta"></td>
+                    <td data-ng-bind="venta.total | currency"></td>
+                    <td>
+                        <a href data-ng-click="liqCtrl.eliminarVenta($index)">eliminar</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
         <button class="btn btn-primary" data-modal="">Guardar</button>
         <button class="btn btn-default" data-modal="">VENTA GARANTIAS</button>

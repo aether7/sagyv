@@ -18,19 +18,26 @@
                         <option value="{{ cliente.id }}">{{ cliente.giro }}</option>
                         {% endfor %}
                     </select>
-                    <span class="help-block"></span>
+
+                    <span class="text-danger"
+                        data-ng-show="gpCtrl.mensajes.cliente"
+                        data-ng-bind="gpCtrl.mensajes.cliente"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="guia_cliente_guia_propia" class="control-label">Guía cliente</label>
-                    <input type="text" class="form-control" />
+                    <input type="text" class="form-control" data-ng-model="gpCtrl.venta.numero" />
+
+                    <span class="text-danger"
+                        data-ng-show="gpCtrl.mensajes.numeroVenta"
+                        data-ng-bind="gpCtrl.mensajes.numeroVenta"></span>
                 </div>
 
                 <div class="form-group">
                     <div class="col-xs-6">
                         <label for="tipo_producto_guia_propia" class="control-label">Tipo</label>
                         <select id="tipo_producto_guia_propia" class="form-control"
-                            ng-model="gpCtrl.productoSeleccionado.tipo">
+                            ng-model="gpCtrl.producto.tipo">
                             {% verbatim %}
                             <option value="{{ producto }}"
                                 data-ng-repeat="producto in productos"
@@ -41,7 +48,7 @@
                     <div class="col-xs-4">
                         <label for="cantidad_guia_propia" class="control-label">Cantidad</label>
                         <input id="cantidad_guia_propia" type="text" class="form-control"
-                            ng-model="gpCtrl.productoSeleccionado.cantidad" />
+                            ng-model="gpCtrl.producto.cantidad" />
                     </div>
                     <div class="col-xs-2 btn-productos">
                         <button class="btn btn-default btn-agregar" ng-click="gpCtrl.agregarProducto()">+</button>
@@ -62,14 +69,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr data-ng-repeat="producto in gpCtrl.productosSeleccionados">
+                        <tr data-ng-repeat="producto in gpCtrl.venta.productos">
                             <td data-ng-bind="producto.codigo"></td>
                             <td data-ng-bind="producto.cantidad"></td>
                             <td data-ng-bind="producto.precio | currency"></td>
                             <td data-ng-bind="producto.montoDescuento | currency"></td>
                             <td data-ng-bind="producto.total | currency"></td>
                             <td>
-                                <a href data-ng-click="gpCtrl.eliminarProducto($index)">Eliminar</a>
+                                <a href data-ng-click="gpCtrl.removeProducto($index)">Eliminar</a>
                             </td>
                         </tr>
                     </tbody>
@@ -84,11 +91,17 @@
                     Situación descuento : {{ gpCtrl.descripcionDescuento }}
                 </div>
                 {% endverbatim %}
+
+                {% verbatim %}
+                <div>
+                    TOTAL guía propia: {{ gpCtrl.venta.total | currency }}
+                </div>
+                {% endverbatim %}
             </div>
 
             <div class="modal-footer">
                 <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <button class="btn btn-primary">Guardar</button>
+                <button class="btn btn-primary" data-ng-click="gpCtrl.guardar()">Guardar</button>
             </div>
         </div>
     </div>

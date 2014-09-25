@@ -1,28 +1,47 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_propia_controller.js":[function(require,module,exports){
-var Producto = require("./../../models/producto_model.js");
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_lipigas_controller.js":[function(require,module,exports){
+var Producto = require('./../../models/liquidacion/producto_model.js'),
+    Venta = require('./../../models/liquidacion/venta_model.js');
+
+function GuiaLipigasController(){
+    this.venta = null;
+}
+
+GuiaLipigasController({
+    resetearGuia: function(){
+        this.venta = new Venta();
+    }
+});
+
+module.exports = GuiaLipigasController;
+
+},{"./../../models/liquidacion/producto_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/producto_model.js","./../../models/liquidacion/venta_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/venta_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_propia_controller.js":[function(require,module,exports){
+var Producto = require('./../../models/liquidacion/producto_model.js'),
+    Venta = require('./../../models/liquidacion/venta_model.js');
 
 function GuiaPropiaController($http, $scope){
+    this.venta = null;
     this.idCliente = null;
-    this.descripcionDescuento = "nada";
+    this.descripcionDescuento = 'nada';
     this.http = $http;
     this.scope = $scope;
     this.cliente = {};
-    this.productoSeleccionado = {};
-    this.productosSeleccionados = [];
+    this.producto = {};
 
+    this.totalGuia = 0;
     this.descuento = {};
     this.mensajes = {};
 }
 
 GuiaPropiaController.mixin({
-    resetearCliente: function(){
+    resetearGuia: function(){
         this.idCliente = null;
-        this.descripcionDescuento = "nada";
+        this.descripcionDescuento = 'nada';
+        this.venta = new Venta();
     },
 
     buscarCliente: function(){
-        var url = App.urls.get("liquidacion:buscar_cliente");
-        url += "?id_cliente=" + this.idCliente;
+        var url = App.urls.get('liquidacion:buscar_cliente');
+        url += '?id_cliente=' + this.idCliente;
 
         this.http.get(url).success(this.procesarCliente.bind(this));
     },
@@ -48,58 +67,74 @@ GuiaPropiaController.mixin({
             return;
         }
 
-        obj = JSON.parse(this.productoSeleccionado.tipo);
+        obj = JSON.parse(this.producto.tipo);
 
         producto = new Producto();
-        producto.cantidad = this.productoSeleccionado.cantidad;
+        producto.cantidad = this.producto.cantidad;
         producto.precio = obj.precio;
         producto.codigo = obj.codigo;
         producto.descuento = this.descuento;
         producto.calcularTotal();
 
-        this.productosSeleccionados.push(producto);
-        this.productoSeleccionado = {};
+        this.venta.addProducto(producto);
+        this.producto = {};
+
+        this.venta.calcularTotal();
     },
 
     esValidoProducto: function(){
         this.mensajes = {};
 
-        if(!this.productoSeleccionado.tipo){
-            this.mensajes.producto = "No se ha seleccionado que producto se desea agregar";
+        if(!this.producto.tipo){
+            this.mensajes.producto = 'No se ha seleccionado que producto se desea agregar';
             return false;
         }
 
-        obj = JSON.parse(this.productoSeleccionado.tipo);
+        obj = JSON.parse(this.producto.tipo);
 
-        if(!this.productoSeleccionado.cantidad || parseInt(this.productoSeleccionado.cantidad) < 1){
-            this.mensajes.producto = "Se debe ingresar una cantidad de producto";
+        if(!this.producto.cantidad || parseInt(this.producto.cantidad) < 1){
+            this.mensajes.producto = 'Se debe ingresar una cantidad de producto';
             return false;
-        }else if(obj.cantidad < parseInt(this.productoSeleccionado.cantidad)){
-            this.mensajes.producto = "No se puede elegir una mayor a la disponible";
+        }else if(obj.cantidad < parseInt(this.producto.cantidad)){
+            this.mensajes.producto = 'No se puede elegir una mayor a la disponible';
             return false;
         }
 
         return true;
     },
 
-    eliminarProducto: function(index){
-        this.productosSeleccionados.splice(index, 1);
+    removeProducto: function(index){
+        this.venta.removeProducto(index);
+    },
+
+    calcularTotalGuia: function(){
+        this.venta.calcularTotal();
+    },
+
+    guardar: function(){
+        this.venta.tipoVenta = "propia";
+
+        this.scope.$emit("guia:agregarVenta", this.venta);
+        common.agregarMensaje('Se ha guardado guía propia exitosamente');
+        $('#modal_guia_propia').modal('hide');
     }
 });
 
 module.exports = GuiaPropiaController;
 
-},{"./../../models/producto_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/producto_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/liquidacion_controller.js":[function(require,module,exports){
+},{"./../../models/liquidacion/producto_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/producto_model.js","./../../models/liquidacion/venta_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/venta_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/liquidacion_controller.js":[function(require,module,exports){
 function LiquidacionController($http, $scope){
     this.productos = [];
     this.boleta = null;
 
     this.guia = {};
+    this.ventas = [];
 
-    this.idVehiculo = null;
+    this.idGuiaDespacho = null;
     this.subTotal = 0;
     this.descuentos = 0;
     this.total = 0;
+    this.kilosVendidos = 0;
     this.fecha = null;
     this.vehiculo = null;
 
@@ -109,14 +144,12 @@ function LiquidacionController($http, $scope){
     this.suscribeEvents();
 }
 
-LiquidacionController.prototype = {
-    constructor: LiquidacionController,
-
+LiquidacionController.mixin({
     buscarGuia: function(){
         var url = App.urls.get("liquidacion:obtener_guia"),
             _this = this;
 
-        url += "?id_vehiculo=" + this.idVehiculo;
+        url += "?id_guia_despacho=" + this.idGuiaDespacho;
 
         this.resetearValores();
         this.http.get(url).success(this.cargaDatosCabecera.bind(this));
@@ -155,6 +188,23 @@ LiquidacionController.prototype = {
         this.total = this.subTotal - this.descuentos;
     },
 
+    calcularKilos: function(){
+        var _this = this;
+
+        this.kilosVendidos = 0;
+
+        this.productos.forEach(function(producto){
+            var vacios = parseInt(producto.vacios),
+                peso = parseInt(producto.peso);
+
+            if(isNaN(vacios)){
+                vacios = 0;
+            }
+
+            _this.kilosVendidos += vacios * peso;
+        });
+    },
+
     resetearValores: function(){
         this.idCliente = null;
         this.guia = {};
@@ -165,13 +215,19 @@ LiquidacionController.prototype = {
 
     suscribeEvents: function(){
         this.scope.$on("guia:calcularSubTotal", this.calcularSubTotal.bind(this));
+        this.scope.$on("guia:calcularKilos", this.calcularKilos.bind(this));
+        this.scope.$on("guia:agregarVenta", this.addVenta.bind(this));
+    },
+
+    addVenta: function(evt, venta){
+        this.ventas.push(venta);
     },
 
     cerrarLiquidacion: function(){
         var url = App.urls.get("liquidacion:cerrar");
         window.location.href = url;
     }
-};
+});
 
 module.exports = LiquidacionController;
 
@@ -208,6 +264,7 @@ ProductoController.prototype = {
         producto.vacios = aux;
         this.calculaValorTotal(producto);
         this.scope.$emit("guia:calcularSubTotal");
+        this.scope.$emit("guia:calcularKilos");
     }
 };
 
@@ -215,24 +272,26 @@ module.exports = ProductoController;
 
 },{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/liquidacion_bundle.js":[function(require,module,exports){
 (function(){
-"use strict";
+'use strict';
 
-var app = angular.module("liquidacionApp",[]),
-    LiquidacionController = require("./controllers/liquidacion/liquidacion_controller.js"),
-    ProductoController = require("./controllers/liquidacion/producto_controller.js"),
-    GuiaPropiaController = require("./controllers/liquidacion/guia_propia_controller.js");
+var app = angular.module('liquidacionApp',[]),
+    LiquidacionController = require('./controllers/liquidacion/liquidacion_controller.js'),
+    ProductoController = require('./controllers/liquidacion/producto_controller.js'),
+    GuiaPropiaController = require('./controllers/liquidacion/guia_propia_controller.js'),
+    GuiaLipigasController = require('./controllers/liquidacion/guia_lipigas_controller.js');
 
-app.controller("LiquidacionController", ["$http","$scope", LiquidacionController]);
-app.controller("ProductoController", ["$scope", ProductoController]);
-app.controller("GuiaPropiaController", ["$http", "$scope", GuiaPropiaController]);
+app.controller('LiquidacionController', ['$http','$scope', LiquidacionController]);
+app.controller('ProductoController', ['$scope', ProductoController]);
+app.controller('GuiaPropiaController', ['$http', '$scope', GuiaPropiaController]);
+app.controller('GuiaLipigasController', ['$http', '$scope', GuiaLipigasController]);
 
 })();
 
-$("button[data-accion=abre_modal]").on("click", function(evt){
-    $("#modal_" + $(this).data("modal")).modal("show");
+$('button[data-accion=abre_modal]').on('click', function(evt){
+    $('#modal_' + $(this).data('modal')).modal('show');
 });
 
-},{"./controllers/liquidacion/guia_propia_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_propia_controller.js","./controllers/liquidacion/liquidacion_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/liquidacion_controller.js","./controllers/liquidacion/producto_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/producto_controller.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/producto_model.js":[function(require,module,exports){
+},{"./controllers/liquidacion/guia_lipigas_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_lipigas_controller.js","./controllers/liquidacion/guia_propia_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_propia_controller.js","./controllers/liquidacion/liquidacion_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/liquidacion_controller.js","./controllers/liquidacion/producto_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/producto_controller.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/producto_model.js":[function(require,module,exports){
 function Producto(){
     this.codigo = null;
     this.cantidad = null;
@@ -291,5 +350,36 @@ Producto.mixin({
 });
 
 module.exports = Producto;
+
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/venta_model.js":[function(require,module,exports){
+function Venta(){
+    this.numero = 0;
+    this.total = 0;
+    this.tipoVenta = null;
+    this.cliente = {};
+    this.productos = [];
+}
+
+Venta.mixin({
+    addProducto: function(producto){
+        this.productos.push(producto);
+    },
+
+    removeProducto: function(index){
+        this.productos.splice(index, 1);
+    },
+
+    calcularTotal: function(){
+        var total = 0;
+
+        this.productos.forEach(function(producto){
+            total += parseInt(producto.total);
+        });
+
+        this.total = total;
+    }
+});
+
+module.exports = Venta;
 
 },{}]},{},["/Users/Aether/Proyectos/sagyv/sagyv/static/js/liquidacion_bundle.js"]);

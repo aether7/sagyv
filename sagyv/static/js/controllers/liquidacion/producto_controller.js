@@ -30,6 +30,7 @@ ProductoController.prototype = {
         producto.vacios = aux;
         this.calculaValorTotal(producto);
         this.scope.$emit("guia:calcularSubTotal");
+        this.scope.$emit("guia:calcularKilos");
     }
 };
 

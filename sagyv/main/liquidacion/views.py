@@ -4,6 +4,7 @@ import json
 from django.http import HttpResponse
 from django.views.generic import TemplateView, View
 from reportlab.pdfgen import canvas
+from reportlab.lib.units import inch
 
 from main.models import Vehiculo
 from main.models import StockVehiculo
@@ -20,28 +21,28 @@ class IndexView(TemplateView):
 
 	def get_context_data(self, **kwargs):
 		context = super(IndexView, self).get_context_data(**kwargs)
-		context["vehiculos"] = Vehiculo.objects.order_by("id")
 		context["clientes_propios"] = Cliente.objects.filter(es_propio=True).order_by("id")
 		context["clientes_lipigas"] = Cliente.objects.filter(es_lipigas=True).order_by("id")
 		context["tarjetas_comerciales"] = TarjetaCredito.objects.get_tarjetas_comerciales()
 		context["bancos"] = Banco.objects.order_by("nombre")
 		context["tarjetas_bancarias"] = TarjetaCredito.objects.get_tarjetas_bancarias()
 		context["productos"] = Producto.objects.exclude(tipo_producto_id=3)
+		context["guias_despacho"] = GuiaDespacho.objects.filter(estado = 0).order_by("id")
 
 		return context
 
 
 class ObtenerGuiaDespacho(View):
 	def get(self, req):
-		id_vehiculo = int(req.GET.get("id_vehiculo"))
-		vehiculo = Vehiculo.objects.get(pk=id_vehiculo)
-		productos = self.obtener_productos(id_vehiculo)
-		guia = GuiaDespacho.objects.filter(vehiculo=vehiculo).order_by("-id")[0]
+		id_guia_despacho = int(req.GET.get("id_guia_despacho"))
+		guia = GuiaDespacho.objects.get(pk=id_guia_despacho)
+		vehiculo = guia.vehiculo
+		productos = self.obtener_productos(vehiculo.id)
 		boleta = BoletaTrabajador.objects.obtener_por_trabajador(vehiculo.get_ultimo_chofer())
 
 		datos = {
 			"vehiculo": {
-				"id": id_vehiculo,
+				"id": vehiculo.id,
 				"km": vehiculo.km,
 				"chofer": vehiculo.get_nombre_ultimo_chofer()
 			},
@@ -69,7 +70,8 @@ class ObtenerGuiaDespacho(View):
 				'id': item.producto.id,
 				'codigo': item.producto.codigo,
 				'cantidad': item.cantidad,
-				'precio': item.producto.get_precio_producto()
+				'precio': item.producto.get_precio_producto(),
+				'peso': item.producto.peso
 			})
 
 		return productos
@@ -161,8 +163,6 @@ class BalanceLiquidacionView(View):
 class Cerrar(TemplateView):
 
 	def get(self, req):
-		from reportlab.lib.units import inch
-
 		response = HttpResponse(content_type='application/pdf')
 		response['Content-Disposition'] = 'attachment; filename="reporte_eaeaea.pdf"'
 

@@ -103,23 +103,14 @@ App.Models.Trabajador.prototype = {
     },
 
     getJSON: function(){
-        function convierteFechaJSON(fecha){
-            var aux = fecha.toLocaleDateString().split("-");
-
-            aux[1] = parseInt(aux[1]) < 10 ? "0" + aux[1] : aux[1];
-            aux[0] = parseInt(aux[0]) < 10 ? "0" + aux[0] : aux[0];
-
-            return aux[2] + "-" + aux[1] + "-" + aux[0];
-        }
-
         var json = {
             nombre: this.nombre,
             apellido: this.apellido,
             rut: this.rut,
             domicilio: this.domicilio,
-            fecha_nacimiento: convierteFechaJSON(this.fechaNacimiento),
-            inicio_contrato: convierteFechaJSON(this.inicioContrato),
-            vigencia_licencia: convierteFechaJSON(this.vigenciaLicencia),
+            fecha_nacimiento: common.fecha.fechaToJSON(this.fechaNacimiento),
+            inicio_contrato: common.fecha.fechaToJSON(this.inicioContrato),
+            vigencia_licencia: common.fecha.fechaToJSON(this.vigenciaLicencia),
             afp: this.afp,
             sistema_salud: this.sistemaSalud,
             estado_civil: this.estadoCivil,
