@@ -48,7 +48,7 @@
                 {% include "liquidacion/components/modal_voucher_lipigas.html" %}
             </div>
 
-            <div class="box">
+            <div class="box" data-ng-controller="VoucherTransbankController as vtCtrl">
                 <button type="button" class="btn btn-default"
                     data-accion="abre_modal"
                     data-modal="voucher_transbank">Voucher Transbank</button>
@@ -82,6 +82,7 @@
             </div>
         </div>
 
+        <h3>Guías</h3>
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -98,6 +99,26 @@
                     <td data-ng-bind="venta.total | currency"></td>
                     <td>
                         <a href data-ng-click="liqCtrl.eliminarVenta($index)">eliminar</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Vouchers</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Tipo voucher</th>
+                    <th>Total</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="voucher in liqCtrl.vouchers">
+                    <td data-ng-bind="voucher.tipo"></td>
+                    <td data-ng-bind="voucher.total | currency"></td>
+                    <td>
+                        <a href data-ng-click="liqCtrl.eliminarVoucher($index)">eliminar</a>
                     </td>
                 </tr>
             </tbody>

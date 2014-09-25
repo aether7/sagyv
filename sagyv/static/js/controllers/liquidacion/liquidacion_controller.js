@@ -4,6 +4,8 @@ function LiquidacionController($http, $scope){
 
     this.guia = {};
     this.ventas = [];
+    this.vouchers = [];
+    this.cheques = [];
 
     this.idGuiaDespacho = null;
     this.subTotal = 0;
@@ -92,10 +94,24 @@ LiquidacionController.mixin({
         this.scope.$on("guia:calcularSubTotal", this.calcularSubTotal.bind(this));
         this.scope.$on("guia:calcularKilos", this.calcularKilos.bind(this));
         this.scope.$on("guia:agregarVenta", this.addVenta.bind(this));
+        this.scope.$on("guia:agregarVoucher", this.addVoucher.bind(this));
+        this.scope.$on("guia:agregarCheques", this.addCheques.bind(this));
     },
 
     addVenta: function(evt, venta){
         this.ventas.push(venta);
+    },
+
+    addVoucher: function(evt, voucher){
+        this.voucher.push(voucher);
+    },
+
+    addCheques: function(evt, cheques){
+        var self = this;
+
+        cheques.forEach(function(cheque){
+            self.cheques.push(cheque);
+        });
     },
 
     cerrarLiquidacion: function(){
