@@ -61,8 +61,6 @@ GuiaPropiaController.mixin({
 
         this.venta.addProducto(producto);
         this.producto = {};
-
-        this.venta.calcularTotal();
     },
 
     esValidoProducto: function(){
@@ -88,10 +86,6 @@ GuiaPropiaController.mixin({
 
     removeProducto: function(index){
         this.venta.removeProducto(index);
-    },
-
-    calcularTotalGuia: function(){
-        this.venta.calcularTotal();
     },
 
     guardar: function(){

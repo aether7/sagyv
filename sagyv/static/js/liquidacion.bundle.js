@@ -81,8 +81,6 @@ GuiaPropiaController.mixin({
 
         this.venta.addProducto(producto);
         this.producto = {};
-
-        this.venta.calcularTotal();
     },
 
     esValidoProducto: function(){
@@ -108,10 +106,6 @@ GuiaPropiaController.mixin({
 
     removeProducto: function(index){
         this.venta.removeProducto(index);
-    },
-
-    calcularTotalGuia: function(){
-        this.venta.calcularTotal();
     },
 
     guardar: function(){
@@ -273,7 +267,86 @@ ProductoController.prototype = {
 
 module.exports = ProductoController;
 
-},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/liquidacion_bundle.js":[function(require,module,exports){
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/voucher_lipigas_controller.js":[function(require,module,exports){
+var Voucher = require('./../../models/liquidacion/voucher_model.js');
+
+
+function VoucherLipigasController($http, $scope){
+    this.scope = $scope;
+
+    this.numero = 0;
+    this.terminal = null;
+    this.tarjeta = null;
+    this.monto = null;
+    this.descuento = 0;
+
+    this.voucher = {};
+    this.mensajes = {};
+}
+
+VoucherLipigasController.mixin({
+    resetearVoucher: function(){
+        this.voucher = new Voucher();
+    },
+
+    addTarjeta: function(){
+        if(!this._esValidaTarjeta()){
+            return;
+        }
+
+        var tarjeta = {
+            id: this.tarjeta,
+            nombre: $('#tarjeta_comercial_lipigas option:selected').text(),
+            monto: this.monto
+        };
+
+        this.voucher.addTarjeta(tarjeta);
+        this.tarjeta = null;
+        this.monto = null;
+    },
+
+    removeTarjeta: function(index){
+        this.voucher.removeTarjeta(index);
+    },
+
+    guardar: function(){
+        this.voucher.numero = this.numero;
+        this.voucher.tipoVenta = 'voucher Lipigas';
+
+        this.scope.$emit("guia:agregarVenta", this.voucher);
+
+        $('#modal_voucher_lipigas').modal('hide');
+        common.agregarMensaje('El voucher de lipigas ha sido agregado exitosamente');
+    },
+
+    _esValidaTarjeta: function(){
+        if(!this.tarjeta){
+            this.mensajes.tarjeta = 'Debe seleccionar una tarjeta';
+            return false;
+        }
+
+        if(!this.monto || isNaN(this.monto) || parseInt(this.monto) < 1){
+            this.mensajes.tarjeta = 'Debe elegir un monto válido';
+            return false;
+        }
+
+        return true;
+    },
+
+    hacerDescuento: function(){
+        var descuento = parseInt(this.descuento);
+
+        if(isNaN(descuento)){
+            descuento = 0;
+        }
+
+        this.voucher.setDescuento(descuento);
+    }
+});
+
+module.exports = VoucherLipigasController;
+
+},{"./../../models/liquidacion/voucher_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/voucher_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/liquidacion_bundle.js":[function(require,module,exports){
 (function(){
 'use strict';
 
@@ -281,12 +354,14 @@ var app = angular.module('liquidacionApp',[]),
     LiquidacionController = require('./controllers/liquidacion/liquidacion_controller.js'),
     ProductoController = require('./controllers/liquidacion/producto_controller.js'),
     GuiaPropiaController = require('./controllers/liquidacion/guia_propia_controller.js'),
-    GuiaLipigasController = require('./controllers/liquidacion/guia_lipigas_controller.js');
+    GuiaLipigasController = require('./controllers/liquidacion/guia_lipigas_controller.js'),
+    VoucherLipigasController = require('./controllers/liquidacion/voucher_lipigas_controller.js');
 
 app.controller('LiquidacionController', ['$http','$scope', LiquidacionController]);
 app.controller('ProductoController', ['$scope', ProductoController]);
 app.controller('GuiaPropiaController', ['$http', '$scope', GuiaPropiaController]);
 app.controller('GuiaLipigasController', ['$http', '$scope', GuiaLipigasController]);
+app.controller('VoucherLipigasController', ['$http', '$scope', VoucherLipigasController]);
 
 })();
 
@@ -294,7 +369,7 @@ $('button[data-accion=abre_modal]').on('click', function(evt){
     $('#modal_' + $(this).data('modal')).modal('show');
 });
 
-},{"./controllers/liquidacion/guia_lipigas_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_lipigas_controller.js","./controllers/liquidacion/guia_propia_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_propia_controller.js","./controllers/liquidacion/liquidacion_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/liquidacion_controller.js","./controllers/liquidacion/producto_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/producto_controller.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/producto_model.js":[function(require,module,exports){
+},{"./controllers/liquidacion/guia_lipigas_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_lipigas_controller.js","./controllers/liquidacion/guia_propia_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_propia_controller.js","./controllers/liquidacion/liquidacion_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/liquidacion_controller.js","./controllers/liquidacion/producto_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/producto_controller.js","./controllers/liquidacion/voucher_lipigas_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/voucher_lipigas_controller.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/producto_model.js":[function(require,module,exports){
 function Producto(){
     this.codigo = null;
     this.cantidad = null;
@@ -366,13 +441,15 @@ function Venta(){
 Venta.mixin({
     addProducto: function(producto){
         this.productos.push(producto);
+        this._calcularTotal();
     },
 
     removeProducto: function(index){
         this.productos.splice(index, 1);
+        this._calcularTotal();
     },
 
-    calcularTotal: function(){
+    _calcularTotal: function(){
         var total = 0;
 
         this.productos.forEach(function(producto){
@@ -384,5 +461,47 @@ Venta.mixin({
 });
 
 module.exports = Venta;
+
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/voucher_model.js":[function(require,module,exports){
+function Voucher(){
+    this.numero = null;
+    this.tarjetas = [];
+    this.descuento = 0;
+    this.total = 0;
+}
+
+Voucher.mixin({
+    setDescuento: function(descuento){
+        if(isNaN(descuento)){
+            throw new TypeError('El descuento debe ser numérico');
+        }
+
+        this.descuento = descuento;
+        this._calcularTotal();
+    },
+
+    addTarjeta: function(tarjeta){
+        this.tarjetas.push(tarjeta);
+        this._calcularTotal();
+    },
+
+    removeTarjeta: function(index){
+        this.tarjetas.splice(index, 1);
+        this._calcularTotal();
+    },
+
+    _calcularTotal: function(){
+        var _this = this;
+        this.total = 0;
+
+        this.tarjetas.forEach(function(tarjeta){
+            _this.total += parseInt(tarjeta.monto);
+        });
+
+        this.total -= this.descuento;
+    }
+});
+
+module.exports = Voucher;
 
 },{}]},{},["/Users/Aether/Proyectos/sagyv/sagyv/static/js/liquidacion_bundle.js"]);

@@ -39,9 +39,14 @@
                 {% include "liquidacion/components/modal_guia_lipigas.html" %}
             </div>
 
-            <button type="button" class="btn btn-default"
-                data-accion="abre_modal"
-                data-modal="voucher_lipigas">Voucher Lipigas</button>
+            <div class="box" data-ng-controller="VoucherLipigasController as vlCtrl">
+                <button type="button" class="btn btn-default"
+                    data-accion="abre_modal"
+                    data-modal="voucher_lipigas"
+                    data-ng-click="vlCtrl.resetearVoucher()">Voucher Lipigas</button>
+
+                {% include "liquidacion/components/modal_voucher_lipigas.html" %}
+            </div>
 
             <button type="button" class="btn btn-default"
                 data-accion="abre_modal"
@@ -63,7 +68,6 @@
                 {% include "liquidacion/components/modal_cheques.html" %}
             </div>
 
-            {% include "liquidacion/components/modal_voucher_lipigas.html" %}
             {% include "liquidacion/components/modal_voucher_transbank.html" %}
             {% include "liquidacion/components/modal_cupones_prepago.html" %}
             {% include "liquidacion/components/modal_otros.html" %}
