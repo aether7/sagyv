@@ -1,20 +1,23 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_lipigas_controller.js":[function(require,module,exports){
-var Producto = require('./../../models/liquidacion/producto_model.js'),
-    Venta = require('./../../models/liquidacion/venta_model.js');
+var GuiaPropiaController = require('./guia_propia_controller.js');
 
-function GuiaLipigasController(){
-    this.venta = null;
+function GuiaLipigasController($http, $scope){
+    GuiaPropiaController.call(this, $http, $scope);
 }
 
-GuiaLipigasController({
-    resetearGuia: function(){
-        this.venta = new Venta();
+GuiaLipigasController.mixin(GuiaPropiaController, {
+    guardar: function(){
+        this.venta.tipoVenta = 'lipigas';
+
+        this.scope.$emit("guia:agregarVenta", this.venta);
+        common.agregarMensaje('Se ha guardado guía lipigas exitosamente');
+        $('#modal_guia_lipigas').modal('hide');
     }
 });
 
 module.exports = GuiaLipigasController;
 
-},{"./../../models/liquidacion/producto_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/producto_model.js","./../../models/liquidacion/venta_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/venta_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_propia_controller.js":[function(require,module,exports){
+},{"./guia_propia_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_propia_controller.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_propia_controller.js":[function(require,module,exports){
 var Producto = require('./../../models/liquidacion/producto_model.js'),
     Venta = require('./../../models/liquidacion/venta_model.js');
 

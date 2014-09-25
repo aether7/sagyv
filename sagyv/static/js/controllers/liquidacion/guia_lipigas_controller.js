@@ -1,13 +1,16 @@
-var Producto = require('./../../models/liquidacion/producto_model.js'),
-    Venta = require('./../../models/liquidacion/venta_model.js');
+var GuiaPropiaController = require('./guia_propia_controller.js');
 
-function GuiaLipigasController(){
-    this.venta = null;
+function GuiaLipigasController($http, $scope){
+    GuiaPropiaController.call(this, $http, $scope);
 }
 
-GuiaLipigasController({
-    resetearGuia: function(){
-        this.venta = new Venta();
+GuiaLipigasController.mixin(GuiaPropiaController, {
+    guardar: function(){
+        this.venta.tipoVenta = 'lipigas';
+
+        this.scope.$emit("guia:agregarVenta", this.venta);
+        common.agregarMensaje('Se ha guardado guía lipigas exitosamente');
+        $('#modal_guia_lipigas').modal('hide');
     }
 });
 
