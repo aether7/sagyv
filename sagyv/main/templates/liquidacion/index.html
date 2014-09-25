@@ -60,7 +60,7 @@
                 data-accion="abre_modal"
                 data-modal="otros">Otros</button>
 
-            <div class="box-style">
+            <div class="box-style" data-ng-controller="ChequeController as CCtrl">
                 <button type="button" class="btn btn-default"
                 data-accion="abre_modal"
                 data-modal="cheque">CHEQUES</button>
@@ -107,6 +107,10 @@
 <script src="{% static 'js/plugins/typeahead.min.js' %}"></script>
 <script src="{% static 'js/common_functions.js' %}"></script>
 <script src="{% static 'js/liquidacion.bundle.js' %}"></script>
+
+<!-- puebas -->
+<script src="{% static 'js/controllers/liquidacion/cheque_controller.js' %}"></script>
+<script src="{% static 'js/models/liquidacion/cheque_model.js' %}"></script>
 <script>
     App.urls.set("liquidacion:obtener_guia", "{% url 'liquidacion:obtener_guia' %}");
     App.urls.set("liquidacion:buscar_cliente", "{% url 'liquidacion:buscar_cliente' %}");
