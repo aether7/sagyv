@@ -1,20 +1,10 @@
-function Voucher(){
-    this.numero = null;
+function Voucher(tipo){
+    this.tipo = tipo;
     this.tarjetas = [];
-    this.descuento = 0;
     this.total = 0;
 }
 
 Voucher.mixin({
-    setDescuento: function(descuento){
-        if(isNaN(descuento)){
-            throw new TypeError('El descuento debe ser numérico');
-        }
-
-        this.descuento = descuento;
-        this._calcularTotal();
-    },
-
     addTarjeta: function(tarjeta){
         this.tarjetas.push(tarjeta);
         this._calcularTotal();
@@ -26,14 +16,7 @@ Voucher.mixin({
     },
 
     _calcularTotal: function(){
-        var _this = this;
-        this.total = 0;
-
-        this.tarjetas.forEach(function(tarjeta){
-            _this.total += parseInt(tarjeta.monto);
-        });
-
-        this.total -= this.descuento;
+        throw new Error('Método no implementado');
     }
 });
 

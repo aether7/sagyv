@@ -21,6 +21,7 @@ VoucherTransbankController.mixin({
         };
 
         this.vouchers.push(voucher);
+        this.voucher = {};
     },
 
     removeVoucher: function(index){
@@ -62,8 +63,10 @@ VoucherTransbankController.mixin({
     },
 
     guardar: function(){
-        console.log('guardando');
-        this.scope.$emit('guia:agregarVoucher', );
+        this.scope.$emit('guia:agregarVouchers', this.vouchers);
+
+        $('#modal_voucher_transbank').modal('hide');
+        common.agregarMensaje('Los vouchers han sido guardados exitosamente');
     }
 });
 

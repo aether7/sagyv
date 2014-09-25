@@ -1,4 +1,4 @@
-|{% extends "panel_control.html" %}
+{% extends "panel_control.html" %}
 {% load static from staticfiles %}
 
 {% block content %}
@@ -109,17 +109,27 @@
             <thead>
                 <tr>
                     <th>Tipo voucher</th>
+                    <th>tarjeta</th>
                     <th>Total</th>
-                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                <tr data-ng-repeat="voucher in liqCtrl.vouchers">
-                    <td data-ng-bind="voucher.tipo"></td>
-                    <td data-ng-bind="voucher.total | currency"></td>
-                    <td>
-                        <a href data-ng-click="liqCtrl.eliminarVoucher($index)">eliminar</a>
-                    </td>
+                <tr data-ng-if="liqCtrl.vouchers.lipigas.length">
+                    <td rowspan="liqCtrl.vouchers.lipigas.length">Lipigas</td>
+                </tr>
+
+                <tr data-ng-repeat="voucherLipigas in liqCtrl.vouchers.lipigas">
+                    <td data-ng-bind="voucherLipigas.tarjeta.nombre"></td>
+                    <td data-ng-bind="voucherLipigas.total | currency"></td>
+                </tr>
+
+                <tr data-ng-if="liqCtrl.vouchers.transbank.length">
+                    <td rowspan="liqCtrl.vouchers.transbank.length">Transbank</td>
+                </tr>
+
+                <tr data-ng-repeat="voucherTransbank in liqCtrl.vouchers.transbank">
+                    <td data-ng-bind="voucherTransbank.tarjeta.nombre"></td>
+                    <td data-ng-bind="voucherTransbank.total | currency"></td>
                 </tr>
             </tbody>
         </table>

@@ -60,7 +60,7 @@
                         <tbody>
                             <tr data-ng-repeat="voucher in vtCtrl.vouchers">
                                 <td data-ng-bind="voucher.tarjeta.nombre"></td>
-                                <td data-ng-bind="voucher.monto"></td>
+                                <td data-ng-bind="voucher.monto | currency"></td>
                                 <td data-ng-bind="voucher.cuotas"></td>
                                 <td>
                                     <a href data-ng-click="vtCtrl.removeVoucher($index)">eliminar</a>

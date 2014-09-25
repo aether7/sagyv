@@ -3,8 +3,14 @@ function LiquidacionController($http, $scope){
     this.boleta = null;
 
     this.guia = {};
+
     this.ventas = [];
-    this.vouchers = [];
+
+    this.vouchers = {
+        lipigas: [],
+        transbank: []
+    };
+
     this.cheques = [];
 
     this.idGuiaDespacho = null;
@@ -94,7 +100,7 @@ LiquidacionController.mixin({
         this.scope.$on("guia:calcularSubTotal", this.calcularSubTotal.bind(this));
         this.scope.$on("guia:calcularKilos", this.calcularKilos.bind(this));
         this.scope.$on("guia:agregarVenta", this.addVenta.bind(this));
-        this.scope.$on("guia:agregarVoucher", this.addVoucher.bind(this));
+        this.scope.$on("guia:agregarVoucher", this.addVouchers.bind(this));
         this.scope.$on("guia:agregarCheques", this.addCheques.bind(this));
     },
 
@@ -102,8 +108,19 @@ LiquidacionController.mixin({
         this.ventas.push(venta);
     },
 
-    addVoucher: function(evt, voucher){
-        this.voucher.push(voucher);
+    addVouchers: function(evt, voucher){
+        var self = this;
+
+        if(!(voucher.tipo in self.vouchers)){
+            throw "el voucher {0} no es lipigas ni transbank es {1}".format(index, voucher.tipo);
+        }
+
+        console.log(voucher);
+
+        voucher.tarjetas.forEach(function(tarjeta){
+            console.log(tarjeta);
+            self.vouchers[voucher.tipo].push(tarjeta);
+        });
     },
 
     addCheques: function(evt, cheques){

@@ -1,5 +1,4 @@
-var Voucher = require('./../../models/liquidacion/voucher_model.js');
-
+var VoucherLipigas = require('./../../models/liquidacion/voucher_lipigas_model.js');
 
 function VoucherLipigasController($http, $scope){
     this.scope = $scope;
@@ -16,7 +15,7 @@ function VoucherLipigasController($http, $scope){
 
 VoucherLipigasController.mixin({
     resetearVoucher: function(){
-        this.voucher = new Voucher();
+        this.voucher = new VoucherLipigas();
     },
 
     addTarjeta: function(){
@@ -41,9 +40,7 @@ VoucherLipigasController.mixin({
 
     guardar: function(){
         this.voucher.numero = this.numero;
-        this.voucher.tipoVenta = 'voucher Lipigas';
-
-        this.scope.$emit("guia:agregarVenta", this.voucher);
+        this.scope.$emit("guia:agregarVouchers", this.voucher);
 
         $('#modal_voucher_lipigas').modal('hide');
         common.agregarMensaje('El voucher de lipigas ha sido agregado exitosamente');
