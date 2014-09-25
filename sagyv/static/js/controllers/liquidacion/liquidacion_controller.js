@@ -125,10 +125,15 @@ LiquidacionController.mixin({
 
     addCheques: function(evt, cheques){
         var self = this;
-
         cheques.forEach(function(cheque){
             self.cheques.push(cheque);
         });
+    },
+
+    removeCheque:function(indice){
+        console.log('indice '+ indice);
+
+        this.cheques.splice(indice, 1);
     },
 
     cerrarLiquidacion: function(){

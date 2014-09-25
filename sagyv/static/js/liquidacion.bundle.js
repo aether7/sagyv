@@ -27,16 +27,20 @@ ChequeController.mixin({
     },
 
     guardar: function(){
-        this.cheque.mensajes.cheques=""
+        console.log('Aqui');
 
+        this.cheque.mensajes.cheques=""
         if(!this.cheque.cheques.length){
+            console.log('UHM');
             this.cheque.mensajes.cheques="Debe tener al menos 1 cheque";
             return;
         }
+        console.log('Guarde');
+        this.scope.$emit('guia:agregarCheques', this.cheque.cheques);
+        common.agregarMensaje('Se ha guardado los cheques exitosamente');
+        $('#modal_cheque').modal('hide');
 
     }
-
-    //se guardara 1 x 1 (?)
 });
 
 module.exports = ChequeController;
@@ -290,10 +294,15 @@ LiquidacionController.mixin({
 
     addCheques: function(evt, cheques){
         var self = this;
-
         cheques.forEach(function(cheque){
             self.cheques.push(cheque);
         });
+    },
+
+    removeCheque:function(indice){
+        console.log('indice '+ indice);
+
+        this.cheques.splice(indice, 1);
     },
 
     cerrarLiquidacion: function(){
