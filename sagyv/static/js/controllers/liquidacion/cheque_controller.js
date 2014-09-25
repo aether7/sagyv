@@ -1,14 +1,19 @@
+var Cheque = require('./../../models/liquidacion/cheque_model.js');
+
 function ChequeController($http, $scope){
     this.http = $http;
     this.scope = $scope;
-    this.cheque = App.Models.Cheque();
+    this.cheque = new Cheque();
 }
 
 ChequeController.mixin({
     //insert magic here
     agregarCheque: function(){
+        console.log(this.cheque);
+
         if(!this.cheque.esValido()){
-            return
+            console.log(this.cheque.mensajes.banco);
+            return;
         }
 
         some = {
@@ -26,6 +31,6 @@ ChequeController.mixin({
     },
 
     //se guardara 1 x 1 (?)
-
-
 });
+
+module.exports = ChequeController;

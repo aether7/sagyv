@@ -1,4 +1,4 @@
-App.Models.Cheque = function(){
+var Cheque = function(){
     this.banco = null;
     this.numero = null;
     this.monto = null;
@@ -8,7 +8,7 @@ App.Models.Cheque = function(){
     this.mensajes = {};
 };
 
-App.Models.Cheque.mixin({
+Cheque.mixin({
     getJSON: function(){
         var json = {
             cheques : this.cheques
@@ -67,10 +67,11 @@ App.Models.Cheque.mixin({
 
     esValidoBanco: function(){
         var valido = true;
-        this.mensajes.banco = ""
-        if(this.banco.trim() === ""){
+        this.mensajes.banco = "";
+
+        if(!this.banco){
             valido = false;
-            this.mensajes.banco = "campo obligatorio"
+            this.mensajes.banco = "campo obligatorio";
         }
 
         return valido;
@@ -87,5 +88,6 @@ App.Models.Cheque.mixin({
     esValidaFecha:function(){
         return this._esFechaValida("fecha");
     }
-
 });
+
+module.exports = Cheque;
