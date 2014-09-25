@@ -1,4 +1,20 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_propia_controller.js":[function(require,module,exports){
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_lipigas_controller.js":[function(require,module,exports){
+var Producto = require('./../../models/liquidacion/producto_model.js'),
+    Venta = require('./../../models/liquidacion/venta_model.js');
+
+function GuiaLipigasController(){
+    this.venta = null;
+}
+
+GuiaLipigasController({
+    resetearGuia: function(){
+        this.venta = new Venta();
+    }
+});
+
+module.exports = GuiaLipigasController;
+
+},{"./../../models/liquidacion/producto_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/producto_model.js","./../../models/liquidacion/venta_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/venta_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_propia_controller.js":[function(require,module,exports){
 var Producto = require('./../../models/liquidacion/producto_model.js'),
     Venta = require('./../../models/liquidacion/venta_model.js');
 
@@ -256,24 +272,26 @@ module.exports = ProductoController;
 
 },{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/liquidacion_bundle.js":[function(require,module,exports){
 (function(){
-"use strict";
+'use strict';
 
-var app = angular.module("liquidacionApp",[]),
-    LiquidacionController = require("./controllers/liquidacion/liquidacion_controller.js"),
-    ProductoController = require("./controllers/liquidacion/producto_controller.js"),
-    GuiaPropiaController = require("./controllers/liquidacion/guia_propia_controller.js");
+var app = angular.module('liquidacionApp',[]),
+    LiquidacionController = require('./controllers/liquidacion/liquidacion_controller.js'),
+    ProductoController = require('./controllers/liquidacion/producto_controller.js'),
+    GuiaPropiaController = require('./controllers/liquidacion/guia_propia_controller.js'),
+    GuiaLipigasController = require('./controllers/liquidacion/guia_lipigas_controller.js');
 
-app.controller("LiquidacionController", ["$http","$scope", LiquidacionController]);
-app.controller("ProductoController", ["$scope", ProductoController]);
-app.controller("GuiaPropiaController", ["$http", "$scope", GuiaPropiaController]);
+app.controller('LiquidacionController', ['$http','$scope', LiquidacionController]);
+app.controller('ProductoController', ['$scope', ProductoController]);
+app.controller('GuiaPropiaController', ['$http', '$scope', GuiaPropiaController]);
+app.controller('GuiaLipigasController', ['$http', '$scope', GuiaLipigasController]);
 
 })();
 
-$("button[data-accion=abre_modal]").on("click", function(evt){
-    $("#modal_" + $(this).data("modal")).modal("show");
+$('button[data-accion=abre_modal]').on('click', function(evt){
+    $('#modal_' + $(this).data('modal')).modal('show');
 });
 
-},{"./controllers/liquidacion/guia_propia_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_propia_controller.js","./controllers/liquidacion/liquidacion_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/liquidacion_controller.js","./controllers/liquidacion/producto_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/producto_controller.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/producto_model.js":[function(require,module,exports){
+},{"./controllers/liquidacion/guia_lipigas_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_lipigas_controller.js","./controllers/liquidacion/guia_propia_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_propia_controller.js","./controllers/liquidacion/liquidacion_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/liquidacion_controller.js","./controllers/liquidacion/producto_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/producto_controller.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/producto_model.js":[function(require,module,exports){
 function Producto(){
     this.codigo = null;
     this.cantidad = null;

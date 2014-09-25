@@ -10,12 +10,10 @@ function TrabajadorController($http){
 
 }
 
-TrabajadorController.prototype = {
-    constructor: TrabajadorController,
-
+TrabajadorController.mixin({
     mostrar: function(){
         this.trabajador = new App.Models.Trabajador();
-        common.mostrarModal("nuevo");
+        common.mostrarModal('nuevo');
     },
 
     crearTrabajador: function(){
@@ -24,11 +22,11 @@ TrabajadorController.prototype = {
         }
 
         if(existeTrabajador(this.trabajador.rut)){
-            this.trabajador.mensajes.rut = "El rut está siendo utilizado por otro trabajador";
+            this.trabajador.mensajes.rut = 'El rut está siendo utilizado por otro trabajador';
             return;
         }
 
-        var action = App.urls.get("trabajador:crear"),
+        var action = App.urls.get('trabajador:crear'),
             json = this.trabajador.getJSON();
 
         $.post(action, json, this.renderNuevoTrabajador);
@@ -36,41 +34,41 @@ TrabajadorController.prototype = {
 
     renderNuevoTrabajador: function(data){
         var html,
-            tpl = $("#tpl_nuevo_trabajador").html(),
+            tpl = $('#tpl_nuevo_trabajador').html(),
             fx = Handlebars.compile(tpl);
 
         html = fx(data);
-        $("#lista_trabajadores tbody").append(html);
+        $('#lista_trabajadores tbody').append(html);
 
-        $("#modal_nuevo").modal("hide");
-        common.agregarMensaje("El trabajador ha sido creado exitosamente");
+        $('#modal_nuevo').modal('hide');
+        common.agregarMensaje('El trabajador ha sido creado exitosamente');
     },
 
     verTrabajador: function(id){
-        var action = App.urls.get("trabajador:obtener"),
+        var action = App.urls.get('trabajador:obtener'),
             _this = this;
 
-        action += "?id=" + id;
+        action += '?id=' + id;
 
         this.trabajador = new App.Models.Trabajador();
 
         this.http.get(action).success(function(data){
-            common.mostrarModal("ver");
+            common.mostrarModal('ver');
             _this.procesarTrabajador(data);
         });
     },
 
     editarTrabajador: function(id){
-        var action = App.urls.get("trabajador:obtener"),
+        var action = App.urls.get('trabajador:obtener'),
             _this = this;
 
         this.trabajador = new App.Models.Trabajador();
-        action += "?id=" + id;
+        action += '?id=' + id;
 
         this.http.get(action).success(function(data){
-            common.mostrarModal("editar");
+            common.mostrarModal('editar');
 
-            _this.procesarTrabajador(data, "id");
+            _this.procesarTrabajador(data, 'id');
             _this.trabajador.id = id;
         });
     },
@@ -80,7 +78,7 @@ TrabajadorController.prototype = {
             return;
         }
 
-        var action = App.urls.get("trabajador:actualizar"),
+        var action = App.urls.get('trabajador:actualizar'),
             json = this.trabajador.getJSON(),
             _this = this;
 
@@ -88,37 +86,37 @@ TrabajadorController.prototype = {
     },
 
     renderActualizarTrabajador: function(data){
-        var tr = $("#lista_trabajadores tr[data-id={0}]".format(data.id));
+        var tr = $('#lista_trabajadores tr[data-id={0}]'.format(data.id));
 
-        tr.find("td[data-campo=nombre]").text(data.nombre);
-        tr.find("td[data-campo=apellido]").text(data.apellido);
-        tr.find("td[data-campo=rut]").text(data.rut);
-        tr.find("td[data-campo=estado_vacaciones]").text(data.estado_vacaciones);
+        tr.find('td[data-campo=nombre]').text(data.nombre);
+        tr.find('td[data-campo=apellido]').text(data.apellido);
+        tr.find('td[data-campo=rut]').text(data.rut);
+        tr.find('td[data-campo=estado_vacaciones]').text(data.estado_vacaciones);
 
-        $("#modal_editar").modal("hide");
-        common.agregarMensaje("El trabajador ha sido editado exitosamente");
+        $('#modal_editar').modal('hide');
+        common.agregarMensaje('El trabajador ha sido editado exitosamente');
     },
 
     eliminarTrabajador: function(id){
-        if(!confirm("¿Esta seguro(a) de realizar esta acción ?")){
+        if(!confirm('¿Esta seguro(a) de realizar esta acción ?')){
             return;
         }
 
-        var action = App.urls.get("trabajador:eliminar"),
+        var action = App.urls.get('trabajador:eliminar'),
             json = { id : id };
 
         $.post(action, json, function(data){
-            $("#lista_trabajadores tr[data-id={0}]".format(id)).remove();
-            common.agregarMensaje("El trabajador se ha eliminado exitosamente");
+            $('#lista_trabajadores tr[data-id={0}]'.format(id)).remove();
+            common.agregarMensaje('El trabajador se ha eliminado exitosamente');
         });
     },
 
     procesarTrabajador: function(data, campo){
-        campo = campo || "nombre";
+        campo = campo || 'nombre';
 
-        var fechaNac = new Date(common.fecha.agregarCeros(data.nacimiento) + " 00:00:00"),
-            fechaInicio = new Date(common.fecha.agregarCeros(data.fecha_inicio_contrato) + " 00:00:00"),
-            fechaVigencia = new Date(common.fecha.agregarCeros(data.vigencia_licencia) + " 00:00:00");
+        var fechaNac = new Date(common.fecha.agregarCeros(data.nacimiento) + ' 00:00:00'),
+            fechaInicio = new Date(common.fecha.agregarCeros(data.fecha_inicio_contrato) + ' 00:00:00'),
+            fechaVigencia = new Date(common.fecha.agregarCeros(data.vigencia_licencia) + ' 00:00:00');
 
         this.trabajador.nombre = data.nombre;
         this.trabajador.apellido = data.apellido;
@@ -139,10 +137,10 @@ TrabajadorController.prototype = {
     anexarBoleta: function(id){
         this.boleta = new App.Models.Boleta();
 
-        var url = App.urls.get("trabajador:buscar_boleta"),
+        var url = App.urls.get('trabajador:buscar_boleta'),
             _this = this;
 
-        url += "?id=" + id;
+        url += '?id=' + id;
 
         this.http.get(url).success(function(data){
             _this.boleta.numeroAnterior = data.boleta_actual;
@@ -159,17 +157,17 @@ TrabajadorController.prototype = {
             return;
         }
 
-        var url = App.urls.get("trabajador:guardar_boleta"),
+        var url = App.urls.get('trabajador:guardar_boleta'),
             json = this.boleta.getJSON();
 
         $.post(url, json).success(function(data){
             $('#modal_anexar_boleta').modal('hide');
-            common.agregarMensaje("Se ha anexado el talonario de boletas al trabajador exitosamente");
+            common.agregarMensaje('Se ha anexado el talonario de boletas al trabajador exitosamente');
         });
     }
-};
+});
 
-app.controller("TrabajadorController",["$http", TrabajadorController]);
+app.controller('TrabajadorController',['$http', TrabajadorController]);
 
 })();
 
@@ -177,7 +175,7 @@ app.controller("TrabajadorController",["$http", TrabajadorController]);
 function existeTrabajador(rut){
     var duplicado = false;
 
-    $("#lista_trabajadores tbody tr[data-id] td[data-campo=rut]").each(function(){
+    $('#lista_trabajadores tbody tr[data-id] td[data-campo=rut]').each(function(){
         if(rut === $(this).text().trim()){
             duplicado = true;
         }

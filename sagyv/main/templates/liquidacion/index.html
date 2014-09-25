@@ -23,16 +23,21 @@
         <div>
             <div class="box" data-ng-controller="GuiaPropiaController as gpCtrl">
                 <button type="button" class="btn btn-default"
-                data-accion="abre_modal"
-                data-modal="guia_propia"
-                data-ng-click="gpCtrl.resetearGuia()">Guia propia</button>
+                    data-accion="abre_modal"
+                    data-modal="guia_propia"
+                    data-ng-click="gpCtrl.resetearGuia()">Guia propia</button>
 
                 {% include "liquidacion/components/modal_guia_propia.html" %}
             </div>
 
-            <button type="button" class="btn btn-default"
-                data-accion="abre_modal"
-                data-modal="guia_lipigas">Guia Lipigas</button>
+            <div class="box" data-ng-controller="GuiaLipigasController as glCtrl">
+                <button type="button" class="btn btn-default"
+                    data-accion="abre_modal"
+                    data-modal="guia_lipigas"
+                    data-ng-click="glCtrl.resetearGuia()">Guia Lipigas</button>
+
+                {% include "liquidacion/components/modal_guia_lipigas.html" %}
+            </div>
 
             <button type="button" class="btn btn-default"
                 data-accion="abre_modal"
@@ -58,12 +63,10 @@
                 {% include "liquidacion/components/modal_cheques.html" %}
             </div>
 
-            {% include "liquidacion/components/modal_guia_lipigas.html" %}
             {% include "liquidacion/components/modal_voucher_lipigas.html" %}
             {% include "liquidacion/components/modal_voucher_transbank.html" %}
             {% include "liquidacion/components/modal_cupones_prepago.html" %}
             {% include "liquidacion/components/modal_otros.html" %}
-
         </div>
 
         <table class="table table-striped">

@@ -75,6 +75,18 @@ var common = {
 
             mes = "de " + meses[parseInt(aux[1]) - 1] + " de"
             return dia + " " + mes + " " + anio;
+        },
+
+        fechaToJSON: function(fecha){
+
+            var anio = fecha.getFullYear(),
+                mes = fecha.getMonth() + 1,
+                dia = fecha.getDate();
+
+            mes = mes < 10 ? '0' + mes : mes;
+            dia = dia < 10 ? '0' + dia : dia;
+
+            return anio + '-' + mes + '-' + dia;
         }
     }
 };
