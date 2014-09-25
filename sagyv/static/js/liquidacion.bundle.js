@@ -4,27 +4,21 @@ var Cheque = require('./../../models/liquidacion/cheque_model.js');
 function ChequeController($http, $scope){
     this.http = $http;
     this.scope = $scope;
-    this.cheque = new Cheque();
+    this.cheque = null;
+    this.mensajes = {};
 }
 
 ChequeController.mixin({
-    //insert magic here
-    agregarCheque: function(){
-        console.log(this.cheque);
+    resetearCheque: function(){
+        this.cheque = new Cheque();
+    },
 
+    addCheque: function(){
         if(!this.cheque.esValido()){
-            console.log(this.cheque.mensajes.banco);
             return;
         }
 
-        some = {
-            banco : this.cheque.banco,
-            numero : this.cheque.numero,
-            monto : this.cheque.monto,
-            fecha : this.cheque.fecha
-        };
-
-        this.cheque.cheques.push(some);
+        this.cheque.cheques.push(this.cheque.getJSON());
     },
 
     removeCheque: function(indice){
@@ -444,11 +438,13 @@ var Cheque = function(){
 Cheque.mixin({
     getJSON: function(){
         var json = {
-            cheques : this.cheques
+            banco: this.banco,
+            numero: this.numero,
+            fecha: this.fecha,
+            monto: this.monto
         };
 
         return json;
-
     },
 
     esValido: function(){
@@ -460,7 +456,6 @@ Cheque.mixin({
         valido = this.esValidaFecha() && valido;
 
         return valido;
-
     },
 
     _esNumeroValido: function(campo){

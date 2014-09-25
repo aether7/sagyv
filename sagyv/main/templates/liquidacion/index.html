@@ -75,7 +75,8 @@
             <div class="box" data-ng-controller="ChequeController as cCtrl">
                 <button type="button" class="btn btn-default"
                 data-accion="abre_modal"
-                data-modal="cheque">CHEQUES</button>
+                data-modal="cheque"
+                data-ng-click="cCtrl.resetearCheque()">CHEQUES</button>
 
                 {% include "liquidacion/components/modal_cheques.html" %}
             </div>

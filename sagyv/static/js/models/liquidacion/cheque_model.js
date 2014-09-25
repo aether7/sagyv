@@ -11,11 +11,13 @@ var Cheque = function(){
 Cheque.mixin({
     getJSON: function(){
         var json = {
-            cheques : this.cheques
+            banco: this.banco,
+            numero: this.numero,
+            fecha: this.fecha,
+            monto: this.monto
         };
 
         return json;
-
     },
 
     esValido: function(){
@@ -27,7 +29,6 @@ Cheque.mixin({
         valido = this.esValidaFecha() && valido;
 
         return valido;
-
     },
 
     _esNumeroValido: function(campo){

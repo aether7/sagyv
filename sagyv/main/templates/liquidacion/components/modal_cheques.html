@@ -11,18 +11,17 @@
 
                 <div class="form-group">
                     <label for="banco_cheque" class="control-label">Banco</label>
+
                     <select id="banco_cheque" class="form-control"
                         data-ng-model="cCtrl.cheque.banco">
                         {% for banco in bancos %}
-                        <option value="{{ banco.id }}">
-                            {{ banco.nombre }}
-                        </option>
+                        <option value="{{ banco.id }}">{{ banco.nombre }}</option>
                         {% endfor %}
                     </select>
 
                     <span class="text-danger"
-                        data-ng-show="cCrtl.mensajes.banco"
-                        data-ng-bind="cCtrl.mensajes.banco"></span>
+                        data-ng-show="cCtrl.cheque.mensajes.banco"
+                        data-ng-bind="cCtrl.cheque.mensajes.banco"></span>
                 </div>
 
                 <div class="form-group">
@@ -39,7 +38,11 @@
                     <label for="fecha_cheque">Fecha</label>
                     <input id="fecha_cheque" class="form-control" type="date" value="" />
                 </div>
-                <button data-ng-click="cCtrl.agregarCheque()">+</button>
+
+                <div class="form-group">
+                    <button class="btn btn-default" data-ng-click="cCtrl.addCheque()">+</button>
+                </div>
+
                 <table id="lita_cheques" class="table table-striped">
                     <thead>
                         <th>Banco</th>
