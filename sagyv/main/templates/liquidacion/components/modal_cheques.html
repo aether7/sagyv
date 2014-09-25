@@ -26,17 +26,32 @@
 
                 <div class="form-group">
                     <label for="numero_cheque">Numero de cheque</label>
-                    <input id="numero_cheque" class="form-control" type="text" value="" />
+                    <input id="numero_cheque" class="form-control"
+                        type="text" value=""
+                        data-ng-model="cCtrl.cheque.numero" />
+                    <span class="text-danger"
+                        data-ng-show="cCtrl.cheque.mensajes.numero"
+                        data-ng-bind="cCtrl.cheque.mensajes.numero"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="monto_cheque">Monto</label>
-                    <input id="monto_cheque" class="form-control" type="text" value="" />
+                    <input id="monto_cheque" class="form-control"
+                        type="text" value=""
+                        data-ng-model="cCtrl.cheque.monto"/>
+                    <span class="text-danger"
+                        data-ng-show="cCtrl.cheque.mensajes.monto"
+                        data-ng-bind="cCtrl.cheque.mensajes.monto"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="fecha_cheque">Fecha</label>
-                    <input id="fecha_cheque" class="form-control" type="date" value="" />
+                    <input id="fecha_cheque" class="form-control"
+                        type="date" value=""
+                        data-ng-model="cCtrl.cheque.fecha" />
+                    <span class="text-danger"
+                        data-ng-show="cCtrl.cheque.mensajes.fecha"
+                        data-ng-bind="cCtrl.cheque.mensajes.fecha"></span>
                 </div>
 
                 <div class="form-group">
@@ -48,19 +63,30 @@
                         <th>Banco</th>
                         <th>N° Cheque</th>
                         <th>Monto</th>
+                        <th>Fecha</th>
                         <th>Acciones</th>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                        <tr data-ng-repeat="documento in cCtrl.cheque.cheques">
+                            <td data-ng-bind="documento.banco.nombre"></td>
+                            <td data-ng-bind="documento.numero"></td>
+                            <td data-ng-bind="documento.monto"></td>
+                            <td data-ng-bind="documento.fecha | date:'yyyy-MM-d'"></td>
                             <td>
-                                <i class="glyphicon glyphicon-remove"></i>
+                                <i class="glyphicon glyphicon-remove"
+                                    data-ng-click="cCtrl.removeCheque($index)"></i>
                             </td>
                         </tr>
                     </tbody>
                 </table>
+                <span class="text-danger"
+                        data-ng-show="cCtrl.cheque.mensajes.cheques"
+                        data-ng-bind="cCtrl.cheque.mensajes.cheques"></span>
+
+                <div class="modal-footer">
+                    <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button class="btn btn-primary" data-ng-click="cCtrl.guardar()">Guardar</button>
+                </div>
             </div>
         </div>
     </div>

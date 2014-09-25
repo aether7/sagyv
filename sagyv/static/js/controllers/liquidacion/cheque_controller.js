@@ -18,11 +18,22 @@ ChequeController.mixin({
         }
 
         this.cheque.cheques.push(this.cheque.getJSON());
+        this.cheque.clearData();
     },
 
     removeCheque: function(indice){
         this.cheque.cheques.splice(indice, 1);
     },
+
+    guardar: function(){
+        this.cheque.mensajes.cheques=""
+
+        if(!this.cheque.cheques.length){
+            this.cheque.mensajes.cheques="Debe tener al menos 1 cheque";
+            return;
+        }
+
+    }
 
     //se guardara 1 x 1 (?)
 });

@@ -19,11 +19,22 @@ ChequeController.mixin({
         }
 
         this.cheque.cheques.push(this.cheque.getJSON());
+        this.cheque.clearData();
     },
 
     removeCheque: function(indice){
         this.cheque.cheques.splice(indice, 1);
     },
+
+    guardar: function(){
+        this.cheque.mensajes.cheques=""
+
+        if(!this.cheque.cheques.length){
+            this.cheque.mensajes.cheques="Debe tener al menos 1 cheque";
+            return;
+        }
+
+    }
 
     //se guardara 1 x 1 (?)
 });
@@ -427,6 +438,7 @@ $('button[data-accion=abre_modal]').on('click', function(evt){
 },{"./controllers/liquidacion/cheque_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/cheque_controller.js","./controllers/liquidacion/guia_lipigas_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_lipigas_controller.js","./controllers/liquidacion/guia_propia_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_propia_controller.js","./controllers/liquidacion/liquidacion_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/liquidacion_controller.js","./controllers/liquidacion/producto_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/producto_controller.js","./controllers/liquidacion/voucher_lipigas_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/voucher_lipigas_controller.js","./controllers/liquidacion/voucher_transbank_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/voucher_transbank_controller.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/models/liquidacion/cheque_model.js":[function(require,module,exports){
 var Cheque = function(){
     this.banco = null;
+    this.nombreBanco = null;
     this.numero = null;
     this.monto = null;
     this.fecha = null;
@@ -437,8 +449,13 @@ var Cheque = function(){
 
 Cheque.mixin({
     getJSON: function(){
+        this.nombreBanco = $('#banco_cheque option:selected').text();
+
         var json = {
-            banco: this.banco,
+            banco: {
+                id: this.banco,
+                nombre: this.nombreBanco
+            },
             numero: this.numero,
             fecha: this.fecha,
             monto: this.monto
@@ -515,6 +532,13 @@ Cheque.mixin({
 
     esValidaFecha:function(){
         return this._esFechaValida("fecha");
+    },
+
+    clearData:function(){
+        this.banco = null;
+        this.numero = null;
+        this.monto = null;
+        this.fecha = null;
     }
 });
 

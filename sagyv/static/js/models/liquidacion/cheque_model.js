@@ -1,5 +1,6 @@
 var Cheque = function(){
     this.banco = null;
+    this.nombreBanco = null;
     this.numero = null;
     this.monto = null;
     this.fecha = null;
@@ -10,8 +11,13 @@ var Cheque = function(){
 
 Cheque.mixin({
     getJSON: function(){
+        this.nombreBanco = $('#banco_cheque option:selected').text();
+
         var json = {
-            banco: this.banco,
+            banco: {
+                id: this.banco,
+                nombre: this.nombreBanco
+            },
             numero: this.numero,
             fecha: this.fecha,
             monto: this.monto
@@ -88,6 +94,13 @@ Cheque.mixin({
 
     esValidaFecha:function(){
         return this._esFechaValida("fecha");
+    },
+
+    clearData:function(){
+        this.banco = null;
+        this.numero = null;
+        this.monto = null;
+        this.fecha = null;
     }
 });
 
