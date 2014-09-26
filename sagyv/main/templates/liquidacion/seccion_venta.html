@@ -35,10 +35,11 @@
         {% include "liquidacion/components/modal_voucher_transbank.html" %}
     </div>
 
-    <div class="box">
+    <div class="box" data-ng-controller="CuponPrepagoController as cpCtrl">
         <button type="button" class="btn btn-default"
             data-accion="abre_modal"
-            data-modal="cupones_prepago">Cupones de prepago</button>
+            data-modal="cupones_prepago"
+            data-ng-click="cpCtrl.resetearCuponPrepago()" >Cupones de prepago</button>
 
         {% include "liquidacion/components/modal_cupones_prepago.html" %}
     </div>

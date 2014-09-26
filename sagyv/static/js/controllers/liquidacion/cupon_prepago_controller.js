@@ -19,7 +19,7 @@ CuponPrepagoController.mixin({
         this.cuponPrepago.clienteNombre = $('#cliente_prepago option:selected').text();
         this.cuponPrepago.formatoNombre = $('#formato_prepago option:selected').text();
 
-        this.scope.emit();
+        this.scope.$emit('guia:agregarCuponesPrepago', this.cuponPrepago.getJSON());
         $('#modal_cupones_prepago').modal('hide');
     }
 });

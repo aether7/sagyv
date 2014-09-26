@@ -3,7 +3,7 @@ var CuponPrepago = function(){
     this.clienteId = null;
     this.clienteNombre = null;
     this.formatoNombre = null;
-    this.formato = null;
+    this.formatoId = null;
     this.descuento = null;
 
     this.mensajes = {};
@@ -29,6 +29,11 @@ CuponPrepago.mixin({
 
     esValido: function(){
         var valido = true;
+
+        valido = this.esValidoNumero() && valido;
+        valido = this.esValidoFormato() && valido;
+        valido = this.esValidoDescuento() && valido;
+        valido = this.esValidoClienteId() && valido;
 
         return valido;
     },
@@ -70,11 +75,11 @@ CuponPrepago.mixin({
 
     esValidoFormato: function(){
         var valido = true;
-        this.mensajes.formato = ""
+        this.mensajes.formatoId = ""
 
-        if(!this.formato){
+        if(!this.formatoId){
             valido = false;
-            this.mensajes.clienteId = "campo obligatorio";
+            this.mensajes.formatoId = "campo obligatorio";
         }
 
         return valido;

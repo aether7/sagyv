@@ -15,6 +15,7 @@ function LiquidacionController($http, $scope){
     };
 
     this.cheques = [];
+    this.cuponesPrepago = [];
 
     this.idGuiaDespacho = null;
     this.subTotal = 0;
@@ -105,6 +106,7 @@ LiquidacionController.mixin({
         this.scope.$on("guia:agregarVenta", this.addVenta.bind(this));
         this.scope.$on("guia:agregarVoucher", this.addVouchers.bind(this));
         this.scope.$on("guia:agregarCheques", this.addCheques.bind(this));
+        this.scope.$on("guia:agregarCuponesPrepago", this.addCuponesPrepago.bind(this));
     },
 
     addVenta: function(evt, venta){
@@ -117,6 +119,12 @@ LiquidacionController.mixin({
         }
 
         this.vouchers[voucher.tipo] = voucher;
+    },
+
+    addCuponesPrepago: function(evt, cupones){
+        var self = this;
+        self.cuponesPrepago.push(cupones);
+        console.log(self.cuponesPrepago);
     },
 
     addCheques: function(evt, cheques){
