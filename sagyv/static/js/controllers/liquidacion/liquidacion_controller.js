@@ -124,6 +124,11 @@ LiquidacionController.mixin({
         console.log(self.cuponesPrepago);
     },
 
+    removeCuponDescuento: function(indice){
+        this.cuponesPrepago.splice(indice, 1);
+
+    },
+
     addCheques: function(evt, cheques){
         var self = this;
 

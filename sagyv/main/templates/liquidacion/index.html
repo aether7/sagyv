@@ -138,6 +138,31 @@
             </tbody>
         </table>
 
+        <h3>Cupones de descuento</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Numero</th>
+                    <th>Cliente</th>
+                    <th>Formato</th>
+                    <th>Descuento</th>
+                    <th>Acciones</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="cp in liqCtrl.cuponesPrepago">
+                    <td data-ng-bind="cp.numero"></td>
+                    <td data-ng-bind="cp.cliente.nombre"></td>
+                    <td data-ng-bind="cp.formato.nombre"></td>
+                    <td data-ng-bind="cp.descuento"></td>
+                    <td>
+                        <a href data-ng-click="liqCtrl.removeCuponDescuento($index)">eliminar</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
         <button class="btn btn-primary" data-modal="">Guardar</button>
         <button class="btn btn-default" data-modal="">VENTA GARANTIAS</button>
 

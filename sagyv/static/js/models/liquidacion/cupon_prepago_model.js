@@ -17,8 +17,8 @@ CuponPrepago.mixin({
                 nombre : this.clienteNombre
             },
             formato: {
-                id : this.formato,
-                nombre: this.formatoId
+                id : this.formatoId,
+                nombre: this.formatoNombre
             },
             numero: this.numero,
             descuento: this.descuento
