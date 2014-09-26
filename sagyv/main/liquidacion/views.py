@@ -21,6 +21,7 @@ class IndexView(TemplateView):
 
 	def get_context_data(self, **kwargs):
 		context = super(IndexView, self).get_context_data(**kwargs)
+		context["clientes"] = Cliente.objects.order_by("id")
 		context["clientes_propios"] = Cliente.objects.filter(es_propio=True).order_by("id")
 		context["clientes_lipigas"] = Cliente.objects.filter(es_lipigas=True).order_by("id")
 		context["tarjetas_comerciales"] = TarjetaCredito.objects.get_tarjetas_comerciales()

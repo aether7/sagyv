@@ -11,8 +11,6 @@ var Cheque = function(){
 
 Cheque.mixin({
     getJSON: function(){
-        this.nombreBanco = $('#banco_cheque option:selected').text();
-
         var json = {
             banco: {
                 id: this.banco,

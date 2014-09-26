@@ -16,6 +16,7 @@ ChequeController.mixin({
         if(!this.cheque.esValido()){
             return;
         }
+        this.cheque.nombreBanco = $('#banco_cheque option:selected').text();
 
         this.cheque.cheques.push(this.cheque.getJSON());
         this.cheque.clearData();
@@ -26,15 +27,11 @@ ChequeController.mixin({
     },
 
     guardar: function(){
-        console.log('Aqui');
-
         this.cheque.mensajes.cheques=""
         if(!this.cheque.cheques.length){
-            console.log('UHM');
             this.cheque.mensajes.cheques="Debe tener al menos 1 cheque";
             return;
         }
-        console.log('Guarde');
         this.scope.$emit('guia:agregarCheques', this.cheque.cheques);
         common.agregarMensaje('Se ha guardado los cheques exitosamente');
         $('#modal_cheque').modal('hide');

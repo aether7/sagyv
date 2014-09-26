@@ -18,7 +18,7 @@
                     <label for="cliente_prepago" class="control-label">Cliente</label>
                     <select id="cliente_prepago" class="form-control">
                     {% for cliente in clientes %}
-                    <option value="{{ cliente.id }}">{{ cliente.giro }}</option>
+                    <option value="{{ cliente.id }}">{{ cliente.nombre }} - {{ cliente.giro}}</option>
                     {% endfor %}
                     </select>
                 </div>
