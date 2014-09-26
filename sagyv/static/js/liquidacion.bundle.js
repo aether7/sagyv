@@ -66,7 +66,7 @@ module.exports = GuiaLipigasController;
 
 },{"./guia_propia_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_propia_controller.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_propia_controller.js":[function(require,module,exports){
 var Producto = require('./../../models/liquidacion/producto_model.js'),
-    Venta = require('./../../models/liquidacion/venta_model.js');
+    VentaPropia = require('./../../models/liquidacion/venta_model.js');
 
 function GuiaPropiaController($http, $scope){
     this.venta = null;
@@ -86,7 +86,7 @@ GuiaPropiaController.mixin({
     resetearGuia: function(){
         this.idCliente = null;
         this.descripcionDescuento = 'nada';
-        this.venta = new Venta();
+        this.venta = new VentaPropia();
     },
 
     buscarCliente: function(){
@@ -156,8 +156,6 @@ GuiaPropiaController.mixin({
     },
 
     guardar: function(){
-        this.venta.tipoVenta = "propia";
-
         this.scope.$emit("guia:agregarVenta", this.venta);
         common.agregarMensaje('Se ha guardado guía propia exitosamente');
         $('#modal_guia_propia').modal('hide');
@@ -173,11 +171,14 @@ function LiquidacionController($http, $scope){
 
     this.guia = {};
 
-    this.ventas = [];
-
     this.vouchers = {
-        lipigas: [],
-        transbank: []
+        lipigas: null,
+        transbank: null
+    };
+
+    this.ventas = {
+        propia: null,
+        lipigas: null
     };
 
     this.cheques = [];
@@ -278,37 +279,39 @@ LiquidacionController.mixin({
     },
 
     addVouchers: function(evt, voucher){
-        var self = this;
-
-        console.log('add voucher');
-
-        if(!(voucher.tipo in self.vouchers)){
+        if(!(voucher.tipo in this.vouchers)){
             throw "el voucher {0} no es lipigas ni transbank es {1}".format(index, voucher.tipo);
         }
 
-        console.log(voucher);
-
-        voucher.tarjetas.forEach(function(tarjeta){
-            console.log(tarjeta);
-            self.vouchers[voucher.tipo].push(tarjeta);
-        });
+        this.vouchers[voucher.tipo] = voucher;
     },
 
     addCheques: function(evt, cheques){
         var self = this;
+
         cheques.forEach(function(cheque){
             self.cheques.push(cheque);
         });
     },
 
     removeCheque:function(indice){
-        console.log('indice '+ indice);
-
         this.cheques.splice(indice, 1);
     },
 
     cerrarLiquidacion: function(){
-        var url = App.urls.get("liquidacion:cerrar");
+        var url = App.urls.get("liquidacion:cerrar"),
+            json;
+
+        json = {
+            productos: this.productos,
+            ventas: this.ventas,
+            vouchers: this.vouchers,
+            cheques: this.cheques
+        };
+
+        console.log(JSON.stringify(json));
+        return;
+
         window.location.href = url;
     }
 });
@@ -396,7 +399,6 @@ VoucherLipigasController.mixin({
     },
 
     guardar: function(){
-        console.log('guardando voucher lipigas');
         this.voucher.numero = this.numero;
         this.scope.$emit("guia:agregarVoucher", this.voucher);
 
@@ -432,34 +434,41 @@ VoucherLipigasController.mixin({
 module.exports = VoucherLipigasController;
 
 },{"./../../models/liquidacion/voucher_lipigas_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/voucher_lipigas_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/voucher_transbank_controller.js":[function(require,module,exports){
+var VoucherTransbank = require('./../../models/liquidacion/voucher_transbank_model.js');
+
 function VoucherTransbankController($http, $scope){
+    this.voucher = null;
     this.scope = $scope;
-    this.vouchers = [];
-    this.voucher = {};
+
+    this.idTarjeta = null;
+    this.monto = 0;
+    this.cuotas = 1;
+
     this.mensajes = {};
 }
 
 VoucherTransbankController.mixin({
-    addVoucher: function(){
+    addTarjeta: function(){
         if(!this.esValido()){
            return;
         }
 
-        var voucher = {
-            tarjeta:{
-                id: this.voucher.tarjeta,
-                nombre: $('#tarjeta_comercial_transbank option:selected').text()
-            },
-            monto: this.voucher.monto,
-            cuotas: this.voucher.cuotas
+        var tarjeta = {
+            id: this.idTarjeta,
+            nombre: $('#tarjeta_comercial_transbank option:selected').text(),
+            monto: this.monto,
+            cuotas: this.cuotas
         };
 
-        this.vouchers.push(voucher);
-        this.voucher = {};
+        this.voucher.addTarjeta(tarjeta);
+
+        this.idTarjeta = null;
+        this.monto = 0;
+        this.cuotas = 1;
     },
 
-    removeVoucher: function(index){
-        this.vouchers.splice(index, 1);
+    removeTarjeta: function(index){
+        this.voucher.removeTarjeta(index);
     },
 
     esValido: function(){
@@ -467,28 +476,28 @@ VoucherTransbankController.mixin({
 
         this.mensajes = {};
 
-        if(!this.voucher.tarjeta){
+        if(!this.idTarjeta){
             this.mensajes.tarjeta = 'campo obligatorio';
             valido = false;
         }
 
-        if(!this.voucher.monto){
+        if(!this.monto){
             this.mensajes.monto = 'campo obligatorio';
             valido = false;
-        }else if(isNaN(this.voucher.monto)){
+        }else if(isNaN(this.monto)){
             this.mensajes.monto = 'monto inválido';
             valido = false;
-        }else if(parseInt(this.voucher.monto) < 1){
+        }else if(parseInt(this.monto) < 1){
             this.mensajes.monto = 'el monto a ingresar debe ser mayor a 0';
         }
 
-        if(!this.voucher.cuotas){
+        if(!this.cuotas){
             this.mensajes.cuotas = 'campo obligatorio';
             valido = false;
-        }else if(isNaN(this.voucher.cuotas)){
+        }else if(isNaN(this.cuotas)){
             this.mensajes.cuotas = 'valor inválido';
             valido = false;
-        }else if(parseInt(this.voucher.cuotas) < 1){
+        }else if(parseInt(this.cuotas) < 1){
             this.mensajes.cuotas = 'el monto a ingresar debe ser mayor a 0';
             valido = false;
         }
@@ -497,16 +506,20 @@ VoucherTransbankController.mixin({
     },
 
     guardar: function(){
-        this.scope.$emit('guia:agregarVouchers', this.vouchers);
+        this.scope.$emit('guia:agregarVoucher', this.voucher);
 
         $('#modal_voucher_transbank').modal('hide');
         common.agregarMensaje('Los vouchers han sido guardados exitosamente');
+    },
+
+    resetearVoucher: function(){
+        this.voucher = new VoucherTransbank();
     }
 });
 
 module.exports = VoucherTransbankController;
 
-},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/liquidacion_bundle.js":[function(require,module,exports){
+},{"./../../models/liquidacion/voucher_transbank_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/voucher_transbank_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/liquidacion_bundle.js":[function(require,module,exports){
 (function(){
 'use strict';
 
@@ -703,10 +716,10 @@ Producto.mixin({
 module.exports = Producto;
 
 },{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/venta_model.js":[function(require,module,exports){
-function Venta(){
+function Venta(tipo){
     this.numero = 0;
     this.total = 0;
-    this.tipoVenta = null;
+    this.tipoVenta = tipo;
     this.cliente = {};
     this.productos = [];
 }
@@ -787,10 +800,23 @@ Voucher.mixin({
     },
 
     _calcularTotal: function(){
-        throw new Error('Método no implementado');
+        throw new Error('Método no implementado: _calcularTotal');
     }
 });
 
 module.exports = Voucher;
 
-},{}]},{},["/Users/Aether/Proyectos/sagyv/sagyv/static/js/liquidacion_bundle.js"]);
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/voucher_transbank_model.js":[function(require,module,exports){
+var Voucher = require('./voucher_model.js');
+
+function VoucherTransbank(){
+    Voucher.call(this, 'transbank');
+}
+
+VoucherTransbank.mixin(Voucher, {
+    _calcularTotal: function(){}
+});
+
+module.exports = VoucherTransbank;
+
+},{"./voucher_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/voucher_model.js"}]},{},["/Users/Aether/Proyectos/sagyv/sagyv/static/js/liquidacion_bundle.js"]);

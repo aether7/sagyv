@@ -1,7 +1,7 @@
-function Venta(){
+function Venta(tipo){
     this.numero = 0;
     this.total = 0;
-    this.tipoVenta = null;
+    this.tipoVenta = tipo;
     this.cliente = {};
     this.productos = [];
 }

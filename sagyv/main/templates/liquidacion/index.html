@@ -1,6 +1,15 @@
 {% extends "panel_control.html" %}
 {% load static from staticfiles %}
 
+{% block css %}
+<style>
+    .celda-header{
+        text-align: center !important;
+        vertical-align: middle !important;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
     {% include "mensaje.html" %}
 
@@ -19,92 +28,42 @@
 
         {% include "liquidacion/panel_cabecera.html" %}
         {% include "liquidacion/panel_detalle.html" %}
-
-        <div>
-            <div class="box" data-ng-controller="GuiaPropiaController as gpCtrl">
-                <button type="button" class="btn btn-default"
-                    data-accion="abre_modal"
-                    data-modal="guia_propia"
-                    data-ng-click="gpCtrl.resetearGuia()">Guia propia</button>
-
-                {% include "liquidacion/components/modal_guia_propia.html" %}
-            </div>
-
-            <div class="box" data-ng-controller="GuiaLipigasController as glCtrl">
-                <button type="button" class="btn btn-default"
-                    data-accion="abre_modal"
-                    data-modal="guia_lipigas"
-                    data-ng-click="glCtrl.resetearGuia()">Guia Lipigas</button>
-
-                {% include "liquidacion/components/modal_guia_lipigas.html" %}
-            </div>
-
-            <div class="box" data-ng-controller="VoucherLipigasController as vlCtrl">
-                <button type="button" class="btn btn-default"
-                    data-accion="abre_modal"
-                    data-modal="voucher_lipigas"
-                    data-ng-click="vlCtrl.resetearVoucher()">Voucher Lipigas</button>
-
-                {% include "liquidacion/components/modal_voucher_lipigas.html" %}
-            </div>
-
-            <div class="box" data-ng-controller="VoucherTransbankController as vtCtrl">
-                <button type="button" class="btn btn-default"
-                    data-accion="abre_modal"
-                    data-modal="voucher_transbank">Voucher Transbank</button>
-
-                {% include "liquidacion/components/modal_voucher_transbank.html" %}
-            </div>
-
-            <div class="box">
-                <button type="button" class="btn btn-default"
-                    data-accion="abre_modal"
-                    data-modal="cupones_prepago">Cupones de prepago</button>
-
-                {% include "liquidacion/components/modal_cupones_prepago.html" %}
-            </div>
-
-            <div class="box">
-                <button type="button" class="btn btn-default"
-                    data-accion="abre_modal"
-                    data-modal="otros">Otros</button>
-
-                {% include "liquidacion/components/modal_otros.html" %}
-            </div>
-
-            <div class="box" data-ng-controller="ChequeController as cCtrl">
-                <button type="button" class="btn btn-default"
-                data-accion="abre_modal"
-                data-modal="cheque"
-                data-ng-click="cCtrl.resetearCheque()">CHEQUES</button>
-
-                {% include "liquidacion/components/modal_cheques.html" %}
-            </div>
-        </div>
+        {% include "liquidacion/seccion_venta.html" %}
 
         <h3>Guías</h3>
         <table class="table table-striped">
             <thead>
                 <tr>
+                    <th>Tipo</th>
                     <th>Número guía</th>
-                    <th>Tipo Venta</th>
+                    <th>Producto</th>
                     <th>Total</th>
-                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                <tr data-ng-repeat="venta in liqCtrl.ventas">
-                    <td data-ng-bind="venta.numero"></td>
-                    <td data-ng-bind="venta.tipoVenta"></td>
-                    <td data-ng-bind="venta.total | currency"></td>
-                    <td>
-                        <a href data-ng-click="liqCtrl.eliminarVenta($index)">eliminar</a>
-                    </td>
+                <tr data-ng-show="liqCtrl.ventas.propia.productos.length">
+                    {% verbatim %}
+                    <td rowspan="{{ liqCtrl.ventas.propia.productos.length + 1 }}">Propia</td>
+                    <td rowspan="{{ liqCtrl.ventas.propia.productos.length + 1 }}"
+                        data-ng-bind="liqCtrl.ventas.propia.numero"></td>
+                    {% endverbatim %}
+                </tr>
+
+                <tr data-ng-repeat="producto in liqCtrl.ventas.propia.productos">
+                    <td data-ng-bind="producto.nombre"></td>
+                    <td data-ng-bind="producto.total"></td>
+                </tr>
+
+                <tr data-ng-show="liqCtrl.ventas.lipigas.productos.length">
+                    {% verbatim %}
+                    <td rowspan="{{ liqCtrl.ventas.lipigas.productos.length + 1 }}">Lipigas</td>
+                    {% endverbatim %}
                 </tr>
             </tbody>
         </table>
 
         <h3>Vouchers</h3>
+
         <table class="table table-bordered table-condensed">
             <thead>
                 <tr>
@@ -114,30 +73,34 @@
                 </tr>
             </thead>
             <tbody>
-                <tr data-ng-show="liqCtrl.vouchers.lipigas.length">
+                <tr data-ng-show="liqCtrl.vouchers.lipigas.tarjetas.length">
                     {% verbatim %}
-                    <td rowspan="{{ liqCtrl.vouchers.lipigas.length + 1 }}"
-                        style="text-align:center;vertical-align:middle">Lipigas</td>
+                    <td rowspan="{{ liqCtrl.vouchers.lipigas.tarjetas.length + 1 }}"
+                        class="celda-header ng-cloak">Lipigas</td>
                     {% endverbatim %}
                 </tr>
 
-                <tr data-ng-repeat="tarjeta in liqCtrl.vouchers.lipigas">
+                <tr data-ng-repeat="tarjeta in liqCtrl.vouchers.lipigas.tarjetas">
                     <td data-ng-bind="tarjeta.nombre"></td>
                     <td data-ng-bind="tarjeta.monto | currency"></td>
                 </tr>
 
-                <tr data-ng-if="liqCtrl.vouchers.transbank.length">
-                    <td rowspan="liqCtrl.vouchers.transbank.length">Transbank</td>
+                <tr data-ng-show="liqCtrl.vouchers.transbank.tarjetas.length">
+                    {% verbatim %}
+                    <td rowspan="{{ liqCtrl.vouchers.transbank.tarjetas.length + 1 }}"
+                        class="celda-header ng-cloak">Transbank</td>
+                    {% endverbatim %}
                 </tr>
 
-                <tr data-ng-repeat="voucherTransbank in liqCtrl.vouchers.transbank">
-                    <td data-ng-bind="voucherTransbank.tarjeta.nombre"></td>
-                    <td data-ng-bind="voucherTransbank.monto | currency"></td>
+                <tr data-ng-repeat="tarjeta in liqCtrl.vouchers.transbank.tarjetas">
+                    <td data-ng-bind="tarjeta.nombre"></td>
+                    <td data-ng-bind="tarjeta.monto | currency"></td>
                 </tr>
             </tbody>
         </table>
 
         <h3>Cheques</h3>
+
         <table class="table table-striped">
             <thead>
                 <tr>

@@ -39,7 +39,6 @@ VoucherLipigasController.mixin({
     },
 
     guardar: function(){
-        console.log('guardando voucher lipigas');
         this.voucher.numero = this.numero;
         this.scope.$emit("guia:agregarVoucher", this.voucher);
 

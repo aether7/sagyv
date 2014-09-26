@@ -4,11 +4,14 @@ function LiquidacionController($http, $scope){
 
     this.guia = {};
 
-    this.ventas = [];
-
     this.vouchers = {
-        lipigas: [],
-        transbank: []
+        lipigas: null,
+        transbank: null
+    };
+
+    this.ventas = {
+        propia: null,
+        lipigas: null
     };
 
     this.cheques = [];
@@ -109,37 +112,39 @@ LiquidacionController.mixin({
     },
 
     addVouchers: function(evt, voucher){
-        var self = this;
-
-        console.log('add voucher');
-
-        if(!(voucher.tipo in self.vouchers)){
+        if(!(voucher.tipo in this.vouchers)){
             throw "el voucher {0} no es lipigas ni transbank es {1}".format(index, voucher.tipo);
         }
 
-        console.log(voucher);
-
-        voucher.tarjetas.forEach(function(tarjeta){
-            console.log(tarjeta);
-            self.vouchers[voucher.tipo].push(tarjeta);
-        });
+        this.vouchers[voucher.tipo] = voucher;
     },
 
     addCheques: function(evt, cheques){
         var self = this;
+
         cheques.forEach(function(cheque){
             self.cheques.push(cheque);
         });
     },
 
     removeCheque:function(indice){
-        console.log('indice '+ indice);
-
         this.cheques.splice(indice, 1);
     },
 
     cerrarLiquidacion: function(){
-        var url = App.urls.get("liquidacion:cerrar");
+        var url = App.urls.get("liquidacion:cerrar"),
+            json;
+
+        json = {
+            productos: this.productos,
+            ventas: this.ventas,
+            vouchers: this.vouchers,
+            cheques: this.cheques
+        };
+
+        console.log(JSON.stringify(json));
+        return;
+
         window.location.href = url;
     }
 });

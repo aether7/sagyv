@@ -16,7 +16,7 @@ Voucher.mixin({
     },
 
     _calcularTotal: function(){
-        throw new Error('Método no implementado');
+        throw new Error('Método no implementado: _calcularTotal');
     }
 });
 
