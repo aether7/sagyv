@@ -1,7 +1,6 @@
 var Cheque = require('./../../models/liquidacion/cheque_model.js');
 
-function ChequeController($http, $scope){
-    this.http = $http;
+function ChequeController($scope){
     this.scope = $scope;
     this.cheque = null;
     this.mensajes = {};
@@ -27,11 +26,13 @@ ChequeController.mixin({
     },
 
     guardar: function(){
-        this.cheque.mensajes.cheques=""
+        this.cheque.mensajes.cheques = '';
+
         if(!this.cheque.cheques.length){
-            this.cheque.mensajes.cheques="Debe tener al menos 1 cheque";
+            this.cheque.mensajes.cheques = 'Debe tener al menos 1 cheque';
             return;
         }
+
         this.scope.$emit('guia:agregarCheques', this.cheque.cheques);
         common.agregarMensaje('Se ha guardado los cheques exitosamente');
         $('#modal_cheque').modal('hide');

@@ -1,6 +1,9 @@
 var GuiaVenta = require('./../../models/liquidacion/guia_venta_model.js');
 
-function LiquidacionController($http, $scope){
+function LiquidacionController($scope, liquidacionService){
+    this.scope = $scope;
+    this.service = liquidacionService;
+
     this.productos = [];
     this.boleta = null;
     this.guia = {};
@@ -22,21 +25,13 @@ function LiquidacionController($http, $scope){
     this.fecha = null;
     this.vehiculo = null;
 
-    this.http = $http;
-    this.scope = $scope;
-
     this.suscribeEvents();
 }
 
 LiquidacionController.mixin({
     buscarGuia: function(){
-        var url = App.urls.get("liquidacion:obtener_guia"),
-            _this = this;
-
-        url += "?id_guia_despacho=" + this.idGuiaDespacho;
-
-        this.resetearValores();
-        this.http.get(url).success(this.cargaDatosCabecera.bind(this));
+        var data = { id_guia_despacho: this.idGuiaDespacho };
+        this.service.buscarGuia(data, this.cargaDatosCabecera.bind(this));
     },
 
     cargaDatosCabecera: function(data){

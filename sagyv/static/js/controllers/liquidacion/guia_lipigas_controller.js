@@ -1,7 +1,7 @@
 var GuiaPropiaController = require('./guia_propia_controller.js');
 
-function GuiaLipigasController($http, $scope){
-    GuiaPropiaController.call(this, $http, $scope);
+function GuiaLipigasController($scope, service){
+    GuiaPropiaController.call(this, $scope, service);
 }
 
 GuiaLipigasController.mixin(GuiaPropiaController, {

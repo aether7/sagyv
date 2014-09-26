@@ -1,6 +1,6 @@
 var VoucherTransbank = require('./../../models/liquidacion/voucher_transbank_model.js');
 
-function VoucherTransbankController($http, $scope){
+function VoucherTransbankController($scope){
     this.voucher = null;
     this.scope = $scope;
 

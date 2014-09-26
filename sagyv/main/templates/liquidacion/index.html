@@ -31,7 +31,7 @@
         {% include "liquidacion/seccion_venta.html" %}
 
         <h3>Guías</h3>
-        <table class="table table-striped">
+        <table id="tabla_ventas" class="table table-striped">
             <thead>
                 <tr>
                     <th>Tipo</th>
@@ -41,17 +41,29 @@
                 </tr>
             </thead>
             <tbody>
-
-                <tr data-ng-show="liqCtrl.ventas.propia.length">
+                <tr data-ng-show="liqCtrl.guias.propia.ventas.length">
                     {% verbatim %}
-                    <td rowspan=""></td>
+                    <td rowspan="{{ liqCtrl.guias.propia.rowspan }}">Propia</td>
                     {% endverbatim %}
                 </tr>
 
-                <tr data-ng-show="liqCtrl.ventas.propia.length">
+                <tr data-ng-repeat="venta in liqCtrl.guias.propia.ventas">
                     {% verbatim %}
-                    <td class="celda-header" rowspan="{{ liqCtrl.ventas.propia.length + 1 }}">Propia</td>
-                    <td class="celda-header" rowspan="{{ liqCtrl.ventas.propia.length + 1 }}"
+                    <td rowspan="{{ venta.productos.length + 1 }}"
+                        data-ng-bind="venta.numero"></td>
+                    {% endverbatim %}
+
+                    <td data-ng-repeat="producto in venta.productos"
+                        data-ng-bind="producto.nombre"></td>
+
+                    <td data-ng-repeat="producto in venta.productos"
+                        data-ng-bind="producto.monto | currency"></td>
+                </tr>
+                <!--
+                <tr data-ng-show="liqCtrl.guias.propia.ventas.length">
+                    {% verbatim %}
+                    <td class="celda-header" rowspan="{{ liqCtrl.guias.propia.rowspan }}">Propia</td>
+                    <td class="celda-header" rowspan="{{ liqCtrl.guias.propia.rowspan }}"
                         data-ng-bind="liqCtrl.ventas.propia.numero"></td>
                     {% endverbatim %}
                 </tr>
@@ -73,6 +85,7 @@
                     <td data-ng-bind="producto.nombre"></td>
                     <td data-ng-bind="producto.total"></td>
                 </tr>
+                -->
             </tbody>
         </table>
 
@@ -151,6 +164,20 @@
 <script src="{% static 'js/plugins/typeahead.min.js' %}"></script>
 <script src="{% static 'js/common_functions.js' %}"></script>
 <script src="{% static 'js/liquidacion.bundle.js' %}"></script>
+
+<script id="tpl_tabla_ventas" type="text/x-handlebars-template">
+{% include "liquidacion/tpl_tabla_ventas.html" %}
+</script>
+
+<script>
+    Handlebars.registerHelper('omitePrimero', function(arreglo){
+        if(!Array.isArray(arreglo)){
+            throw new TypeError('nos enviaron un elemento que no es arreglo');
+        }
+
+        return arreglo.slice(1);
+    });
+</script>
 
 <script>
     App.urls.set("liquidacion:obtener_guia", "{% url 'liquidacion:obtener_guia' %}");

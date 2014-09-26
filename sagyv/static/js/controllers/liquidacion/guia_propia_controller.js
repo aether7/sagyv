@@ -1,12 +1,13 @@
 var Producto = require('./../../models/liquidacion/producto_model.js'),
     VentaPropia = require('./../../models/liquidacion/venta_propia_model.js');
 
-function GuiaPropiaController($http, $scope){
+function GuiaPropiaController($scope, service){
+    this.service = service;
+    this.scope = $scope;
+
     this.venta = null;
     this.idCliente = null;
     this.descripcionDescuento = 'nada';
-    this.http = $http;
-    this.scope = $scope;
     this.cliente = {};
     this.producto = {};
 
@@ -23,10 +24,7 @@ GuiaPropiaController.mixin({
     },
 
     buscarCliente: function(){
-        var url = App.urls.get('liquidacion:buscar_cliente');
-        url += '?id_cliente=' + this.idCliente;
-
-        this.http.get(url).success(this.procesarCliente.bind(this));
+        this.service.buscarCliente({ id_cliente: this.idCliente }, this.procesarCliente.bind(this));
     },
 
     procesarCliente: function(data){

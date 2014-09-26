@@ -1,7 +1,6 @@
 var CuponPrepago = require('./../../models/liquidacion/cupon_prepago_model.js');
 
-function CuponPrepagoController($http, $scope){
-    this.http = $http;
+function CuponPrepagoController($scope){
     this.scope = $scope;
     this.cuponPrepago = null;
 }

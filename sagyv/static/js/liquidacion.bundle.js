@@ -1,8 +1,7 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/cheque_controller.js":[function(require,module,exports){
 var Cheque = require('./../../models/liquidacion/cheque_model.js');
 
-function ChequeController($http, $scope){
-    this.http = $http;
+function ChequeController($scope){
     this.scope = $scope;
     this.cheque = null;
     this.mensajes = {};
@@ -28,11 +27,13 @@ ChequeController.mixin({
     },
 
     guardar: function(){
-        this.cheque.mensajes.cheques=""
+        this.cheque.mensajes.cheques = '';
+
         if(!this.cheque.cheques.length){
-            this.cheque.mensajes.cheques="Debe tener al menos 1 cheque";
+            this.cheque.mensajes.cheques = 'Debe tener al menos 1 cheque';
             return;
         }
+
         this.scope.$emit('guia:agregarCheques', this.cheque.cheques);
         common.agregarMensaje('Se ha guardado los cheques exitosamente');
         $('#modal_cheque').modal('hide');
@@ -45,8 +46,7 @@ module.exports = ChequeController;
 },{"./../../models/liquidacion/cheque_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/cheque_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/cupon_prepago_controller.js":[function(require,module,exports){
 var CuponPrepago = require('./../../models/liquidacion/cupon_prepago_model.js');
 
-function CuponPrepagoController($http, $scope){
-    this.http = $http;
+function CuponPrepagoController($scope){
     this.scope = $scope;
     this.cuponPrepago = null;
 }
@@ -74,8 +74,8 @@ module.exports = CuponPrepagoController;
 },{"./../../models/liquidacion/cupon_prepago_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/cupon_prepago_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_lipigas_controller.js":[function(require,module,exports){
 var GuiaPropiaController = require('./guia_propia_controller.js');
 
-function GuiaLipigasController($http, $scope){
-    GuiaPropiaController.call(this, $http, $scope);
+function GuiaLipigasController($scope, service){
+    GuiaPropiaController.call(this, $scope, service);
 }
 
 GuiaLipigasController.mixin(GuiaPropiaController, {
@@ -94,12 +94,13 @@ module.exports = GuiaLipigasController;
 var Producto = require('./../../models/liquidacion/producto_model.js'),
     VentaPropia = require('./../../models/liquidacion/venta_propia_model.js');
 
-function GuiaPropiaController($http, $scope){
+function GuiaPropiaController($scope, service){
+    this.service = service;
+    this.scope = $scope;
+
     this.venta = null;
     this.idCliente = null;
     this.descripcionDescuento = 'nada';
-    this.http = $http;
-    this.scope = $scope;
     this.cliente = {};
     this.producto = {};
 
@@ -116,10 +117,7 @@ GuiaPropiaController.mixin({
     },
 
     buscarCliente: function(){
-        var url = App.urls.get('liquidacion:buscar_cliente');
-        url += '?id_cliente=' + this.idCliente;
-
-        this.http.get(url).success(this.procesarCliente.bind(this));
+        this.service.buscarCliente({ id_cliente: this.idCliente }, this.procesarCliente.bind(this));
     },
 
     procesarCliente: function(data){
@@ -193,7 +191,10 @@ module.exports = GuiaPropiaController;
 },{"./../../models/liquidacion/producto_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/producto_model.js","./../../models/liquidacion/venta_propia_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/venta_propia_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/liquidacion_controller.js":[function(require,module,exports){
 var GuiaVenta = require('./../../models/liquidacion/guia_venta_model.js');
 
-function LiquidacionController($http, $scope){
+function LiquidacionController($scope, liquidacionService){
+    this.scope = $scope;
+    this.service = liquidacionService;
+
     this.productos = [];
     this.boleta = null;
     this.guia = {};
@@ -215,21 +216,13 @@ function LiquidacionController($http, $scope){
     this.fecha = null;
     this.vehiculo = null;
 
-    this.http = $http;
-    this.scope = $scope;
-
     this.suscribeEvents();
 }
 
 LiquidacionController.mixin({
     buscarGuia: function(){
-        var url = App.urls.get("liquidacion:obtener_guia"),
-            _this = this;
-
-        url += "?id_guia_despacho=" + this.idGuiaDespacho;
-
-        this.resetearValores();
-        this.http.get(url).success(this.cargaDatosCabecera.bind(this));
+        var data = { id_guia_despacho: this.idGuiaDespacho };
+        this.service.buscarGuia(data, this.cargaDatosCabecera.bind(this));
     },
 
     cargaDatosCabecera: function(data){
@@ -391,7 +384,7 @@ module.exports = ProductoController;
 },{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/voucher_lipigas_controller.js":[function(require,module,exports){
 var VoucherLipigas = require('./../../models/liquidacion/voucher_lipigas_model.js');
 
-function VoucherLipigasController($http, $scope){
+function VoucherLipigasController($scope){
     this.scope = $scope;
 
     this.numero = 0;
@@ -467,7 +460,7 @@ module.exports = VoucherLipigasController;
 },{"./../../models/liquidacion/voucher_lipigas_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/voucher_lipigas_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/voucher_transbank_controller.js":[function(require,module,exports){
 var VoucherTransbank = require('./../../models/liquidacion/voucher_transbank_model.js');
 
-function VoucherTransbankController($http, $scope){
+function VoucherTransbankController($scope){
     this.voucher = null;
     this.scope = $scope;
 
@@ -562,16 +555,19 @@ var app = angular.module('liquidacionApp',[]),
     VoucherLipigasController = require('./controllers/liquidacion/voucher_lipigas_controller.js'),
     VoucherTransbankController = require('./controllers/liquidacion/voucher_transbank_controller.js'),
     ChequeController = require('./controllers/liquidacion/cheque_controller.js'),
-    CuponPrepagoController = require('./controllers/liquidacion/cupon_prepago_controller.js');
+    CuponPrepagoController = require('./controllers/liquidacion/cupon_prepago_controller.js'),
+    liquidacionService = require('./services/liquidacion_service.js');
 
-app.controller('LiquidacionController', ['$http','$scope', LiquidacionController]);
+app.factory('liquidacionService', liquidacionService);
+
+app.controller('LiquidacionController', ['$scope', 'liquidacionService', LiquidacionController]);
 app.controller('ProductoController', ['$scope', ProductoController]);
-app.controller('GuiaPropiaController', ['$http', '$scope', GuiaPropiaController]);
-app.controller('GuiaLipigasController', ['$http', '$scope', GuiaLipigasController]);
-app.controller('VoucherLipigasController', ['$http', '$scope', VoucherLipigasController]);
-app.controller('VoucherTransbankController', ['$http', '$scope', VoucherTransbankController]);
-app.controller('ChequeController', ['$http', '$scope', ChequeController]);
-app.controller('CuponPrepagoController', ['$http', '$scope', CuponPrepagoController]);
+app.controller('GuiaPropiaController', ['$scope', 'liquidacionService', GuiaPropiaController]);
+app.controller('GuiaLipigasController', ['$scope', 'liquidacionService', GuiaLipigasController]);
+app.controller('VoucherLipigasController', ['$scope', VoucherLipigasController]);
+app.controller('VoucherTransbankController', ['$scope', VoucherTransbankController]);
+app.controller('ChequeController', ['$scope', ChequeController]);
+app.controller('CuponPrepagoController', ['$scope', CuponPrepagoController]);
 
 })();
 
@@ -579,7 +575,7 @@ $('button[data-accion=abre_modal]').on('click', function(evt){
     $('#modal_' + $(this).data('modal')).modal('show');
 });
 
-},{"./controllers/liquidacion/cheque_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/cheque_controller.js","./controllers/liquidacion/cupon_prepago_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/cupon_prepago_controller.js","./controllers/liquidacion/guia_lipigas_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_lipigas_controller.js","./controllers/liquidacion/guia_propia_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_propia_controller.js","./controllers/liquidacion/liquidacion_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/liquidacion_controller.js","./controllers/liquidacion/producto_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/producto_controller.js","./controllers/liquidacion/voucher_lipigas_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/voucher_lipigas_controller.js","./controllers/liquidacion/voucher_transbank_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/voucher_transbank_controller.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/cheque_model.js":[function(require,module,exports){
+},{"./controllers/liquidacion/cheque_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/cheque_controller.js","./controllers/liquidacion/cupon_prepago_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/cupon_prepago_controller.js","./controllers/liquidacion/guia_lipigas_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_lipigas_controller.js","./controllers/liquidacion/guia_propia_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_propia_controller.js","./controllers/liquidacion/liquidacion_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/liquidacion_controller.js","./controllers/liquidacion/producto_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/producto_controller.js","./controllers/liquidacion/voucher_lipigas_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/voucher_lipigas_controller.js","./controllers/liquidacion/voucher_transbank_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/voucher_transbank_controller.js","./services/liquidacion_service.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/liquidacion_service.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/cheque_model.js":[function(require,module,exports){
 var Cheque = function(){
     this.banco = null;
     this.nombreBanco = null;
@@ -806,7 +802,7 @@ function GuiaVenta(){
 GuiaVenta.mixin({
     addGuia: function(guia){
         if(guia.tipo !== 'propia' && guia.tipo !== 'lipigas'){
-            throw 'La guia ingresada no es ni lipigas ni es propia, es ' + guia.tipo;
+            throw TypeError('La guia ingresada no es ni lipigas ni es propia, es ' + guia.tipo);
         }
 
         if(guia.tipo === 'propia'){
@@ -1010,4 +1006,53 @@ VoucherTransbank.mixin(Voucher, {
 
 module.exports = VoucherTransbank;
 
-},{"./voucher_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/voucher_model.js"}]},{},["/Users/Aether/Proyectos/sagyv/sagyv/static/js/liquidacion_bundle.js"]);
+},{"./voucher_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/voucher_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/liquidacion_service.js":[function(require,module,exports){
+var serviceUtil = require('./service_util.js');
+
+function liquidacionService($http){
+    return {
+        buscarGuia: function(data, callback){
+            if(!_.isObject(data)){
+                throw new TypeError('el parametro debe ser un JSON');
+            }
+
+            var url = App.urls.get('liquidacion:obtener_guia');
+            url = serviceUtil.processURL(url, data);
+            $http.get(url).success(callback).error(serviceUtil.standardError);
+        },
+
+        buscarCliente: function(data, callback){
+            if(!_.isObject(data)){
+                throw new TypeError('el parametro debe ser un JSON');
+            }
+
+            var url = App.urls.get('liquidacion:buscar_cliente');
+            url = serviceUtil.processURL(url, data);
+            $http.get(url).success(callback).error(serviceUtil.standardError);
+        }
+    };
+}
+
+module.exports = liquidacionService;
+
+},{"./service_util.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/service_util.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/service_util.js":[function(require,module,exports){
+function standardError(data){
+    console.error(data);
+    alert('ha ocurrido un error en el servidor !!!');
+};
+
+function processURL(url, params){
+    var queryStr = [];
+
+    Object.keys(params).forEach(function(key){
+        queryStr.push(key + '=' + params[key]);
+    });
+
+    url += '?' + queryStr.join('&');
+    return url;
+};
+
+exports.standardError = standardError;
+exports.processURL = processURL;
+
+},{}]},{},["/Users/Aether/Proyectos/sagyv/sagyv/static/js/liquidacion_bundle.js"]);

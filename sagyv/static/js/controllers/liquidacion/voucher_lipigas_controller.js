@@ -1,6 +1,6 @@
 var VoucherLipigas = require('./../../models/liquidacion/voucher_lipigas_model.js');
 
-function VoucherLipigasController($http, $scope){
+function VoucherLipigasController($scope){
     this.scope = $scope;
 
     this.numero = 0;

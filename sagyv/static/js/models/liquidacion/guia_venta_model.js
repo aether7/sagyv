@@ -13,7 +13,7 @@ function GuiaVenta(){
 GuiaVenta.mixin({
     addGuia: function(guia){
         if(guia.tipo !== 'propia' && guia.tipo !== 'lipigas'){
-            throw 'La guia ingresada no es ni lipigas ni es propia, es ' + guia.tipo;
+            throw TypeError('La guia ingresada no es ni lipigas ni es propia, es ' + guia.tipo);
         }
 
         if(guia.tipo === 'propia'){

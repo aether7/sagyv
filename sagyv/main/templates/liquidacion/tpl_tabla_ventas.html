@@ -1,0 +1,38 @@
+{% verbatim %}
+
+{{! se recorre primera guia primer producto }}
+<tr>
+    <td rowspan="{{ propia.rowspan }}">Propia</td>
+    <td rowspan="{{ propia.guias[0].productos.length }}">{{ propia.guias[0].numero }}</td>
+    <td>{{ guia.guias[0].productos[0].nombre }}</td>
+    <td>{{ guia.guias[0].productos[0].monto }}</td>
+</tr>
+
+{{! se recorre primera guia resto de productos }}
+
+{{#each omitePrimero propia.guias[0].productos}}
+    <tr>
+        <td>{{ nombre }}</td>
+        <td>{{ monto }}</td>
+    </tr>
+{{/each}}
+
+{{! se recorren resto de guias }}
+
+{{#each omitePrimero propia.guias}}
+    {{! se recorre primer producto }}
+    <tr>
+        <td rowspan="{{ this.productos.length }}">{{ numero }}</td>
+        <td>{{ productos[0].nombre }}</td>
+        <td>{{ productos[0].monto }}</td>
+    </tr>
+
+    {{#each omitePrimero productos }}
+    <tr>
+        <td>{{ nombre }}</td>
+        <td>{{ numero }}</td>
+    </tr>
+    {{/each}}
+{{/each}}
+
+{% endverbatim %}

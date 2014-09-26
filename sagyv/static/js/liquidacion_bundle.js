@@ -9,16 +9,19 @@ var app = angular.module('liquidacionApp',[]),
     VoucherLipigasController = require('./controllers/liquidacion/voucher_lipigas_controller.js'),
     VoucherTransbankController = require('./controllers/liquidacion/voucher_transbank_controller.js'),
     ChequeController = require('./controllers/liquidacion/cheque_controller.js'),
-    CuponPrepagoController = require('./controllers/liquidacion/cupon_prepago_controller.js');
+    CuponPrepagoController = require('./controllers/liquidacion/cupon_prepago_controller.js'),
+    liquidacionService = require('./services/liquidacion_service.js');
 
-app.controller('LiquidacionController', ['$http','$scope', LiquidacionController]);
+app.factory('liquidacionService', liquidacionService);
+
+app.controller('LiquidacionController', ['$scope', 'liquidacionService', LiquidacionController]);
 app.controller('ProductoController', ['$scope', ProductoController]);
-app.controller('GuiaPropiaController', ['$http', '$scope', GuiaPropiaController]);
-app.controller('GuiaLipigasController', ['$http', '$scope', GuiaLipigasController]);
-app.controller('VoucherLipigasController', ['$http', '$scope', VoucherLipigasController]);
-app.controller('VoucherTransbankController', ['$http', '$scope', VoucherTransbankController]);
-app.controller('ChequeController', ['$http', '$scope', ChequeController]);
-app.controller('CuponPrepagoController', ['$http', '$scope', CuponPrepagoController]);
+app.controller('GuiaPropiaController', ['$scope', 'liquidacionService', GuiaPropiaController]);
+app.controller('GuiaLipigasController', ['$scope', 'liquidacionService', GuiaLipigasController]);
+app.controller('VoucherLipigasController', ['$scope', VoucherLipigasController]);
+app.controller('VoucherTransbankController', ['$scope', VoucherTransbankController]);
+app.controller('ChequeController', ['$scope', ChequeController]);
+app.controller('CuponPrepagoController', ['$scope', CuponPrepagoController]);
 
 })();
 
