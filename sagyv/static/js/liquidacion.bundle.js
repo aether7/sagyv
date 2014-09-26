@@ -206,7 +206,7 @@ function LiquidacionController($http, $scope){
     this.guias = new GuiaVenta();
     this.cheques = [];
     this.cuponesPrepago = [];
-
+    this.otro = [];
     this.idGuiaDespacho = null;
     this.subTotal = 0;
     this.descuentos = 0;
@@ -297,6 +297,7 @@ LiquidacionController.mixin({
         this.scope.$on("guia:agregarVoucher", this.addVouchers.bind(this));
         this.scope.$on("guia:agregarCheques", this.addCheques.bind(this));
         this.scope.$on("guia:agregarCuponesPrepago", this.addCuponesPrepago.bind(this));
+        this.scope.$on("guia:agregaOtro", this.addOtro.bind(this));
     },
 
     addGuia: function(evt, venta){
@@ -309,6 +310,15 @@ LiquidacionController.mixin({
         }
 
         this.vouchers[voucher.tipo] = voucher;
+    },
+
+    addOtro: function(evt, otro){
+        var self = this;
+        self.otro.push(otro);
+    },
+
+    removeOtro: function(indice){
+        this.otro.splice(indice, 1);
     },
 
     addCuponesPrepago: function(evt, cupones){
@@ -354,7 +364,33 @@ LiquidacionController.mixin({
 
 module.exports = LiquidacionController;
 
-},{"./../../models/liquidacion/guia_venta_model.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/models/liquidacion/guia_venta_model.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/producto_controller.js":[function(require,module,exports){
+},{"./../../models/liquidacion/guia_venta_model.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/models/liquidacion/guia_venta_model.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/otro_controller.js":[function(require,module,exports){
+var Otro = require('./../../models/liquidacion/otro_model.js');
+
+function OtroController($scope){
+    this.scope = $scope;
+    this.otro = null;
+}
+
+OtroController.mixin({
+    resetearOtro: function(){
+        this.otro = new Otro();
+    },
+
+    guardar: function(){
+        if(!this.otro.esValido()){
+            return;
+        }
+
+        this.scope.$emit("guia:agregaOtro", this.otro.getJSON());
+        common.agregarMensaje("Se ha guardado otroModel exitosamente");
+        $('#modal_otros').modal('hide');
+    }
+});
+
+module.exports = OtroController;
+
+},{"./../../models/liquidacion/otro_model.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/models/liquidacion/otro_model.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/producto_controller.js":[function(require,module,exports){
 function ProductoController($scope){
     this.scope = $scope;
 }
@@ -567,7 +603,8 @@ var app = angular.module('liquidacionApp',[]),
     VoucherLipigasController = require('./controllers/liquidacion/voucher_lipigas_controller.js'),
     VoucherTransbankController = require('./controllers/liquidacion/voucher_transbank_controller.js'),
     ChequeController = require('./controllers/liquidacion/cheque_controller.js'),
-    CuponPrepagoController = require('./controllers/liquidacion/cupon_prepago_controller.js');
+    CuponPrepagoController = require('./controllers/liquidacion/cupon_prepago_controller.js'),
+    OtroController = require('./controllers/liquidacion/otro_controller.js');
 
 app.controller('LiquidacionController', ['$http','$scope', LiquidacionController]);
 app.controller('ProductoController', ['$scope', ProductoController]);
@@ -577,6 +614,8 @@ app.controller('VoucherLipigasController', ['$http', '$scope', VoucherLipigasCon
 app.controller('VoucherTransbankController', ['$http', '$scope', VoucherTransbankController]);
 app.controller('ChequeController', ['$http', '$scope', ChequeController]);
 app.controller('CuponPrepagoController', ['$http', '$scope', CuponPrepagoController]);
+app.controller('OtroController', ['$scope', OtroController]);
+
 
 })();
 
@@ -584,7 +623,7 @@ $('button[data-accion=abre_modal]').on('click', function(evt){
     $('#modal_' + $(this).data('modal')).modal('show');
 });
 
-},{"./controllers/liquidacion/cheque_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/cheque_controller.js","./controllers/liquidacion/cupon_prepago_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/cupon_prepago_controller.js","./controllers/liquidacion/guia_lipigas_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_lipigas_controller.js","./controllers/liquidacion/guia_propia_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_propia_controller.js","./controllers/liquidacion/liquidacion_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/liquidacion_controller.js","./controllers/liquidacion/producto_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/producto_controller.js","./controllers/liquidacion/voucher_lipigas_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/voucher_lipigas_controller.js","./controllers/liquidacion/voucher_transbank_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/voucher_transbank_controller.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/models/liquidacion/cheque_model.js":[function(require,module,exports){
+},{"./controllers/liquidacion/cheque_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/cheque_controller.js","./controllers/liquidacion/cupon_prepago_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/cupon_prepago_controller.js","./controllers/liquidacion/guia_lipigas_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_lipigas_controller.js","./controllers/liquidacion/guia_propia_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_propia_controller.js","./controllers/liquidacion/liquidacion_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/liquidacion_controller.js","./controllers/liquidacion/otro_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/otro_controller.js","./controllers/liquidacion/producto_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/producto_controller.js","./controllers/liquidacion/voucher_lipigas_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/voucher_lipigas_controller.js","./controllers/liquidacion/voucher_transbank_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/voucher_transbank_controller.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/models/liquidacion/cheque_model.js":[function(require,module,exports){
 var Cheque = function(){
     this.banco = null;
     this.nombreBanco = null;
@@ -839,6 +878,69 @@ GuiaVenta.mixin({
 });
 
 module.exports = GuiaVenta;
+
+},{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/models/liquidacion/otro_model.js":[function(require,module,exports){
+var Otro = function(){
+    this.concepto = null;
+    this.monto = null;
+
+    this.mensajes={};
+};
+
+Otro.mixin({
+    getJSON: function(){
+        var json = {
+            concepto : this.concepto,
+            monto : this.monto
+        };
+
+        return json;
+    },
+
+    esValido: function(){
+        var valido = true;
+
+        valido = this.esMontoValido() && valido;
+        valido = this.esConceptoValido() && valido;
+
+        return valido;
+    },
+
+    _esNumeroValido: function(campo){
+        var valido = true;
+
+        this.mensajes[campo] = "";
+
+        if(!this[campo]){
+            valido = false;
+            this.mensajes[campo] = "campo obligatorio";
+        }else if(isNaN(this[campo])){
+            valido = false;
+            this.mensajes[campo] = "el valor debe ser numérico";
+        }
+
+        return valido;
+    },
+
+    esConceptoValido: function(){
+        var valido = true;
+        this.mensajes.concepto = "";
+
+        if(this.concepto == null || this.concepto.trim() == ""){
+            valido = false;
+            this.mensajes.concepto = "campo obligatorio";
+        }
+
+        return valido;
+    },
+
+    esMontoValido: function(){
+        return this._esNumeroValido("monto");
+    }
+
+});
+
+module.exports = Otro;
 
 },{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/models/liquidacion/producto_model.js":[function(require,module,exports){
 function Producto(){

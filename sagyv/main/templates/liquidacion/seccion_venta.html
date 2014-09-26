@@ -44,10 +44,11 @@
         {% include "liquidacion/components/modal_cupones_prepago.html" %}
     </div>
 
-    <div class="box">
+    <div class="box" data-ng-controller="OtroController as oCtrl">
         <button type="button" class="btn btn-default"
             data-accion="abre_modal"
-            data-modal="otros">Otros</button>
+            data-modal="otros"
+            data-ng-click="oCtrl.resetearOtro()">Otros</button>
 
         {% include "liquidacion/components/modal_otros.html" %}
     </div>

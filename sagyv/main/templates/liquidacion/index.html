@@ -139,6 +139,7 @@
         </table>
 
         <h3>Cupones de descuento</h3>
+
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -158,6 +159,27 @@
                     <td data-ng-bind="cp.descuento"></td>
                     <td>
                         <a href data-ng-click="liqCtrl.removeCuponDescuento($index)">eliminar</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Otro</h3>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Concepto</th>
+                    <th>Monto</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="o in liqCtrl.otro">
+                    <td data-ng-bind="o.concepto"></td>
+                    <td data-ng-bind="o.monto"></td>
+                    <td>
+                        <a href data-ng-click="liqCtrl.removeOtro($index)">eliminar</a>
                     </td>
                 </tr>
             </tbody>

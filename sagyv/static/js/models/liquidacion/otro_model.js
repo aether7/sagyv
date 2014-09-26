@@ -1,5 +1,5 @@
 var Otro = function(){
-    this.consepto = null;
+    this.concepto = null;
     this.monto = null;
 
     this.mensajes={};
@@ -8,7 +8,7 @@ var Otro = function(){
 Otro.mixin({
     getJSON: function(){
         var json = {
-            consepto : this.consepto,
+            concepto : this.concepto,
             monto : this.monto
         };
 
@@ -17,6 +17,11 @@ Otro.mixin({
 
     esValido: function(){
         var valido = true;
+
+        valido = this.esMontoValido() && valido;
+        valido = this.esConceptoValido() && valido;
+
+        return valido;
     },
 
     _esNumeroValido: function(campo){
@@ -35,13 +40,13 @@ Otro.mixin({
         return valido;
     },
 
-    esConseptoValido: function(){
+    esConceptoValido: function(){
         var valido = true;
-        this.mensajes.consepto = "";
+        this.mensajes.concepto = "";
 
-        if(this.consepto == null){
+        if(this.concepto == null || this.concepto.trim() == ""){
             valido = false;
-            this.mensajes.consepto = "campo obligatorio";
+            this.mensajes.concepto = "campo obligatorio";
         }
 
         return valido;
