@@ -51,19 +51,20 @@ function CuponPrepagoController($http, $scope){
     this.cuponPrepago = null;
 }
 
-CuponPrepagoController.mixen({
+CuponPrepagoController.mixin({
     resetearCuponPrepago: function(){
         this.cuponPrepago = new CuponPrepago();
     },
 
     guardarCuponPrepago: function(){
         if(!this.cuponPrepago.esValido()){
-            return
+            return;
         }
+
         this.cuponPrepago.clienteNombre = $('#cliente_prepago option:selected').text();
         this.cuponPrepago.formatoNombre = $('#formato_prepago option:selected').text();
 
-        this.scope.emit()
+        this.scope.emit();
         $('#modal_cupones_prepago').modal('hide');
     }
 });
