@@ -1,5 +1,5 @@
 var Producto = require('./../../models/liquidacion/producto_model.js'),
-    VentaPropia = require('./../../models/liquidacion/venta_model.js');
+    VentaPropia = require('./../../models/liquidacion/venta_propia_model.js');
 
 function GuiaPropiaController($http, $scope){
     this.venta = null;

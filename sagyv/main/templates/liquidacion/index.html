@@ -41,10 +41,17 @@
                 </tr>
             </thead>
             <tbody>
-                <tr data-ng-show="liqCtrl.ventas.propia.productos.length">
+
+                <tr data-ng-show="liqCtrl.ventas.propia.length">
                     {% verbatim %}
-                    <td rowspan="{{ liqCtrl.ventas.propia.productos.length + 1 }}">Propia</td>
-                    <td rowspan="{{ liqCtrl.ventas.propia.productos.length + 1 }}"
+                    <td rowspan=""></td>
+                    {% endverbatim %}
+                </tr>
+
+                <tr data-ng-show="liqCtrl.ventas.propia.length">
+                    {% verbatim %}
+                    <td class="celda-header" rowspan="{{ liqCtrl.ventas.propia.length + 1 }}">Propia</td>
+                    <td class="celda-header" rowspan="{{ liqCtrl.ventas.propia.length + 1 }}"
                         data-ng-bind="liqCtrl.ventas.propia.numero"></td>
                     {% endverbatim %}
                 </tr>
@@ -57,8 +64,14 @@
                 <tr data-ng-show="liqCtrl.ventas.lipigas.productos.length">
                     {% verbatim %}
                     <td rowspan="{{ liqCtrl.ventas.lipigas.productos.length + 1 }}">Lipigas</td>
-                    <td rowspan=""></td>
+                    <td rowspan="{{ liqCtrl.ventas.lipigas.productos.length + 1 }}"
+                        data-ng-bind="liqCtrl.ventas.lipigas.numero"></td>
                     {% endverbatim %}
+                </tr>
+
+                <tr data-ng-repeat="producto in liqCtrl.ventas.lipigas.productos">
+                    <td data-ng-bind="producto.nombre"></td>
+                    <td data-ng-bind="producto.total"></td>
                 </tr>
             </tbody>
         </table>

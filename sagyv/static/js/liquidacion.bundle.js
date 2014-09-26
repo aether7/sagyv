@@ -1,4 +1,4 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/cheque_controller.js":[function(require,module,exports){
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/cheque_controller.js":[function(require,module,exports){
 var Cheque = require('./../../models/liquidacion/cheque_model.js');
 
 function ChequeController($http, $scope){
@@ -42,7 +42,7 @@ ChequeController.mixin({
 
 module.exports = ChequeController;
 
-},{"./../../models/liquidacion/cheque_model.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/models/liquidacion/cheque_model.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/cupon_prepago_controller.js":[function(require,module,exports){
+},{"./../../models/liquidacion/cheque_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/cheque_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/cupon_prepago_controller.js":[function(require,module,exports){
 var CuponPrepago = require('./../../models/liquidacion/cupon_prepago_model.js');
 
 function CuponPrepagoController($http, $scope){
@@ -71,7 +71,7 @@ CuponPrepagoController.mixin({
 
 module.exports = CuponPrepagoController;
 
-},{"./../../models/liquidacion/cupon_prepago_model.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/models/liquidacion/cupon_prepago_model.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_lipigas_controller.js":[function(require,module,exports){
+},{"./../../models/liquidacion/cupon_prepago_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/cupon_prepago_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_lipigas_controller.js":[function(require,module,exports){
 var GuiaPropiaController = require('./guia_propia_controller.js');
 
 function GuiaLipigasController($http, $scope){
@@ -90,9 +90,9 @@ GuiaLipigasController.mixin(GuiaPropiaController, {
 
 module.exports = GuiaLipigasController;
 
-},{"./guia_propia_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_propia_controller.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_propia_controller.js":[function(require,module,exports){
+},{"./guia_propia_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_propia_controller.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_propia_controller.js":[function(require,module,exports){
 var Producto = require('./../../models/liquidacion/producto_model.js'),
-    VentaPropia = require('./../../models/liquidacion/venta_model.js');
+    VentaPropia = require('./../../models/liquidacion/venta_propia_model.js');
 
 function GuiaPropiaController($http, $scope){
     this.venta = null;
@@ -190,11 +190,12 @@ GuiaPropiaController.mixin({
 
 module.exports = GuiaPropiaController;
 
-},{"./../../models/liquidacion/producto_model.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/models/liquidacion/producto_model.js","./../../models/liquidacion/venta_model.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/models/liquidacion/venta_model.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/liquidacion_controller.js":[function(require,module,exports){
+},{"./../../models/liquidacion/producto_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/producto_model.js","./../../models/liquidacion/venta_propia_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/venta_propia_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/liquidacion_controller.js":[function(require,module,exports){
+var GuiaVenta = require('./../../models/liquidacion/guia_venta_model.js');
+
 function LiquidacionController($http, $scope){
     this.productos = [];
     this.boleta = null;
-
     this.guia = {};
 
     this.vouchers = {
@@ -202,11 +203,7 @@ function LiquidacionController($http, $scope){
         transbank: null
     };
 
-    this.ventas = {
-        propia: null,
-        lipigas: null
-    };
-
+    this.guias = new GuiaVenta();
     this.cheques = [];
     this.cuponesPrepago = [];
 
@@ -296,14 +293,14 @@ LiquidacionController.mixin({
     suscribeEvents: function(){
         this.scope.$on("guia:calcularSubTotal", this.calcularSubTotal.bind(this));
         this.scope.$on("guia:calcularKilos", this.calcularKilos.bind(this));
-        this.scope.$on("guia:agregarVenta", this.addVenta.bind(this));
+        this.scope.$on("guia:agregarVenta", this.addGuia.bind(this));
         this.scope.$on("guia:agregarVoucher", this.addVouchers.bind(this));
         this.scope.$on("guia:agregarCheques", this.addCheques.bind(this));
         this.scope.$on("guia:agregarCuponesPrepago", this.addCuponesPrepago.bind(this));
     },
 
-    addVenta: function(evt, venta){
-        this.ventas.push(venta);
+    addGuia: function(evt, venta){
+        this.guias.addGuia(venta);
     },
 
     addVouchers: function(evt, voucher){
@@ -352,7 +349,7 @@ LiquidacionController.mixin({
 
 module.exports = LiquidacionController;
 
-},{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/producto_controller.js":[function(require,module,exports){
+},{"./../../models/liquidacion/guia_venta_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/guia_venta_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/producto_controller.js":[function(require,module,exports){
 function ProductoController($scope){
     this.scope = $scope;
 }
@@ -391,7 +388,7 @@ ProductoController.prototype = {
 
 module.exports = ProductoController;
 
-},{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/voucher_lipigas_controller.js":[function(require,module,exports){
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/voucher_lipigas_controller.js":[function(require,module,exports){
 var VoucherLipigas = require('./../../models/liquidacion/voucher_lipigas_model.js');
 
 function VoucherLipigasController($http, $scope){
@@ -467,7 +464,7 @@ VoucherLipigasController.mixin({
 
 module.exports = VoucherLipigasController;
 
-},{"./../../models/liquidacion/voucher_lipigas_model.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/models/liquidacion/voucher_lipigas_model.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/voucher_transbank_controller.js":[function(require,module,exports){
+},{"./../../models/liquidacion/voucher_lipigas_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/voucher_lipigas_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/voucher_transbank_controller.js":[function(require,module,exports){
 var VoucherTransbank = require('./../../models/liquidacion/voucher_transbank_model.js');
 
 function VoucherTransbankController($http, $scope){
@@ -553,7 +550,7 @@ VoucherTransbankController.mixin({
 
 module.exports = VoucherTransbankController;
 
-},{"./../../models/liquidacion/voucher_transbank_model.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/models/liquidacion/voucher_transbank_model.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/liquidacion_bundle.js":[function(require,module,exports){
+},{"./../../models/liquidacion/voucher_transbank_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/voucher_transbank_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/liquidacion_bundle.js":[function(require,module,exports){
 (function(){
 'use strict';
 
@@ -582,7 +579,7 @@ $('button[data-accion=abre_modal]').on('click', function(evt){
     $('#modal_' + $(this).data('modal')).modal('show');
 });
 
-},{"./controllers/liquidacion/cheque_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/cheque_controller.js","./controllers/liquidacion/cupon_prepago_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/cupon_prepago_controller.js","./controllers/liquidacion/guia_lipigas_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_lipigas_controller.js","./controllers/liquidacion/guia_propia_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_propia_controller.js","./controllers/liquidacion/liquidacion_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/liquidacion_controller.js","./controllers/liquidacion/producto_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/producto_controller.js","./controllers/liquidacion/voucher_lipigas_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/voucher_lipigas_controller.js","./controllers/liquidacion/voucher_transbank_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/voucher_transbank_controller.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/models/liquidacion/cheque_model.js":[function(require,module,exports){
+},{"./controllers/liquidacion/cheque_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/cheque_controller.js","./controllers/liquidacion/cupon_prepago_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/cupon_prepago_controller.js","./controllers/liquidacion/guia_lipigas_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_lipigas_controller.js","./controllers/liquidacion/guia_propia_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_propia_controller.js","./controllers/liquidacion/liquidacion_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/liquidacion_controller.js","./controllers/liquidacion/producto_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/producto_controller.js","./controllers/liquidacion/voucher_lipigas_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/voucher_lipigas_controller.js","./controllers/liquidacion/voucher_transbank_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/voucher_transbank_controller.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/cheque_model.js":[function(require,module,exports){
 var Cheque = function(){
     this.banco = null;
     this.nombreBanco = null;
@@ -689,7 +686,7 @@ Cheque.mixin({
 
 module.exports = Cheque;
 
-},{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/models/liquidacion/cupon_prepago_model.js":[function(require,module,exports){
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/cupon_prepago_model.js":[function(require,module,exports){
 var CuponPrepago = function(){
     this.numero = null;
     this.clienteId = null;
@@ -793,7 +790,52 @@ CuponPrepago.mixin({
 
 module.exports = CuponPrepago;
 
-},{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/models/liquidacion/producto_model.js":[function(require,module,exports){
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/guia_venta_model.js":[function(require,module,exports){
+function GuiaVenta(){
+    this.propia = {
+        rowspan: 1,
+        ventas: []
+    };
+
+    this.lipigas = {
+        rowspan: 1,
+        ventas: []
+    };
+}
+
+GuiaVenta.mixin({
+    addGuia: function(guia){
+        if(guia.tipo !== 'propia' && guia.tipo !== 'lipigas'){
+            throw 'La guia ingresada no es ni lipigas ni es propia, es ' + guia.tipo;
+        }
+
+        if(guia.tipo === 'propia'){
+            this._addGuiaPropia(guia);
+        }else{
+            this._addGuiaLipigas(guia);
+        }
+    },
+
+    _addGuiaPropia: function(guiaPropia){
+        this.propia.ventas.push(guiaPropia);
+        this._addRowspan('propia', guiaPropia);
+    },
+
+    _addGuiaLipigas: function(guiaLipigas){
+        this.lipigas.ventas.push(guiaLipigas);
+        this._addRowspan('lipigas', guiaLipigas);
+    },
+
+    _addRowspan: function(tipo, guia){
+        console.log('a calcular el rowspan mierda');
+        this[tipo].rowspan += guia.productos.length + 1;
+        console.log('rowspan actual : ' + this[tipo].rowspan);
+    }
+});
+
+module.exports = GuiaVenta;
+
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/producto_model.js":[function(require,module,exports){
 function Producto(){
     this.codigo = null;
     this.cantidad = null;
@@ -853,11 +895,11 @@ Producto.mixin({
 
 module.exports = Producto;
 
-},{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/models/liquidacion/venta_model.js":[function(require,module,exports){
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/venta_model.js":[function(require,module,exports){
 function Venta(tipo){
     this.numero = 0;
     this.total = 0;
-    this.tipoVenta = tipo;
+    this.tipo = tipo;
     this.cliente = {};
     this.productos = [];
 }
@@ -886,7 +928,18 @@ Venta.mixin({
 
 module.exports = Venta;
 
-},{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/models/liquidacion/voucher_lipigas_model.js":[function(require,module,exports){
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/venta_propia_model.js":[function(require,module,exports){
+var Venta = require('./venta_model.js');
+
+function VentaPropia(){
+    Venta.call(this, 'propia');
+}
+
+VentaPropia.mixin(Venta,{});
+
+module.exports = VentaPropia;
+
+},{"./venta_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/venta_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/voucher_lipigas_model.js":[function(require,module,exports){
 var Voucher = require('./voucher_model.js');
 
 function VoucherLipigas(){
@@ -919,7 +972,7 @@ VoucherLipigas.mixin(Voucher,{
 
 module.exports = VoucherLipigas;
 
-},{"./voucher_model.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/models/liquidacion/voucher_model.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/models/liquidacion/voucher_model.js":[function(require,module,exports){
+},{"./voucher_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/voucher_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/voucher_model.js":[function(require,module,exports){
 function Voucher(tipo){
     this.tipo = tipo;
     this.tarjetas = [];
@@ -944,7 +997,7 @@ Voucher.mixin({
 
 module.exports = Voucher;
 
-},{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/models/liquidacion/voucher_transbank_model.js":[function(require,module,exports){
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/voucher_transbank_model.js":[function(require,module,exports){
 var Voucher = require('./voucher_model.js');
 
 function VoucherTransbank(){
@@ -957,4 +1010,4 @@ VoucherTransbank.mixin(Voucher, {
 
 module.exports = VoucherTransbank;
 
-},{"./voucher_model.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/models/liquidacion/voucher_model.js"}]},{},["/home/worker8/proyectos/sagyv/sagyv/static/js/liquidacion_bundle.js"]);
+},{"./voucher_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/voucher_model.js"}]},{},["/Users/Aether/Proyectos/sagyv/sagyv/static/js/liquidacion_bundle.js"]);

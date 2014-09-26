@@ -4,6 +4,6 @@ function VentaPropia(){
     Venta.call(this, 'propia');
 }
 
-VentaPropia.mixin({});
+VentaPropia.mixin(Venta,{});
 
 module.exports = VentaPropia;

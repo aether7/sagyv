@@ -1,7 +1,8 @@
+var GuiaVenta = require('./../../models/liquidacion/guia_venta_model.js');
+
 function LiquidacionController($http, $scope){
     this.productos = [];
     this.boleta = null;
-
     this.guia = {};
 
     this.vouchers = {
@@ -9,11 +10,7 @@ function LiquidacionController($http, $scope){
         transbank: null
     };
 
-    this.ventas = {
-        propia: null,
-        lipigas: null
-    };
-
+    this.guias = new GuiaVenta();
     this.cheques = [];
     this.cuponesPrepago = [];
 
@@ -103,14 +100,14 @@ LiquidacionController.mixin({
     suscribeEvents: function(){
         this.scope.$on("guia:calcularSubTotal", this.calcularSubTotal.bind(this));
         this.scope.$on("guia:calcularKilos", this.calcularKilos.bind(this));
-        this.scope.$on("guia:agregarVenta", this.addVenta.bind(this));
+        this.scope.$on("guia:agregarVenta", this.addGuia.bind(this));
         this.scope.$on("guia:agregarVoucher", this.addVouchers.bind(this));
         this.scope.$on("guia:agregarCheques", this.addCheques.bind(this));
         this.scope.$on("guia:agregarCuponesPrepago", this.addCuponesPrepago.bind(this));
     },
 
-    addVenta: function(evt, venta){
-        this.ventas.push(venta);
+    addGuia: function(evt, venta){
+        this.guias.addGuia(venta);
     },
 
     addVouchers: function(evt, voucher){
