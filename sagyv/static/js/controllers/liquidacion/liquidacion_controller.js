@@ -16,7 +16,7 @@ function LiquidacionController($scope, liquidacionService){
     this.guias = new GuiaVenta();
     this.cheques = [];
     this.cuponesPrepago = [];
-
+    this.otro = [];
     this.idGuiaDespacho = null;
     this.subTotal = 0;
     this.descuentos = 0;
@@ -99,24 +99,49 @@ LiquidacionController.mixin({
         this.scope.$on("guia:agregarVoucher", this.addVouchers.bind(this));
         this.scope.$on("guia:agregarCheques", this.addCheques.bind(this));
         this.scope.$on("guia:agregarCuponesPrepago", this.addCuponesPrepago.bind(this));
+        this.scope.$on("guia:agregaOtro", this.addOtro.bind(this));
     },
 
     addGuia: function(evt, venta){
         this.guias.addGuia(venta);
+        this.renderTabla('tpl_tabla_ventas', 'tabla_ventas', this.guias);
     },
 
     addVouchers: function(evt, voucher){
         if(!(voucher.tipo in this.vouchers)){
-            throw "el voucher {0} no es lipigas ni transbank es {1}".format(index, voucher.tipo);
+            throw new TypeError("el voucher {0} no es lipigas ni transbank es {1}".format(index, voucher.tipo));
         }
 
         this.vouchers[voucher.tipo] = voucher;
+        this.renderTabla('tpl_tabla_vouchers', 'tabla_vouchers', this.vouchers);
+    },
+
+    renderTabla: function(idTemplate, idTabla, data){
+        var tpl = $('#' + idTemplate).html(),
+            fx = Handlebars.compile(tpl),
+            template;
+
+        template = fx(data);
+        $('#' + idTabla + ' tbody').empty().html(template);
+    },
+
+    addOtro: function(evt, otro){
+        var self = this;
+        self.otro.push(otro);
+    },
+
+    removeOtro: function(indice){
+        this.otro.splice(indice, 1);
     },
 
     addCuponesPrepago: function(evt, cupones){
         var self = this;
         self.cuponesPrepago.push(cupones);
         console.log(self.cuponesPrepago);
+    },
+
+    removeCuponDescuento: function(indice){
+        this.cuponesPrepago.splice(indice, 1);
     },
 
     addCheques: function(evt, cheques){

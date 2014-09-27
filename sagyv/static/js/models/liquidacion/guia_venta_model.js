@@ -1,11 +1,11 @@
 function GuiaVenta(){
     this.propia = {
-        rowspan: 1,
+        rowspan: 0,
         ventas: []
     };
 
     this.lipigas = {
-        rowspan: 1,
+        rowspan: 0,
         ventas: []
     };
 }
@@ -35,7 +35,7 @@ GuiaVenta.mixin({
 
     _addRowspan: function(tipo, guia){
         console.log('a calcular el rowspan mierda');
-        this[tipo].rowspan += guia.productos.length + 1;
+        this[tipo].rowspan += guia.productos.length;
         console.log('rowspan actual : ' + this[tipo].rowspan);
     }
 });
