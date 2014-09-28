@@ -1,10 +1,17 @@
-var GuiaPropiaController = require('./guia_propia_controller.js');
+var GuiaPropiaController = require('./guia_propia_controller.js'),
+    VentaLipigas = require('./../../models/liquidacion/venta_lipigas_model.js');
 
 function GuiaLipigasController($scope, service){
     GuiaPropiaController.call(this, $scope, service);
 }
 
 GuiaLipigasController.mixin(GuiaPropiaController, {
+    resetearGuia: function(){
+        this.idCliente = null;
+        this.descripcionDescuento = 'nada';
+        this.venta = new VentaLipigas();
+    },
+
     guardar: function(){
         this.venta.tipoVenta = 'lipigas';
 

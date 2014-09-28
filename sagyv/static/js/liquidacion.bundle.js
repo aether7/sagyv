@@ -72,13 +72,20 @@ CuponPrepagoController.mixin({
 module.exports = CuponPrepagoController;
 
 },{"./../../models/liquidacion/cupon_prepago_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/cupon_prepago_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_lipigas_controller.js":[function(require,module,exports){
-var GuiaPropiaController = require('./guia_propia_controller.js');
+var GuiaPropiaController = require('./guia_propia_controller.js'),
+    VentaLipigas = require('./../../models/liquidacion/venta_lipigas_model.js');
 
 function GuiaLipigasController($scope, service){
     GuiaPropiaController.call(this, $scope, service);
 }
 
 GuiaLipigasController.mixin(GuiaPropiaController, {
+    resetearGuia: function(){
+        this.idCliente = null;
+        this.descripcionDescuento = 'nada';
+        this.venta = new VentaLipigas();
+    },
+
     guardar: function(){
         this.venta.tipoVenta = 'lipigas';
 
@@ -90,7 +97,7 @@ GuiaLipigasController.mixin(GuiaPropiaController, {
 
 module.exports = GuiaLipigasController;
 
-},{"./guia_propia_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_propia_controller.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_propia_controller.js":[function(require,module,exports){
+},{"./../../models/liquidacion/venta_lipigas_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/venta_lipigas_model.js","./guia_propia_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_propia_controller.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_propia_controller.js":[function(require,module,exports){
 var Producto = require('./../../models/liquidacion/producto_model.js'),
     VentaPropia = require('./../../models/liquidacion/venta_propia_model.js');
 
@@ -149,6 +156,8 @@ GuiaPropiaController.mixin({
         producto.codigo = obj.codigo;
         producto.descuento = this.descuento;
         producto.calcularTotal();
+
+        console.log(this.venta);
 
         this.venta.addProducto(producto);
         this.producto = {};
@@ -876,9 +885,7 @@ GuiaVenta.mixin({
     },
 
     _addRowspan: function(tipo, guia){
-        console.log('a calcular el rowspan mierda');
         this[tipo].rowspan += guia.productos.length;
-        console.log('rowspan actual : ' + this[tipo].rowspan);
     }
 });
 
@@ -1007,7 +1014,18 @@ Producto.mixin({
 
 module.exports = Producto;
 
-},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/venta_model.js":[function(require,module,exports){
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/venta_lipigas_model.js":[function(require,module,exports){
+var Venta = require('./venta_model.js');
+
+function VentaLipigas(){
+    Venta.call(this, 'lipigas');
+}
+
+VentaLipigas.mixin(Venta,{});
+
+module.exports = VentaLipigas;
+
+},{"./venta_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/venta_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/venta_model.js":[function(require,module,exports){
 function Venta(tipo){
     this.numero = 0;
     this.total = 0;

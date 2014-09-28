@@ -57,6 +57,8 @@ GuiaPropiaController.mixin({
         producto.descuento = this.descuento;
         producto.calcularTotal();
 
+        console.log(this.venta);
+
         this.venta.addProducto(producto);
         this.producto = {};
     },

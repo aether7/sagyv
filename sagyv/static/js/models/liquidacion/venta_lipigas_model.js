@@ -4,6 +4,6 @@ function VentaLipigas(){
     Venta.call(this, 'lipigas');
 }
 
-VentaLipigas.mixin({});
+VentaLipigas.mixin(Venta,{});
 
 module.exports = VentaLipigas;

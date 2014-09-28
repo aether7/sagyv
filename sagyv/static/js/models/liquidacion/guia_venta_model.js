@@ -34,9 +34,7 @@ GuiaVenta.mixin({
     },
 
     _addRowspan: function(tipo, guia){
-        console.log('a calcular el rowspan mierda');
         this[tipo].rowspan += guia.productos.length;
-        console.log('rowspan actual : ' + this[tipo].rowspan);
     }
 });
 
