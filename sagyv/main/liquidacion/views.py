@@ -14,6 +14,7 @@ from main.models import Producto
 from main.models import GuiaDespacho
 from main.models import BoletaTrabajador
 from main.models import Banco
+from main.models import HistorialStock
 
 
 class IndexView(TemplateView):
@@ -38,7 +39,8 @@ class ObtenerGuiaDespacho(View):
 		id_guia_despacho = int(req.GET.get("id_guia_despacho"))
 		guia = GuiaDespacho.objects.get(pk=id_guia_despacho)
 		vehiculo = guia.vehiculo
-		productos = self.obtener_productos(vehiculo.id)
+		productos = self.obtener_productos(guia)
+
 		boleta = BoletaTrabajador.objects.obtener_por_trabajador(vehiculo.get_ultimo_chofer())
 
 		datos = {
@@ -62,8 +64,8 @@ class ObtenerGuiaDespacho(View):
 
 		return HttpResponse(json.dumps(datos), content_type="application/json")
 
-	def obtener_productos(self, id_vehiculo):
-		lote = StockVehiculo.objects.filter(vehiculo_id=id_vehiculo)
+	def obtener_productos(self, id_guia):
+		lote = HistorialStock.objects.filter(guia_despacho = id_guia)
 		productos = []
 
 		for item in lote:
