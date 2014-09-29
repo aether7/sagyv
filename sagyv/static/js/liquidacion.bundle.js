@@ -235,11 +235,18 @@ LiquidacionController.mixin({
     },
 
     cargaDatosCabecera: function(data){
-        console.log(data);
         this.guia = data.guia;
         this.boleta = data.boleta;
         this.guia.boleta = data.boleta.actual;
-        this.guia.fecha = new Date();
+
+        tmp = this.guia.fecha.split("-");
+        tmp[1] = (tmp[1] < 10)? "0"+tmp[1]: tmp[1];
+        tmp[2] = (tmp[2] < 10)? "0"+tmp[2]: tmp[2];
+        tmp[2] = parseInt(tmp[2]) + 1;
+
+        this.guia.fecha = new Date(tmp.join("-"));
+
+
 
         this.productos = this.scope.productos = data.productos;
 

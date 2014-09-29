@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from django.views.generic import TemplateView, View
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import inch
+from main.helpers.fecha import convierte_texto_fecha, convierte_fecha_texto
 
 from main.models import Vehiculo
 from main.models import StockVehiculo
@@ -51,7 +52,8 @@ class ObtenerGuiaDespacho(View):
 			},
 			"guia": {
 				"id": guia.id,
-				"numero": guia.numero
+				"numero": guia.numero,
+				"fecha": convierte_fecha_texto(guia.fecha)
 			},
 			"productos": productos,
 			"boleta": {
