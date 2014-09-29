@@ -1,21 +1,24 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/Aether/Proyectos/sagyv/sagyv/static/js/bodega_bundle.js":[function(require,module,exports){
 (function(){
-"use strict";
+'use strict';
 
-var app = angular.module("bodegaApp", [], App.httpProvider),
-    BodegaController = require("./controllers/bodega_controller.js"),
-    GuiaController = require("./controllers/guia_controller.js"),
-    TransitoController = require("./controllers/transito_controller.js"),
-    GuiaProductoController = require("./controllers/guia_producto_controller.js");
+var app = angular.module('bodegaApp', [], App.httpProvider),
+    BodegaController = require('./controllers/bodega_controller.js'),
+    GuiaController = require('./controllers/guia_controller.js'),
+    TransitoController = require('./controllers/transito_controller.js'),
+    GuiaProductoController = require('./controllers/guia_producto_controller.js'),
+    bodegaService = require('./services/bodega_service.js');
 
-app.controller("BodegaController", ["$http", BodegaController]);
-app.controller("GuiaController", ["$http", GuiaController]);
-app.controller("TransitoController", ["$http", TransitoController]);
-app.controller("GuiaProductoController", ["$http", GuiaProductoController]);
+app.factory('bodegaService', bodegaService);
+
+app.controller('BodegaController', ['$http', BodegaController]);
+app.controller('GuiaController', ['$scope','bodegaService', GuiaController]);
+app.controller('TransitoController', ['$http', TransitoController]);
+app.controller('GuiaProductoController', ['$http', GuiaProductoController]);
 
 })();
 
-},{"./controllers/bodega_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega_controller.js","./controllers/guia_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guia_controller.js","./controllers/guia_producto_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guia_producto_controller.js","./controllers/transito_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/transito_controller.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega_controller.js":[function(require,module,exports){
+},{"./controllers/bodega_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega_controller.js","./controllers/guia_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guia_controller.js","./controllers/guia_producto_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guia_producto_controller.js","./controllers/transito_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/transito_controller.js","./services/bodega_service.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/bodega_service.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega_controller.js":[function(require,module,exports){
 function BodegaController($http, stop){
     this.guia = new App.Models.Guia();
     this.producto = {};
@@ -27,9 +30,7 @@ function BodegaController($http, stop){
     }
 };
 
-BodegaController.prototype = {
-    constructor: BodegaController,
-
+BodegaController.mixin({
     nuevaGuiaDespacho: function(){
         this.guia = new App.Models.Guia();
         this.guia.numero = this.numeroGuia;
@@ -123,47 +124,59 @@ BodegaController.prototype = {
             }, 10000);
         });
     }
-};
+});
 
 module.exports = BodegaController;
 
 },{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guia_controller.js":[function(require,module,exports){
-function GuiaController($http){
+function GuiaController($scope, service){
+    this.scope = $scope;
+    this.service = service;
     this.recarga = new App.Models.Recarga();
-    this.http = $http;
     this.productos = [];
     this.producto = {};
+    this.fecha = null;
+    this.guias = [];
+
+    this.filtrarGuias();
 }
 
 GuiaController.mixin({
-    verGuia: function(id){
-        var action = App.urls.get("bodega:obtener_guia"),
+    filtrarGuias: function(){
+        var fecha = null,
             _this = this;
 
-        action += "?guia_id=" + id;
+        if(this.fecha){
+            fecha = common.fecha.fechaToJSON(this.fecha);
+        }
 
-        this.http.get(action).success(function(data){
+        this.service.filtrarPorFecha({ fecha: fecha },function(data){
+            _this.guias = data.guias;
+        });
+    },
+
+    verGuia: function(id){
+        var _this = this;
+
+        this.service.obtenerGuia({guia_id: id}, function(data){
             _this.productos = data.productos;
             $("#modal_mostrar_guia").modal("show");
         });
     },
 
     recargarGuia: function(id){
-        var action = App.urls.get("bodega:obtener_guia"),
-            _this =this;
-
         this.recarga = new App.Models.Recarga();
-        action += "?guia_id=" + id;
+        this.service.obtenerGuia({guia_id: id}, this.procesarMostrarRecarga.bind(this, id));
+    },
 
-        this.http.get(action).success(function(data){
-            _this.recarga.id = id;
-            _this.recarga.numero = data.numero_guia;
-            _this.recarga.vehiculo = data.movil;
-            _this.recarga.fecha = common.fecha.agregarCeros(data.fecha);
-            _this.recarga.productos = data.productos;
+    procesarMostrarRecarga: function(id, data){
+        this.recarga.id = id;
+        this.recarga.numero = data.numero_guia;
+        this.recarga.vehiculo = data.movil;
+        this.recarga.fecha = common.fecha.agregarCeros(data.fecha);
+        this.recarga.productos = data.productos;
 
-            $("#modal_recargar_guia").modal("show");
-        });
+        $("#modal_recargar_guia").modal("show");
     },
 
     agregarRecarga: function(idSelect){
@@ -181,19 +194,12 @@ GuiaController.mixin({
     },
 
     guardarRecarga: function(){
-        var json,
-            action,
-            valido = this.recarga.esValida(),
-            _this = this;
-
-        if(!valido){
+        if(!this.recarga.esValida()){
             return;
         }
 
-        action = App.urls.get("bodega:recargar_guia");
-        json = this.recarga.getJSON();
-        this.http.post(action, json)
-            .success(this.procesarRecarga.bind(this));
+        var json = this.recarga.getJSON();
+        this.service.guardarRecarga(json, this.procesarRecarga.bind(this));
     },
 
     procesarRecarga: function(data){
@@ -359,5 +365,54 @@ TransitoController.prototype = {
 };
 
 module.exports = TransitoController;
+
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/bodega_service.js":[function(require,module,exports){
+var serviceUtil = require('./service_util.js');
+
+function BodegaService($http){
+    var services = {
+        obtenerGuia: function(params, callback){
+            var url = App.urls.get('bodega:obtener_guia');
+            url = serviceUtil.processURL(url, params);
+
+            $http.get(url).success(callback).error(serviceUtil.standardError);
+        },
+
+        filtrarPorFecha: function(params, callback){
+            var url = App.urls.get('bodega:filtrar_guias');
+            url = serviceUtil.processURL(url, params);
+
+            $http.get(url).success(callback).error(serviceUtil.standardError);
+        },
+
+        guardarRecarga: function(params, callback){
+            var url = App.urls.get('bodega:recargar_guia');
+            $http.post(url, params).success(callback).error(serviceUtil.standardError);
+        }
+    };
+
+    return services;
+}
+
+module.exports = BodegaService;
+
+},{"./service_util.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/service_util.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/service_util.js":[function(require,module,exports){
+function standardError(data){
+    alert('ha ocurrido un error en el servidor !!!');
+};
+
+function processURL(url, params){
+    var queryStr = [];
+
+    Object.keys(params).forEach(function(key){
+        queryStr.push(key + '=' + params[key]);
+    });
+
+    url += '?' + queryStr.join('&');
+    return url;
+};
+
+exports.standardError = standardError;
+exports.processURL = processURL;
 
 },{}]},{},["/Users/Aether/Proyectos/sagyv/sagyv/static/js/bodega_bundle.js"]);

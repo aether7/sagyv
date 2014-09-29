@@ -1,5 +1,4 @@
 function standardError(data){
-    console.error(data);
     alert('ha ocurrido un error en el servidor !!!');
 };
 
