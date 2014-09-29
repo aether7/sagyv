@@ -35,6 +35,7 @@ LiquidacionController.mixin({
     },
 
     cargaDatosCabecera: function(data){
+        console.log(data);
         this.guia = data.guia;
         this.boleta = data.boleta;
         this.guia.boleta = data.boleta.actual;
