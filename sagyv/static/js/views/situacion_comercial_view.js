@@ -119,6 +119,7 @@ App.Views.SituacionComercial.prototype = {
 
         opt = opt.format(data.id_situacion, data.valor_descripcion);
         $(opt).insertBefore("#sit_comercial_add option:last");
+        $(opt).insertBefore("#sit_comercial_update option:last");
 
         $("#tabla_s_comerciales tbody").append(html);
         $("#modal_agregar_situacion").modal("hide");
