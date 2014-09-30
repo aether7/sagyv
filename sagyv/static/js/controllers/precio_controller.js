@@ -126,6 +126,8 @@ App.Controllers.Precio.prototype = {
                 return;
             }
 
+            $(this).find("input[type=text").val("");
+
             $.post(action, { productos: JSON.stringify(stocks) }, function(data){
                 _this.procesarActualizacionStock(stocks);
                 common.agregarMensaje("Los stocks han sido actualizados exitosamente");
