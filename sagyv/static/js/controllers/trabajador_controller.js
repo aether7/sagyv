@@ -1,63 +1,43 @@
-(function(){
-'use strict';
-
-var app = angular.module('trabajadorApp',[], App.httpProvider);
-
-app.factory('trabajadorService', ['$http', function($http){
-    var error, services;
-
-    error = function(){
-        alert('Ha ocurrido un error en el servicor');
-    };
-
-    services = {
-        crear: function(param, callback){
-            var action = App.urls.get('trabajador:crear');
-            $.post(action, param).success(callback).error(error);
-        },
-
-        obtener: function(id, callback){
-            var action = App.urls.get('trabajador:obtener') + '?id=' + id;
-            $http.get(action).success(callback).error(error);
-        },
-
-        actualizar: function(params, callback){
-            var action = App.urls.get('trabajador:actualizar');
-            $.post(action, params).success(callback).error(error);
-        },
-
-        eliminar: function(id, callback){
-            var action = App.urls.get('trabajador:eliminar'),
-                json = { id : id };
-
-            $.post(action, json, callback).error(error);
-        },
-
-        guardarBoleta: function(json, callback){
-            var url = App.urls.get('trabajador:guardar_boleta');
-            $.post(url, json).success(callback).error(error);
-        },
-
-        buscarBoleta: function(id, callback){
-            var url = App.urls.get('trabajador:buscar_boleta');
-            url += '?id=' + id;
-
-            $http.get(url).success(callback).error(error);
-        }
-    };
-
-    return services;
-}]);
+var Trabajador = require('../models/trabajador/trabajador_model.js'),
+    Boleta = require('../models/trabajador/boleta_model.js');
 
 function TrabajadorController(service){
     this.service = service;
-    this.trabajador = new App.Models.Trabajador();
-    this.boleta = new App.Models.Boleta();
+    this.trabajadores = [];
+    this.trabajador = new Trabajador();
+    this.boleta = new Boleta();
+
+    this.init();
 }
 
 TrabajadorController.mixin({
+    init: function(){
+        var _this = this;
+
+        this.service.findAll(function(data){
+            _this.trabajadores = data.map(function(obj){
+                var trabajador = new Trabajador();
+
+                trabajador.id = obj.id;
+                trabajador.nombre = obj.nombre;
+                trabajador.apellido = obj.apellido;
+                trabajador.rut = obj.rut;
+                trabajador.domicilio = obj.domicilio;
+                trabajador.fechaNacimiento = common.fecha.jsonToDate(obj.nacimiento);
+                trabajador.inicioContrato = common.fecha.jsonToDate(obj.inicioContrato);
+                trabajador.vigenciaLicencia = common.fecha.jsonToDate(obj.vigenciaLicencia);
+                trabajador.afp = obj.afp;
+                trabajador.sistemaSalud = obj.sistemaSalud;
+                trabajador.estadoCivil = obj.estadoCivil;
+                trabajador.estadoVacacion = obj.estadoVacacion;
+
+                return trabajador;
+            });
+        });
+    },
+
     mostrar: function(){
-        this.trabajador = new App.Models.Trabajador();
+        this.trabajador = new Trabajador();
         common.mostrarModal('nuevo');
     },
 
@@ -66,30 +46,39 @@ TrabajadorController.mixin({
             return;
         }
 
-        if(existeTrabajador(this.trabajador.rut)){
+        if(this.existeTrabajador(this.trabajador)){
             this.trabajador.mensajes.rut = 'El rut está siendo utilizado por otro trabajador';
             return;
         }
 
         var json = this.trabajador.getJSON();
-        this.service.crear(json, this.renderNuevoTrabajador);
+        this.service.crear(json, this.renderNuevoTrabajador.bind(this));
+    },
+
+    existeTrabajador: function(trabajador){
+        var resultado = this.trabajadores.filter(function(t){
+            return t.rut === trabajador.rut;
+        });
+
+        return resultado.length;
     },
 
     renderNuevoTrabajador: function(data){
-        var html,
-            tpl = $('#tpl_nuevo_trabajador').html(),
-            fx = Handlebars.compile(tpl);
-
-        html = fx(data);
-        $('#lista_trabajadores tbody').append(html);
+        console.log(this.trabajadores);
+        console.log(this.trabajador);
+        this.trabajadores.push(this.trabajador);
+        console.log(this.trabajadores);
 
         $('#modal_nuevo').modal('hide');
         common.agregarMensaje('El trabajador ha sido creado exitosamente');
     },
 
-    verTrabajador: function(id){
-        var _this = this;
-        this.trabajador = new App.Models.Trabajador();
+    verTrabajador: function(index){
+        var _this = this,
+            trabajador = this.trabajadores[index],
+            id = trabajador.id;
+
+        this.trabajador = new Trabajador();
 
         this.service.obtener(id, function(data){
             common.mostrarModal('ver');
@@ -97,9 +86,12 @@ TrabajadorController.mixin({
         })
     },
 
-    editarTrabajador: function(id){
-        var _this = this;
-        this.trabajador = new App.Models.Trabajador();
+    editarTrabajador: function(index){
+        var _this = this,
+            trabajador = this.trabajadores[index],
+            id = trabajador.id;
+
+        this.trabajador = new Trabajador();
 
         this.service.obtener(id, function(data){
             common.mostrarModal('editar');
@@ -129,13 +121,17 @@ TrabajadorController.mixin({
         common.agregarMensaje('El trabajador ha sido editado exitosamente');
     },
 
-    eliminarTrabajador: function(id){
+    eliminarTrabajador: function(index){
         if(!confirm('¿Esta seguro(a) de realizar esta acción ?')){
             return;
         }
 
+        var trabajador = this.trabajadores[index],
+            id = trabajador.id,
+            _this = this;
+
         this.service.eliminar(id, function(data){
-            $('#lista_trabajadores tr[data-id={0}]'.format(id)).remove();
+            _this.trabajadores.splice(index, 1);
             common.agregarMensaje('El trabajador se ha eliminado exitosamente');
         });
     },
@@ -165,7 +161,7 @@ TrabajadorController.mixin({
 
     anexarBoleta: function(id){
         var _this = this;
-        this.boleta = new App.Models.Boleta();
+        this.boleta = new Boleta();
 
         this.service.buscarBoleta(id, function(data){
             _this.boleta.numeroAnterior = data.boleta_actual;
@@ -191,19 +187,4 @@ TrabajadorController.mixin({
     }
 });
 
-app.controller('TrabajadorController',['trabajadorService', TrabajadorController]);
-
-})();
-
-
-function existeTrabajador(rut){
-    var duplicado = false;
-
-    $('#lista_trabajadores tbody tr[data-id] td[data-campo=rut]').each(function(){
-        if(rut === $(this).text().trim()){
-            duplicado = true;
-        }
-    });
-
-    return duplicado;
-}
+module.exports = TrabajadorController;

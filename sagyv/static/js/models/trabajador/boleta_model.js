@@ -1,4 +1,4 @@
-App.Models.Boleta = function(){
+function Boleta(){
     this.numeroAnterior = 0;
     this.boletaInicial = 1;
     this.boletaFinal = 0;
@@ -7,7 +7,7 @@ App.Models.Boleta = function(){
     this.mensajes = {};
 };
 
-App.Models.Boleta.mixin({
+Boleta.mixin({
     esValidaBoletaInicial: function(){
         var valido = true;
 
@@ -64,3 +64,5 @@ App.Models.Boleta.mixin({
         return json;
     }
 });
+
+module.exports = Boleta;

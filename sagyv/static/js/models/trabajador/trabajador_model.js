@@ -1,4 +1,4 @@
-App.Models.Trabajador = function(){
+var Trabajador = function(){
     this.id = null;
     this.nombre = null;
     this.apellido = null;
@@ -16,7 +16,7 @@ App.Models.Trabajador = function(){
     this.mensajes = {};
 };
 
-App.Models.Trabajador.prototype = {
+Trabajador.prototype = {
     constructor: App.Models.Trabajador,
 
     esNombreValido: function(){
@@ -170,3 +170,5 @@ App.Models.Trabajador.prototype = {
         return valido;
     }
 };
+
+module.exports = Trabajador;

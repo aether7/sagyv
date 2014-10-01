@@ -19,33 +19,18 @@
         </tr>
     </thead>
     <tbody>
-        {% for trabajador in trabajadores %}
-        <tr data-id="{{ trabajador.id }}">
-            <td data-campo="nombre">{{ trabajador.nombre }}</td>
-            <td data-campo="apellido">{{ trabajador.apellido }}</td>
-            <td data-campo="rut">{{ trabajador.rut }}</td>
-            <td data-campo="estado_vacaciones">{{ trabajador.get_vacacion }}</td>
+        <tr ng-repeat="trabajador in tc.trabajadores">
+            <td ng-bind="trabajador.nombre">asdf</td>
+            <td ng-bind="trabajador.apellido">asdf</td>
+            <td ng-bind="trabajador.rut">asdf</td>
+            <td ng-bind="trabajador.estadoVacacion">asdf</td>
             <td>
-                <a href class="icon-search"
-                    data-accion="ver" data-id="{{ trabajador.id }}"
-                    data-ng-click="tc.verTrabajador({{ trabajador.id }})"></a>
-
-                <a href class="icon-pencil"
-                    data-accion="editar" data-id="{{ trabajador.id }}"
-                    data-ng-click="tc.editarTrabajador({{ trabajador.id }})"></a>
-
-                <a href class="icon-remove"
-                    data-accion="eliminar" data-id="{{ trabajador.id }}"
-                    data-ng-click="tc.eliminarTrabajador({{ trabajador.id }})"></a>
-
-                <a href
-                    data-accion="anexar_boleta" data-id="{{ trabajador.id }}"
-                    data-ng-click="tc.anexarBoleta({{ trabajador.id }})">Anexar boleta</a>
-
-                <a href data-accion="anexar" data-id="{{ trabajador.id }}">Anexar carga</a>
+                <a href class="icon-search" ng-click="tc.verTrabajador($index)"></a>
+                <a href class="icon-pencil" ng-click="tc.editarTrabajador($index)"></a>
+                <a href class="icon-remove" ng-click="tc.eliminarTrabajador($index)"></a>
+                <a href ng-click="tc.anexarBoleta($index)">anexar boleta</a>
             </td>
         </tr>
-        {% endfor %}
     </tbody>
 </table>
 
@@ -65,13 +50,14 @@
 <script src="{% static 'js/vendor/underscore.min.js' %}"></script>
 <script src="{% static 'js/plugins/jquery.rut.min.js' %}"></script>
 <script src="{% static 'js/common_functions.js' %}"></script>
-<script src="{% static 'js/models/trabajador_model.js' %}"></script>
-<script src="{% static 'js/models/boleta_model.js' %}"></script>
-<script src="{% static 'js/controllers/trabajador_controller.js' %}"></script>
+<script src="{% static 'js/bundles/trabajador.bundle.js' %}"></script>
+
 <script id="tpl_nuevo_trabajador" type="text/x-template">
     {% include "trabajador/components/tpl_nuevo_trabajador.html" %}
 </script>
+
 <script>
+    App.urls.set("trabajador:todos", "{% url 'trabajador:todos' %}");
     App.urls.set("trabajador:obtener","{% url 'trabajador:obtener' %}");
     App.urls.set("trabajador:eliminar","{% url 'trabajador:eliminar' %}");
     App.urls.set("trabajador:actualizar","{% url 'trabajador:modificar' %}");
@@ -79,4 +65,5 @@
     App.urls.set("trabajador:buscar_boleta", "{% url 'trabajador:buscar_boleta' %}");
     App.urls.set("trabajador:guardar_boleta", "{% url 'trabajador:guardar_boleta' %}");
 </script>
+
 {% endblock %}

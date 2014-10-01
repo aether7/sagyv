@@ -1,4 +1,5 @@
 import json
+from django.core.serializers.json import DjangoJSONEncoder
 from datetime import datetime
 from datetime import date
 
@@ -266,7 +267,41 @@ class GuardarBoleta(View):
         return HttpResponse(json.dumps(data), content_type="application/json")
 
 
+class Todos(View):
+    def get(self, req):
+        trabajadores = Trabajador.objects.order_by('id')
+        result = []
+
+        for trabajador in trabajadores:
+            result.append({
+                "id": trabajador.id,
+                "nombre": trabajador.nombre,
+                "apellido": trabajador.apellido,
+                "rut": trabajador.rut,
+                "domicilio": trabajador.domicilio,
+                "nacimiento": trabajador.nacimiento,
+                "inicioContrato": trabajador.fecha_inicio_contrato,
+                "vigenciaLicencia": trabajador.vigencia_licencia,
+                "afp": {
+                    "id": trabajador.afp.id,
+                    "nombre": trabajador.afp.nombre
+                },
+                "estadoCivil": {
+                    "id": trabajador.estado_civil.id,
+                    "nombre": trabajador.estado_civil.nombre
+                },
+                "sistemaSalud": {
+                    "id": trabajador.sistema_salud.id,
+                    "nombre": trabajador.sistema_salud.nombre
+                }
+            })
+
+        result = json.dumps(result, cls=DjangoJSONEncoder)
+        return HttpResponse(result, content_type="application/json")
+
+
 index = IndexList.as_view()
+todos = Todos.as_view()
 obtener = ObtenerTrabajadorView.as_view()
 crear = CrearTrabajadorView.as_view()
 modificar = ModificarTrabajadorView.as_view()

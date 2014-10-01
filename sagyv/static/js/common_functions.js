@@ -87,6 +87,17 @@ var common = {
             dia = dia < 10 ? '0' + dia : dia;
 
             return anio + '-' + mes + '-' + dia;
+        },
+
+        jsonToDate: function(txt){
+            var aux = txt.split("-"),
+                date = new Date();
+
+            date.setFullYear(parseInt(aux[0]));
+            date.setMonth(parseInt(aux[1], 10) - 1);
+            date.setDate(parseInt(aux[2]));
+
+            return date;
         }
     }
 };
