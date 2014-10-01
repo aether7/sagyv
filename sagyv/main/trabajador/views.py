@@ -254,6 +254,7 @@ class GuardarBoleta(View):
         trabajador = Trabajador.objects.get(pk = trabajador_id)
 
         boleta_trabajador.boleta_inicial = boleta_inicial
+        boleta_trabajador.actual = boleta_inicial
         boleta_trabajador.boleta_final = boleta_final
         boleta_trabajador.trabajador = trabajador
         boleta_trabajador.activo = True
