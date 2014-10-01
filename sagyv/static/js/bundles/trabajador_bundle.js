@@ -5,7 +5,6 @@ var app = angular.module('trabajadorApp', [], App.httpProvider),
     TrabajadorController = require('../controllers/trabajador_controller.js');
 
 app.factory('trabajadorService',['$http', trabajadorService]);
-
 app.controller('TrabajadorController',['trabajadorService', TrabajadorController]);
 
 })();

@@ -293,6 +293,10 @@ class Todos(View):
                 "sistemaSalud": {
                     "id": trabajador.sistema_salud.id,
                     "nombre": trabajador.sistema_salud.nombre
+                },
+                "estadoVacacion": {
+                    "id": trabajador.get_id_vacacion(),
+                    "nombre": trabajador.get_vacacion()
                 }
             })
 

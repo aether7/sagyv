@@ -20,10 +20,10 @@
     </thead>
     <tbody>
         <tr ng-repeat="trabajador in tc.trabajadores">
-            <td ng-bind="trabajador.nombre">asdf</td>
-            <td ng-bind="trabajador.apellido">asdf</td>
-            <td ng-bind="trabajador.rut">asdf</td>
-            <td ng-bind="trabajador.estadoVacacion">asdf</td>
+            <td ng-bind="trabajador.nombre"></td>
+            <td ng-bind="trabajador.apellido"></td>
+            <td ng-bind="trabajador.rut"></td>
+            <td ng-bind="trabajador.estadoVacacion.nombre"></td>
             <td>
                 <a href class="icon-search" ng-click="tc.verTrabajador($index)"></a>
                 <a href class="icon-pencil" ng-click="tc.editarTrabajador($index)"></a>
@@ -46,15 +46,9 @@
 {% block js %}
 <script src="{% static 'js/vendor/angular.min.js' %}"></script>
 <script src="{% static 'js/plugins/angular.provider.js' %}"></script>
-<script src="{% static 'js/vendor/handlebars.min.js' %}"></script>
-<script src="{% static 'js/vendor/underscore.min.js' %}"></script>
 <script src="{% static 'js/plugins/jquery.rut.min.js' %}"></script>
 <script src="{% static 'js/common_functions.js' %}"></script>
 <script src="{% static 'js/bundles/trabajador.bundle.js' %}"></script>
-
-<script id="tpl_nuevo_trabajador" type="text/x-template">
-    {% include "trabajador/components/tpl_nuevo_trabajador.html" %}
-</script>
 
 <script>
     App.urls.set("trabajador:todos", "{% url 'trabajador:todos' %}");

@@ -6,7 +6,6 @@ var app = angular.module('trabajadorApp', [], App.httpProvider),
     TrabajadorController = require('../controllers/trabajador_controller.js');
 
 app.factory('trabajadorService',['$http', trabajadorService]);
-
 app.controller('TrabajadorController',['trabajadorService', TrabajadorController]);
 
 })();
@@ -78,26 +77,16 @@ TrabajadorController.mixin({
     },
 
     renderNuevoTrabajador: function(data){
-        console.log(this.trabajadores);
-        console.log(this.trabajador);
         this.trabajadores.push(this.trabajador);
-        console.log(this.trabajadores);
 
         $('#modal_nuevo').modal('hide');
         common.agregarMensaje('El trabajador ha sido creado exitosamente');
     },
 
     verTrabajador: function(index){
-        var _this = this,
-            trabajador = this.trabajadores[index],
-            id = trabajador.id;
-
-        this.trabajador = new Trabajador();
-
-        this.service.obtener(id, function(data){
-            common.mostrarModal('ver');
-            _this.procesarTrabajador(data);
-        })
+        this.trabajador = this.trabajadores[index];
+        console.log(this.trabajador);
+        common.mostrarModal('ver');
     },
 
     editarTrabajador: function(index){
