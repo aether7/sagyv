@@ -364,7 +364,7 @@ class FiltrarGuias(View):
                     "id": guia.vehiculo_id,
                     "numero": guia.vehiculo.numero
                 },
-                "fecha": guia.fecha,
+                "fecha": convierte_fecha_texto(guia.fecha),
                 "estado" : guia.estado
             })
 
