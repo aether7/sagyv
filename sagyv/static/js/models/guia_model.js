@@ -5,6 +5,7 @@ App.Models.Guia = function(){
     this.fecha = new Date();
     this.productos = []; //siempre debe comenzar con una nueva lista de productos
     this.observaciones = null;
+    this.estado = null;
 
     this.mensajes = {};
 };

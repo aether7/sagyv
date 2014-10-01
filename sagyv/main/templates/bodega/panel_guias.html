@@ -19,7 +19,7 @@
             <td data-ng-bind="item.fecha | date:'yyyy-mm-dd'"></td>
             <td>
                 <a href class="icon-search" data-ng-click="guia.verGuia(item.id)"></a>
-                <a href data-ng-click="guia.recargarGuia(item.id)">Recargar</a>
+                <a href data-ng-hide="item.estado" data-ng-click="guia.recargarGuia(item.id)">Recargar</a>
             </td>
         </tr>
     </tbody>
