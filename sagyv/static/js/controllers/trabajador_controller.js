@@ -149,8 +149,11 @@ TrabajadorController.mixin({
         this.trabajador.boleta.boletaActual = data.boleta.boleta_actual;
     },
 
-    anexarBoleta: function(id){
-        var _this = this;
+    anexarBoleta: function(index){
+        var _this = this,
+            trabajador = this.trabajadores[index],
+            id = trabajador.id;
+
         this.boleta = new Boleta();
 
         this.service.buscarBoleta(id, function(data){

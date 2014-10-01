@@ -162,8 +162,11 @@ TrabajadorController.mixin({
         this.trabajador.boleta.boletaActual = data.boleta.boleta_actual;
     },
 
-    anexarBoleta: function(id){
-        var _this = this;
+    anexarBoleta: function(index){
+        var _this = this,
+            trabajador = this.trabajadores[index],
+            id = trabajador.id;
+
         this.boleta = new Boleta();
 
         this.service.buscarBoleta(id, function(data){
@@ -371,7 +374,7 @@ Trabajador.prototype = {
         var json = {
             nombre: this.nombre,
             apellido: this.apellido,
-            rut: this.rut,
+            rut: this.rut.replace(/\./g, ''),
             domicilio: this.domicilio,
             fecha_nacimiento: common.fecha.fechaToJSON(this.fechaNacimiento),
             inicio_contrato: common.fecha.fechaToJSON(this.inicioContrato),

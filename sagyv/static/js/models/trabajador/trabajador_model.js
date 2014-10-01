@@ -106,7 +106,7 @@ Trabajador.prototype = {
         var json = {
             nombre: this.nombre,
             apellido: this.apellido,
-            rut: this.rut,
+            rut: this.rut.replace(/\./g, ''),
             domicilio: this.domicilio,
             fecha_nacimiento: common.fecha.fechaToJSON(this.fechaNacimiento),
             inicio_contrato: common.fecha.fechaToJSON(this.inicioContrato),
