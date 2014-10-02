@@ -1,4 +1,4 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/Aether/Proyectos/sagyv/sagyv/static/js/bundles/bodega_bundle.js":[function(require,module,exports){
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/home/worker8/proyectos/sagyv/sagyv/static/js/bundles/bodega_bundle.js":[function(require,module,exports){
 (function(){
 'use strict';
 
@@ -18,7 +18,7 @@ app.controller('GuiaProductoController', ['$http', 'bodegaService', GuiaProducto
 
 })();
 
-},{"../controllers/bodega/bodega_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/bodega_controller.js","../controllers/bodega/guia_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/guia_controller.js","../controllers/bodega/guia_producto_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/guia_producto_controller.js","../controllers/bodega/transito_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/transito_controller.js","../services/bodega_service.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/bodega_service.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/bodega_controller.js":[function(require,module,exports){
+},{"../controllers/bodega/bodega_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/bodega/bodega_controller.js","../controllers/bodega/guia_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/bodega/guia_controller.js","../controllers/bodega/guia_producto_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/bodega/guia_producto_controller.js","../controllers/bodega/transito_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/bodega/transito_controller.js","../services/bodega_service.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/services/bodega_service.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/bodega/bodega_controller.js":[function(require,module,exports){
 function BodegaController($http, service, stop){
     this.service = service;
     this.guia = new App.Models.Guia();
@@ -136,7 +136,7 @@ BodegaController.mixin({
 
 module.exports = BodegaController;
 
-},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/guia_controller.js":[function(require,module,exports){
+},{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/bodega/guia_controller.js":[function(require,module,exports){
 function GuiaController($scope, service){
     this.scope = $scope;
     this.service = service;
@@ -223,7 +223,7 @@ GuiaController.mixin({
 
 module.exports = GuiaController;
 
-},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/guia_producto_controller.js":[function(require,module,exports){
+},{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/bodega/guia_producto_controller.js":[function(require,module,exports){
 var BodegaController = require("./bodega_controller.js");
 
 function GuiaProductoController($http, service){
@@ -350,7 +350,7 @@ GuiaProductoController.mixin(BodegaController,{
 
 module.exports = GuiaProductoController;
 
-},{"./bodega_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/bodega_controller.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/transito_controller.js":[function(require,module,exports){
+},{"./bodega_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/bodega/bodega_controller.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/bodega/transito_controller.js":[function(require,module,exports){
 function TransitoController($http){
     this.resultados = null;
     this.http = $http;
@@ -374,7 +374,7 @@ TransitoController.prototype = {
 
 module.exports = TransitoController;
 
-},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/bodega_service.js":[function(require,module,exports){
+},{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/services/bodega_service.js":[function(require,module,exports){
 var serviceUtil = require('./service_util.js');
 
 function BodegaService($http){
@@ -433,7 +433,7 @@ function BodegaService($http){
 
 module.exports = BodegaService;
 
-},{"./service_util.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/service_util.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/service_util.js":[function(require,module,exports){
+},{"./service_util.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/services/service_util.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/services/service_util.js":[function(require,module,exports){
 function standardError(data){
     alert('ha ocurrido un error en el servidor !!!');
 };
@@ -452,4 +452,4 @@ function processURL(url, params){
 exports.standardError = standardError;
 exports.processURL = processURL;
 
-},{}]},{},["/Users/Aether/Proyectos/sagyv/sagyv/static/js/bundles/bodega_bundle.js"]);
+},{}]},{},["/home/worker8/proyectos/sagyv/sagyv/static/js/bundles/bodega_bundle.js"]);
