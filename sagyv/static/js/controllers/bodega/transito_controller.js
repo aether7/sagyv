@@ -1,4 +1,5 @@
-function TransitoController(service){
+function TransitoController($scope, service){
+    this.scope = $scope;
     this.service = service;
     this.resultados = null;
 }

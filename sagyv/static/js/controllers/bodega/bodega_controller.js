@@ -1,6 +1,9 @@
-function BodegaController(service){
+var Guia = require('../../models/bodega/guia_model.js');
+
+function BodegaController($scope, service){
+    this.scope = $scope;
     this.service = service;
-    this.guia = new App.Models.Guia();
+    this.guia = new Guia();
     this.productosBodega = [];
 
     this.producto = {};
@@ -11,11 +14,13 @@ function BodegaController(service){
 
 BodegaController.mixin({
     addListeners: function(){
-
+        this.scope.$on('bodega/recargaProductos', this.obtenerProductos.bind(this));
     },
 
     obtenerProductos: function(){
         var _this = this;
+
+        console.log('estoy recargando los productos desde DJANGO');
 
         this.service.findProductos(function(productos){
             _this.productosBodega = productos;
@@ -23,7 +28,7 @@ BodegaController.mixin({
     },
 
     nuevaGuiaDespacho: function(){
-        this.guia = new App.Models.Guia();
+        this.guia = new Guia();
         this.guia.numero = this.numeroGuia;
         this.producto = {};
 

@@ -1,8 +1,9 @@
-var BodegaController = require("./bodega_controller.js");
+var BodegaController = require('./bodega_controller.js'),
+    Factura = require('../../models/bodega/factura_model.js');
 
-function GuiaProductoController(service){
-    BodegaController.call(this, service);
-    this.guia = new App.Models.Factura();
+function GuiaProductoController($scope, service){
+    BodegaController.call(this, $scope, service);
+    this.guia = new Factura();
     this.paso = 1;
     this.garantias = null;
     this.valorCalculado = 0;
@@ -12,7 +13,7 @@ function GuiaProductoController(service){
 
 GuiaProductoController.mixin(BodegaController,{
     nuevaFactura: function(){
-        this.guia = new App.Models.Factura();
+        this.guia = new Factura();
         this.producto = {}
         this.paso = 1;
         this.valorCalculado = 0;
@@ -24,9 +25,9 @@ GuiaProductoController.mixin(BodegaController,{
         var select;
 
         if(this.producto.id && parseInt(this.producto.cantidad) > 0){
-            select = $("#" + idSelect + " option:selected");
+            select = $('#' + idSelect + ' option:selected');
             this.producto.codigo = select.text();
-            this.producto.precio = select.data("precio") * this.producto.cantidad;
+            this.producto.precio = select.data('precio') * this.producto.cantidad;
         }
 
         if(this.guia.agregarProducto(this.producto)){
@@ -45,13 +46,13 @@ GuiaProductoController.mixin(BodegaController,{
         var garantias,
             porRegistrar = [];
 
-        garantias = { "3105": 0, "3111": 0, "3115": 0, "3145": 0 };
+        garantias = { '3105': 0, '3111': 0, '3115': 0, '3145': 0 };
 
         this.guia.productos.forEach(function(producto){
-            var codigo = producto.codigo.split("").slice(2).join("");
+            var codigo = producto.codigo.split('').slice(2).join('');
 
-            if("31" + codigo in garantias){
-                garantias["31" + codigo] += parseInt(producto.cantidad);
+            if(('31' + codigo) in garantias){
+                garantias['31' + codigo] += parseInt(producto.cantidad);
             }
         });
 
@@ -95,25 +96,15 @@ GuiaProductoController.mixin(BodegaController,{
     },
 
     procesarGuardado: function(){
-        var json,
-            action,
-            _this = this;
+        var json, _this = this;
 
-        action = App.urls.get("bodega:guardar_factura");
         this.guia.garantias = this.garantias;
         json = this.guia.getJSON();
 
-        this.http.post(action, json).success(function(data){
-            data.guia.productos.forEach(function(producto){
-                var cantidad,
-                    stock = $("#stock_" + producto.id);
-
-                cantidad = parseInt(stock.text(), 10);
-                stock.text(cantidad);
-            });
-
-            $("#modal_carga_producto").modal("hide");
-            common.agregarMensaje("La guía ha sido guardada exitosamente");
+        this.service.guardarFactura(json, function(data){
+            _this.scope.$emit('bodega/recargaProductos');
+            $('#modal_carga_producto').modal('hide');
+            common.agregarMensaje('La guía ha sido guardada exitosamente');
         });
     },
 

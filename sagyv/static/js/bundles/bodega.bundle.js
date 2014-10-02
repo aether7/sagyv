@@ -11,17 +11,20 @@ var app = angular.module('bodegaApp', [], App.httpProvider),
 
 app.factory('bodegaService', bodegaService);
 
-app.controller('BodegaController', ['bodegaService', BodegaController]);
+app.controller('BodegaController', ['$scope', 'bodegaService', BodegaController]);
 app.controller('GuiaController', ['$scope','bodegaService', GuiaController]);
-app.controller('TransitoController', ['bodegaService', TransitoController]);
-app.controller('GuiaProductoController', ['bodegaService', GuiaProductoController]);
+app.controller('TransitoController', ['$scope', 'bodegaService', TransitoController]);
+app.controller('GuiaProductoController', ['$scope', 'bodegaService', GuiaProductoController]);
 
 })();
 
 },{"../controllers/bodega/bodega_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/bodega_controller.js","../controllers/bodega/guia_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/guia_controller.js","../controllers/bodega/guia_producto_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/guia_producto_controller.js","../controllers/bodega/transito_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/transito_controller.js","../services/bodega_service.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/bodega_service.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/bodega_controller.js":[function(require,module,exports){
-function BodegaController(service){
+var Guia = require('../../models/bodega/guia_model.js');
+
+function BodegaController($scope, service){
+    this.scope = $scope;
     this.service = service;
-    this.guia = new App.Models.Guia();
+    this.guia = new Guia();
     this.productosBodega = [];
 
     this.producto = {};
@@ -32,11 +35,13 @@ function BodegaController(service){
 
 BodegaController.mixin({
     addListeners: function(){
-
+        this.scope.$on('bodega/recargaProductos', this.obtenerProductos.bind(this));
     },
 
     obtenerProductos: function(){
         var _this = this;
+
+        console.log('estoy recargando los productos desde DJANGO');
 
         this.service.findProductos(function(productos){
             _this.productosBodega = productos;
@@ -44,7 +49,7 @@ BodegaController.mixin({
     },
 
     nuevaGuiaDespacho: function(){
-        this.guia = new App.Models.Guia();
+        this.guia = new Guia();
         this.guia.numero = this.numeroGuia;
         this.producto = {};
 
@@ -132,7 +137,7 @@ BodegaController.mixin({
 
 module.exports = BodegaController;
 
-},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/guia_controller.js":[function(require,module,exports){
+},{"../../models/bodega/guia_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/bodega/guia_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/guia_controller.js":[function(require,module,exports){
 function GuiaController($scope, service){
     this.scope = $scope;
     this.service = service;
@@ -220,11 +225,12 @@ GuiaController.mixin({
 module.exports = GuiaController;
 
 },{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/guia_producto_controller.js":[function(require,module,exports){
-var BodegaController = require("./bodega_controller.js");
+var BodegaController = require('./bodega_controller.js'),
+    Factura = require('../../models/bodega/factura_model.js');
 
-function GuiaProductoController(service){
-    BodegaController.call(this, service);
-    this.guia = new App.Models.Factura();
+function GuiaProductoController($scope, service){
+    BodegaController.call(this, $scope, service);
+    this.guia = new Factura();
     this.paso = 1;
     this.garantias = null;
     this.valorCalculado = 0;
@@ -234,7 +240,7 @@ function GuiaProductoController(service){
 
 GuiaProductoController.mixin(BodegaController,{
     nuevaFactura: function(){
-        this.guia = new App.Models.Factura();
+        this.guia = new Factura();
         this.producto = {}
         this.paso = 1;
         this.valorCalculado = 0;
@@ -246,9 +252,9 @@ GuiaProductoController.mixin(BodegaController,{
         var select;
 
         if(this.producto.id && parseInt(this.producto.cantidad) > 0){
-            select = $("#" + idSelect + " option:selected");
+            select = $('#' + idSelect + ' option:selected');
             this.producto.codigo = select.text();
-            this.producto.precio = select.data("precio") * this.producto.cantidad;
+            this.producto.precio = select.data('precio') * this.producto.cantidad;
         }
 
         if(this.guia.agregarProducto(this.producto)){
@@ -267,13 +273,13 @@ GuiaProductoController.mixin(BodegaController,{
         var garantias,
             porRegistrar = [];
 
-        garantias = { "3105": 0, "3111": 0, "3115": 0, "3145": 0 };
+        garantias = { '3105': 0, '3111': 0, '3115': 0, '3145': 0 };
 
         this.guia.productos.forEach(function(producto){
-            var codigo = producto.codigo.split("").slice(2).join("");
+            var codigo = producto.codigo.split('').slice(2).join('');
 
-            if("31" + codigo in garantias){
-                garantias["31" + codigo] += parseInt(producto.cantidad);
+            if(('31' + codigo) in garantias){
+                garantias['31' + codigo] += parseInt(producto.cantidad);
             }
         });
 
@@ -317,25 +323,15 @@ GuiaProductoController.mixin(BodegaController,{
     },
 
     procesarGuardado: function(){
-        var json,
-            action,
-            _this = this;
+        var json, _this = this;
 
-        action = App.urls.get("bodega:guardar_factura");
         this.guia.garantias = this.garantias;
         json = this.guia.getJSON();
 
-        this.http.post(action, json).success(function(data){
-            data.guia.productos.forEach(function(producto){
-                var cantidad,
-                    stock = $("#stock_" + producto.id);
-
-                cantidad = parseInt(stock.text(), 10);
-                stock.text(cantidad);
-            });
-
-            $("#modal_carga_producto").modal("hide");
-            common.agregarMensaje("La guía ha sido guardada exitosamente");
+        this.service.guardarFactura(json, function(data){
+            _this.scope.$emit('bodega/recargaProductos');
+            $('#modal_carga_producto').modal('hide');
+            common.agregarMensaje('La guía ha sido guardada exitosamente');
         });
     },
 
@@ -346,8 +342,9 @@ GuiaProductoController.mixin(BodegaController,{
 
 module.exports = GuiaProductoController;
 
-},{"./bodega_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/bodega_controller.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/transito_controller.js":[function(require,module,exports){
-function TransitoController(service){
+},{"../../models/bodega/factura_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/bodega/factura_model.js","./bodega_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/bodega_controller.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/transito_controller.js":[function(require,module,exports){
+function TransitoController($scope, service){
+    this.scope = $scope;
     this.service = service;
     this.resultados = null;
 }
@@ -364,6 +361,263 @@ TransitoController.mixin({
 });
 
 module.exports = TransitoController;
+
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/bodega/factura_model.js":[function(require,module,exports){
+function Factura(){
+    this.id = null;
+    this.factura = null;
+    this.valor = null;
+    this.fecha = new Date();
+    this.productos = [];
+    this.garantias = null;
+
+    this.mensajes = {};
+};
+
+Factura.mixin({
+    esValida: function(){
+        var valido = true;
+
+        valido = this.esFacturaValida() && valido;
+        valido = this.esValorValido() && valido;
+        valido = this.esFechaValida() && valido;
+        valido = this.esProductoValid() && valido;
+
+        return valido;
+    },
+
+    agregarProducto: function(producto){
+        var fn,
+            valido = true;
+
+        fn = function(p){
+            return p.codigo === producto.codigo && p.id === producto.id && p.precio === producto.precio;
+        };
+
+        this.mensajes.producto = "";
+
+        if(!producto.id || !producto.codigo || !producto.cantidad){
+            valido = false;
+            this.mensajes.producto = "El producto debe ingresarse tanto el código como la cantidad";
+        }else if(_.find(this.productos, fn)){
+            valido = false;
+            this.mensajes.producto = "El producto que intenta ingresar ya se encuentra en la lista";
+        }else{
+            this.productos.push(producto);
+        }
+
+        return valido;
+    },
+
+    _esNumeroValido: function(campo){
+        var valido = true
+
+        this.mensajes[campo] = "";
+
+        if(!this[campo]){
+            valido = false;
+            this.mensajes[campo] = "campo obligatorio";
+        }else if(isNaN(this[campo])){
+            valido = false;
+            this.mensajes[campo] = "el valor debe ser numérico";
+        }else if(parseInt(this[campo]) < 0){
+            valido = false;
+            this.mensajes[campo] = "el valor debe ser positivo";
+        }
+
+        return valido;
+    },
+
+    _esFechaValida: function(campo){
+        var valido = true;
+
+        this.mensajes[campo] = "";
+
+        if(!this[campo]){
+            valido = false;
+            this.mensajes[campo] = "campo obligatorio";
+        }else if(!type.isDate(this[campo])){
+            valido = false;
+            this.mensajes[campo] = "fecha inválida";
+        }
+
+        return valido;
+    },
+
+    esFacturaValida: function(){
+        return this._esNumeroValido('factura');
+    },
+
+    esValorValido: function(){
+        return this._esNumeroValido('valor');
+    },
+
+    esFechaValida: function(){
+        return this._esFechaValida('fecha');
+    },
+
+    esProductoValid: function(){
+        var valido = true;
+
+        this.mensajes.productos = "";
+
+        if(this.productos.length < 1){
+            valido = false;
+            this.mensajes.producto = "Al menos debe haber un producto ingresado";
+        }
+
+        return valido;
+    },
+
+    getJSON: function(){
+        var json = {
+            factura: this.factura,
+            valor: this.valor,
+            fecha: common.fecha.fechaToJSON(this.fecha),
+            productos: JSON.stringify(this.productos),
+            garantias: JSON.stringify(this.garantias),
+            observaciones: this.observaciones
+        };
+
+        if(this.id){
+            json.id = this.id;
+        }
+
+        return json;
+    }
+});
+
+module.exports = Factura;
+
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/bodega/guia_model.js":[function(require,module,exports){
+function Guia(){
+    this.id = null;
+    this.numero = null;
+    this.vehiculo = null;
+    this.fecha = new Date();
+    this.productos = []; //siempre debe comenzar con una nueva lista de productos
+    this.observaciones = null;
+    this.estado = null;
+
+    this.mensajes = {};
+};
+
+Guia.mixin({
+    agregarProductoDescuento: function(producto){
+        var fn,
+            valido = true;
+
+        fn = function(p){
+            return p.codigo === producto.codigo && p.id === producto.id;
+        };
+
+        this.mensajes.producto = "";
+
+        if(!producto.id || !producto.codigo || !producto.cantidad){
+            valido = false;
+            this.mensajes.producto = "El producto debe ingresarse tanto el código como la cantidad";
+        }else if(_.find(this.productos, fn)){
+            valido = false;
+            this.mensajes.producto = "El producto que intenta ingresar ya se encuentra en la lista";
+        }else if(parseInt(App.productos[producto.id]) < parseInt(producto.cantidad)){
+            valido = false;
+            this.mensajes.producto = "No se pueden agregar mas productos de los que hay en stock";
+        }else{
+            this.productos.push(producto);
+        }
+
+        return valido;
+    },
+
+    _esNumeroValido: function(campo){
+        var valido = true
+
+        this.mensajes[campo] = "";
+
+        if(!this[campo]){
+            valido = false;
+            this.mensajes[campo] = "campo obligatorio";
+        }else if(isNaN(this[campo])){
+            valido = false;
+            this.mensajes[campo] = "el valor debe ser numérico";
+        }else if(parseInt(this[campo]) < 0){
+            valido = false;
+            this.mensajes[campo] = "el valor debe ser positivo";
+        }
+
+        return valido;
+    },
+
+    _esFechaValida: function(campo){
+        var valido = true;
+
+        this.mensajes[campo] = "";
+
+        if(!this[campo]){
+            valido = false;
+            this.mensajes[campo] = "campo obligatorio";
+        }else if(!type.isDate(this[campo])){
+            valido = false;
+            this.mensajes[campo] = "fecha inválida";
+        }
+
+        return valido;
+    },
+
+    esNumeroValido: function(){
+        return this._esNumeroValido('numero');
+    },
+
+    esVehiculoValido:function(){
+        return this._esNumeroValido('vehiculo');
+    },
+
+    esFechaValida:function(){
+        return this._esFechaValida('fecha');
+    },
+
+    esProductosValido:function(){
+        var valido = true;
+
+        this.mensajes.productos = "";
+
+        if(this.productos.length < 1){
+            valido = false;
+            this.mensajes.producto = "Al menos debe haber un producto ingresado";
+        }
+
+        return valido;
+    },
+
+    esValida: function(){
+        var valido = true;
+
+        valido = this.esNumeroValido() && valido;
+        valido = this.esVehiculoValido() && valido;
+        valido = this.esFechaValida() && valido;
+        valido = this.esProductosValido() && valido;
+
+        return valido;
+    },
+
+    getJSON: function(){
+        var json = {
+            numero: this.numero,
+            factura: this.factura,
+            vehiculo: this.vehiculo,
+            fecha: common.fecha.fechaToJSON(this.fecha),
+            productos: JSON.stringify(this.productos)
+        };
+
+        if(this.id){
+            json.id = this.id;
+        }
+
+        return json;
+    }
+});
+
+module.exports = Guia;
 
 },{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/bodega_service.js":[function(require,module,exports){
 var serviceUtil = require('./service_util.js');
