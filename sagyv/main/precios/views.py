@@ -1,4 +1,5 @@
 import json
+from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponse
 from django.db import transaction
 from django.views.generic import View, TemplateView, ListView
@@ -22,9 +23,8 @@ class IndexView(TemplateView):
 
 
 class UpdatePrecioProductoView(View):
-
     @transaction.atomic
-    def post(self,req):
+    def post(self, req):
         cambios = req.POST.get("precios")
         cambios_productos = json.loads(cambios)
 
@@ -56,6 +56,51 @@ class UpdateStock(View):
         return HttpResponse(json.dumps(dato), content_type="application/json")
 
 
+class ObtenerProductos(View):
+    def get(self, req):
+        lista_precio = Producto.objects.exclude(tipo_producto_id = 3)
+        lista_precio = lista_precio.exclude(codigo = 1515).order_by('orden')
+
+        res = []
+
+        for producto in lista_precio:
+            res.append({
+                'id': producto.id,
+                'precio': producto.get_precio_producto(),
+                'codigo': producto.codigo
+            })
+
+        res = json.dumps(res, cls = DjangoJSONEncoder)
+        return HttpResponse(res, content_type="application/json")
+
+
+class ObtenerGarantias(View):
+    def get(self, req):
+        garantias = Producto.objects.filter(tipo_producto_id = 3).order_by("id")
+        res = []
+
+        for producto in garantias:
+            res.append({
+                'id': producto.id,
+                'precio': producto.get_precio_producto(),
+                'codigo': producto.codigo
+            })
+
+        res = json.dumps(res, cls = DjangoJSONEncoder)
+        return HttpResponse(res, content_type="application/json")
+
+
+class ObtenerStocks(View):
+    def get(self, req):
+        res = []
+
+        res = json.dumps(res, cls = DjangoJSONEncoder)
+        return HttpResponse(res, content_type="application/json")
+
+
 index = permiso_admin(IndexView.as_view())
+obtener_productos = ObtenerProductos.as_view()
+obtener_garantias = ObtenerGarantias.as_view()
+obtener_stocks = ObtenerStocks.as_view()
 update_precios = UpdatePrecioProductoView.as_view()
 update_stock = UpdateStock.as_view()

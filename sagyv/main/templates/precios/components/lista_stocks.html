@@ -14,7 +14,8 @@
                 <td>{{ producto.codigo }}</td>
                 <td>{{ producto.nivel_critico }}</td>
                 <td>
-                    <input id="producto_stock_{{ producto.id }}" data-id="{{ producto.id }}" type="text" value="" />
+                    <input id="producto_stock_{{ producto.id }}" data-id="{{ producto.id }}"
+                        data-columna-stock="{{ forloop.counter }}" type="text" value="" />
                     <span class="text-danger"></span>
                 </td>
             </tr>
