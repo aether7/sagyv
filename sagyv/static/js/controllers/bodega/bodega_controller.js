@@ -9,7 +9,10 @@ function BodegaController($scope, service){
     this.producto = {};
     this.numeroGuia = null;
     this.addListeners();
-    this.obtenerProductos();
+
+    if(arguments.length <= 2){
+        this.obtenerProductos();
+    }
 };
 
 BodegaController.mixin({
@@ -20,8 +23,6 @@ BodegaController.mixin({
     obtenerProductos: function(){
         var _this = this;
 
-        console.log('estoy recargando los productos desde DJANGO');
-
         this.service.findProductos(function(productos){
             _this.productosBodega = productos;
         });
@@ -31,6 +32,8 @@ BodegaController.mixin({
         this.guia = new Guia();
         this.guia.numero = this.numeroGuia;
         this.producto = {};
+
+        var _this = this;
 
         this.refrescarNumeroGuia(function(){
             $('#modal_guia_despacho').modal('show');
@@ -77,7 +80,8 @@ BodegaController.mixin({
 
     procesarGuardarGuiaDespacho: function(data){
         this.obtenerProductos();
-        this.scope.$emit('guia/recargarTransito');
+        this.scope.$broadcast('guia/recargarTransito');
+        this.scope.$broadcast('guia/recargarGuia');
 
         $('#modal_guia_despacho').modal('hide');
         common.agregarMensaje('Se ha actualizado el vehiculo exitosamente');
@@ -88,6 +92,7 @@ BodegaController.mixin({
 
         this.service.findNumeroGuia(function(data){
             _this.numeroGuia = data.next;
+            _this.guia.numero = _this.numeroGuia;
 
             if(typeof callback === 'function'){
                 callback();

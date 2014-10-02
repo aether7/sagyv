@@ -10,9 +10,14 @@ function GuiaController($scope, service){
     this.guias = [];
 
     this.filtrarGuias();
+    this.addListeners();
 }
 
 GuiaController.mixin({
+    addListeners: function(){
+        this.scope.$on('guia/recargarGuia', this.filtrarGuias.bind(this));
+    },
+
     filtrarGuias: function(){
         var fecha = null,
             _this = this;

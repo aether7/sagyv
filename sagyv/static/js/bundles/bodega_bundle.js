@@ -10,9 +10,9 @@ var app = angular.module('bodegaApp', [], App.httpProvider),
 
 app.factory('bodegaService', bodegaService);
 
-app.controller('BodegaController', ['$scope', 'bodegaService', BodegaController]);
-app.controller('GuiaController', ['$scope','bodegaService', GuiaController]);
-app.controller('TransitoController', ['$scope', 'bodegaService', TransitoController]);
-app.controller('GuiaProductoController', ['$scope', 'bodegaService', GuiaProductoController]);
+app.controller('BodegaController', ['$rootScope', 'bodegaService', BodegaController]);
+app.controller('GuiaController', ['$rootScope','bodegaService', GuiaController]);
+app.controller('TransitoController', ['$rootScope', 'bodegaService', TransitoController]);
+app.controller('GuiaProductoController', ['$rootScope', 'bodegaService', GuiaProductoController]);
 
 })();

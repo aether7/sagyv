@@ -2,7 +2,7 @@ var BodegaController = require('./bodega_controller.js'),
     Factura = require('../../models/bodega/factura_model.js');
 
 function GuiaProductoController($scope, service){
-    BodegaController.call(this, $scope, service);
+    BodegaController.call(this, $scope, service, false);
     this.guia = new Factura();
     this.paso = 1;
     this.garantias = null;
