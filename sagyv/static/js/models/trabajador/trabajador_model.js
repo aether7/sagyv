@@ -103,10 +103,20 @@ Trabajador.prototype = {
     },
 
     getJSON: function(){
-        var json = {
+        var rut = this.rut, json;
+
+        rut = rut.replace(/\./g, '');
+
+        if(rut.indexOf('-') !== -1){
+           rut = rut.split('');
+           rut = rut.pop() + '-' + rut.slice(0).reverse().join('');
+           rut = rut.split('').reverse().join('');
+        }
+
+        json = {
             nombre: this.nombre,
             apellido: this.apellido,
-            rut: this.rut.replace(/\./g, ''),
+            rut: rut,
             domicilio: this.domicilio,
             fecha_nacimiento: common.fecha.fechaToJSON(this.fechaNacimiento),
             inicio_contrato: common.fecha.fechaToJSON(this.inicioContrato),

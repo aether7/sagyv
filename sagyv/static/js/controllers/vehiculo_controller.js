@@ -22,7 +22,7 @@ App.Controllers.Vehiculo.prototype = {
         if(!vehiculo.esValido()){
             pubsub.publish("vehiculo:noValido", [ vehiculo.getErrorList() ]);
             return;
-        }else if(_.indexOf(patentes, vehiculo.patente) !== -1){
+        }else if(this.esPatenteDuplicada(patentes, vehiculo.patente)){
             alert("La patente ya está siendo utilizada");
             return;
         }
@@ -57,6 +57,16 @@ App.Controllers.Vehiculo.prototype = {
         $.post(action, vehiculo.getJSON(), function(data){
             pubsub.publish("vehiculo:procesarEditar", [ data ]);
         });
+    },
+
+    esPatenteDuplicada: function(patentes, patente){
+        var duplicada = patentes.filter(function(p){
+            return patente == p;
+        });
+
+        duplicada = !!duplicada.length;
+
+        return duplicada;
     },
 
     guardarAnexar: function(numero, chofer, fecha, idVehiculo){
