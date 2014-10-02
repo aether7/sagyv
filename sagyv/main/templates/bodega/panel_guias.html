@@ -1,3 +1,8 @@
+<div>
+    <label for="filtrar_por_fecha">Fecha:</label>
+    <input id="filtrar_por_fecha" type="date" data-ng-model="guia.fecha" data-ng-change="guia.filtrarGuias()" />
+</div>
+
 <table id="tbl_guias" class="table center table-striped">
     <thead>
         <tr>
@@ -8,17 +13,14 @@
         </tr>
     </thead>
     <tbody>
-    {% for guia in guias %}
-        <tr>
-            <td>{{guia.numero}}</td>
-            <td>{{guia.vehiculo.numero}}</td>
-            <td>{{guia.fecha}}</td>
+        <tr data-ng-repeat="item in guia.guias">
+            <td data-ng-bind="item.numero"></td>
+            <td data-ng-bind="item.vehiculo.numero"></td>
+            <td data-ng-bind="item.fecha | date:'yyyy-mm-dd'"></td>
             <td>
-
-                <a href class="icon-search" data-ng-click="guia.verGuia({{ guia.id }})"></a>
-                <a href data-ng-click="guia.recargarGuia({{ guia.id }})">Recargar</a>
+                <a href class="icon-search" data-ng-click="guia.verGuia(item.id)"></a>
+                <a href data-ng-click="guia.recargarGuia(item.id)">Recargar</a>
             </td>
         </tr>
-    {% endfor %}
     </tbody>
 </table>

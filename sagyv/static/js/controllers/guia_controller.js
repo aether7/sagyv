@@ -1,39 +1,51 @@
-function GuiaController($http){
+function GuiaController($scope, service){
+    this.scope = $scope;
+    this.service = service;
     this.recarga = new App.Models.Recarga();
-    this.http = $http;
     this.productos = [];
     this.producto = {};
+    this.fecha = null;
+    this.guias = [];
+
+    this.filtrarGuias();
 }
 
 GuiaController.mixin({
-    verGuia: function(id){
-        var action = App.urls.get("bodega:obtener_guia"),
+    filtrarGuias: function(){
+        var fecha = null,
             _this = this;
 
-        action += "?guia_id=" + id;
+        if(this.fecha){
+            fecha = common.fecha.fechaToJSON(this.fecha);
+        }
 
-        this.http.get(action).success(function(data){
+        this.service.filtrarPorFecha({ fecha: fecha },function(data){
+            _this.guias = data.guias;
+        });
+    },
+
+    verGuia: function(id){
+        var _this = this;
+
+        this.service.obtenerGuia({guia_id: id}, function(data){
             _this.productos = data.productos;
             $("#modal_mostrar_guia").modal("show");
         });
     },
 
     recargarGuia: function(id){
-        var action = App.urls.get("bodega:obtener_guia"),
-            _this =this;
-
         this.recarga = new App.Models.Recarga();
-        action += "?guia_id=" + id;
+        this.service.obtenerGuia({guia_id: id}, this.procesarMostrarRecarga.bind(this, id));
+    },
 
-        this.http.get(action).success(function(data){
-            _this.recarga.id = id;
-            _this.recarga.numero = data.numero_guia;
-            _this.recarga.vehiculo = data.movil;
-            _this.recarga.fecha = common.fecha.agregarCeros(data.fecha);
-            _this.recarga.productos = data.productos;
+    procesarMostrarRecarga: function(id, data){
+        this.recarga.id = id;
+        this.recarga.numero = data.numero_guia;
+        this.recarga.vehiculo = data.movil;
+        this.recarga.fecha = common.fecha.agregarCeros(data.fecha);
+        this.recarga.productos = data.productos;
 
-            $("#modal_recargar_guia").modal("show");
-        });
+        $("#modal_recargar_guia").modal("show");
     },
 
     agregarRecarga: function(idSelect){
@@ -51,19 +63,12 @@ GuiaController.mixin({
     },
 
     guardarRecarga: function(){
-        var json,
-            action,
-            valido = this.recarga.esValida(),
-            _this = this;
-
-        if(!valido){
+        if(!this.recarga.esValida()){
             return;
         }
 
-        action = App.urls.get("bodega:recargar_guia");
-        json = this.recarga.getJSON();
-        this.http.post(action, json)
-            .success(this.procesarRecarga.bind(this));
+        var json = this.recarga.getJSON();
+        this.service.guardarRecarga(json, this.procesarRecarga.bind(this));
     },
 
     procesarRecarga: function(data){

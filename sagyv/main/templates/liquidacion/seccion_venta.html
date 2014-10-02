@@ -1,0 +1,64 @@
+<div>
+    <div class="box" data-ng-controller="GuiaPropiaController as gpCtrl">
+        <button type="button" class="btn btn-default"
+            data-accion="abre_modal"
+            data-modal="guia_propia"
+            data-ng-click="gpCtrl.resetearGuia()">Guia propia</button>
+
+        {% include "liquidacion/components/modal_guia_propia.html" %}
+    </div>
+
+    <div class="box" data-ng-controller="GuiaLipigasController as glCtrl">
+        <button type="button" class="btn btn-default"
+            data-accion="abre_modal"
+            data-modal="guia_lipigas"
+            data-ng-click="glCtrl.resetearGuia()">Guia Lipigas</button>
+
+        {% include "liquidacion/components/modal_guia_lipigas.html" %}
+    </div>
+
+    <div class="box" data-ng-controller="VoucherLipigasController as vlCtrl">
+        <button type="button" class="btn btn-default"
+            data-accion="abre_modal"
+            data-modal="voucher_lipigas"
+            data-ng-click="vlCtrl.resetearVoucher()">Voucher Lipigas</button>
+
+        {% include "liquidacion/components/modal_voucher_lipigas.html" %}
+    </div>
+
+    <div class="box" data-ng-controller="VoucherTransbankController as vtCtrl">
+        <button type="button" class="btn btn-default"
+            data-accion="abre_modal"
+            data-modal="voucher_transbank"
+            data-ng-click="vtCtrl.resetearVoucher()">Voucher Transbank</button>
+
+        {% include "liquidacion/components/modal_voucher_transbank.html" %}
+    </div>
+
+    <div class="box" data-ng-controller="CuponPrepagoController as cpCtrl">
+        <button type="button" class="btn btn-default"
+            data-accion="abre_modal"
+            data-modal="cupones_prepago"
+            data-ng-click="cpCtrl.resetearCuponPrepago()" >Cupones de prepago</button>
+
+        {% include "liquidacion/components/modal_cupones_prepago.html" %}
+    </div>
+
+    <div class="box" data-ng-controller="OtroController as oCtrl">
+        <button type="button" class="btn btn-default"
+            data-accion="abre_modal"
+            data-modal="otros"
+            data-ng-click="oCtrl.resetearOtro()">Otros</button>
+
+        {% include "liquidacion/components/modal_otros.html" %}
+    </div>
+
+    <div class="box" data-ng-controller="ChequeController as cCtrl">
+        <button type="button" class="btn btn-default"
+        data-accion="abre_modal"
+        data-modal="cheque"
+        data-ng-click="cCtrl.resetearCheque()">CHEQUES</button>
+
+        {% include "liquidacion/components/modal_cheques.html" %}
+    </div>
+</div>

@@ -9,9 +9,7 @@ function BodegaController($http, stop){
     }
 };
 
-BodegaController.prototype = {
-    constructor: BodegaController,
-
+BodegaController.mixin({
     nuevaGuiaDespacho: function(){
         this.guia = new App.Models.Guia();
         this.guia.numero = this.numeroGuia;
@@ -105,6 +103,6 @@ BodegaController.prototype = {
             }, 10000);
         });
     }
-};
+});
 
 module.exports = BodegaController;

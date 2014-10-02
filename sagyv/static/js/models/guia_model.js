@@ -110,20 +110,11 @@ App.Models.Guia.prototype = {
     },
 
     getJSON: function(){
-        function convierteFechaJSON(fecha){
-            var aux = fecha.toLocaleDateString().split("/");
-
-            aux[1] = parseInt(aux[1]) < 10 ? "0" + aux[1] : aux[1];
-            aux[0] = parseInt(aux[0]) < 10 ? "0" + aux[0] : aux[0];
-
-            return aux[2] + "-" + aux[1] + "-" + aux[0];
-        }
-
         var json = {
             numero: this.numero,
             factura: this.factura,
             vehiculo: this.vehiculo,
-            fecha: convierteFechaJSON(this.fecha),
+            fecha: common.fecha.fechaToJSON(this.fecha),
             productos: JSON.stringify(this.productos)
         };
 

@@ -1,5 +1,7 @@
 #-*- coding: utf-8 -*-
 import json
+import datetime
+from django.core.serializers.json import DjangoJSONEncoder
 
 from django.views.generic import TemplateView,View
 from django.db import transaction
@@ -44,7 +46,10 @@ class IndexView(TemplateView):
         return total
 
     def get_guias(self):
-        guias = GuiaDespacho.objects.all()
+        hoy = datetime.datetime.now()
+        fecha = datetime.date(hoy.year, hoy.month, hoy.day)
+        #guias = GuiaDespacho.objects.filter(fecha=fecha).order_by('id')
+        guias = GuiaDespacho.objects.all().order_by('id')
         return guias
 
 class GuardarFactura(View):
@@ -339,6 +344,36 @@ class ObtenerIdGuia(View):
         return HttpResponse(json.dumps(result), content_type="application/json")
 
 
+class FiltrarGuias(View):
+    def get(self, req):
+        fecha = req.GET.get("fecha")
+
+        if fecha == "null" or fecha is None:
+            guia_results = GuiaDespacho.objects.order_by("id")
+        else:
+            print "FECHA"
+            print fecha
+            guia_results = GuiaDespacho.objects.filter(fecha__startswith=fecha).order_by("id")
+
+        guias = []
+
+        for guia in guia_results:
+            guias.append({
+                "id": guia.id,
+                "numero": guia.numero,
+                "vehiculo": {
+                    "id": guia.vehiculo_id,
+                    "numero": guia.vehiculo.numero
+                },
+                "fecha": guia.fecha
+            })
+
+        res = { "guias": guias }
+        res = json.dumps(res, cls=DjangoJSONEncoder)
+
+        return HttpResponse(res, content_type="application/json")
+
+
 index = IndexView.as_view()
 crea_guia = csrf_exempt(CrearGuiaDespachoView.as_view())
 guardar_factura = csrf_exempt(GuardarFactura.as_view())
@@ -346,3 +381,4 @@ obtener_guia = ObtenerGuiaDespasho.as_view()
 obtener_vehiculos_por_producto = ObtenerVehiculosPorProductoView.as_view()
 recargar_guia = csrf_exempt(RecargaGuia.as_view())
 obtener_id_guia = ObtenerIdGuia.as_view()
+filtrar_guias = FiltrarGuias.as_view()

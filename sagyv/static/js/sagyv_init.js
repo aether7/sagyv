@@ -5,11 +5,6 @@ App.Views = {};
 
 //se crea funcionalidad para urls
 App.urls = (function(){
-    function URLError(mensaje){
-        this.name = "URL";
-        this.message = mensaje;
-    }
-
     var urls = {};
 
     return {
@@ -23,7 +18,7 @@ App.urls = (function(){
             if(urlLabel in urls){
                 return urls[urlLabel];
             }else{
-                throw new URLError(mje.format(urlLabel, Object.keys(urls).join(",")));
+                throw mje.format(urlLabel, Object.keys(urls).join(","));
             }
         }
     }

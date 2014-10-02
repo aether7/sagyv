@@ -1,7 +1,7 @@
-function Venta(){
+function Venta(tipo){
     this.numero = 0;
     this.total = 0;
-    this.tipoVenta = null;
+    this.tipo = tipo;
     this.cliente = {};
     this.productos = [];
 }
@@ -9,13 +9,15 @@ function Venta(){
 Venta.mixin({
     addProducto: function(producto){
         this.productos.push(producto);
+        this._calcularTotal();
     },
 
     removeProducto: function(index){
         this.productos.splice(index, 1);
+        this._calcularTotal();
     },
 
-    calcularTotal: function(){
+    _calcularTotal: function(){
         var total = 0;
 
         this.productos.forEach(function(producto){

@@ -9,32 +9,99 @@
             </div>
 
             <div class="modal-body">
-
-                <div class="form-group">
-                    <label for="numero_guia_lipigas" class="control-label">Numero guía</label>
-                    <input id="numero_guia_lipigas" class="form-control" type="text" value="" />
-                    <span class="help-block"></span>
-                </div>
-
                 <div class="form-group">
                     <label for="cliente_guia_lipigas" class="control-label">Cliente</label>
-                    <select name="cliente_guia_lipigas" id="cliente_guia_lipigas" class="form-control">
+                    <select id="cliente_guia_lipigas" class="form-control"
+                        data-ng-model="glCtrl.idCliente"
+                        data-ng-change="glCtrl.buscarCliente()">
                         {% for cliente in clientes_lipigas %}
                         <option value="{{ cliente.id }}">{{ cliente.giro }}</option>
                         {% endfor %}
                     </select>
-                    <span class="help-block"></span>
+
+                    <span class="text-danger"
+                        data-ng-show="glCtrl.mensajes.cliente"
+                        data-ng-bind="glCtrl.mensajes.cliente"></span>
                 </div>
 
-                sistema de carga de guia
-                <br />
-                (si el cliente tiene credito se aplica el total de la guía)<br />
-                (si el cliente tiene solo descuento se descuenta el % X del producto)
+                <div class="form-group">
+                    <label for="guia_cliente_guia_lipigas" class="control-label">Guía cliente</label>
+                    <input type="text" class="form-control" data-ng-model="glCtrl.venta.numero" />
+
+                    <span class="text-danger"
+                        data-ng-show="glCtrl.mensajes.numeroVenta"
+                        data-ng-bind="glCtrl.mensajes.numeroVenta"></span>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-xs-6">
+                        <label for="tipo_producto_guia_lipigas" class="control-label">Tipo</label>
+                        <select id="tipo_producto_guia_lipigas" class="form-control"
+                            ng-model="glCtrl.producto.tipo">
+                            {% verbatim %}
+                            <option value="{{ producto }}"
+                                data-ng-repeat="producto in productos"
+                                data-ng-bind="{{ producto.codigo }}"></option>
+                            {% endverbatim %}
+                        </select>
+                    </div>
+                    <div class="col-xs-4">
+                        <label for="cantidad_guia_lipigas" class="control-label">Cantidad</label>
+                        <input id="cantidad_guia_lipigas" type="text" class="form-control"
+                            ng-model="glCtrl.producto.cantidad" />
+                    </div>
+                    <div class="col-xs-2 btn-productos">
+                        <button class="btn btn-default btn-agregar" ng-click="glCtrl.agregarProducto()">+</button>
+                    </div>
+                </div>
+
+                <div class="text-danger" data-ng-show="glCtrl.mensajes.producto"
+                    data-ng-bind="glCtrl.mensajes.producto"></div>
+
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Cód</th>
+                            <th>Cant</th>
+                            <th>Precio</th>
+                            <th>Desc</th>
+                            <th colspan="2">TOTAL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-ng-repeat="producto in glCtrl.venta.productos">
+                            <td data-ng-bind="producto.codigo"></td>
+                            <td data-ng-bind="producto.cantidad"></td>
+                            <td data-ng-bind="producto.precio | currency"></td>
+                            <td data-ng-bind="producto.montoDescuento | currency"></td>
+                            <td data-ng-bind="producto.total | currency"></td>
+                            <td>
+                                <a href data-ng-click="glCtrl.removeProducto($index)">Eliminar</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="form-group">
+                    <label for="situacion_descuento_propia"></label>
+                </div>
+
+                {% verbatim %}
+                <div id="descuento">
+                    Situación descuento : {{ glCtrl.descripcionDescuento }}
+                </div>
+                {% endverbatim %}
+
+                {% verbatim %}
+                <div>
+                    TOTAL guía propia: {{ glCtrl.venta.total | currency }}
+                </div>
+                {% endverbatim %}
             </div>
 
             <div class="modal-footer">
                 <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <button class="btn btn-primary">Guardar</button>
+                <button class="btn btn-primary" data-ng-click="glCtrl.guardar()">Guardar</button>
             </div>
         </div>
     </div>

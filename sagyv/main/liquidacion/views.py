@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from django.views.generic import TemplateView, View
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import inch
+from main.helpers.fecha import convierte_texto_fecha, convierte_fecha_texto
 
 from main.models import Vehiculo, TipoProducto
 from main.models import StockVehiculo
@@ -15,155 +16,161 @@ from main.models import GuiaDespacho
 from main.models import BoletaTrabajador
 from main.models import Banco
 from main.reportes import templates
+from main.models import HistorialStock
 
 
 class IndexView(TemplateView):
-    template_name = "liquidacion/index.html"
+	template_name = "liquidacion/index.html"
 
-    def get_context_data(self, **kwargs):
-        context = super(IndexView, self).get_context_data(**kwargs)
-        context["clientes_propios"] = Cliente.objects.filter(es_propio=True).order_by("id")
-        context["clientes_lipigas"] = Cliente.objects.filter(es_lipigas=True).order_by("id")
-        context["tarjetas_comerciales"] = TarjetaCredito.objects.get_tarjetas_comerciales()
-        context["bancos"] = Banco.objects.order_by("nombre")
-        context["tarjetas_bancarias"] = TarjetaCredito.objects.get_tarjetas_bancarias()
-        context["productos"] = Producto.objects.exclude(tipo_producto_id=3)
-        context["guias_despacho"] = GuiaDespacho.objects.filter(estado = 0).order_by("id")
+	def get_context_data(self, **kwargs):
+		context = super(IndexView, self).get_context_data(**kwargs)
+		context["clientes"] = Cliente.objects.order_by("id")
+		context["clientes_propios"] = Cliente.objects.filter(es_propio=True).order_by("id")
+		context["clientes_lipigas"] = Cliente.objects.filter(es_lipigas=True).order_by("id")
+		context["tarjetas_comerciales"] = TarjetaCredito.objects.get_tarjetas_comerciales()
+		context["bancos"] = Banco.objects.order_by("nombre")
+		context["tarjetas_bancarias"] = TarjetaCredito.objects.get_tarjetas_bancarias()
+		context["productos"] = Producto.objects.exclude(tipo_producto_id=3)
+		context["guias_despacho"] = GuiaDespacho.objects.filter(estado = 0).order_by("id")
 
-        return context
+		return context
 
 
 class ObtenerGuiaDespacho(View):
-    def get(self, req):
-        id_guia_despacho = int(req.GET.get("id_guia_despacho"))
-        guia = GuiaDespacho.objects.get(pk=id_guia_despacho)
-        vehiculo = guia.vehiculo
-        productos = self.obtener_productos(vehiculo.id)
-        boleta = BoletaTrabajador.objects.obtener_por_trabajador(vehiculo.get_ultimo_chofer())
+	def get(self, req):
+		id_guia_despacho = int(req.GET.get("id_guia_despacho"))
+		guia = GuiaDespacho.objects.get(pk=id_guia_despacho)
+		vehiculo = guia.vehiculo
+		productos = self.obtener_productos(guia)
 
-        datos = {
-        "vehiculo": {
-        "id": vehiculo.id,
-        "km": vehiculo.km,
-        "chofer": vehiculo.get_nombre_ultimo_chofer()
-        },
-        "guia": {
-        "id": guia.id,
-        "numero": guia.numero
-        },
-        "productos": productos,
-        "boleta": {
-        "id": boleta.id,
-        "boleta_inicial": boleta.boleta_inicial,
-        "boleta_final": boleta.boleta_final,
-        "actual": boleta.actual
-        }
-        }
+		boleta = BoletaTrabajador.objects.obtener_por_trabajador(vehiculo.get_ultimo_chofer())
 
-        return HttpResponse(json.dumps(datos), content_type="application/json")
+		datos = {
+			"vehiculo": {
+				"id": vehiculo.id,
+				"km": vehiculo.km,
+				"chofer": vehiculo.get_nombre_ultimo_chofer()
+			},
+			"guia": {
+				"id": guia.id,
+				"numero": guia.numero,
+				"fecha": convierte_fecha_texto(guia.fecha)
+			},
+			"productos": productos,
+			"boleta": {
+				"id": boleta.id,
+				"boleta_inicial": boleta.boleta_inicial,
+				"boleta_final": boleta.boleta_final,
+				"actual": boleta.actual
+			}
+		}
 
-    def obtener_productos(self, id_vehiculo):
-        lote = StockVehiculo.objects.filter(vehiculo_id=id_vehiculo)
-        productos = []
+		return HttpResponse(json.dumps(datos), content_type="application/json")
 
-        for item in lote:
-            productos.append({
-            'id': item.producto.id,
-            'codigo': item.producto.codigo,
-            'cantidad': item.cantidad,
-            'precio': item.producto.get_precio_producto(),
-            'peso': item.producto.peso
-            })
+	def obtener_productos(self, id_guia):
+		lote = HistorialStock.objects.filter(guia_despacho = id_guia)
+		productos = []
 
-        return productos
+		for item in lote:
+			productos.append({
+				'id': item.producto.id,
+				'codigo': item.producto.codigo,
+				'cantidad': item.cantidad,
+				'precio': item.producto.get_precio_producto(),
+				'peso': item.producto.peso
+			})
+
+		return productos
 
 
 class BuscarCliente(View):
-    def get(self, req):
-        id_cliente = int(req.GET.get("id_cliente"))
-        cliente = Cliente.objects.get(pk=id_cliente)
+	def get(self, req):
+		id_cliente = int(req.GET.get("id_cliente"))
+		cliente = Cliente.objects.get(pk=id_cliente)
 
-        data = {
-        "id": cliente.id,
-        "direccion": cliente.direccion,
-        "rut": cliente.rut,
-        "situacion_comercial": {
-        "texto": cliente.situacion_comercial.get_json_string(),
-        "con_credito": cliente.credito,
-        "descripcion_descuento": None,
-        "simbolo": None,
-        "monto": None,
-        "codigo": None
-        }
-        }
+		data = {
+			"id": cliente.id,
+			"direccion": cliente.direccion,
+			"rut": cliente.rut,
+			"situacion_comercial": {
+				"texto": cliente.situacion_comercial.get_json_string(),
+				"con_credito": cliente.credito,
+				"descripcion_descuento": None,
+				"simbolo": None,
+				"monto": None,
+				"codigo": None
+			}
+		}
 
-        opciones = self.get_situacion_comercial(cliente)
-        data["situacion_comercial"]["descripcion_descuento"] = opciones["descripcion_descuento"]
-        data["situacion_comercial"]["simbolo"] = opciones["simbolo"]
-        data["situacion_comercial"]["monto"] = opciones["monto"]
-        data["situacion_comercial"]["codigo"] = opciones["codigo"]
+		opciones = self.get_situacion_comercial(cliente)
+		data["situacion_comercial"]["descripcion_descuento"] = opciones["descripcion_descuento"]
+		data["situacion_comercial"]["simbolo"] = opciones["simbolo"]
+		data["situacion_comercial"]["monto"] = opciones["monto"]
+		data["situacion_comercial"]["codigo"] = opciones["codigo"]
 
-        return HttpResponse(json.dumps(data), content_type="application/json")
+		return HttpResponse(json.dumps(data), content_type="application/json")
 
 
-    def get_situacion_comercial(self, cliente):
-        opciones = {}
-        params = None
-        simbolo = None
-        monto = str(cliente.situacion_comercial.monto_descuento)
-        texto = ""
+	def get_situacion_comercial(self, cliente):
+		opciones = {}
+		params = None
+		simbolo = None
+		monto = str(cliente.situacion_comercial.monto_descuento)
+		texto = ""
 
-        if cliente.situacion_comercial.id == 1:
-            texto = "Sin descuento"
-        else:
-            if cliente.situacion_comercial.tipo_descuento_id == 1:
-                simbolo = "$"
-                params = [simbolo, monto]
-            else:
-                simbolo = "%"
-                params = [monto, simbolo]
+		if cliente.situacion_comercial.id == 1:
+			texto = "Sin descuento"
+		else:
+			if cliente.situacion_comercial.tipo_descuento_id == 1:
+				simbolo = "$"
+				params = [simbolo, monto]
+			else:
+				simbolo = "%"
+				params = [monto, simbolo]
 
-            if cliente.credito:
-                texto = "El cliente posee crédito y se descuenta {0} {1} de la compra total"
-            else:
-                texto = "El cliente posee {0} {1} en ({2})"
-                opciones["codigo"] = cliente.situacion_comercial.producto.codigo
-                params.append(opciones["codigo"])
+			if cliente.credito:
+				texto = "El cliente posee crédito y se descuenta {0} {1} de la compra total"
+			else:
+				texto = "El cliente posee {0} {1} en ({2})"
+				opciones["codigo"] = cliente.situacion_comercial.producto.codigo
+				params.append(opciones["codigo"])
 
-            for i in range(len(params)):
-                param = params[i]
-                texto = texto.replace("{" + str(i) + "}", str(param))
+			for i in range(len(params)):
+				param = params[i]
+				texto = texto.replace("{" + str(i) + "}", str(param))
 
-        opciones["descripcion_descuento"] = texto
-        opciones["simbolo"] = simbolo
-        opciones["monto"] = monto
-        opciones["codigo"] = cliente.situacion_comercial.producto.codigo
+		opciones["descripcion_descuento"] = texto
+		opciones["simbolo"] = simbolo
+		opciones["monto"] = monto
+		opciones["codigo"] = cliente.situacion_comercial.producto.codigo
 
-        return opciones
+		return opciones
 
 
 class BalanceLiquidacionView(View):
-    def post(self, req):
-        guia_despacho = req.POST.get('guia_despacho')
-        id_trabajador = req.POST.get('id_trabajador')
-        productos_json = req.POST.get('productos')
-        productos = json.loads(productos_json)
-        valor_total = 0
+	def post(self, req):
+		guia_despacho = req.POST.get('guia_despacho')
+		id_trabajador = req.POST.get('id_trabajador')
+		productos_json = req.POST.get('productos')
+		productos = json.loads(productos_json)
+		valor_total = 0
 
-        for obj in productos:
-            producto = Producto.objects.get(pk=obj["id"])
-            precio = producto.get_precio_producto()
-            valor_tmp = precio * int(obj["cantidad"])
-            valor_total += valor_tmp
+		for obj in productos:
+			producto = Producto.objects.get(pk=obj["id"])
+			precio = producto.get_precio_producto()
+			valor_tmp = precio * int(obj["cantidad"])
+			valor_total += valor_tmp
 
-        dato = {'valor': valor_total}
+		dato = {'valor': valor_total}
 
-        return HttpResponse(json.dumps(dato), content_type="application/json")
+		return HttpResponse(json.dumps(dato), content_type="application/json")
 
 
 class Cerrar(TemplateView):
 
-    def get(self, req):
+	def get(self, req):
+		response = HttpResponse(content_type='application/pdf')
+		response['Content-Disposition'] = 'attachment; filename="reporte_eaeaea.pdf"'
 
         nombre = "Consumo_clientes_comerciales"
 

@@ -1,6 +1,19 @@
 {% extends "panel_control.html" %}
 {% load static from staticfiles %}
 
+{% block css %}
+<style>
+    #tabla_ventas thead tr th, #tabla_vouchers thead tr th{
+        text-align: center;
+    }
+
+    .celda-header{
+        text-align: center !important;
+        vertical-align: middle !important;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
     {% include "mensaje.html" %}
 
@@ -19,72 +32,102 @@
 
         {% include "liquidacion/panel_cabecera.html" %}
         {% include "liquidacion/panel_detalle.html" %}
+        {% include "liquidacion/seccion_venta.html" %}
 
-        <div>
-            <div class="box" data-ng-controller="GuiaPropiaController as gpCtrl">
-                <button type="button" class="btn btn-default"
-                    data-accion="abre_modal"
-                    data-modal="guia_propia"
-                    data-ng-click="gpCtrl.resetearGuia()">Guia propia</button>
+        <h3>Guías</h3>
 
-                {% include "liquidacion/components/modal_guia_propia.html" %}
-            </div>
+        <table id="tabla_ventas" class="table table-bordered table-condensed">
+            <thead>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Número guía</th>
+                    <th>Producto</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
 
-            <div class="box" data-ng-controller="GuiaLipigasController as glCtrl">
-                <button type="button" class="btn btn-default"
-                    data-accion="abre_modal"
-                    data-modal="guia_lipigas"
-                    data-ng-click="glCtrl.resetearGuia()">Guia Lipigas</button>
+        <h3>Vouchers</h3>
 
-                {% include "liquidacion/components/modal_guia_lipigas.html" %}
-            </div>
+        <table id="tabla_vouchers" class="table table-bordered table-condensed">
+            <thead>
+                <tr>
+                    <th>Tipo voucher</th>
+                    <th>tarjeta</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
 
-            <button type="button" class="btn btn-default"
-                data-accion="abre_modal"
-                data-modal="voucher_lipigas">Voucher Lipigas</button>
-
-            <button type="button" class="btn btn-default"
-                data-accion="abre_modal"
-                data-modal="voucher_transbank">Voucher Transbank</button>
-
-            <button type="button" class="btn btn-default"
-                data-accion="abre_modal"
-                data-modal="cupones_prepago">Cupones de prepago</button>
-
-            <button type="button" class="btn btn-default"
-                data-accion="abre_modal"
-                data-modal="otros">Otros</button>
-
-            <div class="box-style">
-                <button type="button" class="btn btn-default"
-                data-accion="abre_modal"
-                data-modal="cheque">CHEQUES</button>
-
-                {% include "liquidacion/components/modal_cheques.html" %}
-            </div>
-
-            {% include "liquidacion/components/modal_voucher_lipigas.html" %}
-            {% include "liquidacion/components/modal_voucher_transbank.html" %}
-            {% include "liquidacion/components/modal_cupones_prepago.html" %}
-            {% include "liquidacion/components/modal_otros.html" %}
-        </div>
+        <h3>Cheques</h3>
 
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Número guía</th>
-                    <th>Tipo Venta</th>
-                    <th>Total</th>
+                    <th>Banco</th>
+                    <th>N° Cheque</th>
+                    <th>Monto</th>
+                    <th>Fecha</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                <tr data-ng-repeat="venta in liqCtrl.ventas">
-                    <td data-ng-bind="venta.numero"></td>
-                    <td data-ng-bind="venta.tipoVenta"></td>
-                    <td data-ng-bind="venta.total | currency"></td>
+                <tr data-ng-repeat="chk in liqCtrl.cheques">
+                    <td data-ng-bind="chk.banco.nombre"></td>
+                    <td data-ng-bind="chk.numero"></td>
+                    <td data-ng-bind="chk.monto"></td>
+                    <td data-ng-bind="chk.fecha | date:'yyyy-MM-d'"></td>
                     <td>
-                        <a href data-ng-click="liqCtrl.eliminarVenta($index)">eliminar</a>
+                        <a href data-ng-click="liqCtrl.removeCheque($index)">eliminar</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Cupones de descuento</h3>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Numero</th>
+                    <th>Cliente</th>
+                    <th>Formato</th>
+                    <th>Descuento</th>
+                    <th>Acciones</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="cp in liqCtrl.cuponesPrepago">
+                    <td data-ng-bind="cp.numero"></td>
+                    <td data-ng-bind="cp.cliente.nombre"></td>
+                    <td data-ng-bind="cp.formato.nombre"></td>
+                    <td data-ng-bind="cp.descuento"></td>
+                    <td>
+                        <a href data-ng-click="liqCtrl.removeCuponDescuento($index)">eliminar</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Otro</h3>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Concepto</th>
+                    <th>Monto</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="o in liqCtrl.otro">
+                    <td data-ng-bind="o.concepto"></td>
+                    <td data-ng-bind="o.monto"></td>
+                    <td>
+                        <a href data-ng-click="liqCtrl.removeOtro($index)">eliminar</a>
                     </td>
                 </tr>
             </tbody>
@@ -101,8 +144,18 @@
 {% block js %}
 <script src="{% static 'js/vendor/angular.min.js' %}"></script>
 <script src="{% static 'js/plugins/typeahead.min.js' %}"></script>
+<script src="{% static 'js/vendor/handlebars.min.js' %}"></script>
 <script src="{% static 'js/common_functions.js' %}"></script>
 <script src="{% static 'js/liquidacion.bundle.js' %}"></script>
+
+<script id="tpl_tabla_ventas" type="text/x-handlebars-template">
+{% include "liquidacion/tpl_tabla_ventas.html" %}
+</script>
+
+<script id="tpl_tabla_vouchers" type="text/x-handlebars-template">
+{% include "liquidacion/tpl_tabla_vouchers.html" %}
+</script>
+
 <script>
     App.urls.set("liquidacion:obtener_guia", "{% url 'liquidacion:obtener_guia' %}");
     App.urls.set("liquidacion:buscar_cliente", "{% url 'liquidacion:buscar_cliente' %}");

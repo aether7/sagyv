@@ -1,12 +1,13 @@
 var Producto = require('./../../models/liquidacion/producto_model.js'),
-    Venta = require('./../../models/liquidacion/venta_model.js');
+    VentaPropia = require('./../../models/liquidacion/venta_propia_model.js');
 
-function GuiaPropiaController($http, $scope){
+function GuiaPropiaController($scope, service){
+    this.service = service;
+    this.scope = $scope;
+
     this.venta = null;
     this.idCliente = null;
     this.descripcionDescuento = 'nada';
-    this.http = $http;
-    this.scope = $scope;
     this.cliente = {};
     this.producto = {};
 
@@ -19,14 +20,11 @@ GuiaPropiaController.mixin({
     resetearGuia: function(){
         this.idCliente = null;
         this.descripcionDescuento = 'nada';
-        this.venta = new Venta();
+        this.venta = new VentaPropia();
     },
 
     buscarCliente: function(){
-        var url = App.urls.get('liquidacion:buscar_cliente');
-        url += '?id_cliente=' + this.idCliente;
-
-        this.http.get(url).success(this.procesarCliente.bind(this));
+        this.service.buscarCliente({ id_cliente: this.idCliente }, this.procesarCliente.bind(this));
     },
 
     procesarCliente: function(data){
@@ -59,10 +57,10 @@ GuiaPropiaController.mixin({
         producto.descuento = this.descuento;
         producto.calcularTotal();
 
+        console.log(this.venta);
+
         this.venta.addProducto(producto);
         this.producto = {};
-
-        this.venta.calcularTotal();
     },
 
     esValidoProducto: function(){
@@ -90,13 +88,7 @@ GuiaPropiaController.mixin({
         this.venta.removeProducto(index);
     },
 
-    calcularTotalGuia: function(){
-        this.venta.calcularTotal();
-    },
-
     guardar: function(){
-        this.venta.tipoVenta = "propia";
-
         this.scope.$emit("guia:agregarVenta", this.venta);
         common.agregarMensaje('Se ha guardado guía propia exitosamente');
         $('#modal_guia_propia').modal('hide');
