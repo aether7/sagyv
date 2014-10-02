@@ -92,29 +92,9 @@ BodegaController.mixin({
     },
 
     procesarGuardarGuiaDespacho: function(data){
-        var html,
-            tpl = $("#tpl_nueva_guia").html(),
-            fx = Handlebars.compile(tpl);
-
-        html = fx({
-            numero_guia: this.guia.numero,
-            numero_vehiculo: this.guia.vehiculo,
-            fecha_guia: this.guia.fecha
-        });
-
-        this.actualizarProductos(data);
-
-        $("#tbl_guias tbody").append(html);
-        $("#modal_guia_despacho").modal("hide");
-
-        common.agregarMensaje("Se ha actualizado el vehiculo exitosamente");
-    },
-
-    actualizarProductos: function(data){
-        data.guia.productos.forEach(function(producto){
-            $("#stock_" + producto.id).text(producto.cantidad);
-            App.productos[producto.id] = producto.cantidad;
-        });
+        this.obtenerProductos();
+        $('#modal_guia_despacho').modal('hide');
+        common.agregarMensaje('Se ha actualizado el vehiculo exitosamente');
     },
 
     refrescarNumeroGuia: function(callback){
