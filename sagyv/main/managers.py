@@ -1,6 +1,43 @@
 from django.db import connection, models
 from django.db.models import Q
 
+class ReportesManager(models.Manager):
+
+    ###TODO: agregar fechas en un between en la consulta
+
+    def get_consumos_cliente_producto(self,fecha_inicio = None, fecha_termino = None):
+
+        consulta_sql= """
+            SELECT main_cliente.id, main_cliente.nombre, main_detalleventa.producto_id, SUM(main_detalleventa.monto)
+                           FROM main_cliente INNER JOIN main_venta ON main_cliente.id = main_venta.cliente_id
+                           LEFT JOIN main_detalleventa ON main_venta.id = main_detalleventa.venta_id
+                           GROUP BY main_cliente.id, main_cliente.nombre, main_detalleventa.producto_id
+        """
+
+        query = connection.cursor()
+        query.execute(consulta_sql)
+
+        resultado = []
+
+        for row in query.fetchall():
+            fila = ConsumoCliente()
+            fila.id_cliente = row[0]
+            fila.nombre = row[1]
+            fila.id_producto = row[2]
+            fila.suma_monto = row[3]
+
+            resultado.append(fila)
+
+        return resultado
+
+class ConsumoCliente(object):
+
+    def __init__(self):
+        self.id_cliente = 0
+        self.nombre = ""
+        self.id_producto = 0
+        self.suma_monto = 0
+
 class Stock(object):
 
     def __init__(self):

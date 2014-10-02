@@ -501,6 +501,7 @@ class DetalleVenta(models.Model):
     cantidad = models.IntegerField()
     venta = models.ForeignKey(Venta)
     producto = models.ForeignKey(Producto)
+    monto = models.IntegerField()
 
     def __unicode__(self):
         return self.producto + " " + self.cantidad
