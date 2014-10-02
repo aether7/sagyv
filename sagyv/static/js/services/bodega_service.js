@@ -19,6 +19,11 @@ function BodegaService($http){
             get(url, callback);
         },
 
+        findProductosTransito:function(callback){
+            var url = App.urls.get('bodega:obtener_productos_transito');
+            get(url, callback);
+        },
+
         obtenerGuia: function(params, callback){
             var url = App.urls.get('bodega:obtener_guia');
             url = serviceUtil.processURL(url, params);

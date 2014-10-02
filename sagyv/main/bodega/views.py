@@ -24,7 +24,6 @@ class IndexView(TemplateView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(IndexView, self).get_context_data(*args, **kwargs)
-        #context["productos"] = self.get_productos()
         context["productos_guia"] = Producto.objects.exclude(tipo_producto_id = 3).order_by("id")
         context["productos_transito"] = self.get_productos_transito()
         context["total_stock"] = self.get_stock_total()
@@ -32,10 +31,6 @@ class IndexView(TemplateView):
         context["guias"] = self.get_guias()
 
         return context
-
-    def get_productos(self):
-        productos =  Producto.objects.exclude(orden = -1).order_by('orden')
-        return productos
 
     def get_productos_transito(self):
         en_trancito = StockVehiculo.objects.get_stock_transito()
@@ -395,6 +390,24 @@ class ObtenerProductos(View):
         response = json.dumps(response, cls=DjangoJSONEncoder)
         return HttpResponse(response, content_type="application/json")
 
+
+class ObtenerProductosTransito(View):
+    def get(self, req):
+        productos = StockVehiculo.objects.get_stock_transito()
+        response = []
+
+        for producto in productos:
+            response.append({
+                "id": producto.producto_id,
+                "codigo": producto.codigo,
+                "tipo": producto.nombre,
+                "stock": producto.cantidad
+            })
+
+        response = json.dumps(response, cls=DjangoJSONEncoder)
+        return HttpResponse(response, content_type="application/json")
+
+
 index = IndexView.as_view()
 crea_guia = csrf_exempt(CrearGuiaDespachoView.as_view())
 guardar_factura = csrf_exempt(GuardarFactura.as_view())
@@ -403,4 +416,6 @@ obtener_vehiculos_por_producto = ObtenerVehiculosPorProductoView.as_view()
 recargar_guia = csrf_exempt(RecargaGuia.as_view())
 obtener_id_guia = ObtenerIdGuia.as_view()
 filtrar_guias = FiltrarGuias.as_view()
+
 obtener_productos = ObtenerProductos.as_view()
+obtener_productos_transito = ObtenerProductosTransito.as_view()

@@ -26,11 +26,13 @@ function BodegaController($scope, service){
     this.service = service;
     this.guia = new Guia();
     this.productosBodega = [];
+    this.productosTransito = [];
 
     this.producto = {};
     this.numeroGuia = null;
     this.addListeners();
     this.obtenerProductos();
+    this.obtenerProductosTransito();
 };
 
 BodegaController.mixin({
@@ -45,6 +47,14 @@ BodegaController.mixin({
 
         this.service.findProductos(function(productos){
             _this.productosBodega = productos;
+        });
+    },
+
+    obtenerProductosTransito: function(){
+        var self = this;
+
+        this.service.findProductosTransito(function(productosTransito){
+            self.productosTransito = productosTransito;
         });
     },
 
@@ -618,6 +628,11 @@ function BodegaService($http){
     services = {
         findProductos: function(callback){
             var url = App.urls.get('bodega:obtener_productos');
+            get(url, callback);
+        },
+
+        findProductosTransito:function(callback){
+            var url = App.urls.get('bodega:obtener_productos_transito');
             get(url, callback);
         },
 

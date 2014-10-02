@@ -10,4 +10,5 @@ urlpatterns = patterns("main.bodega.views",
     url(r"^guardar\-factura/$", "guardar_factura", name="guardar_factura"),
     url(r"^filtrar\-guias/$", "filtrar_guias", name="filtrar_guias"),
     url(r"^obtener\-productos/$", "obtener_productos", name="obtener_productos"),
+    url(r"^obtener\-productos\-transito/$", "obtener_productos_transito", name="obtener_productos_transito"),
 )

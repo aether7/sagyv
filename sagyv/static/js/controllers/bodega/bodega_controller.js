@@ -5,11 +5,13 @@ function BodegaController($scope, service){
     this.service = service;
     this.guia = new Guia();
     this.productosBodega = [];
+    this.productosTransito = [];
 
     this.producto = {};
     this.numeroGuia = null;
     this.addListeners();
     this.obtenerProductos();
+    this.obtenerProductosTransito();
 };
 
 BodegaController.mixin({
@@ -24,6 +26,14 @@ BodegaController.mixin({
 
         this.service.findProductos(function(productos){
             _this.productosBodega = productos;
+        });
+    },
+
+    obtenerProductosTransito: function(){
+        var self = this;
+
+        this.service.findProductosTransito(function(productosTransito){
+            self.productosTransito = productosTransito;
         });
     },
 

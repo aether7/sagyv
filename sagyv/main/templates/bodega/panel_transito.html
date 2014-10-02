@@ -8,17 +8,15 @@
         </tr>
     </thead>
     <tbody>
-    {% for item in productos_transito %}
-        <tr>
-            <td>{{ item.codigo }}</td>
-            <td>{{ item.nombre }}</td>
-            <td>{{ item.cantidad }}</td>
+        <tr data-ng-repeat="producto in bodega.productosTransito">
+            <td data-ng-bind="producto.codigo"></td>
+            <td data-ng-bind="producto.tipo"></td>
+            <td data-ng-bind="producto.stock"></td>
             <td>
                 <a href
                     class="icon-search"
-                    data-ng-click="transito.verDetalle({{ item.producto_id }})"></a>
+                    data-ng-click="transito.verDetalle(producto.id)"></a>
             </td>
         </tr>
-    {% endfor %}
     </tbody>
 </table>
