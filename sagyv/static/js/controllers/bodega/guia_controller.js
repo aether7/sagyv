@@ -27,7 +27,10 @@ GuiaController.mixin({
         }
 
         this.service.filtrarPorFecha({ fecha: fecha },function(data){
-            _this.guias = data.guias;
+            _this.guias = data.guias.map(function(guia){
+                guia.fecha = common.fecha.jsonToDate(guia.fecha);
+                return guia;
+            });
         });
     },
 

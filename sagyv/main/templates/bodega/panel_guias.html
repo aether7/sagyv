@@ -16,7 +16,7 @@
         <tr data-ng-repeat="item in guia.guias">
             <td data-ng-bind="item.numero"></td>
             <td data-ng-bind="item.vehiculo.numero"></td>
-            <td data-ng-bind="item.fecha | date:'yyyy-mm-dd'"></td>
+            <td data-ng-bind="item.fecha | date:'yyyy-MM-dd'"></td>
             <td>
                 <a href class="icon-search" data-ng-click="guia.verGuia(item.id)"></a>
                 <a href data-ng-hide="item.estado" data-ng-click="guia.recargarGuia(item.id)">Recargar</a>
