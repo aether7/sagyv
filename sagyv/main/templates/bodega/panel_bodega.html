@@ -8,21 +8,18 @@
         </tr>
     </thead>
     <tbody>
-    {% for producto in productos %}
-        <tr data-producto="{{ producto.id }}">
-            <td data-columna="codigo">{{ producto.codigo }}</td>
-            <td data-columna="tipo_producto">{{ producto.tipo_producto.nombre }}</td>
-            <td data-columna="stock">
-                <span id="stock_{{ producto.id }}" class="{{ producto.get_clase_nivel_alerta }}">
-                    {{ producto.stock }}
-                </span>
+        <tr data-ng-repeat="item in bodega.productosBodega">
+            <td data-ng-bind="item.codigo"></td>
+            <td data-ng-bind="item.tipo.nombre"></td>
+            <td>
+                {% verbatim %}
+                <span class="{{ item.colorAlerta }}"
+                data-ng-bind="item.stock"></span>
+                {% endverbatim %}
             </td>
-            <td data-columna="precio">
-                $ <span id="precio_{{ producto.id }}">
-                    {{ producto.get_precio_producto }}
-                </span>
+            <td>
+                <span data-ng-bind="item.precio | currency"></span>
             </td>
         </tr>
-    {% endfor %}
     </tbody>
 </table>

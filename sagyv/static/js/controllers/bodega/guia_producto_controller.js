@@ -17,7 +17,7 @@ GuiaProductoController.mixin(BodegaController,{
         this.paso = 1;
         this.valorCalculado = 0;
 
-        $("#modal_carga_producto").modal("show");
+        $('#modal_carga_producto').modal('show');
     },
 
     agregarProducto: function(idSelect){
