@@ -128,9 +128,64 @@
   })(ProductoController);
 
   StockController = (function() {
-    function StockController() {
-      this.stocks = [];
+    function StockController(service) {
+      this.productos = [];
+      this.service = service;
+      this.service.findStocks(this.procesarStock.bind(this));
     }
+
+    StockController.prototype.procesarStock = function(data) {
+      return this.productos = data.map(function(producto) {
+        producto.valor = null;
+        return producto;
+      });
+    };
+
+    StockController.prototype.actualizar = function() {
+      var obj;
+      if (!this.esValidoEnvio()) {
+        return;
+      }
+      obj = {
+        productos: JSON.stringify(this.getStocks())
+      };
+      return this.service.actualizarStock(obj, (function(_this) {
+        return function(data) {
+          common.agregarMensaje('Los precios se han actualizado exitosamente');
+          return _this.productos.forEach(function(producto) {
+            producto.nivelCritico = producto.valor;
+            return producto.valor = null;
+          });
+        };
+      })(this));
+    };
+
+    StockController.prototype.esValidoEnvio = function() {
+      var valido;
+      valido = true;
+      this.productos.forEach(function(producto) {
+        delete producto.mensaje;
+        if (producto.valor === '' || producto.valor === null) {
+          producto.mensaje = 'campo obligatorio';
+          return valido = false;
+        } else if (isNaN(producto.valor)) {
+          producto.mensaje = 'debe ingresar un número válido';
+          return valido = false;
+        }
+      });
+      return valido;
+    };
+
+    StockController.prototype.getStocks = function() {
+      var stocks;
+      stocks = this.productos.map(function(producto) {
+        return {
+          id: producto.id,
+          stock: producto.valor
+        };
+      });
+      return stocks;
+    };
 
     return StockController;
 
@@ -142,7 +197,7 @@
 
   app.controller('GarantiaController', ['precioService', GarantiaController]);
 
-  app.controller('StockController', StockController);
+  app.controller('StockController', ['precioService', StockController]);
 
   moverInputs = function(modo) {
     var DOWN, UP;

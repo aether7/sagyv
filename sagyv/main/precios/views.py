@@ -92,7 +92,17 @@ class ObtenerGarantias(View):
 
 class ObtenerStocks(View):
     def get(self, req):
+        lista_precio = Producto.objects.exclude(tipo_producto_id = 3)
+        lista_precio = lista_precio.exclude(codigo = 1515).order_by('orden')
+
         res = []
+
+        for producto in lista_precio:
+            res.append({
+                'id': producto.id,
+                'nivelCritico': producto.nivel_critico,
+                'codigo': producto.codigo
+            })
 
         res = json.dumps(res, cls = DjangoJSONEncoder)
         return HttpResponse(res, content_type="application/json")

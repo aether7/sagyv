@@ -86,15 +86,57 @@ class GarantiaController extends ProductoController
 
 
 class StockController
-    constructor: ()->
-        @stocks = []
+    constructor: (service)->
+        @productos = []
+        @service = service
+        @service.findStocks this.procesarStock.bind(this)
+
+    procesarStock: (data)->
+        @productos = data.map (producto)->
+            producto.valor = null
+            return producto
+
+    actualizar: ()->
+        if not this.esValidoEnvio()
+            return
+
+        obj =
+            productos: JSON.stringify this.getStocks()
+
+        @service.actualizarStock obj, (data)=>
+            common.agregarMensaje 'Los precios se han actualizado exitosamente'
+
+            @productos.forEach (producto)->
+                producto.nivelCritico = producto.valor
+                producto.valor = null
+
+    esValidoEnvio: ()->
+        valido = yes
+
+        @productos.forEach (producto)->
+            delete producto.mensaje
+
+            if producto.valor is '' or producto.valor is null
+                producto.mensaje = 'campo obligatorio'
+                valido = no
+            else if isNaN(producto.valor)
+                producto.mensaje = 'debe ingresar un número válido'
+                valido = no
+
+        return valido
+
+    getStocks: ()->
+        stocks = @productos.map (producto)->
+            return { id: producto.id, stock: producto.valor }
+
+        return stocks
 
 
 app.factory 'precioService', ['$http', precioService]
 
 app.controller 'PrecioController', ['precioService', PrecioController]
 app.controller 'GarantiaController', ['precioService', GarantiaController]
-app.controller 'StockController', StockController
+app.controller 'StockController', ['precioService', StockController]
 #FIN SECCION ANGULAR
 
 # SECCION DE JQUERY Y MANIPULACION DE DOM
