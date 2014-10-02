@@ -1,14 +1,16 @@
 var serviceUtil = require('./service_util.js');
 
 function BodegaService($http){
-    var services, get, post;
+    var services, get, post, noop;
+
+    noop = function(){};
 
     get = function(url, callback){
-        $http.get(url).success(callback).error(serviceUtil.standardError);
+        $http.get(url).success(callback || noop).error(serviceUtil.standardError);
     };
 
     post = function(url, params, callback){
-        $http.post(url, params).success(callback).error(serviceUtil.standardError);
+        $http.post(url, params).success(callback || noop).error(serviceUtil.standardError);
     };
 
     services = {
@@ -47,6 +49,13 @@ function BodegaService($http){
 
         findNumeroGuia: function(callback){
             var url = App.urls.get('bodega:obtener_id_guia');
+            get(url, callback);
+        },
+
+        findVehiculoByProducto: function(id, callback){
+            var url = App.urls.get('bodega:obtener_vehiculos_por_producto');
+            url += '?producto_id=' + id;
+
             get(url, callback);
         }
     };

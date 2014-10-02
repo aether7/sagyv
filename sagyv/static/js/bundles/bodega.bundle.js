@@ -11,27 +11,21 @@ var app = angular.module('bodegaApp', [], App.httpProvider),
 
 app.factory('bodegaService', bodegaService);
 
-app.controller('BodegaController', ['$http', 'bodegaService', BodegaController]);
+app.controller('BodegaController', ['bodegaService', BodegaController]);
 app.controller('GuiaController', ['$scope','bodegaService', GuiaController]);
-app.controller('TransitoController', ['$http', TransitoController]);
-app.controller('GuiaProductoController', ['$http', 'bodegaService', GuiaProductoController]);
+app.controller('TransitoController', ['bodegaService', TransitoController]);
+app.controller('GuiaProductoController', ['bodegaService', GuiaProductoController]);
 
 })();
 
 },{"../controllers/bodega/bodega_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/bodega_controller.js","../controllers/bodega/guia_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/guia_controller.js","../controllers/bodega/guia_producto_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/guia_producto_controller.js","../controllers/bodega/transito_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/transito_controller.js","../services/bodega_service.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/bodega_service.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/bodega_controller.js":[function(require,module,exports){
-function BodegaController($http, service, stop){
+function BodegaController(service){
     this.service = service;
     this.guia = new App.Models.Guia();
     this.productosBodega = [];
 
     this.producto = {};
-    this.http = $http;
     this.numeroGuia = null;
-
-    if(!stop){
-        this.refrescarNumeroGuia();
-    }
-
     this.addListeners();
     this.obtenerProductos();
 };
@@ -54,7 +48,9 @@ BodegaController.mixin({
         this.guia.numero = this.numeroGuia;
         this.producto = {};
 
-        $("#modal_guia_despacho").modal("show");
+        this.refrescarNumeroGuia(function(){
+            $('#modal_guia_despacho').modal('show');
+        });
     },
 
     agregarProductoDescuento: function(idSelect){
@@ -121,15 +117,15 @@ BodegaController.mixin({
         });
     },
 
-    refrescarNumeroGuia: function(){
+    refrescarNumeroGuia: function(callback){
         var _this = this;
 
         this.service.findNumeroGuia(function(data){
             _this.numeroGuia = data.next;
 
-            setTimeout(function(){
-                _this.refrescarNumeroGuia();
-            }, 60000);
+            if(typeof callback === 'function'){
+                callback();
+            }
         });
     }
 });
@@ -168,7 +164,7 @@ GuiaController.mixin({
 
         this.service.obtenerGuia({guia_id: id}, function(data){
             _this.productos = data.productos;
-            $("#modal_mostrar_guia").modal("show");
+            $('#modal_mostrar_guia').modal('show');
         });
     },
 
@@ -184,12 +180,12 @@ GuiaController.mixin({
         this.recarga.fecha = common.fecha.agregarCeros(data.fecha);
         this.recarga.productos = data.productos;
 
-        $("#modal_recargar_guia").modal("show");
+        $('#modal_recargar_guia').modal('show');
     },
 
     agregarRecarga: function(idSelect){
         if(this.producto.id && parseInt(this.producto.cantidad) > 0){
-            this.producto.codigo = $("#" + idSelect + " option:selected").text();
+            this.producto.codigo = $('#' + idSelect + ' option:selected').text();
         }
 
         if(this.recarga.agregarProductoDescuento(this.producto)){
@@ -212,12 +208,12 @@ GuiaController.mixin({
 
     procesarRecarga: function(data){
         data.productos.forEach(function(producto){
-            $("#stock_"+producto.id).text(producto.cantidad);
+            $('#stock_' + producto.id).text(producto.cantidad);
             App.productos[producto.id] = producto.cantidad;
         });
 
-        $("#modal_recargar_guia").modal("hide");
-        common.agregarMensaje("Se ha actualizado el vehiculo exitosamente");
+        $('#modal_recargar_guia').modal('hide');
+        common.agregarMensaje('Se ha actualizado el vehiculo exitosamente');
     }
 });
 
@@ -226,8 +222,8 @@ module.exports = GuiaController;
 },{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/guia_producto_controller.js":[function(require,module,exports){
 var BodegaController = require("./bodega_controller.js");
 
-function GuiaProductoController($http, service){
-    BodegaController.call(this, $http, service, true);
+function GuiaProductoController(service){
+    BodegaController.call(this, service);
     this.guia = new App.Models.Factura();
     this.paso = 1;
     this.garantias = null;
@@ -351,26 +347,21 @@ GuiaProductoController.mixin(BodegaController,{
 module.exports = GuiaProductoController;
 
 },{"./bodega_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/bodega_controller.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/transito_controller.js":[function(require,module,exports){
-function TransitoController($http){
+function TransitoController(service){
+    this.service = service;
     this.resultados = null;
-    this.http = $http;
 }
 
-TransitoController.prototype = {
-    constructor: TransitoController,
-
+TransitoController.mixin({
     verDetalle: function(id){
-        var action = App.urls.get("bodega:obtener_vehiculos_por_producto"),
-            _this = this;
+        var _this = this;
 
-        action += "?producto_id=" + id;
-
-        this.http.get(action).success(function(data){
+        this.service.findVehiculoByProducto(id, function(data){
             _this.resultados = data;
-            $("#modal_ver_detalle").modal("show");
+            $('#modal_ver_detalle').modal('show');
         });
     }
-};
+});
 
 module.exports = TransitoController;
 
@@ -378,14 +369,16 @@ module.exports = TransitoController;
 var serviceUtil = require('./service_util.js');
 
 function BodegaService($http){
-    var services, get, post;
+    var services, get, post, noop;
+
+    noop = function(){};
 
     get = function(url, callback){
-        $http.get(url).success(callback).error(serviceUtil.standardError);
+        $http.get(url).success(callback || noop).error(serviceUtil.standardError);
     };
 
     post = function(url, params, callback){
-        $http.post(url, params).success(callback).error(serviceUtil.standardError);
+        $http.post(url, params).success(callback || noop).error(serviceUtil.standardError);
     };
 
     services = {
@@ -424,6 +417,13 @@ function BodegaService($http){
 
         findNumeroGuia: function(callback){
             var url = App.urls.get('bodega:obtener_id_guia');
+            get(url, callback);
+        },
+
+        findVehiculoByProducto: function(id, callback){
+            var url = App.urls.get('bodega:obtener_vehiculos_por_producto');
+            url += '?producto_id=' + id;
+
             get(url, callback);
         }
     };

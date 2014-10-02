@@ -1,16 +1,10 @@
-function BodegaController($http, service, stop){
+function BodegaController(service){
     this.service = service;
     this.guia = new App.Models.Guia();
     this.productosBodega = [];
 
     this.producto = {};
-    this.http = $http;
     this.numeroGuia = null;
-
-    if(!stop){
-        this.refrescarNumeroGuia();
-    }
-
     this.addListeners();
     this.obtenerProductos();
 };
@@ -33,7 +27,9 @@ BodegaController.mixin({
         this.guia.numero = this.numeroGuia;
         this.producto = {};
 
-        $("#modal_guia_despacho").modal("show");
+        this.refrescarNumeroGuia(function(){
+            $('#modal_guia_despacho').modal('show');
+        });
     },
 
     agregarProductoDescuento: function(idSelect){
@@ -100,15 +96,15 @@ BodegaController.mixin({
         });
     },
 
-    refrescarNumeroGuia: function(){
+    refrescarNumeroGuia: function(callback){
         var _this = this;
 
         this.service.findNumeroGuia(function(data){
             _this.numeroGuia = data.next;
 
-            setTimeout(function(){
-                _this.refrescarNumeroGuia();
-            }, 60000);
+            if(typeof callback === 'function'){
+                callback();
+            }
         });
     }
 });
