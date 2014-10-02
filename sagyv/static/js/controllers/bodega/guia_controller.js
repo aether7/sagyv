@@ -1,7 +1,9 @@
+var Recarga = require('../../models/bodega/recarga_model.js');
+
 function GuiaController($scope, service){
     this.scope = $scope;
     this.service = service;
-    this.recarga = new App.Models.Recarga();
+    this.recarga = new Recarga();
     this.productos = [];
     this.producto = {};
     this.fecha = null;
@@ -34,7 +36,7 @@ GuiaController.mixin({
     },
 
     recargarGuia: function(id){
-        this.recarga = new App.Models.Recarga();
+        this.recarga = new Recarga();
         this.service.obtenerGuia({guia_id: id}, this.procesarMostrarRecarga.bind(this, id));
     },
 

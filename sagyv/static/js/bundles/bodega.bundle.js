@@ -26,13 +26,11 @@ function BodegaController($scope, service){
     this.service = service;
     this.guia = new Guia();
     this.productosBodega = [];
-    this.productosTransito = [];
 
     this.producto = {};
     this.numeroGuia = null;
     this.addListeners();
     this.obtenerProductos();
-    this.obtenerProductosTransito();
 };
 
 BodegaController.mixin({
@@ -47,14 +45,6 @@ BodegaController.mixin({
 
         this.service.findProductos(function(productos){
             _this.productosBodega = productos;
-        });
-    },
-
-    obtenerProductosTransito: function(){
-        var self = this;
-
-        this.service.findProductosTransito(function(productosTransito){
-            self.productosTransito = productosTransito;
         });
     },
 
@@ -108,6 +98,8 @@ BodegaController.mixin({
 
     procesarGuardarGuiaDespacho: function(data){
         this.obtenerProductos();
+        this.scope.$emit('guia/recargarTransito');
+
         $('#modal_guia_despacho').modal('hide');
         common.agregarMensaje('Se ha actualizado el vehiculo exitosamente');
     },
@@ -128,10 +120,12 @@ BodegaController.mixin({
 module.exports = BodegaController;
 
 },{"../../models/bodega/guia_model.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/models/bodega/guia_model.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/bodega/guia_controller.js":[function(require,module,exports){
+var Recarga = require('../../models/bodega/recarga_model.js');
+
 function GuiaController($scope, service){
     this.scope = $scope;
     this.service = service;
-    this.recarga = new App.Models.Recarga();
+    this.recarga = new Recarga();
     this.productos = [];
     this.producto = {};
     this.fecha = null;
@@ -164,7 +158,7 @@ GuiaController.mixin({
     },
 
     recargarGuia: function(id){
-        this.recarga = new App.Models.Recarga();
+        this.recarga = new Recarga();
         this.service.obtenerGuia({guia_id: id}, this.procesarMostrarRecarga.bind(this, id));
     },
 
@@ -214,7 +208,7 @@ GuiaController.mixin({
 
 module.exports = GuiaController;
 
-},{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/bodega/guia_producto_controller.js":[function(require,module,exports){
+},{"../../models/bodega/recarga_model.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/models/bodega/recarga_model.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/bodega/guia_producto_controller.js":[function(require,module,exports){
 var BodegaController = require('./bodega_controller.js'),
     Factura = require('../../models/bodega/factura_model.js');
 
@@ -337,9 +331,25 @@ function TransitoController($scope, service){
     this.scope = $scope;
     this.service = service;
     this.resultados = null;
+    this.productosTransito = [];
+
+    this.recargarTransito();
+    this.addListeners();
 }
 
 TransitoController.mixin({
+    addListeners: function(){
+        this.scope.$on('guia/recargarTransito', this.recargarTransito.bind(this));
+    },
+
+    recargarTransito: function(){
+        var self = this;
+
+        this.service.findProductosTransito(function(productosTransito){
+            self.productosTransito = productosTransito;
+        });
+    },
+
     verDetalle: function(id){
         var _this = this;
 
@@ -608,6 +618,98 @@ Guia.mixin({
 });
 
 module.exports = Guia;
+
+},{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/models/bodega/recarga_model.js":[function(require,module,exports){
+function Recarga(){
+    this.id = null;
+    this.numero = null;
+    this.vehiculo = null;
+    this.fecha = new Date().toLocaleString();
+    this.productos = [];
+    this.productos_recarga = [];
+    this.monto = null;
+    this.observaciones = null;
+
+    this.mensajes = {};
+};
+
+Recarga.mixin({
+    agregarProductoDescuento: function(producto){
+        var fn,
+            valido = true;
+
+        fn = function(p){
+            return p.codigo === producto.codigo && p.id === producto.id;
+        };
+
+        this.mensajes.producto = "";
+
+        if(!producto.id || !producto.codigo || !producto.cantidad){
+            valido = false;
+            this.mensajes.producto = "El producto debe ingresarse tanto el código como la cantidad";
+        }else if(_.find(this.productos_recarga, fn)){
+            valido = false;
+            this.mensajes.producto = "El producto que intenta ingresar ya se encuentra en la lista";
+        }else if(parseInt(App.productos[producto.id]) < parseInt(producto.cantidad)){
+            valido = false;
+            this.mensajes.producto = "No se pueden agregar mas productos de los que hay en stock";
+        }else{
+            this.productos_recarga.push(producto);
+        }
+        return valido;
+    },
+
+    esMontoValido: function(){
+        var valido = true;
+        if(this.monto){
+
+            if(isNaN(this.monto)){
+                valido = false;
+                this.mensajes.monto = "el valor debe ser numérico";
+            }else if(parseInt(this.monto) < 0){
+                valido = false;
+                this.mensajes.monto = "el valor debe ser positivo";
+            }
+        }
+
+        console.log(valido);
+
+        return valido;
+    },
+
+    esProductosValido:function(){
+        var valido = true;
+
+        this.mensajes.productos = "";
+
+        if(this.productos_recarga.length < 1){
+            valido = false;
+            this.mensajes.producto = "Al menos debe haber un producto ingresado";
+        }
+
+        return valido;
+    },
+
+    esValida: function(){
+        var valido = true;
+        valido = this.esProductosValido() && valido;
+        valido = this.esMontoValido() && valido;
+
+        return valido;
+    },
+
+    getJSON: function(){
+        var json = {
+            id_guia: this.id,
+            monto: this.monto,
+            productos: JSON.stringify(this.productos_recarga)
+        }
+
+        return json;
+    }
+});
+
+module.exports = Recarga;
 
 },{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/services/bodega_service.js":[function(require,module,exports){
 var serviceUtil = require('./service_util.js');

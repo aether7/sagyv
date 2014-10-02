@@ -5,13 +5,11 @@ function BodegaController($scope, service){
     this.service = service;
     this.guia = new Guia();
     this.productosBodega = [];
-    this.productosTransito = [];
 
     this.producto = {};
     this.numeroGuia = null;
     this.addListeners();
     this.obtenerProductos();
-    this.obtenerProductosTransito();
 };
 
 BodegaController.mixin({
@@ -26,14 +24,6 @@ BodegaController.mixin({
 
         this.service.findProductos(function(productos){
             _this.productosBodega = productos;
-        });
-    },
-
-    obtenerProductosTransito: function(){
-        var self = this;
-
-        this.service.findProductosTransito(function(productosTransito){
-            self.productosTransito = productosTransito;
         });
     },
 
@@ -87,6 +77,8 @@ BodegaController.mixin({
 
     procesarGuardarGuiaDespacho: function(data){
         this.obtenerProductos();
+        this.scope.$emit('guia/recargarTransito');
+
         $('#modal_guia_despacho').modal('hide');
         common.agregarMensaje('Se ha actualizado el vehiculo exitosamente');
     },
