@@ -374,6 +374,27 @@ class FiltrarGuias(View):
         return HttpResponse(res, content_type="application/json")
 
 
+class ObtenerProductos(View):
+    def get(self, req):
+        productos =  Producto.objects.exclude(orden = -1).order_by('orden')
+        response = []
+
+        for producto in productos:
+            response.append({
+                "id": producto.id,
+                "codigo": producto.codigo,
+                "stock": producto.stock,
+                "tipo": {
+                    "id": producto.tipo_producto.id,
+                    "nombre": producto.tipo_producto.nombre
+                },
+                "precio": producto.get_precio_producto(),
+                "colorAlerta": producto.get_clase_nivel_alerta()
+            })
+
+        response = json.dumps(response, cls=DjangoJSONEncoder)
+        return HttpResponse(response, content_type="application/json")
+
 index = IndexView.as_view()
 crea_guia = csrf_exempt(CrearGuiaDespachoView.as_view())
 guardar_factura = csrf_exempt(GuardarFactura.as_view())
@@ -382,3 +403,4 @@ obtener_vehiculos_por_producto = ObtenerVehiculosPorProductoView.as_view()
 recargar_guia = csrf_exempt(RecargaGuia.as_view())
 obtener_id_guia = ObtenerIdGuia.as_view()
 filtrar_guias = FiltrarGuias.as_view()
+obtener_productos = ObtenerProductos.as_view()

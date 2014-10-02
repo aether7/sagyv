@@ -2,6 +2,11 @@ var serviceUtil = require('./service_util.js');
 
 function BodegaService($http){
     var services = {
+        findProductos: function(callback){
+            var url = App.urls.get('bodega:obtener_productos');
+            $http.get(url).success(callback).error(serviceUtil.standardError);
+        },
+
         obtenerGuia: function(params, callback){
             var url = App.urls.get('bodega:obtener_guia');
             url = serviceUtil.processURL(url, params);

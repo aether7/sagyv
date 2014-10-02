@@ -3,24 +3,27 @@
 'use strict';
 
 var app = angular.module('bodegaApp', [], App.httpProvider),
-    BodegaController = require('../controllers/bodega_controller.js'),
-    GuiaController = require('../controllers/guia_controller.js'),
-    TransitoController = require('../controllers/transito_controller.js'),
-    GuiaProductoController = require('../controllers/guia_producto_controller.js'),
+    BodegaController = require('../controllers/bodega/bodega_controller.js'),
+    GuiaController = require('../controllers/bodega/guia_controller.js'),
+    TransitoController = require('../controllers/bodega/transito_controller.js'),
+    GuiaProductoController = require('../controllers/bodega/guia_producto_controller.js'),
     bodegaService = require('../services/bodega_service.js');
 
 app.factory('bodegaService', bodegaService);
 
-app.controller('BodegaController', ['$http', BodegaController]);
+app.controller('BodegaController', ['$http', 'bodegaService', BodegaController]);
 app.controller('GuiaController', ['$scope','bodegaService', GuiaController]);
 app.controller('TransitoController', ['$http', TransitoController]);
-app.controller('GuiaProductoController', ['$http', GuiaProductoController]);
+app.controller('GuiaProductoController', ['$http', 'bodegaService', GuiaProductoController]);
 
 })();
 
-},{"../controllers/bodega_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega_controller.js","../controllers/guia_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guia_controller.js","../controllers/guia_producto_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guia_producto_controller.js","../controllers/transito_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/transito_controller.js","../services/bodega_service.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/bodega_service.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega_controller.js":[function(require,module,exports){
-function BodegaController($http, stop){
+},{"../controllers/bodega/bodega_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/bodega_controller.js","../controllers/bodega/guia_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/guia_controller.js","../controllers/bodega/guia_producto_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/guia_producto_controller.js","../controllers/bodega/transito_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/transito_controller.js","../services/bodega_service.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/bodega_service.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/bodega_controller.js":[function(require,module,exports){
+function BodegaController($http, service, stop){
+    this.service = service;
     this.guia = new App.Models.Guia();
+    this.productosBodega = [];
+
     this.producto = {};
     this.http = $http;
     this.numeroGuia = null;
@@ -28,9 +31,24 @@ function BodegaController($http, stop){
     if(!stop){
         this.refrescarNumeroGuia();
     }
+
+    this.addListeners();
+    this.obtenerProductos();
 };
 
 BodegaController.mixin({
+    addListeners: function(){
+
+    },
+
+    obtenerProductos: function(){
+        var _this = this;
+
+        this.service.findProductos(function(productos){
+            _this.productosBodega = productos;
+        });
+    },
+
     nuevaGuiaDespacho: function(){
         this.guia = new App.Models.Guia();
         this.guia.numero = this.numeroGuia;
@@ -128,7 +146,7 @@ BodegaController.mixin({
 
 module.exports = BodegaController;
 
-},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guia_controller.js":[function(require,module,exports){
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/guia_controller.js":[function(require,module,exports){
 function GuiaController($scope, service){
     this.scope = $scope;
     this.service = service;
@@ -215,11 +233,11 @@ GuiaController.mixin({
 
 module.exports = GuiaController;
 
-},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guia_producto_controller.js":[function(require,module,exports){
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/guia_producto_controller.js":[function(require,module,exports){
 var BodegaController = require("./bodega_controller.js");
 
-function GuiaProductoController($http){
-    BodegaController.call(this, $http, true);
+function GuiaProductoController($http, service){
+    BodegaController.call(this, $http, service, true);
     this.guia = new App.Models.Factura();
     this.paso = 1;
     this.garantias = null;
@@ -342,7 +360,7 @@ GuiaProductoController.mixin(BodegaController,{
 
 module.exports = GuiaProductoController;
 
-},{"./bodega_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega_controller.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/transito_controller.js":[function(require,module,exports){
+},{"./bodega_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/bodega_controller.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/transito_controller.js":[function(require,module,exports){
 function TransitoController($http){
     this.resultados = null;
     this.http = $http;
@@ -371,6 +389,11 @@ var serviceUtil = require('./service_util.js');
 
 function BodegaService($http){
     var services = {
+        findProductos: function(callback){
+            var url = App.urls.get('bodega:obtener_productos');
+            $http.get(url).success(callback).error(serviceUtil.standardError);
+        },
+
         obtenerGuia: function(params, callback){
             var url = App.urls.get('bodega:obtener_guia');
             url = serviceUtil.processURL(url, params);

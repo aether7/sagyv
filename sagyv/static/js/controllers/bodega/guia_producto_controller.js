@@ -1,7 +1,7 @@
 var BodegaController = require("./bodega_controller.js");
 
-function GuiaProductoController($http){
-    BodegaController.call(this, $http, true);
+function GuiaProductoController($http, service){
+    BodegaController.call(this, $http, service, true);
     this.guia = new App.Models.Factura();
     this.paso = 1;
     this.garantias = null;

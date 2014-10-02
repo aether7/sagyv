@@ -1,5 +1,8 @@
-function BodegaController($http, stop){
+function BodegaController($http, service, stop){
+    this.service = service;
     this.guia = new App.Models.Guia();
+    this.productosBodega = [];
+
     this.producto = {};
     this.http = $http;
     this.numeroGuia = null;
@@ -7,9 +10,24 @@ function BodegaController($http, stop){
     if(!stop){
         this.refrescarNumeroGuia();
     }
+
+    this.addListeners();
+    this.obtenerProductos();
 };
 
 BodegaController.mixin({
+    addListeners: function(){
+
+    },
+
+    obtenerProductos: function(){
+        var _this = this;
+
+        this.service.findProductos(function(productos){
+            _this.productosBodega = productos;
+        });
+    },
+
     nuevaGuiaDespacho: function(){
         this.guia = new App.Models.Guia();
         this.guia.numero = this.numeroGuia;
