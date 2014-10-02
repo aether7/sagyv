@@ -72,36 +72,27 @@ BodegaController.mixin({
     },
 
     guardarGuiaDespacho: function(){
-        var json,
-            action,
-            valido = this.guia.esValida(),
-            _this = this;
+        var json, valido = this.guia.esValida();
 
         if(!valido){
             return;
         }
 
-        action = App.urls.get("bodega:crea_guia");
         json = this.guia.getJSON();
-
-        this.http.post(action, json)
-            .success(this.procesarGuardarGuiaDespacho.bind(this));
+        this.service.crearGuia(json, this.procesarGuardarGuiaDespacho.bind(this));
     },
 
     guardarFactura: function(){
-        var json,
-            action,
-            valido = this.factura.esValida(),
-            _this = this;
+        var json, valido = this.factura.esValida();
 
         if(!valido){
             return;
         }
 
-        action = App.urls.get("bodega:guardar_factura");
         json = this.factura.getJSON();
-
-        this.http.post(action, json);
+        this.service.guardarFactura(json, function(data){
+            alert('no está implementado');
+        });
     },
 
     procesarGuardarGuiaDespacho: function(data){
@@ -131,15 +122,14 @@ BodegaController.mixin({
     },
 
     refrescarNumeroGuia: function(){
-        var _this = this,
-            action = App.urls.get("bodega:obtener_id_guia");
+        var _this = this;
 
-        this.http.get(action).success(function(data){
+        this.service.findNumeroGuia(function(data){
             _this.numeroGuia = data.next;
 
             setTimeout(function(){
                 _this.refrescarNumeroGuia();
-            }, 10000);
+            }, 60000);
         });
     }
 });
@@ -388,29 +378,53 @@ module.exports = TransitoController;
 var serviceUtil = require('./service_util.js');
 
 function BodegaService($http){
-    var services = {
+    var services, get, post;
+
+    get = function(url, callback){
+        $http.get(url).success(callback).error(serviceUtil.standardError);
+    };
+
+    post = function(url, params, callback){
+        $http.post(url, params).success(callback).error(serviceUtil.standardError);
+    };
+
+    services = {
         findProductos: function(callback){
             var url = App.urls.get('bodega:obtener_productos');
-            $http.get(url).success(callback).error(serviceUtil.standardError);
+            get(url, callback);
         },
 
         obtenerGuia: function(params, callback){
             var url = App.urls.get('bodega:obtener_guia');
             url = serviceUtil.processURL(url, params);
-
-            $http.get(url).success(callback).error(serviceUtil.standardError);
+            get(url, callback);
         },
 
         filtrarPorFecha: function(params, callback){
             var url = App.urls.get('bodega:filtrar_guias');
             url = serviceUtil.processURL(url, params);
 
-            $http.get(url).success(callback).error(serviceUtil.standardError);
+            get(url, callback);
         },
 
         guardarRecarga: function(params, callback){
             var url = App.urls.get('bodega:recargar_guia');
-            $http.post(url, params).success(callback).error(serviceUtil.standardError);
+            post(url, params, callback);
+        },
+
+        crearGuia: function(params, callback){
+            var url = App.urls.get('bodega:crea_guia');
+            post(url, params, callback);
+        },
+
+        guardarFactura: function(params, callback){
+            var url = App.urls.get('bodega:guardar_factura');
+            post(params, callback);
+        },
+
+        findNumeroGuia: function(callback){
+            var url = App.urls.get('bodega:obtener_id_guia');
+            get(url, callback);
         }
     };
 

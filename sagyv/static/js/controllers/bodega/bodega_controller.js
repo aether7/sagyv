@@ -51,36 +51,27 @@ BodegaController.mixin({
     },
 
     guardarGuiaDespacho: function(){
-        var json,
-            action,
-            valido = this.guia.esValida(),
-            _this = this;
+        var json, valido = this.guia.esValida();
 
         if(!valido){
             return;
         }
 
-        action = App.urls.get("bodega:crea_guia");
         json = this.guia.getJSON();
-
-        this.http.post(action, json)
-            .success(this.procesarGuardarGuiaDespacho.bind(this));
+        this.service.crearGuia(json, this.procesarGuardarGuiaDespacho.bind(this));
     },
 
     guardarFactura: function(){
-        var json,
-            action,
-            valido = this.factura.esValida(),
-            _this = this;
+        var json, valido = this.factura.esValida();
 
         if(!valido){
             return;
         }
 
-        action = App.urls.get("bodega:guardar_factura");
         json = this.factura.getJSON();
-
-        this.http.post(action, json);
+        this.service.guardarFactura(json, function(data){
+            alert('no está implementado');
+        });
     },
 
     procesarGuardarGuiaDespacho: function(data){
@@ -110,15 +101,14 @@ BodegaController.mixin({
     },
 
     refrescarNumeroGuia: function(){
-        var _this = this,
-            action = App.urls.get("bodega:obtener_id_guia");
+        var _this = this;
 
-        this.http.get(action).success(function(data){
+        this.service.findNumeroGuia(function(data){
             _this.numeroGuia = data.next;
 
             setTimeout(function(){
                 _this.refrescarNumeroGuia();
-            }, 10000);
+            }, 60000);
         });
     }
 });
