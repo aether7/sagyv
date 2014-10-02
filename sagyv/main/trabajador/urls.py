@@ -8,4 +8,5 @@ urlpatterns = patterns("main.trabajador.views",
     url(r"^eliminar/$","eliminar",name="eliminar"),
     url(r"^buscar\-boleta/$","buscar_boleta",name="buscar_boleta"),
     url(r"^guardar\-boleta/$","guardar_boleta",name="guardar_boleta"),
+    url(r"^todos/$", "todos", name="todos"),
 )

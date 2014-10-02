@@ -17,16 +17,16 @@
     </li>
 </ul>
 
-<div class="tab-content">
-    <div class="tab-pane active" id="cargas">
+<div class="tab-content" ng-app="precioApp">
+    <div class="tab-pane active" id="cargas" ng-controller="PrecioController as precio">
         {% include "precios/components/lista_precios.html" %}
     </div>
 
-    <div class="tab-pane" id="garantias">
+    <div class="tab-pane" id="garantias" ng-controller="GarantiaController as garantia">
         {% include "precios/components/lista_precios_garantias.html" %}
     </div>
 
-    <div class="tab-pane" id="stocks">
+    <div class="tab-pane" id="stocks" ng-controller="StockController as stock">
         {% include "precios/components/lista_stocks.html" %}
     </div>
 </div>
@@ -36,9 +36,14 @@
 
 {% block js %}
 <script src="{% static 'js/common_functions.js' %}"></script>
-<script src="{% static 'js/controllers/precio_controller.js' %}"></script>
+<script src="{% static 'js/vendor/angular.min.js' %}"></script>
+<script src="{% static 'js/plugins/angular.provider.js' %}"></script>
+<script src="{% static 'js/bundles/precio_bundle.js' %}"></script>
 <script>
-    App.precioController = new App.Controllers.Precio();
-    App.precioController.init();
+    App.urls.set("precios:update_precios", "{% url 'precios:update_precios' %}");
+    App.urls.set("precios:update_stock", "{% url 'precios:update_stock' %}");
+    App.urls.set("precios:obtener_productos", "{% url 'precios:obtener_productos' %}");
+    App.urls.set("precios:obtener_garantias", "{% url 'precios:obtener_garantias' %}");
+    App.urls.set("precios:obtener_stocks", "{% url 'precios:obtener_stocks' %}");
 </script>
 {% endblock %}

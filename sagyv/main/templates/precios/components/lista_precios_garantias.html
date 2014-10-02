@@ -1,5 +1,4 @@
-<form id="f_precio_masivo_garantias" action="{% url 'precios:update_precios' %}" method="post" role="form">
-    {% csrf_token %}
+<form action="#" role="form">
     <table id="tabla_precios" class="table table-striped">
         <thead>
             <tr>
@@ -9,20 +8,19 @@
             </tr>
         </thead>
         <tbody>
-            {% for producto in lista_precios_garantias %}
-            <tr>
-                <td>{{ producto.codigo }}</td>
-                <td>$ <span data-actual="true">{{ producto.get_precio_producto }}</span></td>
-                <td class="form-group">
-                    <input id="producto_precio_{{ producto.id }}" type="text"
-                    value="" data-columna-garantias="{{ forloop.counter }}" data-id="{{ producto.id }}" />
-                    <span class="help-block"></span>
+            <tr ng-repeat="producto in garantia.productos">
+                <td ng-bind="producto.codigo"></td>
+                <td ng-bind="producto.precio | currency"></td>
+                <td>
+                    {% verbatim %}
+                    <input type="text" data-columna-garantias="{{ $index }}" ng-model="producto.valor" />
+                    {% endverbatim %}
+                    <span class="text-danger" ng-if="producto.mensaje" ng-bind="producto.mensaje"></span>
                 </td>
             </tr>
-            {% endfor %}
         </tbody>
     </table>
     <div class="form-group center">
-        <button class="btn btn-primary">Guardar</button>
+        <input ng-click="garantia.actualizar()" type="button" class="btn btn-primary" value="Guardar" />
     </div>
 </form>

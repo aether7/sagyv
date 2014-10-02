@@ -177,7 +177,7 @@ class ModificarCliente(CrearEditarCliente):
         credito = self.request.POST.get('credito')
         dispensador = self.request.POST.get('dispensador')
         es_lipigas = self.request.POST.get('es_lipigas')
-        es_propio = self.request.POST.GET('es_propio')
+        es_propio = self.request.POST.get('es_propio')
         obs = self.request.POST.get('obs')
 
         cliente = Cliente.objects.get(pk = id_cliente)
@@ -218,13 +218,24 @@ class EliminarCliente(View):
 class ObtenerSituacionComercial(View):
 
     def get(self, req, id_situacion):
-        sc = DescuentoCliente.objects.get(pk = id_situacion)
+        sc = DescuentoCliente.objects.get(pk = int(id_situacion))
+
         dato = {
             'id': sc.id,
-            'monto_descuento': sc.monto_descuento,
-            'tipo_descuento': sc.tipo_descuento.id,
-            "formato_descuento" : sc.producto.id
+            'monto_descuento': "",
+            'tipo_descuento': "",
+            "formato_descuento": ""
         }
+
+        if str(sc) != "Sin descuento":
+            dato["monto_descuento"] = sc.monto_descuento
+            dato["tipo_descuento"] = sc.tipo_descuento.id
+            dato["formato_descuento"] = sc.producto.id
+        else:
+            dato["monto_descuento"] = 0
+            dato["tipo_descuento"] = None
+            dato["formato_descuento"] = None
+
         return HttpResponse(json.dumps(dato),content_type="application/json")
 
 
@@ -335,6 +346,19 @@ class BuscarCliente(View):
         return HttpResponse(json.dumps(data), content_type="application/json")
 
 
+class BuscarProducto(View):
+    def get(self, req):
+        producto_id = int(req.GET.get("producto_id"))
+        producto = Producto.objects.get(pk = producto_id)
+
+        data = json.dumps({
+            "id": producto.id,
+            "nombre": producto.nombre,
+            "tipo": producto.tipo_producto.nombre
+        })
+
+        return HttpResponse(data, content_type="application/json")
+
 index = Index.as_view()
 obtener_cliente = ObtenerCliente.as_view()
 crear_cliente = CrearCliente.as_view()
@@ -345,3 +369,4 @@ buscar_cliente = BuscarCliente.as_view()
 obtener_situacion_comercial = ObtenerSituacionComercial.as_view()
 crear_situacion_comercial = CrearSituacionComercial.as_view()
 modificar_situacion_comercial = ModificarSituacionComercialView.as_view()
+buscar_producto = BuscarProducto.as_view()

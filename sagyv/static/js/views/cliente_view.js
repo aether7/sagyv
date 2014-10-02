@@ -35,6 +35,7 @@ App.Views.Cliente.prototype = {
 
         this.listaClientes.on("click","a[data-accion=editar]", this.editarCliente());
         this.listaClientes.on("click","a[data-accion=eliminar]",this.eliminarCliente());
+        this.listaClientes.on("click","a[data-accion=ver]", this.verCliente());
 
         this.agregarSuscriptores();
     },
@@ -46,6 +47,55 @@ App.Views.Cliente.prototype = {
         pubsub.suscribe("cliente:cargarCliente", this.cargarCliente);
         pubsub.suscribe("cliente:buscar", this.procesarBuscar);
         pubsub.suscribe("cliente:actualizarCliente", this.actualizarCliente);
+        pubsub.suscribe("cliente:verCliente", this.procesarVerCliente);
+    },
+
+    procesarVerCliente: function(data){
+        var lipigas = data.es_lipigas ? "Sí" : "No",
+            dispensador = data.dispensador ? "Sí" : "No",
+            credito = data.credito ? "Sí" : "No",
+            propio = data.es_propio ? "Sí" : "No",
+            situacionComercial;
+
+        if(data.situacion_comercial.tipo_descuento === 1){
+            situacionComercial = "${0} en {1} {2}".format(
+                data.situacion_comercial.monto_descuento,
+                data.producto.nombre,
+                data.producto.tipo
+            );
+        }else if(data.situacion_comercial.tipo_descuento === 2){
+            situacionComercial = "{0}% en {1} {2}".format(
+                data.situacion_comercial.monto_descuento,
+                data.producto.nombre,
+                data.producto.tipo
+            );
+        }else{
+            situacionComercial = "Sin descuento";
+        }
+
+        $("#nombre_ver").text(data.nombre);
+        $("#giro_ver").text(data.giro);
+        $("#direccion_ver").text(data.direccion);
+        $("#telefono_ver").text(data.telefono);
+        $("#rut_ver").text(data.rut);
+        $("#sit_comercial_ver").text(situacionComercial);
+        $("#credito_ver").text(credito);
+        $("#es_lipigas_ver").text(lipigas);
+        $("#dispensador_ver").text(dispensador);
+        $("#es_propio_ver").text(propio);
+        $("#obs_ver").text(data.obs);
+
+        $("#modal_ver").modal("show");
+    },
+
+    verCliente: function(){
+        var _this = this;
+
+        return function(evt){
+            evt.preventDefault();
+            var id = $(this).data("id");
+            _this.controller.verCliente(id);
+        };
     },
 
     procesarBuscar: function(data){

@@ -1,5 +1,4 @@
-<form id="f_stock" action="{% url 'precios:update_stock' %}" method="post">
-    {% csrf_token %}
+<form action="#" role="form">
     <table class="table table-striped">
         <thead>
             <tr>
@@ -9,19 +8,19 @@
             </tr>
         </thead>
         <tbody>
-            {% for producto in lista_precios %}
-            <tr>
-                <td>{{ producto.codigo }}</td>
-                <td>{{ producto.nivel_critico }}</td>
+            <tr ng-repeat="producto in stock.productos">
+                <td ng-bind="producto.codigo"></td>
+                <td ng-bind="producto.nivelCritico"></td>
                 <td>
-                    <input id="producto_stock_{{ producto.id }}" data-id="{{ producto.id }}" type="text" value="" />
-                    <span class="text-danger"></span>
+                    {% verbatim %}
+                    <input data-columna-stock="{{ $index }}" type="text" ng-model="producto.valor" />
+                    {% endverbatim %}
+                    <span class="text-danger" ng-if="producto.mensaje" ng-bind="producto.mensaje"></span>
                 </td>
             </tr>
-            {% endfor %}
         </tbody>
     </table>
     <div class="center" style="padding: 1em">
-        <button class="btn btn-primary">Guardar</button>
+        <input ng-click="stock.actualizar()" class="btn btn-primary" value="Guardar" />
     </div>
 </form>

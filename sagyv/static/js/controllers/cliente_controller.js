@@ -7,6 +7,34 @@ App.Controllers.Cliente = function(){
 App.Controllers.Cliente.prototype = {
     constructor: App.Controllers.Cliente,
 
+    verCliente: function(id){
+        var url = App.urls.get("cliente:obtener").replace("0", id),
+            urlSitComercial = App.urls.get("cliente:obtener_situacion_comercial"),
+            urlProducto = App.urls.get("cliente:buscar_producto");
+
+        function callback(data, dataB, dataC){
+            data.situacion_comercial = dataB;
+            data.producto = dataC;
+            pubsub.publish("cliente:verCliente", [ data ]);
+        }
+
+        $.get(url, function(data){
+            urlSitComercial = urlSitComercial.replace("0", data.situacion_comercial);
+            $.get(urlSitComercial, function(dataB){
+                if(dataB.id === 1){
+                    callback(data, dataB, null);
+                    return;
+                }
+
+                $.get(urlProducto,{ producto_id: dataB.formato_descuento }, function(dataC){
+                    data.situacion_comercial = dataB;
+                    data.producto = dataC;
+                    pubsub.publish("cliente:verCliente", [ data ]);
+                });
+            });
+        });
+    },
+
     addClienteRut: function(rut){
         this.rutList.push(rut);
     },

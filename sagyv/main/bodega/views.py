@@ -48,7 +48,6 @@ class IndexView(TemplateView):
     def get_guias(self):
         hoy = datetime.datetime.now()
         fecha = datetime.date(hoy.year, hoy.month, hoy.day)
-        #guias = GuiaDespacho.objects.filter(fecha=fecha).order_by('id')
         guias = GuiaDespacho.objects.all().order_by('id')
         return guias
 
@@ -365,7 +364,8 @@ class FiltrarGuias(View):
                     "id": guia.vehiculo_id,
                     "numero": guia.vehiculo.numero
                 },
-                "fecha": guia.fecha
+                "fecha": convierte_fecha_texto(guia.fecha),
+                "estado" : guia.estado
             })
 
         res = { "guias": guias }

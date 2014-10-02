@@ -65,6 +65,7 @@
 {% include "cliente/components/modal_editar_cliente.html" %}
 {% include "cliente/components/modal_nueva_situacion_comercial.html"%}
 {% include "cliente/components/modal_editar_situacion_comercial.html"%}
+{% include "cliente/components/modal_ver_cliente.html" %}
 
 {% endblock %}
 
@@ -98,6 +99,7 @@
     App.urls.set("cliente:obtener_situacion_comercial","{% url 'cliente:obtener_situacion_comercial' 0 %}");
     App.urls.set("cliente:crear_situacion_comercial", "{% url 'cliente:crear_situacion_comercial' %}");
     App.urls.set("cliente:modificar_situacion_comercial", "{% url 'cliente:modificar_situacion_comercial' %}");
+    App.urls.set("cliente:buscar_producto", "{% url 'cliente:buscar_producto' %}");
 
     App.clienteView = new App.Views.Cliente();
     App.clienteView.init();
