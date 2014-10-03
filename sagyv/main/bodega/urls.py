@@ -12,4 +12,5 @@ urlpatterns = patterns("main.bodega.views",
     url(r"^obtener\-productos/$", "obtener_productos", name="obtener_productos"),
     url(r"^obtener\-productos\-transito/$", "obtener_productos_transito", name="obtener_productos_transito"),
     url(r"^obtener\-consolidados/$", "obtener_consolidados", name="obtener_consolidados"),
+    url(r"obtener\-vehiculos\-seleccionables/$", "obtener_vehiculos_seleccionables", name="obtener_vehiculos_seleccionables"),
 )

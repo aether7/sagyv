@@ -41,8 +41,9 @@ App.Models.Recarga.prototype = {
 
     esMontoValido: function(){
         var valido = true;
-        if(this.monto){
 
+        if(this.monto){
+            this.mensajes.monto = '';
             if(isNaN(this.monto)){
                 valido = false;
                 this.mensajes.monto = "el valor debe ser numérico";
@@ -50,12 +51,13 @@ App.Models.Recarga.prototype = {
                 valido = false;
                 this.mensajes.monto = "el valor debe ser positivo";
             }
+        }else{
+            this.monto = 0;
         }
-
-        console.log(valido);
 
         return valido;
     },
+
 
     esProductosValido:function(){
         var valido = true;

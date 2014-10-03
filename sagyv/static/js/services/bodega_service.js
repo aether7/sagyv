@@ -59,7 +59,7 @@ function BodegaService($http){
 
         guardarFactura: function(params, callback){
             var url = App.urls.get('bodega:guardar_factura');
-            post(params, callback);
+            post(url, params, callback);
         },
 
         findNumeroGuia: function(callback){

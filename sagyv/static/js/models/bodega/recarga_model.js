@@ -5,7 +5,7 @@ function Recarga(){
     this.fecha = new Date().toLocaleString();
     this.productos = [];
     this.productos_recarga = [];
-    this.monto = null;
+    this.monto = 0;
     this.observaciones = null;
 
     this.mensajes = {};
@@ -39,8 +39,9 @@ Recarga.mixin({
 
     esMontoValido: function(){
         var valido = true;
-        if(this.monto){
 
+        if(this.monto){
+            this.mensajes.monto = '';
             if(isNaN(this.monto)){
                 valido = false;
                 this.mensajes.monto = "el valor debe ser numérico";
@@ -48,9 +49,9 @@ Recarga.mixin({
                 valido = false;
                 this.mensajes.monto = "el valor debe ser positivo";
             }
+        }else{
+            this.monto = 0;
         }
-
-        console.log(valido);
 
         return valido;
     },
