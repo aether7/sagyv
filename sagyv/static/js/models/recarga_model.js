@@ -41,22 +41,23 @@ App.Models.Recarga.prototype = {
 
     esMontoValido: function(){
         var valido = true;
-        this.monto = ""
-        if(this.monto){
 
+        if(this.monto){
+            this.mensajes.monto = '';
             if(isNaN(this.monto)){
                 valido = false;
-                this.monto = "el valor debe ser numérico";
+                this.mensajes.monto = "el valor debe ser numérico";
             }else if(parseInt(this.monto) < 0){
                 valido = false;
-                this.monto = "el valor debe ser positivo";
+                this.mensajes.monto = "el valor debe ser positivo";
             }
+        }else{
+            this.monto = 0;
         }
-
-        console.log(valido);
 
         return valido;
     },
+
 
     esProductosValido:function(){
         var valido = true;
