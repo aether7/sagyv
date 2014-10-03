@@ -86,6 +86,12 @@ class Vehiculo(models.Model):
         else:
             return trabajador_vehiculo[0].trabajador.id
 
+    def get_estado_ultima_guia(self):
+        queryset = GuiaDespacho.objects.filter(vehiculo_id = self.id)
+        ultima_guia = queryset.latest("id")
+
+        return ultima_guia.estado
+
     def __unicode__(self):
         return self.patente
 

@@ -408,6 +408,23 @@ class ObtenerProductosTransito(View):
         return HttpResponse(response, content_type="application/json")
 
 
+class ObtenerVehiculosSeleccionables(View):
+    def get(self, req):
+        vehiculos = Vehiculo.objects.get_vehiculos_con_chofer()
+        response = []
+
+        for vehiculo in vehiculos:
+            response.append({
+                "id" : vehiculo.id,
+                "numero" : vehiculo.numero,
+                "patente" : vehiculo.patente,
+                "estado_ultima_guia" : vehiculo.get_estado_ultima_guia()
+            })
+
+        response = json.dumps(response, cls=DjangoJSONEncoder)
+        return HttpResponse(response, content_type="application/json")
+
+
 index = IndexView.as_view()
 crea_guia = csrf_exempt(CrearGuiaDespachoView.as_view())
 guardar_factura = csrf_exempt(GuardarFactura.as_view())
@@ -419,3 +436,4 @@ filtrar_guias = FiltrarGuias.as_view()
 
 obtener_productos = ObtenerProductos.as_view()
 obtener_productos_transito = ObtenerProductosTransito.as_view()
+obtener_vehiculos_seleccionables = ObtenerVehiculosSeleccionables.as_view()
