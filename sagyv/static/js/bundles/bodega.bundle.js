@@ -7,18 +7,20 @@ var app = angular.module('bodegaApp', [], App.httpProvider),
     GuiaController = require('../controllers/bodega/guia_controller.js'),
     TransitoController = require('../controllers/bodega/transito_controller.js'),
     GuiaProductoController = require('../controllers/bodega/guia_producto_controller.js'),
+    ConsolidadoController = require('../controllers/bodega/consolidado_controller.js'),
     bodegaService = require('../services/bodega_service.js');
 
-app.factory('bodegaService', bodegaService);
+app.factory('bodegaService', ['$http', bodegaService]);
 
 app.controller('BodegaController', ['$rootScope', 'bodegaService', BodegaController]);
 app.controller('GuiaController', ['$rootScope','bodegaService', GuiaController]);
 app.controller('TransitoController', ['$rootScope', 'bodegaService', TransitoController]);
 app.controller('GuiaProductoController', ['$rootScope', 'bodegaService', GuiaProductoController]);
+app.controller('ConsolidadoController', ['$rootScope', 'bodegaService', ConsolidadoController]);
 
 })();
 
-},{"../controllers/bodega/bodega_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/bodega_controller.js","../controllers/bodega/guia_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/guia_controller.js","../controllers/bodega/guia_producto_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/guia_producto_controller.js","../controllers/bodega/transito_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/transito_controller.js","../services/bodega_service.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/bodega_service.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/bodega_controller.js":[function(require,module,exports){
+},{"../controllers/bodega/bodega_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/bodega_controller.js","../controllers/bodega/consolidado_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/consolidado_controller.js","../controllers/bodega/guia_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/guia_controller.js","../controllers/bodega/guia_producto_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/guia_producto_controller.js","../controllers/bodega/transito_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/transito_controller.js","../services/bodega_service.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/bodega_service.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/bodega_controller.js":[function(require,module,exports){
 var Guia = require('../../models/bodega/guia_model.js');
 
 function BodegaController($scope, service){
@@ -100,10 +102,7 @@ BodegaController.mixin({
     },
 
     procesarGuardarGuiaDespacho: function(data){
-        this.obtenerProductos();
-        this.scope.$broadcast('guia/recargarTransito');
-        this.scope.$broadcast('guia/recargarGuia');
-
+        this.scope.$broadcast('guia/recargarProductos');
         $('#modal_guia_despacho').modal('hide');
         common.agregarMensaje('Se ha actualizado el vehiculo exitosamente');
     },
@@ -124,7 +123,67 @@ BodegaController.mixin({
 
 module.exports = BodegaController;
 
-},{"../../models/bodega/guia_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/bodega/guia_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/guia_controller.js":[function(require,module,exports){
+},{"../../models/bodega/guia_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/bodega/guia_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/consolidado_controller.js":[function(require,module,exports){
+function Class(methods){
+    var initialize = methods.initialize || function(){},
+        cls = function(){ initialize.apply(this, arguments); };
+
+    delete methods.initialize;
+
+    Object.keys(methods).forEach(function(method){
+        cls.prototype[method] = methods[method];
+    });
+
+    return cls;
+}
+
+
+function ConsolidadoController($scope, service){
+    this.scope = $scope;
+    this.service = service;
+
+    this.consolidados = [];
+
+    this.addListeners();
+    this.obtenerConsolidados();
+}
+
+ConsolidadoController.mixin({
+    addListeners: function(){
+        this.scope.$on('guia/recargarProductos', this.obtenerConsolidados.bind(this));
+    },
+
+    obtenerConsolidados: function(){
+        this.service.findConsolidados(this.renderConsolidados.bind(this));
+    },
+
+    renderConsolidados: function(data){
+        this.consolidados = data;
+    },
+
+    verDetalle: function(index){
+        console.log(this.consolidados[index]);
+    }
+});
+
+var Animal = new Class({
+    initialize: function(nombre, tipo){
+        this.nombre = nombre || 'juanito';
+        this.tipo = tipo || 'nada';
+    },
+
+    getSaludo: function(){
+        return 'hola mi nombre es ' + this.nombre + ' y soy un ' + this.tipo;
+    }
+});
+
+var animal = new Animal('kako','animal');
+console.log(animal.getSaludo());
+
+
+module.exports = ConsolidadoController;
+
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/bodega/guia_controller.js":[function(require,module,exports){
 var Recarga = require('../../models/bodega/recarga_model.js');
 
 function GuiaController($scope, service){
@@ -142,7 +201,7 @@ function GuiaController($scope, service){
 
 GuiaController.mixin({
     addListeners: function(){
-        this.scope.$on('guia/recargarGuia', this.filtrarGuias.bind(this));
+        this.scope.$on('guia/recargarProductos', this.filtrarGuias.bind(this));
     },
 
     filtrarGuias: function(){
@@ -352,7 +411,7 @@ function TransitoController($scope, service){
 
 TransitoController.mixin({
     addListeners: function(){
-        this.scope.$on('guia/recargarTransito', this.recargarTransito.bind(this));
+        this.scope.$on('guia/recargarProductos', this.recargarTransito.bind(this));
     },
 
     recargarTransito: function(){
@@ -748,6 +807,16 @@ function BodegaService($http){
 
         findProductosTransito:function(callback){
             var url = App.urls.get('bodega:obtener_productos_transito');
+            get(url, callback);
+        },
+
+        findConsolidados: function(callback){
+            var url = App.urls.get('bodega:obtener_consolidados');
+            get(url, callback);
+        },
+
+        findVehiculos: function(callback){
+            var url = App.urls.get('bodega:obtener_vehiculos_seleccionables');
             get(url, callback);
         },
 

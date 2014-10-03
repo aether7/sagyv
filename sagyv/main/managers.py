@@ -7,12 +7,15 @@ class ReportesManager(models.Manager):
 
     def get_consumos_cliente_producto(self,fecha_inicio = None, fecha_termino = None):
 
-        consulta_sql= """
-            SELECT main_cliente.id, main_cliente.nombre, main_detalleventa.producto_id, SUM(main_detalleventa.monto)
-                           FROM main_cliente INNER JOIN main_venta ON main_cliente.id = main_venta.cliente_id
-                           LEFT JOIN main_detalleventa ON main_venta.id = main_detalleventa.venta_id
-                           GROUP BY main_cliente.id, main_cliente.nombre, main_detalleventa.producto_id
-        """
+        consulta_sql = """
+            SELECT
+                main_cliente.id,
+                main_cliente.nombre,
+                main_detalleventa.producto_id,
+                SUM(main_detalleventa.monto)
+           FROM main_cliente INNER JOIN main_venta ON main_cliente.id = main_venta.cliente_id
+           LEFT JOIN main_detalleventa ON main_venta.id = main_detalleventa.venta_id
+           GROUP BY main_cliente.id, main_cliente.nombre, main_detalleventa.producto_id"""
 
         query = connection.cursor()
         query.execute(consulta_sql)
@@ -99,6 +102,7 @@ class StockManager(models.Manager):
             p.codigo = row[0]
             p.peso = row[1]
             p.nombre = row[2]
+            p.producto_id = row[5]
 
             if row[4] is not None:
                 p.cantidad = (row[3] + row[4]) or 0

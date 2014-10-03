@@ -42,7 +42,7 @@
         {% include "bodega/components/modal_ver_detalle.html" %}
     </div>
 
-    <div class="tab-pane" id="consolidado">
+    <div class="tab-pane" id="consolidado" data-ng-controller="ConsolidadoController as consolidado">
         {% include "bodega/panel_consolidados.html" %}
     </div>
 
@@ -80,6 +80,7 @@
     App.urls.set("bodega:guardar_factura", "{% url 'bodega:guardar_factura' %}");
     App.urls.set("bodega:filtrar_guias", "{% url 'bodega:filtrar_guias' %}");
     App.urls.set("bodega:obtener_productos_transito", "{% url 'bodega:obtener_productos_transito' %}");
+    App.urls.set("bodega:obtener_consolidados", "{% url 'bodega:obtener_consolidados' %}");
 
     App.productos = {};
 

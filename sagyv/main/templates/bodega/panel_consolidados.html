@@ -7,18 +7,12 @@
         </tr>
     </thead>
     <tbody>
-    {% for producto in total_stock  %}
-        <tr>
-            <td>{{ producto.codigo }}</td>
-            <td>
-                <span id="stock_{{ producto.id }}">
-                    {{ producto.cantidad }}
-                </span>
-            </td>
-            <td>
-               somewhere
-            </td>
-        </tr>
-    {% endfor %}
+    <tr ng-repeat="item in consolidado.consolidados">
+        <td ng-bind="item.codigo"></td>
+        <td ng-bind="item.cantidad"></td>
+        <td>
+            <a href ng-click="consolidado.verDetalle($index)" class="icon-search"></a>
+        </td>
+    </tr>
     </tbody>
 </table>

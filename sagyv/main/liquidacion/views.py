@@ -177,9 +177,7 @@ class Cerrar(TemplateView):
         reporte.set_clientes(clientes)
         reporte.set_productos(productos)
 
-
         datos = ReportesManager().get_consumos_cliente_producto()
-
         excel = reporte.construir_reporte(datos)
 
         response = HttpResponse(excel, content_type='application/vnd.ms-excel')

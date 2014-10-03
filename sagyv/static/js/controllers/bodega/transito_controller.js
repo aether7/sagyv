@@ -10,7 +10,7 @@ function TransitoController($scope, service){
 
 TransitoController.mixin({
     addListeners: function(){
-        this.scope.$on('guia/recargarTransito', this.recargarTransito.bind(this));
+        this.scope.$on('guia/recargarProductos', this.recargarTransito.bind(this));
     },
 
     recargarTransito: function(){

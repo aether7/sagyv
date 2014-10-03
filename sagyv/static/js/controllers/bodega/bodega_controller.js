@@ -79,10 +79,7 @@ BodegaController.mixin({
     },
 
     procesarGuardarGuiaDespacho: function(data){
-        this.obtenerProductos();
-        this.scope.$broadcast('guia/recargarTransito');
-        this.scope.$broadcast('guia/recargarGuia');
-
+        this.scope.$broadcast('guia/recargarProductos');
         $('#modal_guia_despacho').modal('hide');
         common.agregarMensaje('Se ha actualizado el vehiculo exitosamente');
     },

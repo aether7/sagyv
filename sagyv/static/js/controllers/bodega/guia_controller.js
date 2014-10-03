@@ -15,7 +15,7 @@ function GuiaController($scope, service){
 
 GuiaController.mixin({
     addListeners: function(){
-        this.scope.$on('guia/recargarGuia', this.filtrarGuias.bind(this));
+        this.scope.$on('guia/recargarProductos', this.filtrarGuias.bind(this));
     },
 
     filtrarGuias: function(){

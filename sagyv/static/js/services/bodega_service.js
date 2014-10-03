@@ -24,6 +24,16 @@ function BodegaService($http){
             get(url, callback);
         },
 
+        findConsolidados: function(callback){
+            var url = App.urls.get('bodega:obtener_consolidados');
+            get(url, callback);
+        },
+
+        findVehiculos: function(callback){
+            var url = App.urls.get('bodega:obtener_vehiculos_seleccionables');
+            get(url, callback);
+        },
+
         obtenerGuia: function(params, callback){
             var url = App.urls.get('bodega:obtener_guia');
             url = serviceUtil.processURL(url, params);

@@ -408,14 +408,31 @@ class ObtenerProductosTransito(View):
         return HttpResponse(response, content_type="application/json")
 
 
+class ObtenerConsolidados(View):
+    def get(self, req):
+        consolidados = StockVehiculo.objects.get_stock_consolidado()
+        res = []
+
+        for consolidado in consolidados:
+            res.append({
+                'id': consolidado.producto_id,
+                'codigo': consolidado.codigo,
+                'cantidad': consolidado.cantidad
+            })
+
+        res = json.dumps(res, cls=DjangoJSONEncoder)
+        return HttpResponse(res, content_type="application/json")
+
+
+
 index = IndexView.as_view()
-crea_guia = csrf_exempt(CrearGuiaDespachoView.as_view())
-guardar_factura = csrf_exempt(GuardarFactura.as_view())
+crea_guia = CrearGuiaDespachoView.as_view()
+guardar_factura = GuardarFactura.as_view()
 obtener_guia = ObtenerGuiaDespasho.as_view()
 obtener_vehiculos_por_producto = ObtenerVehiculosPorProductoView.as_view()
-recargar_guia = csrf_exempt(RecargaGuia.as_view())
+recargar_guia = RecargaGuia.as_view()
 obtener_id_guia = ObtenerIdGuia.as_view()
 filtrar_guias = FiltrarGuias.as_view()
-
+obtener_consolidados = ObtenerConsolidados.as_view()
 obtener_productos = ObtenerProductos.as_view()
 obtener_productos_transito = ObtenerProductosTransito.as_view()
