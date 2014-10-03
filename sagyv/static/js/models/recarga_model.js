@@ -41,14 +41,15 @@ App.Models.Recarga.prototype = {
 
     esMontoValido: function(){
         var valido = true;
+        this.monto = ""
         if(this.monto){
 
             if(isNaN(this.monto)){
                 valido = false;
-                this.mensajes.monto = "el valor debe ser numérico";
+                this.monto = "el valor debe ser numérico";
             }else if(parseInt(this.monto) < 0){
                 valido = false;
-                this.mensajes.monto = "el valor debe ser positivo";
+                this.monto = "el valor debe ser positivo";
             }
         }
 
