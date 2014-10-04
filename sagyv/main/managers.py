@@ -19,7 +19,7 @@ class StockManager(models.Manager):
 		query.execute(consulta_sql)
 
 		resultado = []
- 
+
 		for row in query.fetchall():
 			p = Stock()
 			p.codigo = row[0]
