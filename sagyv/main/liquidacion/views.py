@@ -8,7 +8,7 @@ from reportlab.lib.units import inch
 from main.helpers.fecha import convierte_texto_fecha, convierte_fecha_texto
 from main.managers import ReportesManager
 
-from main.models import Cliente
+from main.models import Cliente, Trabajador
 from main.models import TarjetaCredito
 from main.models import Producto
 from main.models import GuiaDespacho
@@ -167,23 +167,38 @@ class BalanceLiquidacionView(View):
 
 class Cerrar(TemplateView):
 
+    # def get(self, req):
+    #
+    #     productos = Producto.objects.order_by("nombre")
+    #     clientes = Cliente.objects.order_by("nombre")
+    #
+    #     reporte = templates.ConsumoClientesComerciales()
+    #
+    #     reporte.set_clientes(clientes)
+    #     reporte.set_productos(productos)
+    #
+    #     datos = ReportesManager().get_consumos_cliente_producto()
+    #     excel = reporte.construir_reporte(datos)
+    #
+    #     response = HttpResponse(excel, content_type='application/vnd.ms-excel')
+    #     response['Content-Disposition'] = 'attachment; filename="consumo_clientes_comerciales.xls"'
+    #
+    #     return response
+
     def get(self, req):
 
         productos = Producto.objects.order_by("nombre")
-        clientes = Cliente.objects.order_by("nombre")
+        choferes = Trabajador.objects.order_by("nombre")
 
-        reporte = templates.ConsumoClientesComerciales()
+        reporte = templates.KilosDeVentasPorChofer()
 
-        reporte.set_clientes(clientes)
-        reporte.set_productos(productos)
-
-        datos = ReportesManager().get_consumos_cliente_producto()
-        excel = reporte.construir_reporte(datos)
-
+        datos = ReportesManager().get_kilos_vendidos_trabajor()
+        excel = reporte.construir_reporte(datos,productos,choferes)
         response = HttpResponse(excel, content_type='application/vnd.ms-excel')
-        response['Content-Disposition'] = 'attachment; filename="consumo_clientes_comerciales.xls"'
+        response['Content-Disposition'] = 'attachment; filename="%s.xls"'%(reporte.nombre)
 
         return response
+
 
 index = IndexView.as_view()
 obtener_guia = ObtenerGuiaDespacho.as_view()

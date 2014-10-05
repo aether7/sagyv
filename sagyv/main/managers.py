@@ -1,5 +1,7 @@
 from django.db import connection, models
 from django.db.models import Q
+from main import trabajador
+
 
 class ReportesManager(models.Manager):
 
@@ -32,6 +34,50 @@ class ReportesManager(models.Manager):
             resultado.append(fila)
 
         return resultado
+
+    def get_kilos_vendidos_trabajor(self, fecha_inicio=None, fecha_termino=None):
+
+
+        consulta_sql = """
+                           SELECT trabajador.id, trabajador.nombre,  producto.id, producto.nombre ,
+                                  producto.peso, sum(detalle_v.cantidad) * producto.peso as kilos
+
+                            FROM main_trabajador trabajador
+                                      JOIN main_venta venta on venta.trabajador_id = trabajador.id
+                                      JOIN main_detalleventa detalle_v on venta.id = detalle_v.venta_id
+                                      LEFT  JOIN main_producto producto  on producto.id = detalle_v.producto_id
+                                      JOIN main_tipoproducto tipo_p on producto.tipo_producto_id = tipo_p.id
+                             GROUP BY trabajador.id, trabajador.nombre,tipo_p.nombre, producto.id, producto.nombre ,  producto.peso
+        """
+
+        query = connection.cursor()
+        query.execute(consulta_sql)
+
+        resultado = []
+
+        for row in query.fetchall():
+            fila = KilosVendidos()
+            fila.trabajador_id = row[0]
+            fila.trabajador_nombre = row[1]
+            fila.producto_id = row[2]
+            fila.producto_nombre = row[3]
+            fila.producto_peso = row[4]
+            fila.suma_kilos = row[5]
+
+            resultado.append(fila)
+
+        return resultado
+
+class KilosVendidos(object):
+
+    def __init__(self):
+
+        trabajador_id = 0
+        trabajador_nombre = ""
+        producto_id = 0
+        producto_nombre = ""
+        producto_peso = 0
+        suma_kilos = 0
 
 class ConsumoCliente(object):
 

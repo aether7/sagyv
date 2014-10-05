@@ -410,9 +410,11 @@ LiquidacionController.mixin({
         };
 
         console.log(JSON.stringify(json));
+        window.location.href = url;
+
         return;
 
-        window.location.href = url;
+
     }
 });
 
