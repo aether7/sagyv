@@ -1,80 +1,249 @@
+#-*- coding: utf-8 -*-
 import json
+import datetime
+from django.core.serializers.json import DjangoJSONEncoder
+
 from django.views.generic import TemplateView,View
+from django.db import transaction
 from django.http import HttpResponse
-from main.managers import StockManager
-from main.models import Producto, TipoCambioStock, HistorialStock, PrecioProducto, StockVehiculo
+from main.helpers.fecha import convierte_texto_fecha, convierte_fecha_texto
+
+from main.models import Producto
+from main.models import HistorialStock
+from main.models import PrecioProducto
+from main.models import StockVehiculo
+from main.models import Vehiculo
+from main.models import GuiaDespacho
+from main.models import Factura
 
 class IndexView(TemplateView):
     template_name = "bodega/index.html"
 
-    def get_context_data(self, **kwargs):
-        context = super(IndexView, self).get_context_data(**kwargs)
-        context["productos"] = self.get_productos()
-        context["productos_transito"] = self.get_productos_transito()
-        context["total_stock"] = self.get_stock_total()
+    def get_context_data(self, *args, **kwargs):
+        context = super(IndexView, self).get_context_data(*args, **kwargs)
+        context["vehiculos"] = Vehiculo.objects.get_vehiculos_con_chofer()
 
         return context
 
-    def get_productos(self):
+
+class GuardarFactura(View):
+
+    @transaction.atomic
+    def post(self, req):
+        self.productosActualizados = []
+
+        factura = req.POST.get('factura')
+        fecha = req.POST.get('fecha')
+        precio = req.POST.get('valor')
+        productos = req.POST.get('productos')
+        garantias = req.POST.get('garantias')
+
+        nueva_factura = Factura()
+        nueva_factura.numero_factura = int(factura)
+        nueva_factura.precio = precio
+        nueva_factura.save()
+
+        lista_producto = json.loads(productos)
+        lista_garantias = json.loads(garantias)
+        self.ingreso_productos(nueva_factura, lista_producto)
+        self.salida_garantias(nueva_factura, lista_garantias)
+
+        data = {
+            "status" : "ok",
+            "guia" : {
+                "id" : nueva_factura.id,
+                "fecha" : convierte_fecha_texto(nueva_factura.fecha),
+                "productos" : self.productosActualizados,
+            }
+        }
+
+        return HttpResponse(json.dumps(data), content_type="application/json")
+
+    def ingreso_productos(self, guia, lista):
+        for item in lista:
+            if item["cantidad"] == "":
+                cantidad = 0
+            else:
+                cantidad = int(item["cantidad"])
+
+            producto = Producto.objects.get(pk = item["id"])
+
+            if producto.stock is None:
+                producto.stock = cantidad
+            else:
+                producto.stock += cantidad
+
+            producto.save()
+
+            this_prod = {
+                'id': producto.id,
+                'cantidad': producto.stock
+            }
+
+            self.productosActualizados.append(this_prod)
+            self.crear_historico(producto, cantidad, guia, True)
+
+    def salida_garantias(self, guia, lista):
+        for item in lista:
+            if item["cantidad"] == "":
+                cantidad = 0
+            else:
+                cantidad = int(item["cantidad"])
+
+            producto = Producto.objects.get(codigo = item["codigo"])
+            producto.stock -= cantidad
+            producto.save()
+
+            this_garantia = {
+                'id' : producto.id,
+                'cantidad': producto.stock
+            }
+
+            self.productosActualizados.append(this_garantia)
+            self.crear_historico(producto, cantidad, guia, True)
+
+    def crear_historico(self, producto, cantidad, guia, tipo_operacion):
+        historico = HistorialStock()
+        historico.guia_despacho = None
+        historico.factura = guia
+        historico.producto = producto
+        historico.cantidad = cantidad
+        historico.es_recarga = False
+        historico.save()
+
+
+class ObtenerVehiculosPorProductoView(View):
+
+    def get(self, req):
+        producto_id = int(req.GET.get("producto_id"))
+        stocks_vehiculos = StockVehiculo.objects.filter(producto_id = producto_id)
+
+        resultados = []
+
+        for stock_vehiculo in stocks_vehiculos:
+            resultados.append({
+                "vehiculo" : {
+                    "id" : stock_vehiculo.vehiculo.id,
+                    "patente" : stock_vehiculo.vehiculo.patente,
+                    "numero" : stock_vehiculo.vehiculo.numero
+                },
+                "producto" : {
+                    "cantidad" : stock_vehiculo.cantidad,
+                    "codigo" : stock_vehiculo.producto.codigo
+                }
+            })
+
+        return HttpResponse(json.dumps(resultados), content_type="application/json")
+
+
+class FiltrarGuias(View):
+    def get(self, req):
+        fecha = req.GET.get("fecha")
+
+        if fecha == "null" or fecha is None:
+            guia_results = GuiaDespacho.objects.order_by("id")
+        else:
+            print "FECHA"
+            print fecha
+            guia_results = GuiaDespacho.objects.filter(fecha__startswith=fecha).order_by("id")
+
+        guias = []
+
+        for guia in guia_results:
+            guias.append({
+                "id": guia.id,
+                "numero": guia.numero,
+                "vehiculo": {
+                    "id": guia.vehiculo_id,
+                    "numero": guia.vehiculo.numero
+                },
+                "fecha": convierte_fecha_texto(guia.fecha),
+                "estado" : guia.estado
+            })
+
+        res = { "guias": guias }
+        res = json.dumps(res, cls=DjangoJSONEncoder)
+
+        return HttpResponse(res, content_type="application/json")
+
+
+class ObtenerProductos(View):
+    def get(self, req):
         productos =  Producto.objects.exclude(orden = -1).order_by('orden')
-        return productos
+        response = []
 
-    def get_productos_transito(self):
-        en_trancito = StockVehiculo.stockManager.get_stock()
-        return en_trancito
+        for producto in productos:
+            response.append({
+                "id": producto.id,
+                "codigo": producto.codigo,
+                "stock": producto.stock,
+                "tipo": {
+                    "id": producto.tipo_producto.id,
+                    "nombre": producto.tipo_producto.nombre
+                },
+                "precio": producto.get_precio_producto(),
+                "colorAlerta": producto.get_clase_nivel_alerta()
+            })
 
-    def get_stock_total(self):
-        total = StockManager().get_stock_total()
-        return total
+        response = json.dumps(response, cls=DjangoJSONEncoder)
+        return HttpResponse(response, content_type="application/json")
 
 
-class UpdateStockProductoView(View):
+class ObtenerProductosTransito(View):
+    def get(self, req):
+        productos = StockVehiculo.objects.get_stock_transito()
+        response = []
 
-    def post(self,req):
-        id_producto = req.POST.get("id")
-        num_factura = req.POST.get("num_fact")
-        stock_entra = req.POST.get("agregar_stock")
-        tipo_accion = req.POST.get("accion")
+        for producto in productos:
+            response.append({
+                "id": producto.producto_id,
+                "codigo": producto.codigo,
+                "tipo": producto.nombre,
+                "stock": producto.cantidad
+            })
 
-        accion = TipoCambioStock.objects.get(pk = tipo_accion)
-        producto = Producto.objects.get(pk = id_producto)
-        old_stock = producto.stock
+        response = json.dumps(response, cls=DjangoJSONEncoder)
+        return HttpResponse(response, content_type="application/json")
 
-        hsp = HistorialStock()
-        hsp.producto = producto
-        hsp.cantidad = stock_entra
-        hsp.factura = num_factura
-        hsp.save()
 
-        new_stock = int(old_stock)
+class ObtenerConsolidados(View):
+    def get(self, req):
+        consolidados = StockVehiculo.objects.get_stock_consolidado()
+        res = []
 
-        if tipo_accion == "1":
-            new_stock += int(stock_entra)
-        elif tipo_accion == "2":
-            new_stock -= int(stock_entra)
+        for consolidado in consolidados:
+            res.append({
+                'id': consolidado.producto_id,
+                'codigo': consolidado.codigo,
+                'cantidad': consolidado.cantidad
+            })
 
-        producto.stock = new_stock
-        producto.save()
+        res = json.dumps(res, cls=DjangoJSONEncoder)
+        return HttpResponse(res, content_type="application/json")
 
-        return HttpResponse(new_stock)
 
-class UpdatePrecioProductoView(View):
+class ObtenerVehiculosSeleccionables(View):
+    def get(self, req):
+        vehiculos = Vehiculo.objects.get_vehiculos_con_chofer()
+        response = []
 
-    def post(self,req):
-        cambios = req.POST.get("precios")
-        cambios_productos = json.loads(cambios)
+        for vehiculo in vehiculos:
+            response.append({
+                "id" : vehiculo.id,
+                "numero" : vehiculo.numero,
+                "patente" : vehiculo.patente,
+                "estado_ultima_guia" : vehiculo.get_estado_ultima_guia()
+            })
 
-        for cambio in cambios_productos:
-            producto = Producto.objects.get(pk = cambio["id"])
+        response = json.dumps(response, cls=DjangoJSONEncoder)
+        return HttpResponse(response, content_type="application/json")
 
-            precio_producto = PrecioProducto()
-            precio_producto.producto = producto
-            precio_producto.precio = cambio["valor"]
-            precio_producto.save()
-
-        dato = { "status": "ok" }
-        return HttpResponse(json.dumps(dato), content_type="application/json");
 
 index = IndexView.as_view()
-update_stock = UpdateStockProductoView.as_view()
-update_precio = UpdatePrecioProductoView.as_view()
+guardar_factura = GuardarFactura.as_view()
+obtener_vehiculos_por_producto = ObtenerVehiculosPorProductoView.as_view()
+filtrar_guias = FiltrarGuias.as_view()
+obtener_consolidados = ObtenerConsolidados.as_view()
+obtener_productos = ObtenerProductos.as_view()
+obtener_productos_transito = ObtenerProductosTransito.as_view()
+obtener_vehiculos_seleccionables = ObtenerVehiculosSeleccionables.as_view()

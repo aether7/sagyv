@@ -1,10 +1,25 @@
+#-*- coding: utf-8 -*-
+
 import json
 from django.db import models
+from django.contrib.auth.models import User
 from main.managers import StockManager
+from main.managers import ClienteManager
+from main.managers import TarjetaCreditoManager
+from main.managers import GuiaDespachoManager
+from main.managers import VehiculoManager
+from main.managers import TrabajadorManager
+from main.managers import BoletaTrabajadorManager
+
+"""
+Como nota adicional: Todos los ingresos que sean representados como booleanos
+las columnas con valor 1 son entradas al sistema, mientras que los 0 seran representados
+como salidas del sistema
+"""
 
 class Region(models.Model):
     nombre = models.CharField(max_length=140)
-    orden = models.IntegerField()
+    orden = models.IntegerField(null = True)
 
     def __unicode__(self):
         return self.nombre
@@ -19,6 +34,7 @@ class Comuna(models.Model):
 
     def __unicode__(self):
         return self.nombre
+
 
 class Herramienta(models.Model):
     nombre = models.CharField(max_length=140)
@@ -41,17 +57,40 @@ class Vehiculo(models.Model):
     patente = models.CharField(max_length=140)
     fecha_revision_tecnica = models.DateField()
     km = models.IntegerField()
-    estado_sec = models.BooleanField(default=True)
-    estado_pago = models.BooleanField(default=True)
+    estado_sec = models.NullBooleanField()
+    estado_pago = models.NullBooleanField()
+
+    objects = VehiculoManager()
+
+    def get_nombre_ultimo_chofer(self):
+        trabajador_vehiculo = TrabajadorVehiculo.objects.filter(vehiculo_id = self.id, activo = True)
+
+        if not trabajador_vehiculo.exists():
+            return "No anexado"
+        else:
+            return trabajador_vehiculo[0].trabajador.get_nombre_completo()
 
     def get_ultimo_chofer(self):
         trabajador_vehiculo = TrabajadorVehiculo.objects.filter(vehiculo_id = self.id, activo = True)
 
-        if len(trabajador_vehiculo) == 0:
-            return "No anexado"
+        if not trabajador_vehiculo.exists():
+            return None
         else:
-            print trabajador_vehiculo
-            return trabajador_vehiculo[0].trabajador.get_nombre_completo()
+            return trabajador_vehiculo[0].trabajador
+
+    def get_ultimo_chofer_id(self):
+        trabajador_vehiculo = TrabajadorVehiculo.objects.filter(vehiculo_id = self.id, activo = True)
+
+        if not trabajador_vehiculo.exists():
+            return 0
+        else:
+            return trabajador_vehiculo[0].trabajador.id
+
+    def get_estado_ultima_guia(self):
+        queryset = GuiaDespacho.objects.filter(vehiculo_id = self.id)
+        ultima_guia = queryset.latest("id")
+
+        return ultima_guia.estado
 
     def __unicode__(self):
         return self.patente
@@ -119,13 +158,6 @@ class SistemaSalud(models.Model):
         verbose_name_plural = "sistemas salud"
 
 
-class Isapre(models.Model):
-    nombre = models.CharField(max_length=140)
-
-    def __unicode__(self):
-        return self.nombre
-
-
 class EstadoCivil(models.Model):
     nombre = models.CharField(max_length=140)
 
@@ -133,11 +165,20 @@ class EstadoCivil(models.Model):
         return self.nombre
 
 
+class EstadoVacacion(models.Model):
+    nombre = models.CharField(max_length=140)
+
+    def __unicode__(self):
+        return self.nombre
+
+    class Meta:
+        verbose_name_plural = "estados de vacaciones"
+
+
 class Trabajador(models.Model):
     nombre = models.CharField(max_length=140)
     apellido = models.CharField(max_length=140)
-    rut = models.IntegerField()
-    dv = models.CharField(max_length=1)
+    rut = models.CharField(max_length=140)
     domicilio = models.CharField(max_length=140,null=True,blank=True)
     nacimiento = models.DateField(null=True,blank=True)
     fecha_inicio_contrato = models.DateField(null=True,blank=True)
@@ -145,7 +186,8 @@ class Trabajador(models.Model):
     afp = models.ForeignKey(Afp,null=True,blank=True)
     sistema_salud = models.ForeignKey(SistemaSalud,null=True,default=1)
     estado_civil = models.ForeignKey(EstadoCivil,null=True,default=1)
-    estado_vacaciones = models.NullBooleanField()
+
+    objects = TrabajadorManager()
 
     def get_nombre_completo(self):
         return self.nombre + " " + self.apellido
@@ -161,11 +203,32 @@ class Trabajador(models.Model):
 
         return json.dumps(data)
 
+    def get_vacacion(self):
+        ultima_vacacion = self.vacacion_set.order_by("-id")[0]
+
+        return ultima_vacacion.__unicode__()
+
+    def get_id_vacacion(self):
+        ultima_vacacion = self.vacacion_set.order_by("-id")[0]
+
+        return ultima_vacacion.estado_vacacion.id
+
     def __unicode__(self):
         return self.nombre + ' ' + self.apellido
 
     class Meta:
         verbose_name_plural = "trabajadores"
+
+
+class Vacacion(models.Model):
+    trabajador = models.ForeignKey(Trabajador)
+    estado_vacacion = models.ForeignKey(EstadoVacacion)
+    fecha_inicio = models.DateField(null=True)
+    dias_restantes = models.IntegerField(null=True)
+    activo = models.NullBooleanField()
+
+    def __unicode__(self):
+        return  self.estado_vacacion.nombre
 
 
 class CargaFamiliar(models.Model):
@@ -198,6 +261,7 @@ class TrabajadorVehiculo(models.Model):
 
 
 class TipoProducto(models.Model):
+    GARANTIA = 3
     nombre = models.CharField(max_length=140)
 
     def __unicode__(self):
@@ -206,23 +270,48 @@ class TipoProducto(models.Model):
 
 class Producto(models.Model):
     codigo = models.IntegerField()
-    nombre = models.CharField(max_length=140)
-    peso = models.IntegerField(null=True)
+    nombre = models.CharField(max_length = 140)
+    peso = models.IntegerField(null = True)
     tipo_producto = models.ForeignKey(TipoProducto)
-    stock = models.IntegerField(default=0)
-    orden =  models.IntegerField(default=0)
+    stock = models.IntegerField(default = 0)
+    nivel_critico = models.IntegerField(null = True)
+    orden =  models.IntegerField(default = 0)
 
     def __unicode__(self):
         return str(self.codigo) + " " +self.nombre
 
     def get_precio_producto(self):
-        ultimo_precio = PrecioProducto.objects.filter(producto_id=self.id).order_by("-id")
+        ultimo_precio = PrecioProducto.objects.filter(producto_id = self.id).order_by("-id")
         precio = 0
 
         if len(ultimo_precio) >= 1:
             precio = ultimo_precio[0].precio
 
         return precio
+
+    def get_nombre_tipo(self):
+        return self.nombre + " " + self.tipo_producto.nombre
+
+    def get_clase_nivel_alerta(self):
+        clase_alerta = "text-"
+
+        if self.nivel_critico is None:
+            nivel_critico = 50
+        else:
+            nivel_critico = self.nivel_critico
+
+        if self.stock <= nivel_critico:
+            clase_alerta += "danger"
+        else:
+            clase_alerta += "success"
+
+        if self.es_garantia():
+            clase_alerta = ""
+
+        return clase_alerta
+
+    def es_garantia(self):
+        return self.tipo_producto_id == TipoProducto.GARANTIA
 
 
 class TipoCambioStock(models.Model):
@@ -231,11 +320,45 @@ class TipoCambioStock(models.Model):
     def __unicode__(self):
         return self.nombre
 
+
+class GuiaDespacho(models.Model):
+    numero = models.IntegerField(null = True)
+    vehiculo = models.ForeignKey(Vehiculo, null=True)
+    fecha = models.DateTimeField(auto_now_add=True)
+    valor_total = models.IntegerField(default=0)
+    estado = models.NullBooleanField()
+
+    objects = GuiaDespachoManager()
+
+    def __unicode__(self):
+        return str(self.numero)
+
+
+class AbonoGuia(models.Model):
+    guia_despacho = models.ForeignKey(GuiaDespacho)
+    monto = models.IntegerField()
+    fecha = models.DateField(auto_now_add=True)
+
+    def __unicode__(self):
+        return str(self.guia_despacho.numero)
+
+
+class Factura(models.Model):
+    numero_factura = models.IntegerField()
+    fecha = models.DateTimeField(auto_now_add=True)
+    precio = models.IntegerField()
+
+    def __unicode__(self):
+        return str(self.numero_factura)
+
+
 class HistorialStock(models.Model):
+    guia_despacho = models.ForeignKey(GuiaDespacho, null=True)
+    factura = models.ForeignKey(Factura, null=True)
     producto = models.ForeignKey(Producto)
     cantidad = models.IntegerField()
-    factura = models.IntegerField()
-    fecha = models.DateField(auto_now_add=True)
+    fecha = models.DateField(auto_now_add = True)
+    es_recarga = models.NullBooleanField()
 
     def __unicode__(self):
         return ""
@@ -248,10 +371,19 @@ class TipoTarjeta(models.Model):
         return self.nombre
 
 
+class Banco(models.Model):
+    nombre = models.CharField(max_length=255)
+
+    def __unicode__(self):
+        return self.nombre
+
+
 class TarjetaCredito(models.Model):
     nombre = models.CharField(max_length=140)
     codigo = models.CharField(max_length=140, null=True)
     tipo_tarjeta = models.ForeignKey(TipoTarjeta)
+
+    objects = TarjetaCreditoManager()
 
     def __unicode__(self):
         return self.nombre + " " + self.codigo
@@ -277,21 +409,47 @@ class TipoDescuento(models.Model):
 class DescuentoCliente(models.Model):
     monto_descuento = models.IntegerField()
     tipo_descuento = models.ForeignKey(TipoDescuento)
+    producto = models.ForeignKey(Producto, null=True)
 
     def es_cliente_sin_descuento(self):
         return self.tipo_descuento.id == 1
 
+    def get_json_string(self):
+        if self.id == 1:
+            return "Sin descuento"
+
+        if self.tipo_descuento.id == 1:
+            texto = "$ %s (%s)"
+        else:
+            texto = "%s % (%s)"
+
+        return texto % (self.monto_descuento, self.producto.codigo)
+
     def __unicode__(self):
-        return unicode(str(self.monto_descuento))
+        if self.id == 1:
+            return unicode("Sin descuento")
+        else:
+            tipo = self.tipo_descuento.id == 1 and "$" or "%"
+            producto = self.producto.nombre + " " + self.producto.tipo_producto.nombre
+            texto = "%s %s en %s" % (tipo, self.monto_descuento, producto)
+
+            return unicode(texto)
 
 
 class Cliente(models.Model):
+    nombre = models.CharField(max_length=140)
     giro = models.CharField(max_length=140)
     direccion = models.TextField()
-    telefono = models.CharField(max_length=140)
+    telefono = models.CharField(max_length=140, null=True)
     rut = models.CharField(max_length=140)
     situacion_comercial = models.ForeignKey(DescuentoCliente)
-    credito = models.IntegerField(null=True)
+    credito = models.NullBooleanField()
+    dispensador = models.NullBooleanField()
+    es_lipigas = models.NullBooleanField()
+    es_propio = models.NullBooleanField()
+    observacion = models.CharField(max_length=500, null=True)
+
+    objects = ClienteManager()
 
     def __unicode__(self):
         return self.nombre + " " + self.telefono
@@ -331,8 +489,6 @@ class HistorialCambioVehiculo(models.Model):
         return self.terminal.codigo + "(" + self.vehiculo.p + ") " + self.fecha
 
 
-#crear tabla procedencia
-
 class Venta(models.Model):
     numero_serie = models.IntegerField(null=True)
     trabajador = models.ForeignKey(Trabajador)
@@ -341,12 +497,20 @@ class Venta(models.Model):
     fecha = models.DateTimeField()
     tipo_pago = models.ForeignKey(TipoPago)
     descuento = models.IntegerField()
-    cupon_asociado = models.NullBooleanField()
     descripcion_descuento = models.CharField(max_length=140,null=True)
-    #averiguar procedencia
 
     def __unicode__(self):
         return self.monto
+
+
+class DetalleVenta(models.Model):
+    cantidad = models.IntegerField()
+    venta = models.ForeignKey(Venta)
+    producto = models.ForeignKey(Producto)
+    monto = models.IntegerField()
+
+    def __unicode__(self):
+        return self.producto + " " + self.cantidad
 
 
 class Cupon(models.Model):
@@ -415,11 +579,41 @@ class PrecioProducto(models.Model):
     def __unicode__(self):
         return str(self.precio)
 
+
 class StockVehiculo(models.Model):
     vehiculo = models.ForeignKey(Vehiculo)
     producto = models.ForeignKey(Producto)
     cantidad = models.IntegerField(null=True)
-    stockManager = StockManager()
+
+    objects = StockManager()
+
+    def get_productos_vehiculos(self):
+        stocks_vehiculos = StockVehiculo.objects.filter(producto = self.producto, vehiculo = self.vehiculo)
+        return stocks_vehiculos
 
     def __unicode__(self):
         return str(self.vehiculo.patente) + " -> (cod " + str(self.producto.codigo) + ": " + str(self.cantidad) + ")"
+
+
+class LogSistema(models.Model):
+    CREAR = 1
+    ACTUALIZAR = 2
+    BORRAR = 3
+    descripcion = models.TextField(null = True)
+    fecha = models.DateTimeField(auto_now_add = True)
+    tipo_accion = models.IntegerField()
+    user = models.ForeignKey(User)
+    tabla = models.CharField(max_length = 140)
+    registro_id = models.IntegerField()
+
+
+class BoletaTrabajador(models.Model):
+    boleta_inicial = models.IntegerField(default = 1)
+    boleta_final = models.IntegerField(default = 2)
+    actual = models.IntegerField(default = 1)
+    trabajador = models.ForeignKey(Trabajador)
+    fecha_creacion = models.DateTimeField(auto_now_add = True)
+    fecha_modificacion = models.DateTimeField(auto_now = True)
+    activo = models.NullBooleanField()
+
+    objects = BoletaTrabajadorManager()

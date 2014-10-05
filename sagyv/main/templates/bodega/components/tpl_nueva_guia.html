@@ -1,0 +1,18 @@
+{% verbatim %}
+<tr>
+    <td>{{ numero_guia }}</td>
+    <td>{{ numero_vehiculo }}</td>
+    <td>{{ fecha_guia }}</td>
+    <td>
+        <a href class="icon-search" data-accion="mostrar_detalle"
+            data-guia-id="{{ id }}"
+            data-ng-click="guia.verGuia({{ id }})"></a>
+
+        <a href data-accion="recargar_guia"
+            data-guia-id="{{ id }}"
+            data-ng-click="recarga.iniciarRecarga()">
+            Recargar
+        </a>
+    </td>
+</tr>
+{% endverbatim %}

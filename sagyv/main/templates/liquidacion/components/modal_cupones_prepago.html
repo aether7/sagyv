@@ -1,0 +1,62 @@
+<div id="modal_cupones_prepago" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4>Cupones Prepago</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="numero_prepago" class="control-label">Número</label>
+                    <input id="numero_prepago" class="form-control"
+                        type="text" value="" data-ng-model="cpCtrl.cuponPrepago.numero" />
+                    <span class="text-danger"
+                        data-ng-show="cpCtrl.cuponPrepago.mensajes.numero"
+                        data-ng-bind="cpCtrl.cuponPrepago.mensajes.numero"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="cliente_prepago" class="control-label">Cliente</label>
+                    <select id="cliente_prepago" class="form-control"
+                        data-ng-model="cpCtrl.cuponPrepago.clienteId">
+                    {% for cliente in clientes %}
+                    <option value="{{ cliente.id }}">{{ cliente.nombre }} - {{ cliente.giro}}</option>
+                    {% endfor %}
+                    </select>
+                    <span class="text-danger"
+                        data-ng-show="cpCtrl.cuponPrepago.mensajes.clienteId"
+                        data-ng-bind="cpCtrl.cuponPrepago.mensajes.clienteId"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="formato_prepago" class="control-label">Formato</label>
+                    <select id="formato_prepago" class="form-control"
+                        data-ng-model="cpCtrl.cuponPrepago.formatoId">
+                        {% for producto in productos %}
+                        <option value="{{ producto.id }}">{{ producto.codigo }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="text-danger"
+                        data-ng-show="cpCtrl.cuponPrepago.mensajes.formatoId"
+                        data-ng-bind="cpCtrl.cuponPrepago.mensajes.formatoId"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="descuento_prepago" class="control-label">Descuento</label>
+                    <input id="descuento_prepago" class="form-control"
+                        type="text" value=""
+                        data-ng-model="cpCtrl.cuponPrepago.descuento" />
+                    <span class="text-danger"
+                        data-ng-show="cpCtrl.cuponPrepago.mensajes.descuento"
+                        data-ng-bind="cpCtrl.cuponPrepago.mensajes.descuento"></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button class="btn btn-primary" data-ng-click="cpCtrl.guardarCuponPrepago()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,81 @@
+<div id="modal_voucher_transbank" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4>Vouchers de Transbank</h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="form-group">
+                    <div class="col-xs-4">
+                        <label for="tarjeta_comercial_transbank" class="control-label">Tipo de tarjeta</label>
+                        <select id="tarjeta_comercial_transbank" class="form-control"
+                            data-ng-model="vtCtrl.idTarjeta">
+                            {% for tarjeta_bancaria in tarjetas_bancarias %}
+                            <option value="{{ tarjeta_bancaria.id }}">{{ tarjeta_bancaria.nombre }}</option>
+                            {% endfor %}
+                        </select>
+
+                        <span class="text-danger"
+                            data-ng-show="vtCtrl.mensajes.tarjeta"
+                            data-ng-bind="vtCtrl.mensajes.tarjeta"></span>
+                    </div>
+
+                    <div class="col-xs-4">
+                        <label for="monto_transbank" class="control-label">Monto</label>
+                        <input id="monto_transbank" class="form-control" type="text"
+                            data-ng-model="vtCtrl.monto" />
+
+                        <span class="text-danger"
+                            data-ng-show="vtCtrl.mensajes.monto"
+                            data-ng-bind="vtCtrl.mensajes.monto"></span>
+                    </div>
+                    <div class="col-xs-3">
+                        <label for="cuotas_transbank" class="control-label">Cuotas</label>
+                        <input id="cuotas_transbank" class="form-control" type="text"
+                            data-ng-model="vtCtrl.cuotas" />
+
+                        <span class="text-danger"
+                            data-ng-show="vtCtrl.mensajes.cuotas"
+                            data-ng-bind="vtCtrl.mensajes.cuotas"></span>
+                    </div>
+                    <div class="col-xs-1 col-ajustada">
+                        <button class="btn btn-default" data-ng-click="vtCtrl.addTarjeta()">+</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <table id="lista_tarjetas_transbank" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Tarjeta</th>
+                                <th>Monto</th>
+                                <th>Cuotas</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="tarjeta in vtCtrl.voucher.tarjetas">
+                                <td data-ng-bind="tarjeta.nombre"></td>
+                                <td data-ng-bind="tarjeta.monto | currency"></td>
+                                <td data-ng-bind="tarjeta.cuotas"></td>
+                                <td>
+                                    <a href data-ng-click="vtCtrl.removeTarjeta($index)">eliminar</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button class="btn btn-primary" data-ng-click="vtCtrl.guardar()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+

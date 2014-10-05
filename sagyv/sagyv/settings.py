@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -20,12 +21,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = '*k#9n$x8&_5s)p=p*rd2e5o*dv*3qp=nfq&5jilgq%w9otww)o'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
-ALLOWED_HOSTS = ["*"]
-
+ALLOWED_HOSTS = [".rlay.cl"]
 
 # Application definition
 
@@ -42,10 +41,11 @@ INSTALLED_APPS = (
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    #'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'gadjo.requestprovider.middleware.RequestProvider',
 )
 
 ROOT_URLCONF = 'sagyv.urls'
@@ -69,10 +69,10 @@ DATABASES = {
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
 LANGUAGE_CODE = 'es-CL'
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Santiago'
 USE_I18N = True
 USE_L10N = True
-USE_TZ = True
+USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
@@ -80,11 +80,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
-STATIC_URL = '/static/'
-MEDIA_URL = "/media/"
-
-STATIC_ROOT = "/home/rlay/webapps/andrea_static/"
-MEDIA_ROOT = "/home/rlay/webapps/andrea_media/"
+STATIC_ROOT = "/home/rlay/webapps/sagyv_assets_static/"
+MEDIA_ROOT = "/home/rlay/webapps/sagyv_assets_media/"
 
 CSRF_COOKIE_NAME = "andreacsrftoken"
 
@@ -102,6 +99,10 @@ EMAIL_HOST_USER = "rlaysystems@gmail.com"
 EMAIL_HOST_PASSWORD = "realreyes"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+
+TEMPLATE_CONTEXT_PROCESSORS += (
+    "main.context_processors.variables_roles",
+)
 
 try:
     from .local_settings import *

@@ -1,0 +1,25 @@
+<table id="lista_productos" class="table table-striped center">
+    <thead>
+        <tr>
+            <td>codigo</td>
+            <td>Tipo</td>
+            <td>Stock</td>
+            <td>Precio actual</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr data-ng-repeat="item in bodega.productosBodega">
+            <td data-ng-bind="item.codigo"></td>
+            <td data-ng-bind="item.tipo.nombre"></td>
+            <td>
+                {% verbatim %}
+                <span class="{{ item.colorAlerta }}"
+                data-ng-bind="item.stock"></span>
+                {% endverbatim %}
+            </td>
+            <td>
+                <span data-ng-bind="item.precio | currency"></span>
+            </td>
+        </tr>
+    </tbody>
+</table>

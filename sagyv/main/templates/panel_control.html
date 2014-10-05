@@ -3,10 +3,32 @@
 <nav class="navbar navbar-default navbar-right" role="navigation">
     <div class="container-fluid">
         <ul class="nav navbar-nav">
-            <li><a href="#">Trabajadores</a></li>
-            <li><a href="{% url 'cliente:index' %}">Clientes</a></li>
-            <li><a href="{% url 'vehiculos' %}">Vehiculos</a></li>
-            <li><a href="{% url 'liquidacion' %}">Liquidación</a></li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" id="dropdownMenu1"
+                    data-toggle="dropdown">
+                    Mantenedores
+                    <span class="caret"></span>
+                </a>
+
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                    <li role="presentation">
+                        <a href="{% url 'trabajador:index' %}" role="menuitem" tabindex="-1">Trabajadores</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="{% url 'cliente:index' %}"
+                            tabindex="-1" role="menuitem">Clientes / Situación Comercial</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="{% url 'vehiculos:index' %}" tabindex="-1" role="menuitem">Vehículos</a>
+                    </li>
+                    {% if es_admin %}
+                    <li role="presentation">
+                        <a href="{% url 'precios:index' %}" tabindex="-1" role="menuitem">Precios / Stock</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </li>
+            <li><a href="{% url 'liquidacion:index' %}">Liquidación</a></li>
             <li><a href="{% url 'bodega:index' %}">Bodega</a></li>
             <li><a href="#">Reportes</a></li>
             <li><a href="{% url 'logout' %}">Salir</a></li>

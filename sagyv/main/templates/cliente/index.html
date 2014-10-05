@@ -1,243 +1,119 @@
 {% extends "panel_control.html" %}
-{% load static %}
+{% load static from staticfiles %}
+
+{% block css %}
+<style>
+    th{
+        cursor: pointer;
+    }
+
+    .checkbox{
+        display: inline-block;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
 
-<div id="mensaje" class="center alert" style="display:none"></div>
+<h1 class="center">Clientes</h1>
 
-<button id="btn_agregar" class="btn btn-default">Agregar</button>
+{% include "mensaje.html" %}
 
-<table id="tabla_clientes" class="table table-striped">
-	<thead>
-		<tr>
-			<th>Giro</th>
-			<th>Rut</th>
-			<th>Telefono</th>
-			<th>Situacion comercial</th>
-			<th>Acciones</th>
-		</tr>
-	</thead>
-	<tbody>
-		{% for cliente in clientes %}
-		<tr>
-			<td data-columna="giro">{{ cliente.giro }}</td>
-			<td>{{ cliente.rut }}</td>
-			<td data-columna="telefono">{{ cliente.telefono }}</td>
-			<td data-columna="situacion_comercial">
-				{% if cliente.situacion_comercial.es_cliente_sin_descuento %}
-					Sin descuento
-				{% else %}
-					{{ cliente.situacion_comercial.monto_descuento }}
-					{{ cliente.situacion_comercial.tipo_descuento.tipo }}
-				{% endif %}
-			</td>
-			<td>
-				<a href="#" data-accion="editar" data-id="{{ cliente.id }}">Editar</a>
-				<a href="#" data-accion="eliminar" data-id="{{ cliente.id }}">Eliminar</a>
-			</td>
-		</tr>
-		{% endfor %}
-	</tbody>
-</table>
+<ul class="nav nav-tabs" role="tablist" id="my_tab">
+    <li class="active">
+        <a href="#clientes" role="tab" data-toggle="tab">Clientes</a>
+    </li>
+    <li>
+        <a href="#scomerciales" role="tab" data-toggle="tab">Situaciones Comerciales</a>
+    </li>
+</ul>
 
-<div id="modal_agregar" class="modal fade">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button class="close">
-					<span aria-hidden="true">&times;</span>
-					<span class="sr-only">Close</span>
-				</button>
-				<h4 class="modal-title">Agregar nuevo cliente</h4>
-			</div>
-			<div class="modal-body">
-				<form id="f_agregar_cliente" action="{% url 'cliente:crear' %}" method="post">
-					{% csrf_token %}
+<div class="tab-content">
+    <div class="tab-pane active" id="clientes">
+        {% if es_admin %}
+        <div class="col-xs-6">
+            <button id="btn_agregar" class="btn btn-primary">Agregar Cliente</button>
+        </div>
+        {% endif %}
 
-					<div class="form-group">
-						<label for="giro_add" class="control-label">Giro</label>
-						<input id="giro_add" class="form-control" type="text" value="" />
-						<span class="help-block"></span>
-					</div>
+        <form id="f_buscar_cliente" action="{% url 'cliente:buscar_cliente' %}" method="get">
+            <div class="col-xs-6" style="text-align:right">
+                <input id="cliente_busqueda" type="text" value="" />
+                <select id="cliente_opcion">
+                    <option value="">Seleccione</option>
+                    <option value="nombre">Buscar por nombre</option>
+                    <option value="giro">Buscar por giro</option>
+                    <option value="rut">Buscar por RUT</option>
+                </select>
+                <button class="btn btn-primary">Buscar</button>
+            </div>
+        </form>
 
-					<div class="form-group">
-						<label for="direccion_add" class="control-label">Dirección</label>
-						<input id="direccion_add" type="text" class="form-control" value="" />
-						<span class="help-block"></span>
-					</div>
+        {% include "cliente/lista_clientes.html" %}
+    </div>
 
-					<div class="form-group">
-						<label for="telefono_add" class="control-label">Teléfono</label>
-						<input id="telefono_add" type="text" class="form-control" value="" />
-						<span class="help-block"></span>
-					</div>
+    <div class="tab-pane" id="scomerciales">
+        {% if es_admin %}
+        <button id="btn_agregar_situacion" class="btn btn-primary">Agregar Situacion comercial</button>
+        {% endif %}
 
-					<div class="form-group">
-						<label for="rut_add" class="control-label">Rut</label>
-						<input id="rut_add" type="text" class="form-control" value="" />
-						<span class="help-block"></span>
-					</div>
-
-					<div class="form-group">
-						<label for="sit_comercial_add" class="control-label">Situación comercial</label>
-						<select name="sit_comercial_add" id="sit_comercial_add" class="form-control">
-							{% for situacion in situaciones_comerciales %}
-							<option value="{{ situacion.id }}">
-								{% if situacion.tipo_descuento.id == 1 %}
-									$
-								{% elif situacion.tipo_descuento.id == 2 %}
-									%
-								{% endif %}
-
-								{{ situacion.monto_descuento }}
-							</option>
-							{% endfor%}
-						</select>
-						<span class="help-block"></span>
-					</div>
-
-					<div class="checkbox">
-						<label for="credito_add">
-							<input id="credito_add" type="checkbox" value="1" />
-							<span>Crédito</span>
-						</label>
-					</div>
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button class="btn btn-default" data-dismiss="modal">Cancelar</button>
-				<button id="btn_guardar_add" class="btn btn-primary">Guardar</button>
-			</div>
-		</div>
-	</div>
+        {% include "cliente/lista_situaciones_comerciales.html" %}
+    </div>
 </div>
 
-<div id="modal_editar" class="modal fade">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button class="close">
-					<span aria-hidden="true">&times;</span>
-					<span class="sr-only">Close</span>
-				</button>
-				<h4 class="modal-title">Editar Cliente</h4>
-			</div>
-			<div class="modal-body">
-				<form id="f_editar_cliente" action="{% url 'cliente:modificar' %}" method="post">
-					{% csrf_token %}
+{% include "cliente/components/modal_nuevo_cliente.html" %}
+{% include "cliente/components/modal_editar_cliente.html" %}
+{% include "cliente/components/modal_nueva_situacion_comercial.html"%}
+{% include "cliente/components/modal_editar_situacion_comercial.html"%}
+{% include "cliente/components/modal_ver_cliente.html" %}
 
-					<div class="form-group">
-						<label for="giro_update" class="control-label">Giro</label>
-						<input id="giro_update" class="form-control" type="text" value="" />
-						<span class="help-block"></span>
-					</div>
-
-					<div class="form-group">
-						<label for="direccion_update" class="control-label">Dirección</label>
-						<input id="direccion_update" type="text" class="form-control" value="" />
-						<span class="help-block"></span>
-					</div>
-
-					<div class="form-group">
-						<label for="telefono_update" class="control-label">Teléfono</label>
-						<input id="telefono_update" type="text" class="form-control" value="" />
-						<span class="help-block"></span>
-					</div>
-
-					<div class="form-group">
-						<label for="rut_update" class="control-label">Rut</label>
-						<input id="rut_update" type="text" class="form-control" value="" />
-						<span class="help-block"></span>
-					</div>
-
-					<div class="form-group">
-						<label for="sit_comercial_update" class="control-label">Situación comercial</label>
-						<select name="sit_comercial_update" id="sit_comercial_update" class="form-control">
-							{% for situacion in situaciones_comerciales %}
-							<option value="{{ situacion.id }}">
-								{% if situacion.tipo_descuento.id == 1 %}
-									$
-								{% elif situacion.tipo_descuento.id == 2 %}
-									%
-								{% endif %}
-
-								{{ situacion.monto_descuento }}
-							</option>
-							{% endfor%}
-						</select>
-						<span class="help-block"></span>
-					</div>
-
-					<div class="checkbox">
-						<label for="credito_update">
-							<input id="credito_update" type="checkbox" value="1" />
-							<span>Crédito</span>
-						</label>
-					</div>
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button class="btn btn-default" data-dismiss="modal">Cancelar</button>
-				<button id="btn_guardar_update" class="btn btn-primary">Guardar</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-<div class="modal fade">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button class="close">
-					<span aria-hidden="true">&times;</span>
-					<span class="sr-only">Close</span>
-				</button>
-				<h4 class="modal-title">Título</h4>
-			</div>
-			<div class="modal-body">
-				asdfasdf
-			</div>
-			<div class="modal-footer">
-				<button class="btn btn-default" data-dismiss="modal">Cancelar</button>
-				<button class="btn btn-primary">Guardar</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-<div class="modal fade">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button class="close">
-					<span aria-hidden="true">&times;</span>
-					<span class="sr-only">Close</span>
-				</button>
-				<h4 class="modal-title">Título</h4>
-			</div>
-			<div class="modal-body">
-				asdfasdf
-			</div>
-			<div class="modal-footer">
-				<button class="btn btn-default" data-dismiss="modal">Cancelar</button>
-				<button class="btn btn-primary">Guardar</button>
-			</div>
-		</div>
-	</div>
-</div>
 {% endblock %}
 
 {% block js %}
 <script src="{% static 'js/vendor/handlebars.min.js' %}"></script>
 <script src="{% static 'js/plugins/jquery.rut.min.js' %}"></script>
-<script src="{% static 'js/controllers/cliente.js' %}"></script>
+<script src="{% static 'js/plugins/jquery.tablesorter.min.js' %}"></script>
+<script src="{% static 'js/common_functions.js' %}"></script>
+
+<script src="{% static 'js/models/cliente_model.js' %}"></script>
+<script src="{% static 'js/models/situacion_comercial_model.js' %}"></script>
+
+<script src="{% static 'js/controllers/cliente_controller.js' %}"></script>
+<script src="{% static 'js/controllers/situacion_comercial_controller.js' %}"></script>
+
+<script src="{% static 'js/views/cliente_view.js' %}"></script>
+<script src="{% static 'js/views/situacion_comercial_view.js' %}"></script>
+
 <script id="tpl_nuevo_cliente" type="text/x-template">
-	{% include "cliente/nuevo_cliente_component.html" %}
+    {% include "cliente/components/tpl_nuevo_cliente.html" %}
 </script>
+<script id="tpl_nueva_situacion" type="text/x-template">
+    {% include "cliente/components/tpl_nueva_situacion_comercial.html" %}
+</script>
+
 <script>
-	App.clienteController = new App.Controllers.Cliente();
-	App.clienteController.setClienteUrl("{% url 'cliente:obtener' 0 %}");
-	App.clienteController.setEliminarUrl("{% url 'cliente:eliminar' %}");
-	App.clienteController.init();
+    App.urls.set("cliente:update","{% url 'cliente:modificar' %}");
+    App.urls.set("cliente:crear","{% url 'cliente:crear' %}");
+    App.urls.set("cliente:obtener","{% url 'cliente:obtener' 0 %}");
+    App.urls.set("cliente:eliminar","{% url 'cliente:eliminar' %}");
+    App.urls.set("cliente:obtener_situacion_comercial","{% url 'cliente:obtener_situacion_comercial' 0 %}");
+    App.urls.set("cliente:crear_situacion_comercial", "{% url 'cliente:crear_situacion_comercial' %}");
+    App.urls.set("cliente:modificar_situacion_comercial", "{% url 'cliente:modificar_situacion_comercial' %}");
+    App.urls.set("cliente:buscar_producto", "{% url 'cliente:buscar_producto' %}");
+
+    App.clienteView = new App.Views.Cliente();
+    App.clienteView.init();
+
+    {% for cliente in clientes %}
+    App.clienteView.addClienteRut("{{ cliente.rut }}");
+    {% endfor %}
+
+    App.situacionView = new App.Views.SituacionComercial();
+    App.situacionView.init();
+
+    {% for sc in situaciones_comerciales %}
+    App.situacionView.addSituacionComercial({{ sc.tipo_descuento.id }},
+        {{ sc.monto_descuento }}, {{ sc.producto.id }});
+    {% endfor %}
 </script>
 {% endblock %}

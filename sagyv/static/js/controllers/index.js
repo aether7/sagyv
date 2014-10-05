@@ -45,17 +45,17 @@ App.Controllers.Index.prototype = {
     },
 
     processResponse: function(data){
-        $("#mensaje").removeClass();
+        $("#mensaje").removeClass("alert-success alert-danger");
 
         switch(data.status){
         case "ok":
-            $("#mensaje").text(data.message).addClass("bg-success");
+            $("#mensaje").text(data.message).addClass("alert-success");
             setTimeout(function(){
                 window.location.href = data.redirect;
             },1500);
             break;
         case "error":
-            $("#mensaje").text(data.message).addClass("bg-danger");
+            $("#mensaje").text(data.message).addClass("alert-danger");
             break;
         default:
             alert("ERROR al recibir información desde el servidor");

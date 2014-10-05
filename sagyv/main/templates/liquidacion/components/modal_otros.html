@@ -1,0 +1,36 @@
+<div id="modal_otros" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4>Otros</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="concepto_otros" class="control-label">Concepto</label>
+                    <input id="concepto_otros" type="text" class="form-control"
+                        value="" data-ng-model="oCtrl.otro.concepto"/>
+                    <span class="text-danger"
+                        data-ng-show="oCtrl.otro.mensajes.concepto"
+                        data-ng-bind="oCtrl.otro.mensajes.concepto"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="monto_otros" class="control-label">Monto</label>
+                    <input id="monto_otros" type="text" class="form-control"
+                        value="" data-ng-model="oCtrl.otro.monto" />
+                    <span class="help-block">Aquí se ingresa signo positivo o negativo para sumar o restar valores</span>
+                    <span class="text-danger"
+                        data-ng-show="oCtrl.otro.mensajes.monto"
+                        data-ng-bind="oCtrl.otro.mensajes.monto"></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button class="btn btn-primary" data-ng-click="oCtrl.guardar()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>

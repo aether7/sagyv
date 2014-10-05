@@ -1,0 +1,63 @@
+{% extends "panel_control.html" %}
+{% load static from staticfiles %}
+
+{% block content %}
+
+{% include "mensaje.html" %}
+
+<section data-ng-app="trabajadorApp" data-ng-controller="TrabajadorController as tc">
+<button id="btn_nuevo_trabajador" class="btn btn-primary" data-ng-click="tc.mostrar()">Nuevo</button>
+
+<table id="lista_trabajadores" class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nombres</th>
+            <th>Apellidos</th>
+            <th>Rut</th>
+            <th>Estado Vacaciones</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="trabajador in tc.trabajadores">
+            <td ng-bind="trabajador.nombre"></td>
+            <td ng-bind="trabajador.apellido"></td>
+            <td ng-bind="trabajador.rut"></td>
+            <td ng-bind="trabajador.estadoVacacion.nombre"></td>
+            <td>
+                <a href class="icon-search" ng-click="tc.verTrabajador($index)"></a>
+                <a href class="icon-pencil" ng-click="tc.editarTrabajador($index)"></a>
+                <a href class="icon-remove" ng-click="tc.eliminarTrabajador($index)"></a>
+                <a href ng-click="tc.anexarBoleta($index)">anexar boleta</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+{% include "trabajador/components/modal_nuevo_trabajador.html" %}
+{% include "trabajador/components/modal_ver_trabajador.html" %}
+{% include "trabajador/components/modal_editar_trabajador.html" %}
+{% include "trabajador/components/modal_anexar_boleta.html" %}
+
+</section>
+
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'js/vendor/angular.min.js' %}"></script>
+<script src="{% static 'js/plugins/angular.provider.js' %}"></script>
+<script src="{% static 'js/plugins/jquery.rut.min.js' %}"></script>
+<script src="{% static 'js/common_functions.js' %}"></script>
+<script src="{% static 'js/bundles/trabajador.bundle.js' %}"></script>
+
+<script>
+    App.urls.set("trabajador:todos", "{% url 'trabajador:todos' %}");
+    App.urls.set("trabajador:obtener","{% url 'trabajador:obtener' %}");
+    App.urls.set("trabajador:eliminar","{% url 'trabajador:eliminar' %}");
+    App.urls.set("trabajador:actualizar","{% url 'trabajador:modificar' %}");
+    App.urls.set("trabajador:crear", "{% url 'trabajador:crear' %}");
+    App.urls.set("trabajador:buscar_boleta", "{% url 'trabajador:buscar_boleta' %}");
+    App.urls.set("trabajador:guardar_boleta", "{% url 'trabajador:guardar_boleta' %}");
+</script>
+
+{% endblock %}

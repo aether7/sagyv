@@ -1,0 +1,22 @@
+<table class="table center table-striped">
+    <thead>
+        <tr>
+            <td>Codigo</td>
+            <td>Tipo</td>
+            <td>Stock</td>
+            <td>Vehiculos</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr data-ng-repeat="producto in transito.productosTransito">
+            <td data-ng-bind="producto.codigo"></td>
+            <td data-ng-bind="producto.tipo"></td>
+            <td data-ng-bind="producto.stock"></td>
+            <td>
+                <a href
+                    class="icon-search"
+                    data-ng-click="transito.verDetalle(producto.id)"></a>
+            </td>
+        </tr>
+    </tbody>
+</table>

@@ -1,0 +1,26 @@
+<form action="#" role="form">
+    <table id="tabla_precios" class="table table-striped">
+        <thead>
+            <tr>
+                <th>Codigo</th>
+                <th>Precio actual</th>
+                <th>Precio nuevo</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="producto in precio.productos">
+                <td ng-bind="producto.codigo"></td>
+                <td ng-bind="producto.precio | currency"></td>
+                <td>
+                    {% verbatim %}
+                    <input type="text" data-columna-normal="{{ $index }}" ng-model="producto.valor" />
+                    {% endverbatim %}
+                    <span class="text-danger" ng-bind="producto.mensaje" ng-if="producto.mensaje"></span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="form-group center">
+        <input type="button" class="btn btn-primary" ng-click="precio.actualizar()" value="Guardar" />
+    </div>
+</form>

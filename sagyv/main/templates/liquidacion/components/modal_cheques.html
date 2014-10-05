@@ -1,0 +1,93 @@
+<div id="modal_cheque" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4>Cheque</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group">
+                    <label for="banco_cheque" class="control-label">Banco</label>
+
+                    <select id="banco_cheque" class="form-control"
+                        data-ng-model="cCtrl.cheque.banco">
+                        {% for banco in bancos %}
+                        <option value="{{ banco.id }}">{{ banco.nombre }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <span class="text-danger"
+                        data-ng-show="cCtrl.cheque.mensajes.banco"
+                        data-ng-bind="cCtrl.cheque.mensajes.banco"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="numero_cheque">Numero de cheque</label>
+                    <input id="numero_cheque" class="form-control"
+                        type="text" value=""
+                        data-ng-model="cCtrl.cheque.numero" />
+                    <span class="text-danger"
+                        data-ng-show="cCtrl.cheque.mensajes.numero"
+                        data-ng-bind="cCtrl.cheque.mensajes.numero"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="monto_cheque">Monto</label>
+                    <input id="monto_cheque" class="form-control"
+                        type="text" value=""
+                        data-ng-model="cCtrl.cheque.monto"/>
+                    <span class="text-danger"
+                        data-ng-show="cCtrl.cheque.mensajes.monto"
+                        data-ng-bind="cCtrl.cheque.mensajes.monto"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="fecha_cheque">Fecha</label>
+                    <input id="fecha_cheque" class="form-control"
+                        type="date" value=""
+                        data-ng-model="cCtrl.cheque.fecha" />
+                    <span class="text-danger"
+                        data-ng-show="cCtrl.cheque.mensajes.fecha"
+                        data-ng-bind="cCtrl.cheque.mensajes.fecha"></span>
+                </div>
+
+                <div class="form-group">
+                    <button class="btn btn-default" data-ng-click="cCtrl.addCheque()">+</button>
+                </div>
+
+                <table id="lita_cheques" class="table table-striped">
+                    <thead>
+                        <th>Banco</th>
+                        <th>N° Cheque</th>
+                        <th>Monto</th>
+                        <th>Fecha</th>
+                        <th>Acciones</th>
+                    </thead>
+                    <tbody>
+                        <tr data-ng-repeat="documento in cCtrl.cheque.cheques">
+                            <td data-ng-bind="documento.banco.nombre"></td>
+                            <td data-ng-bind="documento.numero"></td>
+                            <td data-ng-bind="documento.monto"></td>
+                            <td data-ng-bind="documento.fecha | date:'yyyy-MM-d'"></td>
+                            <td>
+                                <i class="glyphicon glyphicon-remove"
+                                    data-ng-click="cCtrl.removeCheque($index)"></i>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <span class="text-danger"
+                        data-ng-show="cCtrl.cheque.mensajes.cheques"
+                        data-ng-bind="cCtrl.cheque.mensajes.cheques"></span>
+
+                <div class="modal-footer">
+                    <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button class="btn btn-primary" data-ng-click="cCtrl.guardar()">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

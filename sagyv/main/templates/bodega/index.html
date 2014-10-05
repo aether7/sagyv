@@ -1,41 +1,91 @@
 {% extends "panel_control.html" %}
-{% load static %}
+{% load static from staticfiles %}
+{% block css %}
+<style>
+    i[data-accion="eliminar"]{
+        cursor: pointer;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 
 <div id="mensaje" class="center alert" style="display:none"></div>
 
 <ul class="nav nav-tabs" role="tablist" id="myTab">
     <li class="active"><a href="#bodega" role="tab" data-toggle="tab">Bodega</a></li>
+    <li><a href="#guias" role="tab" data-toggle="tab">Guías</a></li>
     <li><a href="#transito" role="tab" data-toggle="tab">En transito</a></li>
-    <li><a href="#precios" role="tab" data-toggle="tab">Precios</a></li>
     <li><a href="#consolidado" role="tab" data-toggle="tab">Consolidado</a></li>
 </ul>
 
-<div class="tab-content">
-    <div class="tab-pane active" id="bodega">
-        {% include "components/productos_bodega.html" %}
+<div class="tab-content" data-ng-app="bodegaApp" data-ng-controller="BodegaController as bodega">
+    <div class="tab-pane active" id="bodega" data-ng-controller="GuiaProductoController as guiaCtrl">
+        <button id="btn_guia_despacho"
+            class="btn btn-primary btn-accion"
+            data-ng-click="bodega.nuevaGuiaDespacho()">
+            Cargar Vehiculo
+        </button>
+        <button id="btn_guia_cargar_producto"
+            class="btn btn-primary btn-accion"
+            data-ng-click="guiaCtrl.nuevaFactura()">
+            Cargar Productos
+        </button>
+
+        {% include "bodega/panel_bodega.html" %}
+        {% include "bodega/components/modal_guia_despacho.html" %}
+        {% include "bodega/components/modal_guia_carga_producto.html" %}
     </div>
 
-    <div class="tab-pane" id="transito">
-        {% include "components/productos_bodega_transito.html" %}
+    <div class="tab-pane" id="transito" data-ng-controller="TransitoController as transito">
+        {% include "bodega/panel_transito.html" %}
+        {% include "bodega/components/modal_ver_detalle.html" %}
     </div>
 
-    <div class="tab-pane" id="precios">
-        {% include "components/precios_productos.html" %}
+    <div class="tab-pane" id="consolidado" data-ng-controller="ConsolidadoController as consolidado">
+        {% include "bodega/panel_consolidados.html" %}
     </div>
 
-    <div class="tab-pane" id="consolidado">
-        {% include "components/consolidados.html" %}
+    <div class="tab-pane" id="guias" data-ng-controller="GuiaController as guia">
+        {% include "bodega/panel_guias.html" %}
+        {% include "bodega/components/modal_mostrar_guia.html" %}
+        {% include "bodega/components/modal_recarga_guia.html" %}
+    </div>
+
+    <div class="tab-pane" id="recargas">
+        <button id="btn_guia_despacho_recarga" class="btn btn-primary btn-accion">
+            Recarga Vehiculo
+        </button>
+        {% include "bodega/panel_recargas.html" %}
     </div>
 </div>
 
-{% include "components/modal_bodega.html" with modo="add"  %}
-
 {% endblock %}
+
 {% block js %}
-<script src="{% static 'js/controllers/bodega.js' %}"></script>
+<script src="{% static 'js/vendor/handlebars.min.js' %}"></script>
+<script src="{% static 'js/common_functions.js' %}"></script>
+<script src="{% static 'js/vendor/underscore.min.js' %}"></script>
+<script src="{% static 'js/vendor/angular.min.js' %}"></script>
+<script src="{% static 'js/plugins/angular.provider.js' %}"></script>
+<script src="{% static 'js/bundles/bodega.bundle.js' %}"></script>
+
 <script>
-    App.bodegaController = new App.Controllers.Bodega();
-    App.bodegaController.init();
+    App.urls.set("bodega:obtener_productos", "{% url 'bodega:obtener_productos' %}");
+    App.urls.set("bodega:obtener_id_guia", "{% url 'bodega:obtener_id_guia' %}");
+    App.urls.set("bodega:crea_guia", "{% url 'bodega:crea_guia' %}");
+    App.urls.set("bodega:obtener_vehiculos_por_producto", "{% url 'bodega:obtener_vehiculos_por_producto' %}");
+    App.urls.set("bodega:obtener_guia", "{% url 'bodega:obtener_guia' %}");
+    App.urls.set("bodega:recargar_guia", "{% url 'bodega:recargar_guia' %}");
+    App.urls.set("bodega:guardar_factura", "{% url 'bodega:guardar_factura' %}");
+    App.urls.set("bodega:filtrar_guias", "{% url 'bodega:filtrar_guias' %}");
+    App.urls.set("bodega:obtener_productos_transito", "{% url 'bodega:obtener_productos_transito' %}");
+    App.urls.set("bodega:obtener_consolidados", "{% url 'bodega:obtener_consolidados' %}");
+
+    App.productos = {};
+
+    {% for producto in productos %}
+        App.productos["{{ producto.id }}"] = {{ producto.stock }};
+    {% endfor %}
 </script>
 {% endblock %}

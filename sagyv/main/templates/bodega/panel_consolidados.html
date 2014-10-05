@@ -1,0 +1,18 @@
+<table class="table table-striped cafe">
+    <thead>
+        <tr>
+            <td>Código</td>
+            <td>Stock</td>
+            <td>Vehiculos</td>
+        </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="item in consolidado.consolidados">
+        <td ng-bind="item.codigo"></td>
+        <td ng-bind="item.cantidad"></td>
+        <td>
+            <a href ng-click="consolidado.verDetalle($index)" class="icon-search"></a>
+        </td>
+    </tr>
+    </tbody>
+</table>

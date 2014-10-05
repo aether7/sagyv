@@ -1,0 +1,47 @@
+<div id="modal_editar_situacion" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal" aria-hidden="true">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title">Editar Situacion Comercial</h4>
+            </div>
+            <div class="modal-body">
+                <form id="f_modificar_situacion" action="{% url 'cliente:modificar_situacion_comercial' %}" method="post">
+                    {% csrf_token %}
+
+                    <div class="form-group">
+                        <label for="descuento_edit" class="control-label">Monto Descuento</label>
+                        <input id="descuento_edit" class="form-control" type="text" value="" />
+                        <span class="help-block"></spam>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sit_tipo_edit" class="control-label">Tipo Descuento</label>
+                        <select name="sit_tipo_edit" id="sit_tipo_edit" class="form-control">
+                            <option value="">---</option>
+                            <option value="1">Descuento Fijo</option>
+                            <option value="2">Descuento Porcentual</option>
+                        </select>
+                        <span class="help-block"></spam>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="producto_edit">Producto Descuento</label>
+                        <select name="producto_edit" id="producto_edit" class="form-control">
+                            {% for producto in productos %}
+                            <option value="{{ producto.id }}">{{ producto.get_nombre_tipo }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button id="btn_update_situacion" class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>

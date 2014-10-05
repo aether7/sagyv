@@ -1,0 +1,38 @@
+<section class="panel panel-default panel-cabecera">
+    <div class="panel-heading">
+        <h3 class="panel-title">Datos del chofer</h3>
+    </div>
+
+    <div>
+        <label for="numero_guia">Nº guía</label>
+        <input id="numero_guia" type="text" value="" data-ng-model="liqCtrl.guia.numero" />
+
+        <label for="fecha">Fecha</label>
+        <input id="fecha" type="date" value="" data-ng-model="liqCtrl.guia.fecha" />
+
+        <label for="numero_boleta">Nº de boleta</label>
+        <input id="numero_boleta" type="text" value="" data-ng-model="liqCtrl.guia.boleta" />
+
+        <label for="kilos_vendidos">Kilos vendidos</label>
+        {% verbatim %}
+        <span data-ng-bind-template="{{ liqCtrl.kilosVendidos }} Kg."></span>
+        {% endverbatim %}
+    </div>
+
+    <div>
+        <label for="nombre_chofer">Chofer</label>
+        <input id="nombre_chofer" type="text" data-ng-model="liqCtrl.vehiculo.chofer" readonly value="" />
+
+        <label for="kilometraje">KM actual</label>
+
+        <input id="kilometraje" type="text" value=""
+            data-ng-model="liqCtrl.vehiculo.kmActual"
+            data-ng-keyup="liqCtrl.actualizarKilometraje()" />
+
+        <label for="km_recorridos">KM recorridos</label>
+
+        <input id="km_recorridos" type="text"
+            value="" readonly
+            data-ng-model="liqCtrl.vehiculo.kilometrosRecorridos" />
+    </div>
+</section>

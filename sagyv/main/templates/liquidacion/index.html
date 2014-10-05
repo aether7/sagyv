@@ -1,127 +1,164 @@
 {% extends "panel_control.html" %}
-{% load static %}
+{% load static from staticfiles %}
+
+{% block css %}
+<style>
+    #tabla_ventas thead tr th, #tabla_vouchers thead tr th{
+        text-align: center;
+    }
+
+    .celda-header{
+        text-align: center !important;
+        vertical-align: middle !important;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-    <input id="balance_liquidacion" type="hidden" value="{% url 'balance_liquidacion' %}" />
+    {% include "mensaje.html" %}
 
-    <section class="container">
-        <article class="pull-right">
-            Guía # : <input id="guia_despacho" type="text" value="" />
-        </article>
+    <section id="liquidacion" class="panel-liquidacion"
+        data-ng-app="liquidacionApp" data-ng-controller="LiquidacionController as liqCtrl">
 
-        <article class="pull-right">
-            <input id="busca_trabajador" type="search" value="" placeholder="Nombre trabajador" />
-            <span class="glyphicon glyphicon-search"></span>
-        </article>
-
-        <article class="pull-right">
-            <input type="text" type="search" value="" placeholder="Nº móvil" />
-            <span class="glyphicon glyphicon-search"></span>
-        </article>
-    </section>
-
-    <section class="container" style="margin-top:4em">
-        <article class="row">
-
-            <div id="stock_inicial" class="col-md-4 list-group">
-                {% for producto in productos %}
-                    <a href="javascript:;" class="list-group-item" data-cantidad="{{producto.stock}}">
-                        {{ producto.codigo }} - {{ producto.tipo_producto.nombre }} ({{ producto.peso }} Kg)
-                        <span class="badge" id="id_initial_{{producto.id}}">{{ producto.stock }}</span>
-                    </a>
+        <section class="panel-busqueda">
+            <label for="guias_despacho">Guía despacho</label>
+            <select id="guias_despacho" data-ng-model="liqCtrl.idGuiaDespacho">
+                {% for guia_despacho in guias_despacho %}
+                <option value="{{ guia_despacho.id }}" data-id="{{ guia_despacho.id }}">{{ guia_despacho.numero }}</option>
                 {% endfor %}
-            </div>
-
-            <div id="stock_actual" class="col-md-4 list-group">
-                {% for producto in productos %}
-                    <a href="javascript:;" class="list-group-item"
-                        onclick="App.liquidacionController.showModal({{ producto.id }})"
-                        data-cantidad="0" data-id="{{ producto.id }}" data-producto="true">
-                        {{ producto.codigo }} - {{ producto.tipo_producto.nombre }} ({{ producto.peso }} Kg)
-                        <span class="badge" id="id_actual_{{ producto.id }}">0</span>
-                    </a>
-                {% endfor %}
-            </div>
-
-            <div id="stock_gastado" class="col-md-4">
-                {% for producto in productos %}
-                    <a href="javascript:;" class="list-group-item" data-cantidad="0">
-                        {{ producto.codigo }} - {{ producto.tipo_producto.nombre }} ({{ producto.peso }} Kg)
-                        <span class="badge" id="id_gastado_{{ producto.id }}">0</span>
-                    </a>
-                {% endfor %}
-            </div>
-        </article>
-
-        <section class="container" style="margin-top:4em">
-            <form action="" method="post" role="form">
-                <table class="table table-stripped">
-                    <thead>
-                        <tr>
-                            <th>Código</th>
-                            <th>Cantidad en tránsito</th>
-                            <th>LLenos</th>
-                            <th>Vacíos</th>
-                            <th>Total pagar</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for producto in productos %}
-                        {% if producto.stock > 0 %}
-                        <tr>
-                            <td>{{ producto.codigo }}</td>
-                            <td>{{ producto.stock }}</td>
-                            <td><input type="text" value="" placeholder="cantidad llena" /></td>
-                            <td><input type="text" value="" placeholder="cantidad vacíos" /></td>
-                            <td><span>$ 5000</span></td>
-                        </tr>
-                        {% endif %}
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </form>
+            </select>
+            <button class="btn btn-primary" data-ng-click="liqCtrl.buscarGuia()">Buscar</button>
         </section>
 
-        <article class="row center">
-            <button id="btn_guardar_liquidacion" class="btn btn-primary">Guardar</button>
-        </article>
+        {% include "liquidacion/panel_cabecera.html" %}
+        {% include "liquidacion/panel_detalle.html" %}
+        {% include "liquidacion/seccion_venta.html" %}
+
+        <h3>Guías</h3>
+
+        <table id="tabla_ventas" class="table table-bordered table-condensed">
+            <thead>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Número guía</th>
+                    <th>Producto</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <h3>Vouchers</h3>
+
+        <table id="tabla_vouchers" class="table table-bordered table-condensed">
+            <thead>
+                <tr>
+                    <th>Tipo voucher</th>
+                    <th>tarjeta</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <h3>Cheques</h3>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Banco</th>
+                    <th>N° Cheque</th>
+                    <th>Monto</th>
+                    <th>Fecha</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="chk in liqCtrl.cheques">
+                    <td data-ng-bind="chk.banco.nombre"></td>
+                    <td data-ng-bind="chk.numero"></td>
+                    <td data-ng-bind="chk.monto"></td>
+                    <td data-ng-bind="chk.fecha | date:'yyyy-MM-d'"></td>
+                    <td>
+                        <a href data-ng-click="liqCtrl.removeCheque($index)">eliminar</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Cupones de descuento</h3>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Numero</th>
+                    <th>Cliente</th>
+                    <th>Formato</th>
+                    <th>Descuento</th>
+                    <th>Acciones</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="cp in liqCtrl.cuponesPrepago">
+                    <td data-ng-bind="cp.numero"></td>
+                    <td data-ng-bind="cp.cliente.nombre"></td>
+                    <td data-ng-bind="cp.formato.nombre"></td>
+                    <td data-ng-bind="cp.descuento"></td>
+                    <td>
+                        <a href data-ng-click="liqCtrl.removeCuponDescuento($index)">eliminar</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Otro</h3>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Concepto</th>
+                    <th>Monto</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="o in liqCtrl.otro">
+                    <td data-ng-bind="o.concepto"></td>
+                    <td data-ng-bind="o.monto"></td>
+                    <td>
+                        <a href data-ng-click="liqCtrl.removeOtro($index)">eliminar</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <button class="btn btn-primary" data-modal="">Guardar</button>
+        <button class="btn btn-default" data-modal="">VENTA GARANTIAS</button>
+
+        <button class="btn btn-primary" data-modal=""
+            data-ng-click="liqCtrl.cerrarLiquidacion()">CERRAR LIQUIDACIÓN</button>
     </section>
-
-    <div id="modal" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Cantidad utilizada</h4>
-                </div>
-
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label class="control-label" for="cantidad">Cantidad:</label>
-                        <input id="cantidad" type="text" class="form-control" />
-                        <span class="help-block"></span>
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                    <button id="btn_actualizar_venta" type="button" class="btn btn-primary">Guardar</button>
-                </div>
-            </div>
-        </div>
-    </div>
 {% endblock %}
 
 {% block js %}
+<script src="{% static 'js/vendor/angular.min.js' %}"></script>
 <script src="{% static 'js/plugins/typeahead.min.js' %}"></script>
-<script src="{% static 'js/controllers/liquidacion.js' %}"></script>
+<script src="{% static 'js/vendor/handlebars.min.js' %}"></script>
+<script src="{% static 'js/common_functions.js' %}"></script>
+<script src="{% static 'js/bundles/liquidacion.bundle.js' %}"></script>
+
+<script id="tpl_tabla_ventas" type="text/x-handlebars-template">
+{% include "liquidacion/tpl_tabla_ventas.html" %}
+</script>
+
+<script id="tpl_tabla_vouchers" type="text/x-handlebars-template">
+{% include "liquidacion/tpl_tabla_vouchers.html" %}
+</script>
+
 <script>
-    App.liquidacionController = new App.Controllers.Liquidacion();
-
-    {% for trabajador in trabajadores %}
-        App.liquidacionController.addTrabajador("{{ trabajador }}");
-    {% endfor %}
-
-    App.liquidacionController.init();
+    App.urls.set("liquidacion:obtener_guia", "{% url 'liquidacion:obtener_guia' %}");
+    App.urls.set("liquidacion:buscar_cliente", "{% url 'liquidacion:buscar_cliente' %}");
+    App.urls.set("liquidacion:cerrar", "{% url 'liquidacion:cerrar' %}");
 </script>
 {% endblock %}
