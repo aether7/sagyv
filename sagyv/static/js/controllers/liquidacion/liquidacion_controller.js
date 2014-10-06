@@ -172,7 +172,11 @@ LiquidacionController.mixin({
             productos: this.productos,
             ventas: this.ventas,
             vouchers: this.vouchers,
-            cheques: this.cheques
+            cheques: this.cheques,
+            cuponesPrepago: this.cuponesPrepago,
+            otros: this.otro,
+            guias: this.guias
+
         };
 
         console.log(JSON.stringify(json));
