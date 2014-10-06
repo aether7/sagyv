@@ -24,19 +24,23 @@ class ObtenerGuiaDespacho(View):
         items = HistorialStock.objects.filter(guia_despacho = guia)
 
         for item in items:
-            productos.append({
-                "codigo" : item.producto.codigo,
-                "cantidad" : item.cantidad,
-                "es_recarga" : item.es_recarga,
-                "id_producto" : item.producto.id
-            })
+            for producto in productos:
+                if producto['es_recarga'] and producto['id_producto'] == item.producto.id:
+                    producto += item.cantidad
+                else:
+                    productos.append({
+                        'codigo' : item.producto.codigo,
+                        'cantidad' : item.cantidad,
+                        'es_recarga' : item.es_recarga,
+                        'id_producto' : item.producto.id
+                    })
 
         data = {
-            "status" : "ok",
-            "productos" : productos,
-            "fecha" : convierte_fecha_texto(guia.fecha),
-            "movil" : guia.vehiculo.numero,
-            "numero_guia" : guia.numero
+            'status' : 'ok',
+            'productos' : productos,
+            'fecha' : convierte_fecha_texto(guia.fecha),
+            'movil' : guia.vehiculo.numero,
+            'numero_guia' : guia.numero
         }
 
         return HttpResponse(json.dumps(data), content_type="application/json")
