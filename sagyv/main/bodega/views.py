@@ -141,11 +141,11 @@ class FiltrarGuias(View):
         fecha = req.GET.get("fecha")
 
         if fecha == "null" or fecha is None:
-            guia_results = GuiaDespacho.objects.order_by("id")
+            guia_results = GuiaDespacho.objects.order_by("-id")
         else:
             print "FECHA"
             print fecha
-            guia_results = GuiaDespacho.objects.filter(fecha__startswith=fecha).order_by("id")
+            guia_results = GuiaDespacho.objects.filter(fecha__startswith=fecha).order_by("-id")
 
         guias = []
 
