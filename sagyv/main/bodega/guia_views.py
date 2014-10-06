@@ -10,6 +10,7 @@ from main.models import GuiaDespacho
 from main.models import Producto
 from main.models import StockVehiculo
 from main.models import AbonoGuia
+from main.models import Vehiculo
 
 
 class ObtenerGuiaDespacho(View):

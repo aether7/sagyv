@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
+from django.core.serializers.json import DjangoJSONEncoder
 
 from django.http import HttpResponse
 from django.views.generic import TemplateView, View
@@ -64,7 +65,8 @@ class ObtenerGuiaDespacho(View):
             }
         }
 
-        return HttpResponse(json.dumps(datos), content_type="application/json")
+        datos = json.dumps(datos, cls=DjangoJSONEncoder)
+        return HttpResponse(datos, content_type="application/json")
 
     def obtener_productos(self, id_guia):
         lote = HistorialStock.objects.filter(guia_despacho = id_guia)
@@ -107,7 +109,8 @@ class BuscarCliente(View):
         data["situacion_comercial"]["monto"] = opciones["monto"]
         data["situacion_comercial"]["codigo"] = opciones["codigo"]
 
-        return HttpResponse(json.dumps(data), content_type="application/json")
+        data = json.dumps(data,cls=DjangoJSONEncoder)
+        return HttpResponse(data, content_type="application/json")
 
 
     def get_situacion_comercial(self, cliente):
@@ -119,6 +122,7 @@ class BuscarCliente(View):
 
         if cliente.situacion_comercial.id == 1:
             texto = "Sin descuento"
+            opciones["codigo"] = "Sin codigo"
         else:
             if cliente.situacion_comercial.tipo_descuento_id == 1:
                 simbolo = "$"
@@ -127,11 +131,12 @@ class BuscarCliente(View):
                 simbolo = "%"
                 params = [monto, simbolo]
 
+            opciones["codigo"] = cliente.situacion_comercial.producto.codigo
+
             if cliente.credito:
                 texto = "El cliente posee crédito y se descuenta {0} {1} de la compra total"
             else:
                 texto = "El cliente posee {0} {1} en ({2})"
-                opciones["codigo"] = cliente.situacion_comercial.producto.codigo
                 params.append(opciones["codigo"])
 
             for i in range(len(params)):
@@ -141,7 +146,6 @@ class BuscarCliente(View):
         opciones["descripcion_descuento"] = texto
         opciones["simbolo"] = simbolo
         opciones["monto"] = monto
-        opciones["codigo"] = cliente.situacion_comercial.producto.codigo
 
         return opciones
 
@@ -161,8 +165,9 @@ class BalanceLiquidacionView(View):
             valor_total += valor_tmp
 
         dato = {'valor': valor_total}
+        dato = json.dumps(dato, cls=DjangoJSONEncoder)
 
-        return HttpResponse(json.dumps(dato), content_type="application/json")
+        return HttpResponse(dato, content_type="application/json")
 
 
 class Cerrar(TemplateView):
