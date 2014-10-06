@@ -22,6 +22,7 @@ class IndexView(TemplateView):
     def get_context_data(self, *args, **kwargs):
         context = super(IndexView, self).get_context_data(*args, **kwargs)
         context["vehiculos"] = Vehiculo.objects.get_vehiculos_con_chofer()
+        context["productos_guia"] = Producto.objects.exclude(tipo_producto_id = 3).order_by("id")
 
         return context
 
