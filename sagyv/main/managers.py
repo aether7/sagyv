@@ -1,5 +1,5 @@
 from django.db import connection, models
-from django.db.models import Q
+from django.db.models import Q, Sum
 from main import trabajador
 
 
@@ -218,3 +218,29 @@ class BoletaTrabajadorManager(models.Manager):
 
     def obtener_por_trabajador(self, trabajador):
         return self.filter(trabajador=trabajador, activo=True).order_by("-id")[0]
+
+
+class HistorialStockManager(models.Manager):
+    def get_productos_guia_recarga(self, guia):
+        query = self.filter(guia_despacho = guia).values('producto_id','es_recarga','producto__codigo')
+        productos = query.annotate(cantidad_total = Sum('cantidad'))
+
+        return productos
+
+    def get_productos_guia_total(self, guia):
+        query = """
+            SELECT
+                id,
+                fecha,
+                guia_despacho_id,
+                producto_id,
+                factura_id,
+                es_recarga,
+                SUM(cantidad) as cantidad
+            FROM main_historialstock
+            WHERE guia_despacho_id = #{guia_id}
+            GROUP BY producto_id
+        """
+
+        query = query.replace("#{guia_id}", str(guia.id))
+        return self.raw(query)

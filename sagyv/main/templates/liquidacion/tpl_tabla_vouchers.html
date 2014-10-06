@@ -1,6 +1,8 @@
 {% verbatim %}
+
+{{#if lipigas}}
 <tr>
-    <td class="celda-header" rowspan="{{ lipigas.tarjetas.length + 1 }}">Lipigas</td>
+    <td class="celda-header" rowspan="{{ lipigas.tarjetas.length }}">Lipigas</td>
     <td>{{ lipigas.tarjetas.[0].nombre }}</td>
     <td>{{ lipigas.tarjetas.[0].monto }}</td>
 </tr>
@@ -12,9 +14,11 @@
     </tr>
     {{/unless}}
 {{/each}}
+{{/if}}
 
+{{#if transbank}}
 <tr>
-    <td class="celda-header" rowspan="{{ transbank.tarjetas.length + 1 }}">Transbank</td>
+    <td class="celda-header" rowspan="{{ transbank.tarjetas.length }}">Transbank</td>
     <td>{{ transbank.tarjetas.[0].nombre }}</td>
     <td>{{ transbank.tarjetas.[0].monto }}</td>
 </tr>
@@ -26,4 +30,5 @@
     </tr>
     {{/unless}}
 {{/each}}
+{{/if}}
 {% endverbatim %}

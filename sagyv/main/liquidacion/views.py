@@ -69,7 +69,7 @@ class ObtenerGuiaDespacho(View):
         return HttpResponse(datos, content_type="application/json")
 
     def obtener_productos(self, id_guia):
-        lote = HistorialStock.objects.filter(guia_despacho = id_guia)
+        lote = HistorialStock.objects.get_productos_guia_total(id_guia)
         productos = []
 
         for item in lote:

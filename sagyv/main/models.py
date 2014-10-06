@@ -10,6 +10,7 @@ from main.managers import GuiaDespachoManager
 from main.managers import VehiculoManager
 from main.managers import TrabajadorManager
 from main.managers import BoletaTrabajadorManager
+from main.managers import HistorialStockManager
 
 """
 Como nota adicional: Todos los ingresos que sean representados como booleanos
@@ -359,6 +360,8 @@ class HistorialStock(models.Model):
     cantidad = models.IntegerField()
     fecha = models.DateField(auto_now_add = True)
     es_recarga = models.NullBooleanField()
+
+    objects = HistorialStockManager()
 
     def __unicode__(self):
         return ""

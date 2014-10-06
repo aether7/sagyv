@@ -129,6 +129,7 @@ LiquidacionController.mixin({
             fx = Handlebars.compile(tpl),
             template;
 
+        console.log(data);
         template = fx(data);
         $('#' + idTabla + ' tbody').empty().html(template);
     },
