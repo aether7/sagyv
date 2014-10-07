@@ -3,6 +3,7 @@ function ConsolidadoController($scope, service){
     this.service = service;
 
     this.consolidados = [];
+    this.productoConsolidado = {};
 
     this.addListeners();
     this.obtenerConsolidados();
@@ -22,7 +23,15 @@ ConsolidadoController.mixin({
     },
 
     verDetalle: function(index){
-        console.log(this.consolidados[index]);
+        var prod = this.consolidados[index],
+            _this = this;
+
+        this.service.findDetalleConsolidado(prod.id, function(data){
+            _this.productoConsolidado.codigo = prod.codigo;
+            _this.productoConsolidado.cantidadBodega = data.bodega;
+            _this.productoConsolidado.vehiculos = data.transito;
+            $('#modal_consolidados').modal('show');
+        });
     }
 });
 

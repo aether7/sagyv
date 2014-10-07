@@ -7,15 +7,17 @@ from django.views.generic import TemplateView, View
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import inch
 from main.helpers.fecha import convierte_texto_fecha, convierte_fecha_texto
-from main.managers import ReportesManager
 
-from main.models import Cliente, Trabajador
+from main.managers import ReportesManager
+from main.reportes import templates
+
+from main.models import Cliente
+from main.models import Trabajador
 from main.models import TarjetaCredito
 from main.models import Producto
 from main.models import GuiaDespacho
 from main.models import BoletaTrabajador
 from main.models import Banco
-from main.reportes import templates
 from main.models import HistorialStock
 
 

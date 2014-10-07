@@ -72,6 +72,13 @@ function BodegaService($http){
             url += '?producto_id=' + id;
 
             get(url, callback);
+        },
+
+        findDetalleConsolidado: function(producto_id, callback){
+            var url = App.urls.get('bodega:obtener_detalle_consolidado');
+            url += '?producto_id=' + producto_id;
+
+            get(url, callback);
         }
     };
 

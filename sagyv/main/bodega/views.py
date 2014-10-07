@@ -16,6 +16,7 @@ from main.models import Vehiculo
 from main.models import GuiaDespacho
 from main.models import Factura
 
+
 class IndexView(TemplateView):
     template_name = "bodega/index.html"
 
@@ -240,6 +241,29 @@ class ObtenerVehiculosSeleccionables(View):
         return HttpResponse(response, content_type="application/json")
 
 
+class ObtenerDetalleConsolidado(View):
+    def get(self, req):
+        producto_id = int(req.GET.get('producto_id'))
+        producto = Producto.objects.get(pk = producto_id)
+        items = StockVehiculo.objects.filter(producto = producto)
+
+        res = {
+            'bodega': producto.stock,
+            'transito': []
+        }
+
+        for item in items:
+            res['transito'].append({
+                'id': item.vehiculo.id,
+                'numero': item.vehiculo.numero,
+                'codigo': item.producto.codigo,
+                'patente': item.vehiculo.patente,
+                'cantidad': item.cantidad
+            })
+
+        res = json.dumps(res, cls=DjangoJSONEncoder)
+        return HttpResponse(res, content_type="application/json")
+
 index = IndexView.as_view()
 guardar_factura = GuardarFactura.as_view()
 obtener_vehiculos_por_producto = ObtenerVehiculosPorProductoView.as_view()
@@ -248,3 +272,4 @@ obtener_consolidados = ObtenerConsolidados.as_view()
 obtener_productos = ObtenerProductos.as_view()
 obtener_productos_transito = ObtenerProductosTransito.as_view()
 obtener_vehiculos_seleccionables = ObtenerVehiculosSeleccionables.as_view()
+obtener_detalle_consolidado = ObtenerDetalleConsolidado.as_view()

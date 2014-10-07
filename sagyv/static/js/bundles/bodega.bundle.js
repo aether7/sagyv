@@ -129,6 +129,7 @@ function ConsolidadoController($scope, service){
     this.service = service;
 
     this.consolidados = [];
+    this.productoConsolidado = {};
 
     this.addListeners();
     this.obtenerConsolidados();
@@ -148,7 +149,15 @@ ConsolidadoController.mixin({
     },
 
     verDetalle: function(index){
-        console.log(this.consolidados[index]);
+        var prod = this.consolidados[index],
+            _this = this;
+
+        this.service.findDetalleConsolidado(prod.id, function(data){
+            _this.productoConsolidado.codigo = prod.codigo;
+            _this.productoConsolidado.cantidadBodega = data.bodega;
+            _this.productoConsolidado.vehiculos = data.transito;
+            $('#modal_consolidados').modal('show');
+        });
     }
 });
 
@@ -828,6 +837,13 @@ function BodegaService($http){
         findVehiculoByProducto: function(id, callback){
             var url = App.urls.get('bodega:obtener_vehiculos_por_producto');
             url += '?producto_id=' + id;
+
+            get(url, callback);
+        },
+
+        findDetalleConsolidado: function(producto_id, callback){
+            var url = App.urls.get('bodega:obtener_detalle_consolidado');
+            url += '?producto_id=' + producto_id;
 
             get(url, callback);
         }

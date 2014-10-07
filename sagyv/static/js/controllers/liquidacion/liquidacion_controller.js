@@ -39,12 +39,12 @@ LiquidacionController.mixin({
         this.boleta = data.boleta;
         this.guia.boleta = data.boleta.actual;
 
-        tmp = this.guia.fecha.split("-");
-        tmp[1] = (tmp[1] < 10)? "0"+tmp[1]: tmp[1];
-        tmp[2] = (tmp[2] < 10)? "0"+tmp[2]: tmp[2];
+        tmp = this.guia.fecha.split('-');
+        tmp[1] = (tmp[1] < 10)? '0'+tmp[1]: tmp[1];
+        tmp[2] = (tmp[2] < 10)? '0'+tmp[2]: tmp[2];
         tmp[2] = parseInt(tmp[2]) + 1;
 
-        this.guia.fecha = new Date(tmp.join("-"));
+        this.guia.fecha = new Date(tmp.join('-'));
 
 
 
@@ -101,13 +101,13 @@ LiquidacionController.mixin({
     },
 
     suscribeEvents: function(){
-        this.scope.$on("guia:calcularSubTotal", this.calcularSubTotal.bind(this));
-        this.scope.$on("guia:calcularKilos", this.calcularKilos.bind(this));
-        this.scope.$on("guia:agregarVenta", this.addGuia.bind(this));
-        this.scope.$on("guia:agregarVoucher", this.addVouchers.bind(this));
-        this.scope.$on("guia:agregarCheques", this.addCheques.bind(this));
-        this.scope.$on("guia:agregarCuponesPrepago", this.addCuponesPrepago.bind(this));
-        this.scope.$on("guia:agregaOtro", this.addOtro.bind(this));
+        this.scope.$on('guia:calcularSubTotal', this.calcularSubTotal.bind(this));
+        this.scope.$on('guia:calcularKilos', this.calcularKilos.bind(this));
+        this.scope.$on('guia:agregarVenta', this.addGuia.bind(this));
+        this.scope.$on('guia:agregarVoucher', this.addVouchers.bind(this));
+        this.scope.$on('guia:agregarCheques', this.addCheques.bind(this));
+        this.scope.$on('guia:agregarCuponesPrepago', this.addCuponesPrepago.bind(this));
+        this.scope.$on('guia:agregaOtro', this.addOtro.bind(this));
     },
 
     addGuia: function(evt, venta){
@@ -117,7 +117,7 @@ LiquidacionController.mixin({
 
     addVouchers: function(evt, voucher){
         if(!(voucher.tipo in this.vouchers)){
-            throw new TypeError("el voucher {0} no es lipigas ni transbank es {1}".format(index, voucher.tipo));
+            throw new TypeError('el voucher {0} no es lipigas ni transbank es {1}'.format(index, voucher.tipo));
         }
 
         this.vouchers[voucher.tipo] = voucher;
@@ -129,7 +129,6 @@ LiquidacionController.mixin({
             fx = Handlebars.compile(tpl),
             template;
 
-        console.log(data);
         template = fx(data);
         $('#' + idTabla + ' tbody').empty().html(template);
     },
@@ -166,7 +165,7 @@ LiquidacionController.mixin({
     },
 
     cerrarLiquidacion: function(){
-        var url = App.urls.get("liquidacion:cerrar"),
+        var url = App.urls.get('liquidacion:cerrar'),
             json;
 
         json = {

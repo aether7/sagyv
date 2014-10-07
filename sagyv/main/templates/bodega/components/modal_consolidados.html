@@ -1,0 +1,41 @@
+<div id="modal_consolidados" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button data-dismiss="modal" class="close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">
+                    Consolidados <span ng-bind="consolidado.productoConsolidado.codigo"></span>
+                </h4>
+            </div>
+
+            <div class="modal-body">
+                <label for="" class="control-label">Bodega</label>
+                <span class="form-control-static" ng-bind="consolidado.productoConsolidado.cantidadBodega"></span>
+
+                <table class="table table-condensed table-striped">
+                    <thead>
+                        <tr>
+                            <th>Número</th>
+                            <th>Patente</th>
+                            <th>Cantidad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="vehiculo in consolidado.productoConsolidado.vehiculos">
+                            <td ng-bind="vehiculo.numero"></td>
+                            <td ng-bind="vehiculo.patente"></td>
+                            <td ng-bind="vehiculo.cantidad"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="modal-footer">
+                <button data-dismiss="modal" class="btn btn-default">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

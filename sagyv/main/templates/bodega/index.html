@@ -44,6 +44,7 @@
 
     <div class="tab-pane" id="consolidado" data-ng-controller="ConsolidadoController as consolidado">
         {% include "bodega/panel_consolidados.html" %}
+        {% include "bodega/components/modal_consolidados.html" %}
     </div>
 
     <div class="tab-pane" id="guias" data-ng-controller="GuiaController as guia">
@@ -81,6 +82,7 @@
     App.urls.set("bodega:filtrar_guias", "{% url 'bodega:filtrar_guias' %}");
     App.urls.set("bodega:obtener_productos_transito", "{% url 'bodega:obtener_productos_transito' %}");
     App.urls.set("bodega:obtener_consolidados", "{% url 'bodega:obtener_consolidados' %}");
+    App.urls.set("bodega:obtener_detalle_consolidado", "{% url 'bodega:obtener_detalle_consolidado' %}");
 
     App.productos = {};
 
