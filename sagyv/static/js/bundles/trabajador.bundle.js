@@ -473,6 +473,22 @@ function processURL(url, params){
     return url;
 };
 
+function URLMaker(){
+    this.url = null;
+}
+
+URLMaker.prototype.withThis = function(url){
+    this.url = url;
+};
+
+URLMaker.prototype.doQuery = function(obj){
+    var queryStr = [];
+
+    Objects.keys(params).forEach(function(key){
+
+    });
+};
+
 exports.standardError = standardError;
 exports.processURL = processURL;
 

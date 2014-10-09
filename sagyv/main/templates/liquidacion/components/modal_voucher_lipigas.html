@@ -22,6 +22,9 @@
                 <div class="form-group">
                     <label for="terminal_lipigas" class="control-label">Terminal</label>
                     <select id="terminal_lipigas" class="form-control" data-ng-model="vlCtrl.terminal">
+                        {% for terminal in terminales%}
+                        <option value="{{ terminal.id }}">{{ terminal.codigo }}</option>
+                        {% endfor%}
                     </select>
 
                     <span class="text-danger"

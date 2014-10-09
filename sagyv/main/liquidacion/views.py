@@ -19,6 +19,7 @@ from main.models import GuiaDespacho
 from main.models import BoletaTrabajador
 from main.models import Banco
 from main.models import HistorialStock
+from main.models import Terminal
 
 
 class IndexView(TemplateView):
@@ -34,6 +35,7 @@ class IndexView(TemplateView):
         context["tarjetas_bancarias"] = TarjetaCredito.objects.get_tarjetas_bancarias()
         context["productos"] = Producto.objects.exclude(tipo_producto_id=3)
         context["guias_despacho"] = GuiaDespacho.objects.filter(estado = 0).order_by("id")
+        context["terminales"] = Terminal.objects.order_by("id")
 
         return context
 
