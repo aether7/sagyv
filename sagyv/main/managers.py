@@ -217,7 +217,12 @@ class BoletaTrabajadorManager(models.Manager):
         return len(talonarios) > 0 and talonarios[0] or None
 
     def obtener_por_trabajador(self, trabajador):
-        return self.filter(trabajador=trabajador, activo=True).order_by("-id")[0]
+        qs = self.filter(trabajador=trabajador, activo=True).order_by("-id")
+
+        if qs.exists():
+            return qs[0]
+        else:
+            return None
 
 
 class HistorialStockManager(models.Manager):

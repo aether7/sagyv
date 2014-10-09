@@ -25,8 +25,11 @@ URLMaker.prototype.doQuery = function(obj){
     var queryStr = [];
 
     Objects.keys(params).forEach(function(key){
-
+        queryStr.push(key + '=' + params[key]);
     });
+
+    this.url += '?' + queryStr.join('&');
+    return this.url;
 };
 
 exports.standardError = standardError;

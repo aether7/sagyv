@@ -269,19 +269,21 @@ LiquidacionController.mixin({
     },
 
     cargaDatosCabecera: function(data){
+        if(data.boleta.mensaje){
+            alert(data.mensaje);
+            return;
+        }
+
         this.guia = data.guia;
         this.boleta = data.boleta;
         this.guia.boleta = data.boleta.actual;
 
         tmp = this.guia.fecha.split('-');
-        tmp[1] = (tmp[1] < 10)? '0'+tmp[1]: tmp[1];
-        tmp[2] = (tmp[2] < 10)? '0'+tmp[2]: tmp[2];
+        tmp[1] = (tmp[1] < 10)? '0' + tmp[1]: tmp[1];
+        tmp[2] = (tmp[2] < 10)? '0' + tmp[2]: tmp[2];
         tmp[2] = parseInt(tmp[2]) + 1;
 
         this.guia.fecha = new Date(tmp.join('-'));
-
-
-
         this.productos = this.scope.productos = data.productos;
 
         this.vehiculo = data.vehiculo;
@@ -1195,6 +1197,25 @@ function processURL(url, params){
 
     url += '?' + queryStr.join('&');
     return url;
+};
+
+function URLMaker(){
+    this.url = null;
+}
+
+URLMaker.prototype.withThis = function(url){
+    this.url = url;
+};
+
+URLMaker.prototype.doQuery = function(obj){
+    var queryStr = [];
+
+    Objects.keys(params).forEach(function(key){
+        queryStr.push(key + '=' + params[key]);
+    });
+
+    this.url += '?' + queryStr.join('&');
+    return this.url;
 };
 
 exports.standardError = standardError;

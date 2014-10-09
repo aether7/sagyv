@@ -58,14 +58,20 @@ class ObtenerGuiaDespacho(View):
                 "numero": guia.numero,
                 "fecha": convierte_fecha_texto(guia.fecha)
             },
-            "productos": productos,
-            "boleta": {
+            "productos": productos
+        }
+
+        if boleta is None:
+            datos["boleta"] = {
+                "mensaje": "El trabajador no tiene una boleta asociada, por favor anexe una boleta antes de continuar"
+            }
+        else:
+            datos["boleta"] = {
                 "id": boleta.id,
                 "boleta_inicial": boleta.boleta_inicial,
                 "boleta_final": boleta.boleta_final,
                 "actual": boleta.actual
             }
-        }
 
         datos = json.dumps(datos, cls=DjangoJSONEncoder)
         return HttpResponse(datos, content_type="application/json")
