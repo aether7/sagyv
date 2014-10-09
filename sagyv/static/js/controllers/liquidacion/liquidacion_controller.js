@@ -36,7 +36,7 @@ LiquidacionController.mixin({
 
     cargaDatosCabecera: function(data){
         if(data.boleta.mensaje){
-            alert(data.mensaje);
+            alert(data.boleta.mensaje);
             return;
         }
 
