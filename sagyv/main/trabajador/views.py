@@ -149,7 +149,6 @@ class ObtenerTrabajadorView(View):
     def get(self, req):
         id_trabajador = req.GET.get("id")
         worker = Trabajador.objects.get(pk = id_trabajador)
-
         dato = {
             "nombre" : worker.nombre,
             "apellido" : worker.apellido,
@@ -199,7 +198,7 @@ class ObtenerTrabajadorView(View):
         }
 
         try:
-            boleta = worker.boletatrabajador_set.filter(activo = True).order_by("id")[0]
+            boleta = worker.boletatrabajador_set.filter(activo = True).order_by('id')[0]
             json_boleta["boleta_inicial"] = boleta.boleta_inicial
             json_boleta["boleta_actual"] = boleta.actual
             json_boleta["boleta_final"] = boleta.boleta_final

@@ -58,7 +58,7 @@ TrabajadorController.mixin({
     existeTrabajador: function(trabajador){
         var resultado = this.trabajadores.filter(function(t){
             return t.rut === trabajador.rut;
-        });
+        });trabajadores
 
         return resultado.length;
     },
@@ -71,9 +71,15 @@ TrabajadorController.mixin({
     },
 
     verTrabajador: function(index){
+        var _this = this;
         this.trabajador = this.trabajadores[index];
-        console.log(this.trabajador);
-        common.mostrarModal('ver');
+
+        this.service.obtener(this.trabajador.id, function(data){
+            _this.trabajador.boleta.boletaInicial = data.boleta.boleta_inicial
+            _this.trabajador.boleta.boletaActual = data.boleta.boleta_actual
+            _this.trabajador.boleta.boletaFinal = data.boleta.boleta_final
+            common.mostrarModal('ver');
+        });
     },
 
     editarTrabajador: function(index){
