@@ -239,7 +239,7 @@ class HistorialStockManager(models.Manager):
                 SUM(cantidad) as cantidad
             FROM main_historialstock
             WHERE guia_despacho_id = #{guia_id}
-            GROUP BY producto_id
+            GROUP BY producto_id, id
         """
 
         query = query.replace("#{guia_id}", str(guia.id))
