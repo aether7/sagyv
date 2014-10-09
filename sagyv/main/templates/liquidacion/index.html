@@ -70,7 +70,6 @@
                     <th>N° Cheque</th>
                     <th>Monto</th>
                     <th>Fecha</th>
-                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -79,9 +78,6 @@
                     <td data-ng-bind="chk.numero"></td>
                     <td data-ng-bind="chk.monto"></td>
                     <td data-ng-bind="chk.fecha | date:'yyyy-MM-d'"></td>
-                    <td>
-                        <a href data-ng-click="liqCtrl.removeCheque($index)">eliminar</a>
-                    </td>
                 </tr>
             </tbody>
         </table>
@@ -95,8 +91,6 @@
                     <th>Cliente</th>
                     <th>Formato</th>
                     <th>Descuento</th>
-                    <th>Acciones</th>
-
                 </tr>
             </thead>
             <tbody>
@@ -105,9 +99,6 @@
                     <td data-ng-bind="cp.cliente.nombre"></td>
                     <td data-ng-bind="cp.formato.nombre"></td>
                     <td data-ng-bind="cp.descuento"></td>
-                    <td>
-                        <a href data-ng-click="liqCtrl.removeCuponDescuento($index)">eliminar</a>
-                    </td>
                 </tr>
             </tbody>
         </table>
@@ -119,22 +110,15 @@
                 <tr>
                     <th>Concepto</th>
                     <th>Monto</th>
-                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 <tr data-ng-repeat="o in liqCtrl.otro">
                     <td data-ng-bind="o.concepto"></td>
                     <td data-ng-bind="o.monto"></td>
-                    <td>
-                        <a href data-ng-click="liqCtrl.removeOtro($index)">eliminar</a>
-                    </td>
                 </tr>
             </tbody>
         </table>
-
-        <!--button class="btn btn-primary" data-modal="">Guardar</button-->
-        <!--button class="btn btn-default" data-modal="">VENTA GARANTIAS</button-->
 
         <button class="btn btn-primary" data-modal=""
             data-ng-click="liqCtrl.cerrarLiquidacion()">CERRAR LIQUIDACIÓN</button>
@@ -158,9 +142,6 @@
 
 <script>
     Handlebars.registerHelper('largo', function(el){
-        console.log(el);
-        console.log(arguments);
-
         return el.length + 1;
     });
 </script>
