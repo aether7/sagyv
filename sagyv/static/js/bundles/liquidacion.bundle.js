@@ -191,8 +191,6 @@ GuiaPropiaController.mixin({
         producto.descuento = this.descuento;
         producto.calcularTotal();
 
-        console.log(this.venta);
-
         this.venta.addProducto(producto);
         this.producto = {};
     },
@@ -370,8 +368,7 @@ LiquidacionController.mixin({
     },
 
     addOtro: function(evt, otro){
-        var self = this;
-        self.otro.push(otro);
+        this.otro.push(otro);
     },
 
     removeOtro: function(indice){
@@ -379,9 +376,7 @@ LiquidacionController.mixin({
     },
 
     addCuponesPrepago: function(evt, cupones){
-        var self = this;
-        self.cuponesPrepago.push(cupones);
-        console.log(self.cuponesPrepago);
+        this.cuponesPrepago.push(cupones);
     },
 
     removeCuponDescuento: function(indice){
@@ -412,12 +407,9 @@ LiquidacionController.mixin({
             cuponesPrepago: this.cuponesPrepago,
             otros: this.otro,
             guias: this.guias
-
         };
 
         console.log(JSON.stringify(json));
-
-
         window.location.href = url;
         return;
     }
@@ -456,9 +448,7 @@ function ProductoController($scope){
     this.scope = $scope;
 }
 
-ProductoController.prototype = {
-    constructor: ProductoController,
-
+ProductoController.mixin({
     calculaValorTotal: function(producto){
         var valorTotal = 0;
         valorTotal = parseInt(producto.vacios) * parseInt(producto.precio);
@@ -486,7 +476,7 @@ ProductoController.prototype = {
         this.scope.$emit("guia:calcularSubTotal");
         this.scope.$emit("guia:calcularKilos");
     }
-};
+});
 
 module.exports = ProductoController;
 
@@ -532,11 +522,25 @@ VoucherLipigasController.mixin({
     },
 
     guardar: function(){
+        if(this._esValidaVenta()){
+            return;
+        }
+
         this.voucher.numero = this.numero;
         this.scope.$emit("guia:agregarVoucher", this.voucher);
 
         $('#modal_voucher_lipigas').modal('hide');
         common.agregarMensaje('El voucher de lipigas ha sido agregado exitosamente');
+    },
+
+    hacerDescuento: function(){
+        var descuento = parseInt(this.descuento);
+
+        if(isNaN(descuento)){
+            descuento = 0;
+        }
+
+        this.voucher.setDescuento(descuento);
     },
 
     _esValidaTarjeta: function(){
@@ -553,14 +557,26 @@ VoucherLipigasController.mixin({
         return true;
     },
 
-    hacerDescuento: function(){
-        var descuento = parseInt(this.descuento);
+    _esValidaVenta: function(){
+        var valido = true;
+        this.mensajes = {};
 
-        if(isNaN(descuento)){
-            descuento = 0;
+        if(!this.numero){
+            this.mensajes.numero = 'campo obligatorio';
+            valido = false;
         }
 
-        this.voucher.setDescuento(descuento);
+        if(!this.terminal){
+            this.mensajes.terminal = 'campo obligatorio';
+            valido = false;
+        }
+
+        if(!this.voucher.tarjetas.length){
+            this.mensajes.tarjeta = 'debe ingresar al menos 1 tarjeta';
+            valido = false;
+        }
+
+        return valido;
     }
 });
 
@@ -1159,27 +1175,24 @@ module.exports = VoucherTransbank;
 var serviceUtil = require('./service_util.js');
 
 function liquidacionService($http){
-    return {
-        buscarGuia: function(data, callback){
-            if(!_.isObject(data)){
-                throw new TypeError('el parametro debe ser un JSON');
-            }
+    var get, post, services;
 
+    get = serviceUtil.getMaker($http);
+    post = serviceUtil.postMaker($http);
+
+    services = {
+        buscarGuia: function(data, callback){
             var url = App.urls.get('liquidacion:obtener_guia');
-            url = serviceUtil.processURL(url, data);
-            $http.get(url).success(callback).error(serviceUtil.standardError);
+            get(url, data, callback);
         },
 
         buscarCliente: function(data, callback){
-            if(!_.isObject(data)){
-                throw new TypeError('el parametro debe ser un JSON');
-            }
-
             var url = App.urls.get('liquidacion:buscar_cliente');
-            url = serviceUtil.processURL(url, data);
-            $http.get(url).success(callback).error(serviceUtil.standardError);
+            get(url, data, callback);
         }
     };
+
+    return services;
 }
 
 module.exports = liquidacionService;
@@ -1211,10 +1224,10 @@ URLMaker.prototype.withThis = function(url){
     return this;
 };
 
-URLMaker.prototype.doQuery = function(obj){
+URLMaker.prototype.doQuery = function(params){
     var queryStr = [];
 
-    Objects.keys(params).forEach(function(key){
+    Object.keys(params).forEach(function(key){
         queryStr.push(key + '=' + params[key]);
     });
 
@@ -1228,10 +1241,9 @@ exports.URLMaker = URLMaker;
 
 exports.getMaker = function($http){
     return function(){
-        var args = Array.prototype.slice(arguments),
+        var args = Array.prototype.slice.call(arguments),
             callback = args.pop(),
-            url = args.shift(),
-            params;
+            url = args.shift();
 
         if(args.length){
             url = new URLMaker().withThis(url).doQuery(args[0]);

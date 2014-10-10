@@ -136,8 +136,7 @@ LiquidacionController.mixin({
     },
 
     addOtro: function(evt, otro){
-        var self = this;
-        self.otro.push(otro);
+        this.otro.push(otro);
     },
 
     removeOtro: function(indice){
@@ -145,9 +144,7 @@ LiquidacionController.mixin({
     },
 
     addCuponesPrepago: function(evt, cupones){
-        var self = this;
-        self.cuponesPrepago.push(cupones);
-        console.log(self.cuponesPrepago);
+        this.cuponesPrepago.push(cupones);
     },
 
     removeCuponDescuento: function(indice){
@@ -178,7 +175,6 @@ LiquidacionController.mixin({
             cuponesPrepago: this.cuponesPrepago,
             otros: this.otro,
             guias: this.guias
-
         };
 
         console.log(JSON.stringify(json));

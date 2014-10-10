@@ -1,50 +1,45 @@
 var serviceUtil = require('./service_util.js');
 
 function service($http){
-    var error, services;
+    var services, get, post;
 
-    error = function(){
-        alert('Ha ocurrido un error en el servicor');
-    };
+    get = serviceUtil.getMaker($http);
+    post = serviceUtil.postMaker($http);
 
     services = {
         findAll: function(callback){
             var action = App.urls.get('trabajador:todos');
-            $http.get(action).success(callback).error(serviceUtil.standardError);
+            get(action, callback);
         },
 
         crear: function(param, callback){
             var action = App.urls.get('trabajador:crear');
-            $http.post(action, param).success(callback).error(serviceUtil.standardError);
+            post(action, param, callback);
         },
 
         obtener: function(id, callback){
-            var action = App.urls.get('trabajador:obtener') + '?id=' + id;
-            $http.get(action).success(callback).error(serviceUtil.standardError);
+            var action = App.urls.get('trabajador:obtener');
+            get(action, { id: id }, callback);
         },
 
         actualizar: function(params, callback){
             var action = App.urls.get('trabajador:actualizar');
-            $http.post(action, params).success(callback).error(serviceUtil.standardError);
+            post(action, params, callback);
         },
 
         eliminar: function(id, callback){
-            var action = App.urls.get('trabajador:eliminar'),
-                json = { id : id };
-
-            $http.post(action, json, callback).error(serviceUtil.standardError);
+            var action = App.urls.get('trabajador:eliminar');
+            post(action, { id: id }, callback);
         },
 
         guardarBoleta: function(json, callback){
             var url = App.urls.get('trabajador:guardar_boleta');
-            $http.post(url, json).success(callback).error(serviceUtil.standardError);
+            post(url, json, callback);
         },
 
         buscarBoleta: function(id, callback){
             var url = App.urls.get('trabajador:buscar_boleta');
-            url += '?id=' + id;
-
-            $http.get(url).success(callback).error(serviceUtil.standardError);
+            get(url, { id: id }, callback);
         }
     };
 

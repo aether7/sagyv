@@ -39,11 +39,25 @@ VoucherLipigasController.mixin({
     },
 
     guardar: function(){
+        if(this._esValidaVenta()){
+            return;
+        }
+
         this.voucher.numero = this.numero;
         this.scope.$emit("guia:agregarVoucher", this.voucher);
 
         $('#modal_voucher_lipigas').modal('hide');
         common.agregarMensaje('El voucher de lipigas ha sido agregado exitosamente');
+    },
+
+    hacerDescuento: function(){
+        var descuento = parseInt(this.descuento);
+
+        if(isNaN(descuento)){
+            descuento = 0;
+        }
+
+        this.voucher.setDescuento(descuento);
     },
 
     _esValidaTarjeta: function(){
@@ -60,14 +74,26 @@ VoucherLipigasController.mixin({
         return true;
     },
 
-    hacerDescuento: function(){
-        var descuento = parseInt(this.descuento);
+    _esValidaVenta: function(){
+        var valido = true;
+        this.mensajes = {};
 
-        if(isNaN(descuento)){
-            descuento = 0;
+        if(!this.numero){
+            this.mensajes.numero = 'campo obligatorio';
+            valido = false;
         }
 
-        this.voucher.setDescuento(descuento);
+        if(!this.terminal){
+            this.mensajes.terminal = 'campo obligatorio';
+            valido = false;
+        }
+
+        if(!this.voucher.tarjetas.length){
+            this.mensajes.tarjeta = 'debe ingresar al menos 1 tarjeta';
+            valido = false;
+        }
+
+        return valido;
     }
 });
 
