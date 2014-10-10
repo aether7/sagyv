@@ -29,7 +29,7 @@ function BodegaService($http){
 
         obtenerGuia: function(id, callback){
             var url = App.urls.get('bodega:obtener_guia');
-            get(url, params, { guia_id: id }, callback);
+            get(url, { guia_id: id }, callback);
         },
 
         filtrarPorFecha: function(fecha, callback){
