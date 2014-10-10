@@ -15,6 +15,7 @@ function VoucherLipigasController($scope){
 
 VoucherLipigasController.mixin({
     resetearVoucher: function(){
+        this.mensajes = {};
         this.voucher = new VoucherLipigas();
     },
 
@@ -39,7 +40,7 @@ VoucherLipigasController.mixin({
     },
 
     guardar: function(){
-        if(this._esValidaVenta()){
+        if(!this._esValidaVenta()){
             return;
         }
 
