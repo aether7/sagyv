@@ -26,7 +26,7 @@ GuiaController.mixin({
             fecha = common.fecha.fechaToJSON(this.fecha);
         }
 
-        this.service.filtrarPorFecha({ fecha: fecha },function(data){
+        this.service.filtrarPorFecha(fecha, function(data){
             _this.guias = data.guias.map(function(guia){
                 guia.fecha = common.fecha.jsonToDate(guia.fecha);
                 return guia;
@@ -37,7 +37,7 @@ GuiaController.mixin({
     verGuia: function(id){
         var _this = this;
 
-        this.service.obtenerGuia({guia_id: id}, function(data){
+        this.service.obtenerGuia(id, function(data){
             _this.productos = data.productos;
             $('#modal_mostrar_guia').modal('show');
         });
@@ -45,7 +45,7 @@ GuiaController.mixin({
 
     recargarGuia: function(id){
         this.recarga = new Recarga();
-        this.service.obtenerGuia({guia_id: id}, this.procesarMostrarRecarga.bind(this, id));
+        this.service.obtenerGuia(id, this.procesarMostrarRecarga.bind(this, id));
     },
 
     procesarMostrarRecarga: function(id, data){

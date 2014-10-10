@@ -42,7 +42,7 @@ BodegaController.mixin({
 
     agregarProductoDescuento: function(idSelect){
         if(this.producto.id && this.producto.cantidad){
-            this.producto.codigo = $("#" + idSelect + " option:selected").text();
+            this.producto.codigo = $('#' + idSelect + ' option:selected').text();
         }
 
         if(this.guia.agregarProductoDescuento(this.producto)){

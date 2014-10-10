@@ -1185,8 +1185,10 @@ function liquidacionService($http){
 module.exports = liquidacionService;
 
 },{"./service_util.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/service_util.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/service_util.js":[function(require,module,exports){
+function noop(){}
+
 function standardError(data){
-    alert('ha ocurrido un error en el servidor !!!');
+    alert('ha ocurrido un error en el servidor !!!, por favor informe al administrador');
 };
 
 function processURL(url, params){
@@ -1206,6 +1208,7 @@ function URLMaker(){
 
 URLMaker.prototype.withThis = function(url){
     this.url = url;
+    return this;
 };
 
 URLMaker.prototype.doQuery = function(obj){
@@ -1221,5 +1224,27 @@ URLMaker.prototype.doQuery = function(obj){
 
 exports.standardError = standardError;
 exports.processURL = processURL;
+exports.URLMaker = URLMaker;
+
+exports.getMaker = function($http){
+    return function(){
+        var args = Array.prototype.slice(arguments),
+            callback = args.pop(),
+            url = args.shift(),
+            params;
+
+        if(args.length){
+            url = new URLMaker().withThis(url).doQuery(args[0]);
+        }
+
+        $http.get(url).success(callback || noop).error(standardError);
+    };
+};
+
+exports.postMaker = function($http){
+    return function(url, params, callback){
+        $http.post(url, params).success(callback || noop).error(standardError);
+    };
+};
 
 },{}]},{},["/Users/Aether/Proyectos/sagyv/sagyv/static/js/bundles/liquidacion_bundle.js"]);

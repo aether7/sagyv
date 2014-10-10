@@ -1,17 +1,10 @@
 var serviceUtil = require('./service_util.js');
 
 function BodegaService($http){
-    var services, get, post, noop;
+    var services, get, post;
 
-    noop = function(){};
-
-    get = function(url, callback){
-        $http.get(url).success(callback || noop).error(serviceUtil.standardError);
-    };
-
-    post = function(url, params, callback){
-        $http.post(url, params).success(callback || noop).error(serviceUtil.standardError);
-    };
+    get = serviceUtil.getMaker($http);
+    post = serviceUtil.postMaker($http);
 
     services = {
         findProductos: function(callback){
@@ -34,17 +27,14 @@ function BodegaService($http){
             get(url, callback);
         },
 
-        obtenerGuia: function(params, callback){
+        obtenerGuia: function(id, callback){
             var url = App.urls.get('bodega:obtener_guia');
-            url = serviceUtil.processURL(url, params);
-            get(url, callback);
+            get(url, params, { guia_id: id }, callback);
         },
 
-        filtrarPorFecha: function(params, callback){
+        filtrarPorFecha: function(fecha, callback){
             var url = App.urls.get('bodega:filtrar_guias');
-            url = serviceUtil.processURL(url, params);
-
-            get(url, callback);
+            get(url, { fecha: fecha }, callback);
         },
 
         guardarRecarga: function(params, callback){
@@ -69,16 +59,12 @@ function BodegaService($http){
 
         findVehiculoByProducto: function(id, callback){
             var url = App.urls.get('bodega:obtener_vehiculos_por_producto');
-            url += '?producto_id=' + id;
-
-            get(url, callback);
+            get(url, { producto_id: id }, callback);
         },
 
-        findDetalleConsolidado: function(producto_id, callback){
+        findDetalleConsolidado: function(id, callback){
             var url = App.urls.get('bodega:obtener_detalle_consolidado');
-            url += '?producto_id=' + producto_id;
-
-            get(url, callback);
+            get(url, { producto_id: id }, callback);
         }
     };
 

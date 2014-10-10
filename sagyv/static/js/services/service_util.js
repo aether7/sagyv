@@ -1,5 +1,7 @@
+function noop(){}
+
 function standardError(data){
-    alert('ha ocurrido un error en el servidor !!!');
+    alert('ha ocurrido un error en el servidor !!!, por favor informe al administrador');
 };
 
 function processURL(url, params){
@@ -19,12 +21,13 @@ function URLMaker(){
 
 URLMaker.prototype.withThis = function(url){
     this.url = url;
+    return this;
 };
 
-URLMaker.prototype.doQuery = function(obj){
+URLMaker.prototype.doQuery = function(params){
     var queryStr = [];
 
-    Objects.keys(params).forEach(function(key){
+    Object.keys(params).forEach(function(key){
         queryStr.push(key + '=' + params[key]);
     });
 
@@ -34,3 +37,24 @@ URLMaker.prototype.doQuery = function(obj){
 
 exports.standardError = standardError;
 exports.processURL = processURL;
+exports.URLMaker = URLMaker;
+
+exports.getMaker = function($http){
+    return function(){
+        var args = Array.prototype.slice.call(arguments),
+            callback = args.pop(),
+            url = args.shift();
+
+        if(args.length){
+            url = new URLMaker().withThis(url).doQuery(args[0]);
+        }
+
+        $http.get(url).success(callback || noop).error(standardError);
+    };
+};
+
+exports.postMaker = function($http){
+    return function(url, params, callback){
+        $http.post(url, params).success(callback || noop).error(standardError);
+    };
+};
