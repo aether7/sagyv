@@ -68,6 +68,98 @@ class ReportesManager(models.Manager):
 
         return resultado
 
+    def detalle_cuotas_creditos(self, fecha_inicio = None, fecha_termino = None):
+
+        consulta_sql = """
+                SELECT venta.id, venta.numero_serie, venta.monto ,
+                       venta.fecha, venta.cliente_id, cliente.nombre   , voucher.tipo_cuotas,
+                       voucher.numero_tarjeta, voucher.numero_operacion, voucher.numero_cuotas,
+                       (
+                            SELECT sum(cuota_pagada.monto)
+                            FROM main_cuotavoucher cuota_pagada
+                            WHERE
+                                 voucher.id = cuota_pagada.voucher_id AND
+                                 cuota_pagada.pagado = 1
+                        )  as pagada,
+                        (
+                           SELECT count(cuota_pagada.id)
+                           FROM main_cuotavoucher cuota_pagada
+                           WHERE
+                           voucher.id = cuota_pagada.voucher_id AND
+                           cuota_pagada.pagado = 1
+
+                        )  as cant_cp,
+                        (
+                          SELECT sum(cuota_impagada.monto)
+                          FROM main_cuotavoucher cuota_impagada
+                          WHERE
+                          voucher.id = cuota_impagada.voucher_id AND
+                          cuota_impagada.pagado = 0
+                        )  as impaga,
+                        (
+                          SELECT count(cuota_impagada.id)
+                          FROM main_cuotavoucher cuota_impagada
+                          WHERE
+                            voucher.id = cuota_impagada.voucher_id AND
+                            cuota_impagada.pagado = 0
+                        )  as cant_cimp
+                 FROM main_venta venta
+
+                 INNER JOIN main_voucher voucher ON venta.id = voucher.venta_id
+                 INNER JOIN main_cliente cliente ON cliente.id = venta.cliente_id
+
+                 GROUP BY venta.id, venta.numero_serie, venta.monto , venta.fecha,
+                          venta.cliente_id, cliente.nombre, voucher.tipo_cuotas,
+                          voucher.numero_tarjeta, voucher.numero_operacion, voucher.numero_cuotas
+                 ORDER BY cliente.nombre
+                          """
+
+        query = connection.cursor()
+        query.execute(consulta_sql)
+
+        resultado = []
+
+        for row in query.fetchall():
+
+            fila = DetalleCredito()
+            fila.venta_id = row[0]
+            fila.numero_serie = row[1]
+            fila.monto = row[2]
+            fila.fecha = row[3]
+            fila.cliente_id = row[4]
+            fila.nombre_cliente = row[5]
+            fila.tipo_cuotas = row[6]
+            fila.numero_tarjeta = row[7]
+            fila.numero_operacion = row[8]
+            fila.numero_cuotas = row[9]
+            fila.cuotas_pagadas = row[10] or 0
+            fila.cant_cuotas_pagadas = row[11] or 0
+            fila.cuotas_impagas = row[12] or 0
+            fila.cant_cuotas_impagas = row[13] or 0
+
+            resultado.append(fila)
+
+        return resultado
+
+class DetalleCredito(object):
+
+    def __init__(self):
+        self.venta_id = 0
+        self.numero_serie =0
+        self.monto = 0
+        self.fecha = None
+        self.cliente_id = 0
+        self.nombre_cliente = ""
+        self.tipo_cuotas = ""
+        self.numero_tarjeta = 0
+        self.numero_operacion = 0
+        self.numero_cuotas = 0
+        self.cuotas_pagadas = 0
+        self.cant_cuotas_pagadas = 0
+        self.cuotas_impagas = 0
+        self.cant_cuotas_impagas = 0
+
+
 class KilosVendidos(object):
 
     def __init__(self):

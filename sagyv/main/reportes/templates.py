@@ -104,7 +104,7 @@ class KilosDeVentasPorChofer(object):
 
         #llenado de productos (desde B1 hasta Bn)
         for producto in productos:
-            str_col = str(chr(cont_col)+"1").encode("utf-8")
+            str_col = str(chr(cont_col)+"1").decode("utf-8")
 
             alignment = Alignment(wrap_text=True, horizontal= "center")
             hoja.cell(str_col).style = hoja.cell(str_col).style.copy(alignment=alignment)
@@ -146,6 +146,65 @@ class KilosDeVentasPorChofer(object):
 
 
         return save_virtual_workbook(self.wb)
+
+class DetalleCuotasCreditos(object):
+
+    def __init__(self):
+        self.nombre = "detalle_cuotas_creditos_clientes"
+        self.wb = Workbook(encoding="utf-8")
+        self.matriz = {}
+        self.nombre_columnas = ("Cliente","Número Tarjeta", "Tipo Cuotas", "Fecha",
+                                "Número Cuotas","Cuotas Pagadas", "Monto Pagado",
+                                "Cuotas Impagas", "Monto Impago")
+
+    def construir_reporte(self, creditos=[]):
+
+        hoja = self.wb.create_sheet(0,u"Créditos")
+
+        hoja.page_setup.horizontalCentered = True
+        hoja.page_setup.verticalCentered = True
+        cont_col = ord("A")
+
+        #llenado de productos (desde B1 hasta Bn)
+
+        for columna in self.nombre_columnas:
+            str_col = str(chr(cont_col)+"1").decode("utf-8")
+            alignment = Alignment(wrap_text=True, horizontal= "center")
+            hoja.cell(str_col).style = hoja.cell(str_col).style.copy(alignment=alignment)
+            hoja.cell(str_col).value = columna.decode("utf-8")
+            hoja.column_dimensions[chr(cont_col)].width = len(hoja.cell(str_col).value) - 1
+            cont_col += 1
+
+        hoja.row_dimensions[1].height = 35
+
+        cont_fila = 2
+        nombre_max = 0
+
+        for credito in creditos:
+
+            self.setear_alinear_celda(hoja.cell(row=cont_fila, column=1), credito.nombre_cliente)
+            self.setear_alinear_celda(hoja.cell(row=cont_fila, column=2), credito.numero_tarjeta)
+            self.setear_alinear_celda(hoja.cell(row=cont_fila, column=3), credito.tipo_cuotas)
+            self.setear_alinear_celda(hoja.cell(row=cont_fila, column=4), credito.fecha)
+            self.setear_alinear_celda(hoja.cell(row=cont_fila, column=5), credito.numero_cuotas)
+            self.setear_alinear_celda(hoja.cell(row=cont_fila, column=6), credito.cant_cuotas_pagadas)
+            self.setear_alinear_celda(hoja.cell(row=cont_fila, column=7), credito.cuotas_pagadas)
+            self.setear_alinear_celda(hoja.cell(row=cont_fila, column=8), credito.cant_cuotas_impagas)
+            self.setear_alinear_celda(hoja.cell(row=cont_fila, column=9), credito.cuotas_impagas)
+
+            if nombre_max < len(credito.nombre_cliente):
+                nombre_max = len(credito.nombre_cliente)
+
+            cont_fila += 1
+
+        hoja.column_dimensions["A"].width = nombre_max
+        return save_virtual_workbook(self.wb)
+
+    def setear_alinear_celda(self, celda, valor=0):
+
+        alignment = Alignment(horizontal= "center")
+        celda.style = celda.style.copy(alignment=alignment)
+        celda.value = valor
 
 if __name__ == "__main__":
     print "oli"

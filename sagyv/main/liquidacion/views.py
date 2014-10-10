@@ -200,15 +200,26 @@ class Cerrar(TemplateView):
     #
     #     return response
 
+    # def get(self, req):
+    #
+    #     productos = Producto.objects.order_by("nombre")
+    #     choferes = Trabajador.objects.order_by("nombre")
+    #
+    #     reporte = templates.KilosDeVentasPorChofer()
+    #
+    #     datos = ReportesManager().get_kilos_vendidos_trabajor()
+    #     excel = reporte.construir_reporte(datos,productos,choferes)
+    #     response = HttpResponse(excel, content_type='application/vnd.ms-excel')
+    #     response['Content-Disposition'] = 'attachment; filename="%s.xls"'%(reporte.nombre)
+    #
+    #     return response
+
     def get(self, req):
 
-        productos = Producto.objects.order_by("nombre")
-        choferes = Trabajador.objects.order_by("nombre")
+        reporte = templates.DetalleCuotasCreditos()
 
-        reporte = templates.KilosDeVentasPorChofer()
-
-        datos = ReportesManager().get_kilos_vendidos_trabajor()
-        excel = reporte.construir_reporte(datos,productos,choferes)
+        datos = ReportesManager().detalle_cuotas_creditos()
+        excel = reporte.construir_reporte(creditos= datos)
         response = HttpResponse(excel, content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename="%s.xls"'%(reporte.nombre)
 

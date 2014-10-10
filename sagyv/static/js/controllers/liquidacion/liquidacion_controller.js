@@ -182,9 +182,8 @@ LiquidacionController.mixin({
         };
 
         console.log(JSON.stringify(json));
-        return;
-
         window.location.href = url;
+        return;
     }
 });
 
