@@ -5,6 +5,10 @@ function LiquidacionController($scope, liquidacionService){
     this.service = liquidacionService;
 
     this.productos = [];
+    this.cheques = [];
+    this.cuponesPrepago = [];
+    this.otro = [];
+
     this.boleta = null;
     this.guia = {};
 
@@ -13,14 +17,21 @@ function LiquidacionController($scope, liquidacionService){
         transbank: null
     };
 
+    this.montos = {
+        subTotal: 0,
+        descuentos: 0,
+        total: 0,
+        propias: 0,
+        lipigas: 0,
+        voucherLipigas: 0,
+        voucherTransbank: 0,
+        cheques: 0,
+        cupones: 0,
+        otros: 0
+    };
+
     this.guias = new GuiaVenta();
-    this.cheques = [];
-    this.cuponesPrepago = [];
-    this.otro = [];
     this.idGuiaDespacho = null;
-    this.subTotal = 0;
-    this.descuentos = 0;
-    this.total = 0;
     this.kilosVendidos = 0;
     this.fecha = null;
     this.vehiculo = null;
@@ -64,17 +75,17 @@ LiquidacionController.mixin({
     calcularSubTotal: function(){
         var _this = this;
 
-        this.subTotal = 0;
+        this.montos.subTotal = 0;
 
         this.productos.forEach(function(producto){
             if(isNaN(producto.valorTotal)){
                 return;
             }
 
-            _this.subTotal += producto.valorTotal;
+            _this.montos.subTotal += producto.valorTotal;
         });
 
-        this.total = this.subTotal - this.descuentos;
+        this.montos.total = this.montos.subTotal - this.montos.descuentos;
     },
 
     calcularKilos: function(){
@@ -174,7 +185,8 @@ LiquidacionController.mixin({
             cheques: this.cheques,
             cuponesPrepago: this.cuponesPrepago,
             otros: this.otro,
-            guias: this.guias
+            guias: this.guias,
+            montos: this.montos
         };
 
         console.log(JSON.stringify(json));

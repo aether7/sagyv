@@ -120,6 +120,46 @@
             </tbody>
         </table>
 
+        <div class="totales">
+            <span>Subtotal:</span>
+            <span ng-bind="liqCtrl.montos.subTotal | currency"></span>
+        </div>
+
+        <div class="totales">
+            <span>Guías propias:</span>
+            <span ng-bind="liqCtrl.montos.propias | currency"></span>
+        </div>
+
+        <div class="totales">
+            <span>Guías lipigas:</span>
+            <span ng-bind="liqCtrl.montos.lipigas | currency"></span>
+        </div>
+
+        <div class="totales">
+            <span>Vouchers lipigas:</span>
+            <span ng-bind="liqCtrl.montos.voucherLipigas | currency"></span>
+        </div>
+
+        <div class="totales">
+            <span>Vouchers transbank:</span>
+            <span ng-bind="liqCtrl.montos.voucherTransbank | currency"></span>
+        </div>
+
+        <div class="totales">
+            <span>Cheques:</span>
+            <span ng-bind="liqCtrl.montos.cheques | currency"></span>
+        </div>
+
+        <div class="totales">
+            <span>Cupones descuento:</span>
+            <span ng-bind="liqCtrl.montos.cupones | currency"></span>
+        </div>
+
+        <div class="totales">
+            <span>Otros:</span>
+            <span ng-bind="liqCtrl.montos.otros | currency"></span>
+        </div>
+
         <button class="btn btn-primary" data-modal=""
             data-ng-click="liqCtrl.cerrarLiquidacion()">CERRAR LIQUIDACIÓN</button>
     </section>

@@ -13,7 +13,7 @@ function VoucherTransbankController($scope){
 
 VoucherTransbankController.mixin({
     addTarjeta: function(){
-        if(!this.esValido()){
+        if(!this._esValidaTarjeta()){
            return;
         }
 
@@ -35,7 +35,22 @@ VoucherTransbankController.mixin({
         this.voucher.removeTarjeta(index);
     },
 
-    esValido: function(){
+    guardar: function(){
+        if(this._esValidaVenta()){
+            return;
+        }
+
+        this.scope.$emit('guia:agregarVoucher', this.voucher);
+
+        $('#modal_voucher_transbank').modal('hide');
+        common.agregarMensaje('Los vouchers han sido guardados exitosamente');
+    },
+
+    resetearVoucher: function(){
+        this.voucher = new VoucherTransbank();
+    },
+
+    _esValidaTarjeta: function(){
         var valido = true;
 
         this.mensajes = {};
@@ -69,15 +84,15 @@ VoucherTransbankController.mixin({
         return valido;
     },
 
-    guardar: function(){
-        this.scope.$emit('guia:agregarVoucher', this.voucher);
+    _esValidaVenta: function(){
+        this.mensajes = {};
 
-        $('#modal_voucher_transbank').modal('hide');
-        common.agregarMensaje('Los vouchers han sido guardados exitosamente');
-    },
+        if(!this.voucher.tarjetas.length){
+            this.mensajes.tarjeta = 'Debe al menos ingresar una tarjeta';
+            return false;
+        }
 
-    resetearVoucher: function(){
-        this.voucher = new VoucherTransbank();
+        return true;
     }
 });
 

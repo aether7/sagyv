@@ -10,6 +10,11 @@
 
 morado = #835c94
 
+.box
+    box-sizing border-box
+    display inline-block
+    vertical-align top
+
 body
     font-family 'Verdana','Sans-serif'
     font-size 16px
@@ -49,7 +54,7 @@ body
         .form-control-static
             width 57%
 
-#liquidacion
+.panel-liquidacion
     .panel-busqueda
     .panel-cabecera
     .panel-detalle
@@ -69,6 +74,16 @@ body
         .fila-desglose
             td
                 text-align right
+
+    .totales
+        text-align right
+
+        span
+            @extends .box
+            text-align right
+
+        span:nth-child(1)
+            width 200px
 
 
 #my_tab
