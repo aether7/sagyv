@@ -1,0 +1,92 @@
+
+<ul class="nav nav-tabs" role="tablist">
+    <li class="active"><a role="tab" data-toggle="tab" href="#guia_tab">Guías</a></li>
+    <li><a role="tab" data-toggle="tab" href="#voucher_tab">Vouchers</a></li>
+    <li><a role="tab" data-toggle="tab" href="#cheque_tab">Cheques</a></li>
+    <li><a role="tab" data-toggle="tab" href="#cupones_tab">Cupones de descuento</a></li>
+    <li><a role="tab" data-toggle="tab" href="#otro_tab">Otros</a></li>
+</ul>
+
+<div class="tab-content" >
+    <div id="guia_tab" class="tab-pane active">
+        <table id="tabla_ventas" class="table table-bordered table-condensed">
+            <thead>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Número guía</th>
+                    <th>Producto</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <div id="voucher_tab" class="tab-pane">
+        <table id="tabla_vouchers" class="table table-bordered table-condensed">
+            <thead>
+                <tr>
+                    <th>Tipo voucher</th>
+                    <th>tarjeta</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <div class="tab-pane" id="cheque_tab">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Banco</th>
+                    <th>N° Cheque</th>
+                    <th>Monto</th>
+                    <th>Fecha</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="chk in liqCtrl.cheques">
+                    <td data-ng-bind="chk.banco.nombre"></td>
+                    <td data-ng-bind="chk.numero"></td>
+                    <td data-ng-bind="chk.monto"></td>
+                    <td data-ng-bind="chk.fecha | date:'yyyy-MM-d'"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="cupones_tab" class="tab-pane">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Numero</th>
+                    <th>Cliente</th>
+                    <th>Formato</th>
+                    <th>Descuento</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="cp in liqCtrl.cuponesPrepago">
+                    <td data-ng-bind="cp.numero"></td>
+                    <td data-ng-bind="cp.cliente.nombre"></td>
+                    <td data-ng-bind="cp.formato.nombre"></td>
+                    <td data-ng-bind="cp.descuento"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="otro_tab" class="tab-pane">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Concepto</th>
+                    <th>Monto</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="o in liqCtrl.otro">
+                    <td data-ng-bind="o.concepto"></td>
+                    <td data-ng-bind="o.monto"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
