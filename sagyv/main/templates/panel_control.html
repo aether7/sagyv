@@ -28,10 +28,18 @@
                     {% endif %}
                 </ul>
             </li>
-            <li><a href="{% url 'liquidacion:index' %}">Liquidación</a></li>
-            <li><a href="{% url 'bodega:index' %}">Bodega</a></li>
-            <li><a href="#">Reportes</a></li>
-            <li><a href="{% url 'logout' %}">Salir</a></li>
+            <li>
+                <a href="{% url 'liquidacion:index' %}">Liquidación</a>
+            </li>
+            <li>
+                <a href="{% url 'bodega:index' %}">Bodega</a>
+            </li>
+            <li>
+                <a href="{% url 'reportes:index' %}">Reportes</a>
+            </li>
+            <li>
+                <a href="{% url 'logout' %}">Salir</a>
+            </li>
         </ul>
     </div>
 </nav>

@@ -1,0 +1,32 @@
+{% extends "reportes/base_reportes.html" %}
+
+{% block reporte_content %}
+
+<label for="desde">Desde</label>
+<input id="desde" type="text" />
+<label for="hasta">Hasta</label>
+<input id="hasta" type="text" />
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID CLIENTE</th>
+            <th>NOMBRE</th>
+            <th>PRODUCTO</th>
+            <th>CODIGO</th>
+            <th>MONTO</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for producto in productos %}
+        <tr>
+            <td>{{ producto.id_cliente }}</td>
+            <td>{{ producto.nombre_cliente }}</td>
+            <td>{{ producto.producto_nombre }}</td>
+            <td>{{ producto.producto_codigo }}</td>
+            <td>{{ producto.suma_monto }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -2,6 +2,54 @@ from django.db import connection, models
 from django.db.models import Q, Sum
 from main import trabajador
 
+class DetalleCredito(object):
+
+    def __init__(self):
+        self.venta_id = 0
+        self.numero_serie =0
+        self.monto = 0
+        self.fecha = None
+        self.cliente_id = 0
+        self.nombre_cliente = ""
+        self.tipo_cuotas = ""
+        self.numero_tarjeta = 0
+        self.numero_operacion = 0
+        self.numero_cuotas = 0
+        self.cuotas_pagadas = 0
+        self.cant_cuotas_pagadas = 0
+        self.cuotas_impagas = 0
+        self.cant_cuotas_impagas = 0
+
+
+class KilosVendidos(object):
+
+    def __init__(self):
+
+        trabajador_id = 0
+        trabajador_nombre = ""
+        producto_id = 0
+        producto_nombre = ""
+        producto_peso = 0
+        suma_kilos = 0
+
+class ConsumoCliente(object):
+
+    def __init__(self):
+        self.id_cliente = 0
+        self.nombre_cliente = ""
+        self.producto_id = 0
+        self.producto_nombre = ""
+        self.producto_codigo = ""
+        self.suma_monto = 0
+
+class Stock(object):
+
+    def __init__(self):
+        self.codigo = 0
+        self.producto_id = 0
+        self.nombre = ''
+        self.cantidad = 0
+
 
 class ReportesManager(models.Manager):
 
@@ -11,13 +59,18 @@ class ReportesManager(models.Manager):
 
         consulta_sql = """
             SELECT
-                main_cliente.id,
-                main_cliente.nombre,
-                main_detalleventa.producto_id,
-                SUM(main_detalleventa.monto)
-           FROM main_cliente INNER JOIN main_venta ON main_cliente.id = main_venta.cliente_id
-           LEFT JOIN main_detalleventa ON main_venta.id = main_detalleventa.venta_id
-           GROUP BY main_cliente.id, main_cliente.nombre, main_detalleventa.producto_id"""
+                main_cliente.id AS cliente_id,
+                main_cliente.nombre AS cliente_nombre,
+                main_detalleventa.producto_id AS producto_id,
+                main_producto.nombre AS producto_nombre,
+                main_producto.codigo AS producto_codigo,
+                SUM(main_detalleventa.monto) AS monto
+            FROM main_cliente
+            INNER JOIN main_venta ON main_cliente.id = main_venta.cliente_id
+            LEFT JOIN main_detalleventa ON main_venta.id = main_detalleventa.venta_id
+            LEFT JOIN main_producto ON main_detalleventa.producto_id = main_producto.id
+            GROUP BY main_cliente.id, main_cliente.nombre, main_detalleventa.producto_id
+        """
 
         query = connection.cursor()
         query.execute(consulta_sql)
@@ -26,10 +79,13 @@ class ReportesManager(models.Manager):
 
         for row in query.fetchall():
             fila = ConsumoCliente()
+
             fila.id_cliente = row[0]
-            fila.nombre = row[1]
-            fila.id_producto = row[2]
-            fila.suma_monto = row[3]
+            fila.nombre_cliente = row[1]
+            fila.producto_id = row[2]
+            fila.producto_nombre = row[3]
+            fila.producto_codigo = row[4]
+            fila.suma_monto = row[5]
 
             resultado.append(fila)
 
@@ -39,15 +95,19 @@ class ReportesManager(models.Manager):
 
 
         consulta_sql = """
-                           SELECT trabajador.id, trabajador.nombre,  producto.id, producto.nombre ,
-                                  producto.peso, sum(detalle_v.cantidad) * producto.peso as kilos
-
-                            FROM main_trabajador trabajador
-                                      JOIN main_venta venta on venta.trabajador_id = trabajador.id
-                                      JOIN main_detalleventa detalle_v on venta.id = detalle_v.venta_id
-                                      LEFT  JOIN main_producto producto  on producto.id = detalle_v.producto_id
-                                      JOIN main_tipoproducto tipo_p on producto.tipo_producto_id = tipo_p.id
-                             GROUP BY trabajador.id, trabajador.nombre,tipo_p.nombre, producto.id, producto.nombre ,  producto.peso
+            SELECT
+                trabajador.id,
+                trabajador.nombre,
+                producto.id,
+                producto.nombre ,
+                producto.peso,
+                sum(detalle_v.cantidad) * producto.peso as kilos
+            FROM main_trabajador trabajador
+            JOIN main_venta venta on venta.trabajador_id = trabajador.id
+            JOIN main_detalleventa detalle_v on venta.id = detalle_v.venta_id
+            LEFT  JOIN main_producto producto  on producto.id = detalle_v.producto_id
+            JOIN main_tipoproducto tipo_p on producto.tipo_producto_id = tipo_p.id
+            GROUP BY trabajador.id, trabajador.nombre,tipo_p.nombre, producto.id, producto.nombre , producto.peso
         """
 
         query = connection.cursor()
@@ -140,52 +200,6 @@ class ReportesManager(models.Manager):
             resultado.append(fila)
 
         return resultado
-
-class DetalleCredito(object):
-
-    def __init__(self):
-        self.venta_id = 0
-        self.numero_serie =0
-        self.monto = 0
-        self.fecha = None
-        self.cliente_id = 0
-        self.nombre_cliente = ""
-        self.tipo_cuotas = ""
-        self.numero_tarjeta = 0
-        self.numero_operacion = 0
-        self.numero_cuotas = 0
-        self.cuotas_pagadas = 0
-        self.cant_cuotas_pagadas = 0
-        self.cuotas_impagas = 0
-        self.cant_cuotas_impagas = 0
-
-
-class KilosVendidos(object):
-
-    def __init__(self):
-
-        trabajador_id = 0
-        trabajador_nombre = ""
-        producto_id = 0
-        producto_nombre = ""
-        producto_peso = 0
-        suma_kilos = 0
-
-class ConsumoCliente(object):
-
-    def __init__(self):
-        self.id_cliente = 0
-        self.nombre = ""
-        self.id_producto = 0
-        self.suma_monto = 0
-
-class Stock(object):
-
-    def __init__(self):
-        self.codigo = 0
-        self.producto_id = 0
-        self.nombre = ''
-        self.cantidad = 0
 
 
 class StockManager(models.Manager):

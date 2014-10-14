@@ -1,0 +1,25 @@
+{% extends "panel_control.html" %}
+
+{% block css %}
+<style>
+    .panel-reportes{
+        border: 1px solid black;
+        padding: 1em;
+        text-align: center;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<section class="panel-reportes">
+    <a href="{% url 'reportes:consumo_clientes' %}" class="btn btn-default">Consumo clientes comerciales</a>
+    <a href="#" class="btn btn-default">Compras de gas (en kilos)</a>
+    <a href="#" class="btn btn-default">Kilos de ventas por chofer</a>
+    <a href="#" class="btn btn-default">Créditos</a>
+    <a href="#" class="btn btn-default">Venta masa</a>
+</section>
+
+{% block reporte_content %}No hay nada definido{% endblock %}
+
+{% endblock %}
