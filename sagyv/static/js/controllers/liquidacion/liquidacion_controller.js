@@ -4,6 +4,13 @@ function LiquidacionController($scope, liquidacionService){
     this.scope = $scope;
     this.service = liquidacionService;
 
+    this.productos_dump = '';
+    this.cheques_dump = '';
+    this.cuponesPrepago_dump = '';
+    this.otro_dump = '';
+    this.vouchers_dump = '';
+    this.guia_dump = '';
+
     this.productos = [];
     this.cheques = [];
     this.cuponesPrepago = [];
@@ -16,6 +23,7 @@ function LiquidacionController($scope, liquidacionService){
         lipigas: null,
         transbank: null
     };
+
 
     this.montos = {
         subTotal: 0,
@@ -103,6 +111,8 @@ LiquidacionController.mixin({
 
             _this.kilosVendidos += vacios * peso;
         });
+
+        this.productos_dump = JSON.stringify(this.productos);
     },
 
     resetearValores: function(){
@@ -126,6 +136,12 @@ LiquidacionController.mixin({
     addGuia: function(evt, venta){
         this.guias.addGuia(venta);
         this.renderTabla('tpl_tabla_ventas', 'tabla_ventas', this.guias);
+        var tmp = {
+            "propias": this.guias.propia.ventas,
+            "lipigas": this.guias.lipigas.ventas
+        };
+        this.guia_dump = tmp;
+
     },
 
     addVouchers: function(evt, voucher){
@@ -134,6 +150,7 @@ LiquidacionController.mixin({
         }
 
         this.vouchers[voucher.tipo] = voucher;
+        this.vouchers_dump = JSON.stringify(this.vouchers);
         this.renderTabla('tpl_tabla_vouchers', 'tabla_vouchers', this.vouchers);
     },
 
@@ -148,6 +165,7 @@ LiquidacionController.mixin({
 
     addOtro: function(evt, otro){
         this.otro.push(otro);
+        this.otro_dump = JSON.stringify(this.otro);
     },
 
     removeOtro: function(indice){
@@ -156,6 +174,7 @@ LiquidacionController.mixin({
 
     addCuponesPrepago: function(evt, cupones){
         this.cuponesPrepago.push(cupones);
+        this.cuponesPrepago_dump = JSON.stringify(this.cuponesPrepago);
     },
 
     removeCuponDescuento: function(indice){
@@ -168,6 +187,8 @@ LiquidacionController.mixin({
         cheques.forEach(function(cheque){
             self.cheques.push(cheque);
         });
+
+        this.cheques_dump = JSON.stringify(this.cheques);
     },
 
     removeCheque:function(indice){
@@ -180,7 +201,6 @@ LiquidacionController.mixin({
 
         json = {
             productos: this.productos,
-            ventas: this.ventas,
             vouchers: this.vouchers,
             cheques: this.cheques,
             cuponesPrepago: this.cuponesPrepago,
@@ -192,7 +212,7 @@ LiquidacionController.mixin({
         console.log(JSON.stringify(json));
         window.location.href = url;
         return;
-    }
+    },
 });
 
 module.exports = LiquidacionController;

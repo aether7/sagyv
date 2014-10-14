@@ -79,7 +79,26 @@
         <button class="btn btn-primary" data-modal=""
             data-ng-click="liqCtrl.cerrarLiquidacion()">CERRAR LIQUIDACIÓN</button>
         <form id="f_cerrar_liquidacion" method="post" action="">
-            <input name="v_total" type="hidden" ng-bind="">
+            {% verbatim %}
+            <input id="productos_ls" name="productos"
+                type="hidden" value="{{ liqCtrl.productos_dump }}">
+
+            <input id="vouchers_ls" name="vouchers"
+                type="hidden" value="{{ liqCtrl.vouchers_dump }}">
+
+            <input id="cheques_ls" name="cheques"
+                type="hidden" value="{{ liqCtrl.cheques_dump }}">
+
+            <input id="cupones_prepago_ls" name="cupones_prepago"
+                type="hidden" value="{{ liqCtrl.cuponesPrepago_dump }}">
+
+            <input id="otros_ls" name="otros"
+                type="hidden" value="{{ liqCtrl.otro_dump }}">
+
+            <input id="guias_ls" name="guias"
+                type="hidden" value="{{ liqCtrl.guia_dump }}">
+
+            {% endverbatim %}
         </form>
     </section>
 {% endblock %}
