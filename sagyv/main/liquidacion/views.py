@@ -218,17 +218,7 @@ class Cerrar(View):
     #     return response
 
     def post(self, req):
-        p = canvas.Canvas(response)
-        nombre = "out_data"
-
-        p.translate(inch,inch)
-        p.drawString(225,500,"Cambiate al amarrillo.")
-        response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = 'attachment; filename="%s.pdf"'%(nombre)
-
-        p.showPage()
-        p.save()
-        return response
+        print req.POST.get('cheques')
 
     # def get(self, req):
 

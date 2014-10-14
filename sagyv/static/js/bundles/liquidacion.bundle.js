@@ -242,6 +242,7 @@ function LiquidacionController($scope, liquidacionService){
     this.otro_dump = '';
     this.vouchers_dump = '';
     this.guia_dump = '';
+    this.montos_dump = '';
 
     this.productos = [];
     this.cheques = [];
@@ -343,8 +344,6 @@ LiquidacionController.mixin({
 
             _this.kilosVendidos += vacios * peso;
         });
-
-        this.productos_dump = JSON.stringify(this.productos);
     },
 
     resetearValores: function(){
@@ -369,11 +368,10 @@ LiquidacionController.mixin({
         this.guias.addGuia(venta);
         this.renderTabla('tpl_tabla_ventas', 'tabla_ventas', this.guias);
         var tmp = {
-            "propias": this.guias.propia.ventas,
-            "lipigas": this.guias.lipigas.ventas
-        };
+                "propias": this.guias.propia.ventas,
+                "lipigas": this.guias.lipigas.ventas
+            };
         this.guia_dump = tmp;
-
     },
 
     addVouchers: function(evt, voucher){
@@ -428,22 +426,13 @@ LiquidacionController.mixin({
     },
 
     cerrarLiquidacion: function(){
-        var url = App.urls.get('liquidacion:cerrar'),
-            json;
+        var url = App.urls.get('liquidacion:cerrar');
 
-        json = {
-            productos: this.productos,
-            vouchers: this.vouchers,
-            cheques: this.cheques,
-            cuponesPrepago: this.cuponesPrepago,
-            otros: this.otro,
-            guias: this.guias,
-            montos: this.montos
-        };
+        // TODO
+        //this.productos_dump = JSON.stringify(this.productos);
+        //this.montos_dump = JSON.stringify(this.montos);
 
-        console.log(JSON.stringify(json));
-        window.location.href = url;
-        return;
+        $("#f_cerrar_liquidacion").get(0).submit();
     },
 });
 

@@ -78,7 +78,7 @@
 
         <button class="btn btn-primary" data-modal=""
             data-ng-click="liqCtrl.cerrarLiquidacion()">CERRAR LIQUIDACIÓN</button>
-        <form id="f_cerrar_liquidacion" method="post" action="">
+        <form id="f_cerrar_liquidacion" method="post" action="{% url 'liquidacion:cerrar' %}">
             {% verbatim %}
             <input id="productos_ls" name="productos"
                 type="hidden" value="{{ liqCtrl.productos_dump }}">
@@ -97,6 +97,9 @@
 
             <input id="guias_ls" name="guias"
                 type="hidden" value="{{ liqCtrl.guia_dump }}">
+
+            <input id="montos_ls" name="montos"
+                type="hidden" value="{{ liqCtrl.montos_dump }}">
 
             {% endverbatim %}
         </form>
