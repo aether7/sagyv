@@ -2,6 +2,9 @@
 import json
 from django.core.serializers.json import DjangoJSONEncoder
 
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import inch
+
 from django.http import HttpResponse
 from django.views.generic import TemplateView, View
 from reportlab.pdfgen import canvas
@@ -180,7 +183,7 @@ class BalanceLiquidacionView(View):
         return HttpResponse(dato, content_type="application/json")
 
 
-class Cerrar(TemplateView):
+class Cerrar(View):
 
     # def get(self, req):
     #
@@ -214,16 +217,29 @@ class Cerrar(TemplateView):
     #
     #     return response
 
-    def get(self, req):
+    def post(self, req):
+        p = canvas.Canvas(response)
+        nombre = "out_data"
 
-        reporte = templates.DetalleCuotasCreditos()
+        p.translate(inch,inch)
+        p.drawString(225,500,"Cambiate al amarrillo.")
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="%s.pdf"'%(nombre)
 
-        datos = ReportesManager().detalle_cuotas_creditos()
-        excel = reporte.construir_reporte(creditos= datos)
-        response = HttpResponse(excel, content_type='application/vnd.ms-excel')
-        response['Content-Disposition'] = 'attachment; filename="%s.xls"'%(reporte.nombre)
-
+        p.showPage()
+        p.save()
         return response
+
+    # def get(self, req):
+
+    #     reporte = templates.DetalleCuotasCreditos()
+
+    #     datos = ReportesManager().detalle_cuotas_creditos()
+    #     excel = reporte.construir_reporte(creditos= datos)
+    #     response = HttpResponse(excel, content_type='application/vnd.ms-excel')
+    #     response['Content-Disposition'] = 'attachment; filename="%s.xls"'%(reporte.nombre)
+
+    #     return response
 
 
 index = IndexView.as_view()

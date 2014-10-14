@@ -78,6 +78,9 @@
 
         <button class="btn btn-primary" data-modal=""
             data-ng-click="liqCtrl.cerrarLiquidacion()">CERRAR LIQUIDACIÓN</button>
+        <form id="f_cerrar_liquidacion" method="post" action="">
+            <input name="v_total" type="hidden" ng-bind="">
+        </form>
     </section>
 {% endblock %}
 
