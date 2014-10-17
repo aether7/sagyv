@@ -185,6 +185,15 @@ class BalanceLiquidacionView(View):
 
 class Cerrar(View):
 
+    def post(self, req):
+        productos = req.POST.get('productos')
+        vouchers = req.POST.get('vouchers')
+        cheques = req.POST.get('cheques')
+        cupones_prepago = req.POST.get('cupones_prepago')
+        otros = req.POST.get('otros')
+        guias = req.POST.get('guias')
+        montos = req.POST.get('montos')
+
     # def get(self, req):
     #
     #     productos = Producto.objects.order_by("nombre")
@@ -217,8 +226,6 @@ class Cerrar(View):
     #
     #     return response
 
-    def post(self, req):
-        print req.POST.get('cheques')
 
     # def get(self, req):
 
