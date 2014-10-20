@@ -12,21 +12,20 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>ID CLIENTE</th>
-            <th>NOMBRE</th>
+            <th>TRABAJADOR</th>
             <th>PRODUCTO</th>
             <th>CODIGO</th>
             <th>MONTO</th>
         </tr>
     </thead>
     <tbody>
-        {% for producto in productos %}
+        {% for trabajador in trabajadores %}
         <tr>
-            <td>{{ producto.id_cliente }}</td>
-            <td>{{ producto.nombre_cliente }}</td>
-            <td>{{ producto.producto_nombre }}</td>
-            <td>{{ producto.producto_codigo }}</td>
-            <td>{{ producto.suma_monto }}</td>
+            <td>{{ trabajador.trabajador_nombre }}</td>
+            <td>{{ trabajador.producto_nombre }}</td>
+            <td>{{ trabajador.producto_codigo }}</td>
+            <td>{{ trabajador.producto_peso }}</td>
+            <td>{{ trabajador.suma_kilos }}</td>
         </tr>
         {% endfor %}
     </tbody>

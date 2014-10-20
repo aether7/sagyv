@@ -29,8 +29,10 @@ class KilosVendidos(object):
         trabajador_nombre = ""
         producto_id = 0
         producto_nombre = ""
+        producto_codigo = ""
         producto_peso = 0
         suma_kilos = 0
+
 
 class ConsumoCliente(object):
 
@@ -41,6 +43,7 @@ class ConsumoCliente(object):
         self.producto_nombre = ""
         self.producto_codigo = ""
         self.suma_monto = 0
+
 
 class Stock(object):
 
@@ -54,7 +57,6 @@ class Stock(object):
 class ReportesManager(models.Manager):
 
     ###TODO: agregar fechas en un between en la consulta
-
     def get_consumos_cliente_producto(self,fecha_inicio = None, fecha_termino = None):
 
         consulta_sql = """
@@ -93,19 +95,19 @@ class ReportesManager(models.Manager):
 
     def get_kilos_vendidos_trabajor(self, fecha_inicio=None, fecha_termino=None):
 
-
         consulta_sql = """
             SELECT
                 trabajador.id,
                 trabajador.nombre,
                 producto.id,
-                producto.nombre ,
+                producto.nombre,
                 producto.peso,
-                sum(detalle_v.cantidad) * producto.peso as kilos
+                sum(detalle_v.cantidad) * producto.peso as kilos,
+                producto.codigo
             FROM main_trabajador trabajador
             JOIN main_venta venta on venta.trabajador_id = trabajador.id
             JOIN main_detalleventa detalle_v on venta.id = detalle_v.venta_id
-            LEFT  JOIN main_producto producto  on producto.id = detalle_v.producto_id
+            LEFT JOIN main_producto producto  on producto.id = detalle_v.producto_id
             JOIN main_tipoproducto tipo_p on producto.tipo_producto_id = tipo_p.id
             GROUP BY trabajador.id, trabajador.nombre,tipo_p.nombre, producto.id, producto.nombre , producto.peso
         """
@@ -123,6 +125,7 @@ class ReportesManager(models.Manager):
             fila.producto_nombre = row[3]
             fila.producto_peso = row[4]
             fila.suma_kilos = row[5]
+            fila.producto_codigo = row[6]
 
             resultado.append(fila)
 
@@ -138,41 +141,41 @@ class ReportesManager(models.Manager):
                             SELECT sum(cuota_pagada.monto)
                             FROM main_cuotavoucher cuota_pagada
                             WHERE
-                                 voucher.id = cuota_pagada.voucher_id AND
-                                 cuota_pagada.pagado = 1
+                                voucher.id = cuota_pagada.voucher_id AND cuota_pagada.pagado = 1
                         )  as pagada,
                         (
                            SELECT count(cuota_pagada.id)
                            FROM main_cuotavoucher cuota_pagada
-                           WHERE
-                           voucher.id = cuota_pagada.voucher_id AND
-                           cuota_pagada.pagado = 1
+                           WHERE voucher.id = cuota_pagada.voucher_id AND cuota_pagada.pagado = 1
 
                         )  as cant_cp,
                         (
                           SELECT sum(cuota_impagada.monto)
                           FROM main_cuotavoucher cuota_impagada
-                          WHERE
-                          voucher.id = cuota_impagada.voucher_id AND
-                          cuota_impagada.pagado = 0
+                          WHERE voucher.id = cuota_impagada.voucher_id AND cuota_impagada.pagado = 0
                         )  as impaga,
                         (
                           SELECT count(cuota_impagada.id)
                           FROM main_cuotavoucher cuota_impagada
-                          WHERE
-                            voucher.id = cuota_impagada.voucher_id AND
-                            cuota_impagada.pagado = 0
+                          WHERE voucher.id = cuota_impagada.voucher_id AND cuota_impagada.pagado = 0
                         )  as cant_cimp
-                 FROM main_venta venta
+                FROM main_venta venta
 
-                 INNER JOIN main_voucher voucher ON venta.id = voucher.venta_id
-                 INNER JOIN main_cliente cliente ON cliente.id = venta.cliente_id
-
-                 GROUP BY venta.id, venta.numero_serie, venta.monto , venta.fecha,
-                          venta.cliente_id, cliente.nombre, voucher.tipo_cuotas,
-                          voucher.numero_tarjeta, voucher.numero_operacion, voucher.numero_cuotas
-                 ORDER BY cliente.nombre
-                          """
+                INNER JOIN main_voucher voucher ON venta.id = voucher.venta_id
+                INNER JOIN main_cliente cliente ON cliente.id = venta.cliente_id
+                GROUP BY
+                    venta.id,
+                    venta.numero_serie,
+                    venta.monto,
+                    venta.fecha,
+                    venta.cliente_id,
+                    cliente.nombre,
+                    voucher.tipo_cuotas,
+                    voucher.numero_tarjeta,
+                    voucher.numero_operacion,
+                    voucher.numero_cuotas
+                ORDER BY cliente.nombre
+        """
 
         query = connection.cursor()
         query.execute(consulta_sql)
@@ -213,7 +216,7 @@ class StockManager(models.Manager):
             FROM main_stockvehiculo msv
             INNER JOIN main_producto mp ON(msv.producto_id = mp.id)
             INNER JOIN main_tipoproducto mtp ON(mp.tipo_producto_id = mtp.id)
-            GROUP BY mp.codigo, mp.peso, msv.producto_id, mtp.nombre;
+            GROUP BY mp.codigo, mp.peso, msv.producto_id, mtp.nombre
         """
         query = connection.cursor()
         query.execute(consulta_sql)
@@ -241,7 +244,11 @@ class StockManager(models.Manager):
                     mp.id
             FROM main_producto mp
             INNER JOIN main_tipoproducto mtp ON(mp.tipo_producto_id = mtp.id)
-            GROUP BY mp.codigo, mp.peso, mtp.nombre, mp.stock,mp.id
+            GROUP BY
+                mp.codigo,
+                mp.peso,
+                mtp.nombre,
+                mp.stock,mp.id
         """
 
         query = connection.cursor()
