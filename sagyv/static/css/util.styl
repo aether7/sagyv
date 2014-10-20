@@ -1,0 +1,49 @@
+.auto-margin
+    margin auto
+
+.block
+    display block
+
+.box
+    box-sizing border-box
+    display inline-block
+    vertical-align top
+
+.center
+    text-align center
+
+.icon-pencil, .icon-calendar, .icon-calendar2, .icon-remove, .icon-search
+    font-family 'icomoon'
+    speak none
+    font-style normal
+    font-weight normal
+    font-variant normal
+    text-transform none
+    line-height 1
+    -webkit-font-smoothing antialiased
+    -moz-osx-font-smoothing grayscale
+
+    &:hover
+        color red
+
+.icon-pencil:before
+    content "\e600"
+
+.icon-calendar:before
+    content "\e601"
+
+.icon-calendar2:before
+    content "\e602"
+
+.icon-search:before
+    content "\e604"
+
+.icon-remove:before
+    content "\e603"
+
+.ng-cloak
+    display none !important
+
+for num in (10..90)
+    if num %5 == 0
+        s(".w%s{width:%s%}", num, num)

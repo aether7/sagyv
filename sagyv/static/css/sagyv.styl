@@ -10,10 +10,7 @@
 
 morado = #835c94
 
-.box
-    box-sizing border-box
-    display inline-block
-    vertical-align top
+@import "util.styl"
 
 body
     font-family 'Verdana','Sans-serif'
@@ -85,12 +82,8 @@ body
         span:nth-child(1)
             width 200px
 
-
 #my_tab
     margin 2em 0
-
-.auto-margin
-    margin auto
 
 .btn-accion
     margin 1em
@@ -102,17 +95,6 @@ body
     .btn-agregar
         bottom 11px
         position absolute
-
-.box
-    box-sizing border-box
-    display inline-block
-    vertical-align top
-
-.block
-    display block
-
-.center
-    text-align center
 
 .logo-index
     float left
@@ -132,39 +114,3 @@ body
                     button
                         bottom 0
                         position absolute
-
-.ng-cloak
-    display none !important
-
-.icon-pencil, .icon-calendar, .icon-calendar2, .icon-remove, .icon-search
-    font-family 'icomoon'
-    speak none
-    font-style normal
-    font-weight normal
-    font-variant normal
-    text-transform none
-    line-height 1
-    -webkit-font-smoothing antialiased
-    -moz-osx-font-smoothing grayscale
-
-    &:hover
-        color red
-
-.icon-pencil:before
-    content "\e600"
-
-.icon-calendar:before
-    content "\e601"
-
-.icon-calendar2:before
-    content "\e602"
-
-.icon-search:before
-    content "\e604"
-
-.icon-remove:before
-    content "\e603"
-
-for num in (10..90)
-    if num %5 == 0
-        s(".w%s{width:%s%}", num, num)

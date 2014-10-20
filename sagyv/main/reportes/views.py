@@ -7,16 +7,18 @@ from django.shortcuts import render
 class ConsumoClientes(TemplateView):
     template_name = "reportes/consumo_clientes.html"
 
+    def get(self, req):
+        fecha_inicio = req.GET.get('fechaInicio')
+        fecha_termino = req.GET.get('fechaTermino')
+        productos = ReportesManager().get_consumos_cliente_producto(fecha_inicio, fecha_termino)
+
+        data = { 'productos': productos }
+
+        return render(req, self.template_name, context_instance = RequestContext(req))
+
+
     def post(self, req):
         pass
-
-    def get_context_data(self, *args, **kwargs):
-        data = super(ConsumoClientes, self).get_context_data(*args, **kwargs)
-        reportes = ReportesManager()
-        rs = reportes.get_consumos_cliente_producto()
-        data['productos'] = rs
-
-        return data
 
 
 class ComprasGas(TemplateView):
@@ -30,8 +32,12 @@ class KilosVendidos(TemplateView):
     template_name = "reportes/kilos_vendidos.html"
 
     def get(self, req):
-        trabajadores = ReportesManager().get_kilos_vendidos_trabajor()
+        fecha_inicio = req.GET.get('fechaInicio', None)
+        fecha_termino = req.GET.get('fechaTermino', None)
+        trabajadores = ReportesManager().get_kilos_vendidos_trabajor(fecha_inicio, fecha_termino)
+
         data = { "trabajadores": trabajadores }
+
         return render(req, self.template_name, context_instance = RequestContext(req))
 
 
@@ -39,8 +45,12 @@ class Creditos(TemplateView):
     template_name = "reportes/creditos.html"
 
     def get(self, req):
-        creditos = ReportesManager.detalle_cuotas_creditos()
+        fecha_inicio = req.GET.get('fechaInicio', None)
+        fecha_termino = req.GET.get('fechaTermino', None)
+        creditos = ReportesManager().detalle_cuotas_creditos(fecha_inicio, fecha_termino)
+
         data = { "creditos": creditos }
+
         return render(req, self.template_name, context_instance = RequestContext(req))
 
 
