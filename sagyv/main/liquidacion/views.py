@@ -186,6 +186,7 @@ class BalanceLiquidacionView(View):
 class Cerrar(View):
 
     def post(self, req):
+        print req.POST
         productos = req.POST.get('productos')
         vouchers = req.POST.get('vouchers')
         cheques = req.POST.get('cheques')
