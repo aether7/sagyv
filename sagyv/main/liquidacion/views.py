@@ -222,10 +222,11 @@ class Cerrar(View):
 
             cheque.monto = int(c["monto"])
             cheque.banco = bank
-            #emisor
-            #fecha
-            #numero
-            #cobrado = False
+            #cheque.emisor
+            cheque.fecha = convierte_texto_fecha(c['fecha'])
+            cheque.numero = c['numero']
+            cheque.cobrado = False
+            cheque.save()
             #print c
 
     def ingreso_otros(self, otros):
