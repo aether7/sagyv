@@ -24,6 +24,9 @@ from main.models import Banco
 from main.models import HistorialStock
 from main.models import Terminal
 
+from main.models import Cheque
+from main.models import Banco
+
 
 class IndexView(TemplateView):
     template_name = "liquidacion/index.html"
@@ -190,17 +193,37 @@ class Cerrar(View):
         cheques = req.POST.get('cheques')
         cupones_prepago = req.POST.get('cupones_prepago')
         otros = req.POST.get('otros')
-
         productos = req.POST.get('productos')
         guias = req.POST.get('guias')
         this_guia = req.POST.get('guia_despacho')
         montos = req.POST.get('montos')
 
+        #if vouchers != "":
+            #self.ingreso_vouchers(json.loads())
+        if cheques != "":
+            self.ingreso_cheques(json.loads(cheques))
+
+        #self.ingreso_otros(json.loads())
+        #self.ingreso_guia(json.loads())
+        #self.ingreso_guias(json.loads())
+        #self.ingreso_montos(json.loads())
+
+
     def ingreso_vouchers(self, vouchers):
         pass
 
     def ingreso_cheques(self, cheques):
-        pass
+        for c in cheques:
+            bank = Banco.objects.get( pk = int(c['banco']['id']) )
+            cheque = Cheque()
+
+            cheque.monto = int(c["monto"])
+            cheque.banco = bank
+            #emisor
+            #fecha
+            #numero
+            #cobrado = False
+            #print c
 
     def ingreso_otros(self, otros):
         pass
