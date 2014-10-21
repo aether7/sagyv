@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 import json
+
 from django.core.serializers.json import DjangoJSONEncoder
-
-from reportlab.pdfgen import canvas
-from reportlab.lib.units import inch
-
 from django.http import HttpResponse
 from django.views.generic import TemplateView, View
+from django.db import transaction
+
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import inch
+
 from main.helpers.fecha import convierte_texto_fecha, convierte_fecha_texto
 
 from main.managers import ReportesManager
@@ -23,7 +23,6 @@ from main.models import BoletaTrabajador
 from main.models import Banco
 from main.models import HistorialStock
 from main.models import Terminal
-
 from main.models import Cheque
 from main.models import Banco
 
@@ -188,6 +187,7 @@ class BalanceLiquidacionView(View):
 
 class Cerrar(View):
 
+    @transaction.atomic
     def post(self, req):
         print req.POST
 
