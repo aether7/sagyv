@@ -25,7 +25,6 @@ function LiquidacionController($scope, liquidacionService){
         transbank: null
     };
 
-
     this.montos = {
         subTotal: 0,
         descuentos: 0,

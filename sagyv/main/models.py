@@ -620,3 +620,16 @@ class BoletaTrabajador(models.Model):
     activo = models.NullBooleanField()
 
     objects = BoletaTrabajadorManager()
+
+
+class Cheque(models.Model):
+    monto = models.IntegerField()
+    banco = models.ForeignKey(Banco)
+    emisor = models.ForeignKey(Cliente, null = True)
+    fecha = models.DateField()
+    numero = models.IntegerField()
+    cobrado = models.BooleanField(default = False)
+
+    def __unicode__(self):
+        return str(self.numero) + " " + str(self.monto)
+
