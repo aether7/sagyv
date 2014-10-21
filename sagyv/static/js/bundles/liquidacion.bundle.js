@@ -243,6 +243,7 @@ function LiquidacionController($scope, liquidacionService){
     this.vouchers_dump = '';
     this.guia_dump = '';
     this.montos_dump = '';
+    this.this_guia_dump = '';
 
     this.productos = [];
     this.cheques = [];
@@ -306,6 +307,7 @@ LiquidacionController.mixin({
         this.vehiculo = data.vehiculo;
         this.vehiculo.kilometrosRecorridos = 0;
         this.vehiculo.kmActual = 0;
+        this.this_guia_dump = JSON.stringify(this.guia);
     },
 
     actualizarKilometraje: function(){
@@ -344,6 +346,9 @@ LiquidacionController.mixin({
             _this.kilosVendidos += vacios * peso;
         });
         this.productos_dump = JSON.stringify(this.productos);
+
+
+        console.log(this.guia);
     },
 
     resetearValores: function(){
@@ -427,7 +432,6 @@ LiquidacionController.mixin({
 
     cerrarLiquidacion: function(){
         var url = App.urls.get('liquidacion:cerrar');
-
         // TODO
         //this.productos_dump = JSON.stringify(this.productos);
         //this.montos_dump = JSON.stringify(this.montos);

@@ -186,14 +186,33 @@ class BalanceLiquidacionView(View):
 class Cerrar(View):
 
     def post(self, req):
-        print req.POST
-        productos = req.POST.get('productos')
         vouchers = req.POST.get('vouchers')
         cheques = req.POST.get('cheques')
         cupones_prepago = req.POST.get('cupones_prepago')
         otros = req.POST.get('otros')
+
+        productos = req.POST.get('productos')
         guias = req.POST.get('guias')
+        this_guia = req.POST.get('guia_despacho')
         montos = req.POST.get('montos')
+
+    def ingreso_vouchers(self, vouchers):
+        pass
+
+    def ingreso_cheques(self, cheques):
+        pass
+
+    def ingreso_otros(self, otros):
+        pass
+
+    def ingreso_guia(self, this_guia):
+        pass
+
+    def ingreso_guias(self, guias):
+        pass
+
+    def ingreso_montos(self, montos):
+        pass
 
     # def get(self, req):
     #
