@@ -500,7 +500,7 @@ class Venta(models.Model):
     fecha = models.DateTimeField()
     tipo_pago = models.ForeignKey(TipoPago)
     descuento = models.IntegerField()
-    descripcion_descuento = models.CharField(max_length=140,null=True)
+    descripcion_descuento = models.CharField(max_length = 140, null = True)
 
     def __unicode__(self):
         return self.monto
@@ -527,14 +527,14 @@ class Cupon(models.Model):
 
 
 class Voucher(models.Model):
-    tipo_tarjeta = models.ForeignKey(TipoTarjeta, null=True)
-    tipo_cuotas = models.CharField(max_length=140,null=True)
+    tipo_tarjeta = models.ForeignKey(TipoTarjeta, null = True)
+    tipo_cuotas = models.CharField(max_length = 140, null = True)
     terminal = models.ForeignKey(Terminal)
-    numero_tarjeta = models.IntegerField(null=True)
-    numero_operacion = models.IntegerField()
+    numero_tarjeta = models.IntegerField(null = True)
+    numero_operacion = models.IntegerField(null = True)
     codigo_autorizacion = models.IntegerField()
-    numero_cuotas = models.IntegerField(default=1)
-    venta = models.ForeignKey(Venta)
+    numero_cuotas = models.IntegerField(default = 1)
+    venta = models.ForeignKey(Venta, null = True)
 
     def __unicode__(self):
         return self.monto
@@ -632,4 +632,3 @@ class Cheque(models.Model):
 
     def __unicode__(self):
         return str(self.numero) + " " + str(self.monto)
-

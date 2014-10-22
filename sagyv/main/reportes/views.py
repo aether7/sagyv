@@ -16,7 +16,6 @@ class ConsumoClientes(TemplateView):
 
         return render(req, self.template_name, context_instance = RequestContext(req))
 
-
     def post(self, req):
         pass
 
