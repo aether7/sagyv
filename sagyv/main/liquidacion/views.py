@@ -25,6 +25,8 @@ from main.models import HistorialStock
 from main.models import Terminal
 from main.models import Cheque
 from main.models import Banco
+from main.models import Cupon
+from main.models import Otros
 
 
 class IndexView(TemplateView):
@@ -203,14 +205,29 @@ class Cerrar(View):
 
         #if vouchers != "":
             #self.ingreso_vouchers(json.loads())
-        if cheques != "":
+        if cheques != '':
             self.ingreso_cheques(json.loads(cheques))
 
-        #self.ingreso_otros(json.loads())
+        if cupones_prepago != '':
+            self.ingreso_cupones(json.loads(cupones_prepago))
+
+        if otros != '':
+            pass
+            #por validar
+            #self.ingreso_otros(json.loads(otros))
+
+
         #self.ingreso_guia(json.loads())
         #self.ingreso_guias(json.loads())
         #self.ingreso_montos(json.loads())
 
+    def ingreso_cupones(self, cupones):
+        for i in cupones:
+            cupon = Cupon()
+            cupon.numero_cupon = i['numero']
+            #cupon.fecha Auto now
+            cupon.descuento = i['descuento']
+            #cupon.venta por aclarar
 
     def ingreso_vouchers(self, vouchers):
         pass
@@ -230,8 +247,13 @@ class Cerrar(View):
             #print c
 
     def ingreso_otros(self, otros):
-        pass
-
+        for o in otros:
+            otro = Otros()
+            otro.concepto = o['concepto']
+            otro.monto = o['monto']
+            #otro.fecha auto now
+            #otro.trabajador Por validar
+            otro.save()
     def ingreso_guia(self, this_guia):
         pass
 

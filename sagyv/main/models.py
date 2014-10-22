@@ -632,3 +632,14 @@ class Cheque(models.Model):
 
     def __unicode__(self):
         return str(self.numero) + " " + str(self.monto)
+
+
+class Otros(models.Model):
+    concepto = models.CharField(max_length=255)
+    monto = models.IntegerField()
+    fecha = models.DateField(auto_now=True)
+    trabajador = models.ForeignKey(Trabajador)
+
+    def __unicode__(self):
+        return str(self.fecha)+' '+str(self.trabajador.get_nombre_completo)
+
