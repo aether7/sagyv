@@ -35,7 +35,8 @@
                     <select id="formato_prepago" class="form-control"
                         data-ng-model="cpCtrl.cuponPrepago.formatoId">
                         {% for producto in productos %}
-                        <option value="{{ producto.id }}">{{ producto.codigo }}</option>
+                        <option value="{{ producto.id }}"
+                            data-descuento="{{ producto.get_precio_producto }}">{{ producto.codigo }}</option>
                         {% endfor %}
                     </select>
                     <span class="text-danger"

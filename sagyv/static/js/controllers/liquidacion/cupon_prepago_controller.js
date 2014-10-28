@@ -15,8 +15,12 @@ CuponPrepagoController.mixin({
             return;
         }
 
-        this.cuponPrepago.clienteNombre = $('#cliente_prepago option:selected').text();
-        this.cuponPrepago.formatoNombre = $('#formato_prepago option:selected').text();
+        var clientePrepago = $('#cliente_prepago option:selected'),
+            formatoPrepago = $('#formato_prepago option:selected');
+
+        this.cuponPrepago.descuento = parseInt(formatoPrepago.data('descuento'));
+        this.cuponPrepago.clienteNombre = clientePrepago.text();
+        this.cuponPrepago.formatoNombre = formatoPrepago.text();
 
         this.scope.$emit('guia:agregarCuponesPrepago', this.cuponPrepago.getJSON());
         $('#modal_cupones_prepago').modal('hide');
