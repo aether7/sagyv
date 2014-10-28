@@ -61,6 +61,7 @@
                             <tr>
                                 <th>Tarjeta</th>
                                 <th>Monto</th>
+                                <th>Descuento</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -68,6 +69,7 @@
                             <tr data-ng-repeat="tarjeta in vlCtrl.voucher.tarjetas">
                                 <td data-ng-bind="tarjeta.nombre"></td>
                                 <td data-ng-bind="tarjeta.monto | currency"></td>
+                                <td data-ng-bind="tarjeta.descuento | currency"></td>
                                 <td>
                                     <a href data-ng-click="vlCtrl.removeTarjeta($index)">eliminar</a>
                                 </td>

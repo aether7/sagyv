@@ -12,4 +12,5 @@ urlpatterns += patterns("",
     url(r"^precios/",include("main.precios.urls",namespace="precios")),
     url(r"^trabajador/",include("main.trabajador.urls",namespace="trabajador")),
     url(r"^reportes/", include("main.reportes.urls",namespace="reportes")),
+    url(r"^guias/", include("main.guias.urls", namespace="guias")),
 )

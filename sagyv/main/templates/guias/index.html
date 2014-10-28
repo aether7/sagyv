@@ -1,0 +1,69 @@
+{% extends "panel_control.html" %}
+{% load static from staticfiles %}
+{% block content %}
+
+<!-- Nav tabs -->
+<ul class="nav nav-tabs" role="tablist">
+    <li class="active">
+        <a href="#guias" role="tab" data-toggle="tab">Guias</a>
+    </li>
+    <li>
+        <a href="#talonarios" role="tab" data-toggle="tab">Talonarios</a>
+    </li>
+    <li>
+        <a href="#terminales" role="tab" data-toggle="tab">Terminales</a>
+    </li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content" ng-app="guiaApp">
+    <div class="tab-pane active" id="guias">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Número Guía</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+
+    <div class="tab-pane" id="talonarios">talonarios b</div>
+
+    <div class="tab-pane" id="terminales" ng-controller="TerminalController as terminalCtrl">
+        <button class="btn btn-primary" ng-click="terminalCtrl.mostrarPanel()">Nueva</button>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Número Terminal</th>
+                    <th>Número Vehículo</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="terminal in terminalCtrl.terminales">
+                    <td ng-bind="terminal.numero"></td>
+                    <td ng-bind="terminal.vehiculo"></td>
+                    <td>
+                        <a href class="icon-pencil" ng-click="terminalCtrl.editar($index)"></a>
+                        <a href class="icon-remove" ng-click="terminalCtrl.remover($index)"></a>
+                        <a href class="">asignar</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        {% include "guias/components/modal_terminal_agregar.html" %}
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'js/vendor/angular.min.js' %}"></script>
+<script src="{% static 'js/bundles/guia.bundle.js' %}"></script>
+<script>
+    App.urls.set("guias:obtener_terminales","{% url 'guias:obtener_terminales' %}");
+</script>
+{% endblock %}
