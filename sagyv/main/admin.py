@@ -92,6 +92,11 @@ class DetalleVentaAdmin(admin.ModelAdmin):
     list_editable = ( "cantidad", "venta", "producto", "monto" )
     ordering = ("-id",)
 
+class BancoAdmin(admin.ModelAdmin):
+    list_display = ("id", "nombre","cheques_recibidos")
+    list_editable = ("nombre","cheques_recibidos")
+    ordering = ("id",)
+
 admin.site.register(Region, RegionAdmin)
 admin.site.register(Comuna, ComunaAdmin)
 admin.site.register(Cliente, ClienteAdmin)
@@ -112,3 +117,4 @@ admin.site.register(StockVehiculo)
 admin.site.register(Venta,VentaAdmin)
 admin.site.register(DetalleVenta, DetalleVentaAdmin)
 admin.site.register(EstadoTerminal)
+admin.site.register(Banco, BancoAdmin)
