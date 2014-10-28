@@ -32,7 +32,7 @@ CuponPrepago.mixin({
 
         valido = this.esValidoNumero() && valido;
         valido = this.esValidoFormato() && valido;
-        valido = this.esValidoDescuento() && valido;
+        //valido = this.esValidoDescuento() && valido;
         valido = this.esValidoClienteId() && valido;
 
         return valido;
