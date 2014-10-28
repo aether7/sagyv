@@ -24,7 +24,6 @@ from main.models import Banco
 from main.models import HistorialStock
 from main.models import Terminal
 from main.models import Cheque
-from main.models import Banco
 from main.models import Cupon
 from main.models import Otros
 
@@ -38,7 +37,7 @@ class IndexView(TemplateView):
         context["clientes_propios"] = Cliente.objects.filter(es_propio=True).order_by("id")
         context["clientes_lipigas"] = Cliente.objects.filter(es_lipigas=True).order_by("id")
         context["tarjetas_comerciales"] = TarjetaCredito.objects.get_tarjetas_comerciales()
-        context["bancos"] = Banco.objects.order_by("nombre")
+        context["bancos"] = Banco.objects.order_by("-cheques_recibidos")
         context["tarjetas_bancarias"] = TarjetaCredito.objects.get_tarjetas_bancarias()
         context["productos"] = Producto.objects.exclude(tipo_producto_id=3)
         context["guias_despacho"] = GuiaDespacho.objects.filter(estado = 0).order_by("id")
@@ -235,6 +234,9 @@ class Cerrar(View):
     def ingreso_cheques(self, cheques):
         for c in cheques:
             bank = Banco.objects.get( pk = int(c['banco']['id']) )
+            bank.cheques_recibidos = 1 + bank.cheques_recibidos
+            bank.save()
+
             cheque = Cheque()
 
             cheque.monto = int(c["monto"])

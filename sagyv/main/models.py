@@ -375,7 +375,8 @@ class TipoTarjeta(models.Model):
 
 
 class Banco(models.Model):
-    nombre = models.CharField(max_length=255)
+    nombre = models.CharField(max_length = 255)
+    cheques_recibidos = models.IntegerField(default = 0)
 
     def __unicode__(self):
         return self.nombre
