@@ -1,10 +1,3 @@
-(function(){
-'use strict';
-
-var app = angular.module('guiaApp', []),
-    guiaService = require('../services/guia_service.js'),
-    terminalService = require('../services/terminal_service.js');
-
 function TerminalController(service){
     this.service = service;
 
@@ -26,6 +19,8 @@ TerminalController.mixin({
 
     mostrarPanel: function(){
         this.terminal = {};
+        this.mensajes = {};
+
         $('#modal_terminal_agregar').modal('show');
         console.log('mostrando panel');
     },
@@ -53,6 +48,8 @@ TerminalController.mixin({
         }
 
         console.log(this.terminal);
+        common.agregarMensaje('terminal agregado exitosamente');
+        $('#modal_terminal_agregar').modal('hide');
     },
 
     editar: function(index){
@@ -64,9 +61,4 @@ TerminalController.mixin({
     }
 });
 
-app.factory('guiaService', guiaService);
-app.factory('terminalService', terminalService);
-
-
-app.controller('TerminalController', ['terminalService', TerminalController]);
-})();
+module.exports = TerminalController;
