@@ -72,7 +72,7 @@ class CrearTerminal(View):
                 h.estado = False
                 h.save()
 
-                terminales = Terminal.objects.filter(vehiculo = h.vehiculo, terminal != obj_terminal)
+                terminales = Terminal.objects.filter(vehiculo = h.vehiculo).exclude(pk = obj_terminal.id)
 
                 for t in terminales:
                     t.vehiculo = None
