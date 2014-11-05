@@ -468,7 +468,7 @@ class EstadoTerminal(models.Model):
 
 class Terminal(models.Model):
     codigo = models.CharField(max_length=140)
-    vehiculo = models.ForeignKey(Vehiculo)
+    vehiculo = models.ForeignKey(Vehiculo, null = True)
     estado = models.ForeignKey(EstadoTerminal)
 
     def __unicode__(self):
@@ -488,6 +488,7 @@ class HistorialCambioVehiculo(models.Model):
     terminal = models.ForeignKey(Terminal)
     vehiculo = models.ForeignKey(Vehiculo)
     fecha = models.DateField(auto_now_add=True)
+    estado = models.NullBooleanField()
 
     def __unicode__(self):
         return self.terminal.codigo + "(" + self.vehiculo.p + ") " + self.fecha
