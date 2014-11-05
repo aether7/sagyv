@@ -21,12 +21,19 @@ class ObtenerTerminales(View):
         rs = Terminal.objects.all()
 
         for terminal in rs:
+            if terminal.vehiculo is None:
+                id_vehiculo = "0"
+                numero_vehiculo = "No Vehiculo"
+            else:
+                id_vehiculo = terminal.vehiculo.id
+                numero_vehiculo = terminal.vehiculo.numero
+
             terminales.append({
                 'id': terminal.id,
                 'codigo': terminal.codigo,
                 'vehiculo': {
-                    'id': terminal.vehiculo.id,
-                    'codigo': terminal.vehiculo.numero
+                    'id': id_vehiculo,
+                    'codigo': numero_vehiculo
                 },
                 'estado': {
                     'id': terminal.estado.id,
