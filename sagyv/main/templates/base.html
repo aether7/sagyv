@@ -13,9 +13,11 @@
 </head>
 <body>
     <header>{% block header %}{% endblock %}</header>
+
     <section id="main_content">
         {% block content %}{% endblock %}
     </section>
+
     <footer>{% block footer %}{% endblock %}</footer>
 
     <script src="{% static 'js/vendor/jquery.min.js' %}"></script>
@@ -27,6 +29,7 @@
     <script>
         App.version = "0.1";
     </script>
+
     {% block js %}{% endblock %}
 </body>
 </html>

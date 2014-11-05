@@ -1,23 +1,34 @@
+import json
+
 from django.http import HttpResponse
 from django.template import RequestContext
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, View
 from main.managers import ReportesManager
 from django.shortcuts import render
+from django.core.serializers.json import DjangoJSONEncoder
 
-class ConsumoClientes(TemplateView):
-    template_name = "reportes/consumo_clientes.html"
-
+class ConsumoClientes(View):
     def get(self, req):
         fecha_inicio = req.GET.get('fechaInicio')
         fecha_termino = req.GET.get('fechaTermino')
-        productos = ReportesManager().get_consumos_cliente_producto(fecha_inicio, fecha_termino)
+        consumos = ReportesManager().get_consumos_cliente_producto(fecha_inicio, fecha_termino)
+        data = []
 
-        data = { 'productos': productos }
+        for consumo in consumos:
+            data.append({
+                "cliente": {
+                    "id": consumo.id_cliente,
+                    "nombre": consumo.nombre_cliente
+                },
+                "producto": {
+                    "id": consumo.producto_id,
+                    "codigo": consumo.producto_codigo,
+                    "suma": consumo.suma_producto
+                }
+            })
 
-        return render(req, self.template_name, context_instance = RequestContext(req))
-
-    def post(self, req):
-        pass
+        data = json.dumps(data, cls=DjangoJSONEncoder)
+        return HttpResponse(data, content_type="application/json")
 
 
 class ComprasGas(TemplateView):
@@ -58,7 +69,10 @@ class VentaMasa(TemplateView):
 
 
 index = TemplateView.as_view(template_name="reportes/index.html")
-consumo_clientes = ConsumoClientes.as_view()
+
+consumo_clientes = TemplateView.as_view(template_name="reportes/consumo_clientes.html")
+obtener_consumo = ConsumoClientes.as_view()
+
 compras_gas = ComprasGas.as_view()
 kilos_vendidos = KilosVendidos.as_view()
 creditos = Creditos.as_view()

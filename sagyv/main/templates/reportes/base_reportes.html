@@ -1,4 +1,5 @@
 {% extends "panel_control.html" %}
+{% load static from staticfiles %}
 
 {% block css %}
 <style>
@@ -20,6 +21,19 @@
     <a href="{% url 'reportes:venta_masa' %}" class="btn btn-default">Venta masa</a>
 </section>
 
+<section ng-app="reporteApp">
 {% block reporte_content %}No hay nada definido{% endblock %}
+</section>
+
+{% endblock %}
+
+{% block js %}
+
+<script src="{% static 'js/vendor/angular.min.js' %}"></script>
+<script src="{% static 'js/vendor/highcharts.js' %}"></script>
+<script src="{% static 'js/bundles/reporte.bundle.js' %}"></script>
+
+{% block js_reportes %}
+{% endblock %}
 
 {% endblock %}

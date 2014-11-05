@@ -2,7 +2,17 @@
 
 {% block reporte_content %}
 
-{% include "reportes/panel_acciones.html" with accion_filtrar='reportes:creditos' %}
+<section ng-controller="CreditoController as creditoCtrl">
+    <label for="desde">Desde</label>
+    <input id="desde" type="text" ng-model="creditoCtrl.desde" />
+
+    <label for="hasta">Hasta</label>
+    <input id="hasta" type="text" ng-model="creditoCtrl.hasta" />
+
+    <a href="{% url 'reportes:creditos' %}" class="btn btn-primary" ng-click="creditoCtrl.filtrar()">Filtrar</a>
+    <a href class="btn btn-primary" ng-click="creditoCtrl.exportar()">Exportar a excel</a>
+    <a href class="btn btn-primary" ng-click="creditoCtrl.graficar()">Ver gráfico</a>
+</section>
 
 <table class="table table-striped">
     <thead>

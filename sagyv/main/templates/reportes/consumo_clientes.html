@@ -2,7 +2,19 @@
 
 {% block reporte_content %}
 
-{% include "reportes/panel_acciones.html" with accion_filtrar='reportes:consumo_clientes' %}
+<section ng-controller="ConsumoClienteController as consumoCtrl">
+
+<aside>
+    <label for="desde">Desde</label>
+    <input id="desde" type="text" ng-model="consumoCtrl.desde" />
+
+    <label for="hasta">Hasta</label>
+    <input id="hasta" type="text" ng-model="consumoCtrl.hasta" />
+
+    <a href class="btn btn-primary" ng-click="consumoCtrl.filtrar()">Filtrar</a>
+    <a href class="btn btn-primary" ng-click="consumoCtrl.exportar()">Exportar a excel</a>
+    <a href class="btn btn-primary" ng-click="consumoCtrl.graficar()">Ver gráfico</a>
+</aside>
 
 <table class="table table-striped">
     <thead>
@@ -15,15 +27,21 @@
         </tr>
     </thead>
     <tbody>
-        {% for producto in productos %}
-        <tr>
-            <td>{{ producto.id_cliente }}</td>
-            <td>{{ producto.nombre_cliente }}</td>
-            <td>{{ producto.producto_nombre }}</td>
-            <td>{{ producto.producto_codigo }}</td>
-            <td>{{ producto.suma_monto }}</td>
+        <tr ng-repeat="consumo in consumoCtrl.consumos">
+            <td ng-bind="consumo.cliente.id"></td>
+            <td ng-bind="consumo.cliente.nombre"></td>
+            <td ng-bind="consumo.producto.nombre"></td>
+            <td ng-bind="consumo.producto.codigo"></td>
+            <td ng-bind="consumo.producto.suma"></td>
         </tr>
-        {% endfor %}
     </tbody>
 </table>
+
+</section>
+{% endblock %}
+
+{% block js_reportes %}
+<script>
+    App.urls.set("reportes:obtener_consumo", "{% url 'reportes:obtener_consumo' %}");
+</script>
 {% endblock %}

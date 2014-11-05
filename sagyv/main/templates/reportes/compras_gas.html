@@ -1,8 +1,17 @@
 {% extends "reportes/base_reportes.html" %}
-
 {% block reporte_content %}
 
-{% include "reportes/panel_acciones.html" with accion_filtrar='reportes:compras_gas' %}
+<section ng-controller="GasController as gasCtrl">
+    <label for="desde">Desde</label>
+    <input id="desde" type="text" ng-model="gasCtrl.desde" />
+
+    <label for="hasta">Hasta</label>
+    <input id="hasta" type="text" ng-model="gasCtrl.hasta" />
+
+    <a href="{% url 'reportes:compras_gas' %}" class="btn btn-primary" ng-click="gasCtrl.filtrar()">Filtrar</a>
+    <a href class="btn btn-primary" ng-click="gasCtrl.exportar()">Exportar a excel</a>
+    <a href class="btn btn-primary" ng-click="gasCtrl.graficar()">Ver gráfico</a>
+</section>
 
 <table class="table table-striped">
     <thead>

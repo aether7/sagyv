@@ -2,7 +2,17 @@
 
 {% block reporte_content %}
 
-{% include "reportes/panel_acciones.html" with accion_filtrar='reportes:venta_masa' %}
+<section ng-controller="VentaController as ventaCtrl">
+    <label for="desde">Desde</label>
+    <input id="desde" type="text" ng-model="ventaCtrl.desde" />
+
+    <label for="hasta">Hasta</label>
+    <input id="hasta" type="text" ng-model="ventaCtrl.hasta" />
+
+    <a href="{% url 'reportes:venta_masa' %}" class="btn btn-primary" ng-click="ventaCtrl.filtrar()">Filtrar</a>
+    <a href class="btn btn-primary" ng-click="ventaCtrl.exportar()">Exportar a excel</a>
+    <a href class="btn btn-primary" ng-click="ventaCtrl.graficar()">Ver gráfico</a>
+</section>
 
 <table class="table table-striped">
     <thead>
