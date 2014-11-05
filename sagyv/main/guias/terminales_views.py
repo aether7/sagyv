@@ -32,4 +32,14 @@ class ObtenerTerminales(View):
 
         return terminales
 
+class CrearTerminal(View):
+
+    def post(self, req):
+        print req.POST
+
+        data = {'Status': 'ok'}
+        data = json.dumps(data, cls=DjangoJSONEncoder)
+        return HttpResponse(data, content_type='application/json')
+
 obtener_terminales = ObtenerTerminales.as_view()
+crear_terminal = CrearTerminal.as_view()

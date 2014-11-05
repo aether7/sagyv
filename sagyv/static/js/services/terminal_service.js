@@ -13,6 +13,7 @@ function terminalService($http){
         },
 
         create: function(terminal, callback){
+            var url = App.urls.get('guias:crear_terminal');
             post(url, terminal, callback);
         },
 

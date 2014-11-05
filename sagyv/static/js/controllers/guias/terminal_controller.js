@@ -26,7 +26,8 @@ TerminalController.mixin({
     },
 
     agregar: function(){
-        var valido = true;
+        var valido = true,
+        _this = this;
 
         this.mensajes = {};
 
@@ -48,6 +49,10 @@ TerminalController.mixin({
         }
 
         console.log(this.terminal);
+        this.service.create(this.terminal, function(data){
+            console.log(data);
+        });
+
         common.agregarMensaje('terminal agregado exitosamente');
         $('#modal_terminal_agregar').modal('hide');
     },
