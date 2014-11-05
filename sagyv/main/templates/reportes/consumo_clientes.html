@@ -6,36 +6,56 @@
 
 <aside>
     <label for="desde">Desde</label>
-    <input id="desde" type="text" ng-model="consumoCtrl.desde" />
+    <input id="desde" type="date" ng-model="consumoCtrl.desde" />
 
     <label for="hasta">Hasta</label>
-    <input id="hasta" type="text" ng-model="consumoCtrl.hasta" />
+    <input id="hasta" type="date" ng-model="consumoCtrl.hasta" />
 
     <a href class="btn btn-primary" ng-click="consumoCtrl.filtrar()">Filtrar</a>
     <a href class="btn btn-primary" ng-click="consumoCtrl.exportar()">Exportar a excel</a>
     <a href class="btn btn-primary" ng-click="consumoCtrl.graficar()">Ver gráfico</a>
 </aside>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>ID CLIENTE</th>
-            <th>NOMBRE</th>
-            <th>PRODUCTO</th>
-            <th>CODIGO</th>
-            <th>MONTO</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr ng-repeat="consumo in consumoCtrl.consumos">
-            <td ng-bind="consumo.cliente.id"></td>
-            <td ng-bind="consumo.cliente.nombre"></td>
-            <td ng-bind="consumo.producto.nombre"></td>
-            <td ng-bind="consumo.producto.codigo"></td>
-            <td ng-bind="consumo.producto.suma"></td>
-        </tr>
-    </tbody>
-</table>
+<!-- Nav tabs -->
+<ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active">
+        <a id="tabDetalle" href="#detalle" role="tab" data-toggle="tab">Detalle</a>
+    </li>
+
+    <li role="presentation">
+        <a id="tabGrafico" href="#grafico" role="tab" data-toggle="tab">Gráfico</a>
+    </li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="detalle">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID CLIENTE</th>
+                    <th>NOMBRE</th>
+                    <th>PRODUCTO</th>
+                    <th>CODIGO</th>
+                    <th>MONTO</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="consumo in consumoCtrl.consumos">
+                    <td ng-bind="consumo.cliente.id"></td>
+                    <td ng-bind="consumo.cliente.nombre"></td>
+                    <td ng-bind="consumo.producto.nombre"></td>
+                    <td ng-bind="consumo.producto.codigo"></td>
+                    <td ng-bind="consumo.producto.suma"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div role="tabpanel" class="tab-pane" id="grafico">
+        <div id="canvas_grafico"></div>
+    </div>
+</div>
 
 </section>
 {% endblock %}

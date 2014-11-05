@@ -55,6 +55,4 @@ app.controller('CreditoController', [CreditoController]);
 app.controller('GasController', [GasController]);
 app.controller('KilosController', [KilosController]);
 app.controller('VentaController', [VentaController]);
-
-console.log('reporte app');
 })();
