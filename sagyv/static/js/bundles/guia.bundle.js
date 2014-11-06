@@ -67,11 +67,11 @@ TerminalController.mixin({
 
         console.log(this.terminal);
         this.service.create(this.terminal, function(data){
-            console.log(data);
+            _this.terminales = data.terminales;
+            common.agregarMensaje('terminal agregado exitosamente');
+            $('#modal_terminal_agregar').modal('hide');
         });
 
-        common.agregarMensaje('terminal agregado exitosamente');
-        $('#modal_terminal_agregar').modal('hide');
     },
 
     editar: function(index){

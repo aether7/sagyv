@@ -8,40 +8,42 @@ from main.models import Terminal
 from main.models import Vehiculo
 from main.models import EstadoTerminal
 from main.models import HistorialCambioVehiculo
+from main.models import HistorialEstadoTerminal
+
+def _get_terminales():
+    terminales = []
+    rs = Terminal.objects.all()
+
+    for terminal in rs:
+        if terminal.vehiculo is None:
+            id_vehiculo = "0"
+            numero_vehiculo = "No Vehiculo"
+        else:
+            id_vehiculo = terminal.vehiculo.id
+            numero_vehiculo = terminal.vehiculo.numero
+
+        terminales.append({
+            'id': terminal.id,
+            'codigo': terminal.codigo,
+            'vehiculo': {
+                'id': id_vehiculo,
+                'codigo': numero_vehiculo
+            },
+            'estado': {
+                'id': terminal.estado.id,
+                'nombre': terminal.estado.nombre
+            }
+        })
+
+    return terminales
 
 class ObtenerTerminales(View):
 
     def get(self, req):
-        data = { 'terminales': self._get_terminales() }
+        data = {'terminales': _get_terminales()}
         data = json.dumps(data, cls=DjangoJSONEncoder)
         return HttpResponse(data, content_type='application/json')
 
-    def _get_terminales(self):
-        terminales = []
-        rs = Terminal.objects.all()
-
-        for terminal in rs:
-            if terminal.vehiculo is None:
-                id_vehiculo = "0"
-                numero_vehiculo = "No Vehiculo"
-            else:
-                id_vehiculo = terminal.vehiculo.id
-                numero_vehiculo = terminal.vehiculo.numero
-
-            terminales.append({
-                'id': terminal.id,
-                'codigo': terminal.codigo,
-                'vehiculo': {
-                    'id': id_vehiculo,
-                    'codigo': numero_vehiculo
-                },
-                'estado': {
-                    'id': terminal.estado.id,
-                    'nombre': terminal.estado.nombre
-                }
-            })
-
-        return terminales
 
 class CrearTerminal(View):
 
@@ -54,10 +56,11 @@ class CrearTerminal(View):
         estado_terminal = EstadoTerminal.objects.get(pk = int(1))
 
         terminal = self.crearTerminal(numero, obj_vehiculo, estado_terminal)
-        historico = self.CrearHistoricoVehiculo(terminal)
+        historico = self.crearHistoricoVehiculo(terminal)
+        state = self.crearHistoricoEstado(terminal)
 
 
-        data = {'Status': 'ok'}
+        data = {'terminales': _get_terminales()}
         data = json.dumps(data, cls=DjangoJSONEncoder)
         return HttpResponse(data, content_type='application/json')
 
@@ -71,7 +74,7 @@ class CrearTerminal(View):
 
         return obj_terminal
 
-    def CrearHistoricoVehiculo(self, obj_terminal):
+    def crearHistoricoVehiculo(self, obj_terminal):
         historico = HistorialCambioVehiculo()
         try:
             historico_existente = HistorialCambioVehiculo.objects.filter(estado = True, vehiculo = obj_terminal.vehiculo)
@@ -99,8 +102,12 @@ class CrearTerminal(View):
         return historico
 
 
-    def CrearHistoricoEstado(self, obj_terminal):
-        pass
+    def crearHistoricoEstado(self, obj_terminal):
+        state = HistorialEstadoTerminal()
+        state.terminal = obj_terminal
+        state.estado = obj_terminal.estado
+        state.save()
+        return state
 
 
 obtener_terminales = ObtenerTerminales.as_view()
