@@ -13,7 +13,7 @@ from main.models import HistorialEstadoTerminal
 def _get_terminales():
     terminales = []
     state = EstadoTerminal.objects.get(pk = 3)
-    rs = Terminal.objects.exclude(estado = state)
+    rs = Terminal.objects.exclude(estado = state).order_by('-vehiculo')
 
     for terminal in rs:
         if terminal.vehiculo is None:
@@ -21,7 +21,7 @@ def _get_terminales():
             numero_vehiculo = "No Vehiculo"
         else:
             id_vehiculo = terminal.vehiculo.id
-            numero_vehiculo = terminal.vehiculo.numero
+            numero_vehiculo = 'Movil '+str(terminal.vehiculo.numero)
 
         terminales.append({
             'id': terminal.id,
