@@ -65,7 +65,6 @@ TerminalController.mixin({
             return;
         }
 
-        console.log(this.terminal);
         this.service.create(this.terminal, function(data){
             _this.terminales = data.terminales;
             common.agregarMensaje('terminal agregado exitosamente');
@@ -78,8 +77,15 @@ TerminalController.mixin({
         console.log('editando terminal');
     },
 
-    remover: function(index){
-        console.log('removiendo terminal');
+    remover: function(index, num_terminal){
+        var _this = this,
+            confirmacion = confirm("Desea dar de baja la terminal " + num_terminal);
+        if (confirmacion == true) {
+            this.service.remove(_this.terminales[index].id, function(data){
+                _this.terminales.splice(index, 1);
+                common.agregarMensaje('terminal dada de baja exitosamente');
+            });
+        }
     }
 });
 
@@ -190,6 +196,7 @@ function terminalService($http){
         },
 
         remove: function(id, callback){
+            var url = App.urls.get('guias:remover_terminal')
             post(url, { id : id }, callback);
         },
 

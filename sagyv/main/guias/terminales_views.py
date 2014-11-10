@@ -113,8 +113,43 @@ class CrearTerminal(View):
 class ModificarTerminal(View):
     pass
 
-class EliminarTerminal(View):
-    pass
+class RemoverTerminal(View):
+
+    def post(self, req):
+        id_term = req.POST.get('id')
+        state = EstadoTerminal.objects.get(pk = int(3))
+
+        term = Terminal.objects.get( pk = int(id_term))
+        movil = term.vehiculo
+
+
+        #Anexado a un vehiculo
+        if movil is not None:
+            histvehiculo = HistorialCambioVehiculo()
+            histvehiculo.terminal = term
+            histvehiculo.vehiculo = movil
+            histvehiculo.estado = False
+            histvehiculo.save()
+
+        #cambio del registro
+        term.estado = state
+        term.vehiculo = None
+        term.save()
+
+        #historial terminal
+
+        histo = HistorialEstadoTerminal()
+        histo.terminal = term
+        histo.estado = term.estado
+        histo.save()
+
+
+        data = {'status':'ok'}
+        data = json.dumps(data, cls=DjangoJSONEncoder)
+        return HttpResponse(data, content_type='application/json')
+
+    def desvincularVehiculo(self, terminal):
+        pass
 
 class ReasignarTerminal(View):
     pass
@@ -122,3 +157,4 @@ class ReasignarTerminal(View):
 
 obtener_terminales = ObtenerTerminales.as_view()
 crear_terminal = CrearTerminal.as_view()
+remover_terminal = RemoverTerminal.as_view()

@@ -7,4 +7,5 @@ urlpatterns = patterns("main.guias.views",
 urlpatterns += patterns("main.guias.terminales_views",
     url(r"^terminales/$", "obtener_terminales", name="obtener_terminales"),
     url(r"^crear\-terminal/$", "crear_terminal", name="crear_terminal"),
+    url(r"^remover\-terminal/$", "remover_terminal", name="remover_terminal"),
 )

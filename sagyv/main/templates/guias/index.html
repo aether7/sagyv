@@ -49,7 +49,7 @@
                     <td ng-bind="terminal.vehiculo.codigo"></td>
                     <td>
                         <a href class="icon-pencil" ng-click="terminalCtrl.editar($index)"></a>
-                        <a href class="icon-remove" ng-click="terminalCtrl.remover($index)"></a>
+                        <a href class="icon-remove" ng-click="terminalCtrl.remover($index, terminal.codigo)"></a>
                         <a href class="">asignar</a>
                     </td>
                 </tr>
@@ -70,5 +70,6 @@
 <script>
     App.urls.set("guias:obtener_terminales","{% url 'guias:obtener_terminales' %}");
     App.urls.set("guias:crear_terminal","{% url 'guias:crear_terminal' %}");
+    App.urls.set("guias:remover_terminal","{% url 'guias:remover_terminal' %}");
 </script>
 {% endblock %}
