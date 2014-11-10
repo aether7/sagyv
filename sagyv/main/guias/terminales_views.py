@@ -12,7 +12,8 @@ from main.models import HistorialEstadoTerminal
 
 def _get_terminales():
     terminales = []
-    rs = Terminal.objects.all()
+    state = EstadoTerminal.objects.get(pk = 3)
+    rs = Terminal.objects.exclude(estado = state)
 
     for terminal in rs:
         if terminal.vehiculo is None:
@@ -108,6 +109,15 @@ class CrearTerminal(View):
         state.estado = obj_terminal.estado
         state.save()
         return state
+
+class ModificarTerminal(View):
+    pass
+
+class EliminarTerminal(View):
+    pass
+
+class ReasignarTerminal(View):
+    pass
 
 
 obtener_terminales = ObtenerTerminales.as_view()
