@@ -14,6 +14,15 @@ class ConsumoClientes(View):
         consumos = ReportesManager().get_consumos_cliente_producto(fecha_inicio, fecha_termino)
         data = []
 
+
+        # lipigas / propio
+        # nombre cliente
+        # formato consumido normalmente
+        # monto(descuento)
+
+        # Si es un cliente credito, no mostrar monto
+        # ingresar x cliente
+
         for consumo in consumos:
             data.append({
                 "cliente": {
