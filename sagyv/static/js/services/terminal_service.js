@@ -28,6 +28,11 @@ function terminalService($http){
 
         asignar: function(){
 
+        },
+
+        maintenance: function(id, callback){
+            var url = App.urls.get('guias:maintenance')
+            post(url, { id : id }, callback);
         }
     };
 

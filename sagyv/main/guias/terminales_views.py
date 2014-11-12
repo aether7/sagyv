@@ -155,6 +155,54 @@ class ReasignarTerminal(View):
     pass
 
 
+class Maintenance(View):
+
+    def post(self, req):
+        id_term = req.POST.get('id')
+        state = EstadoTerminal.objects.get(pk = int(2))
+
+        term = Terminal.objects.get( pk = int(id_term))
+        movil = term.vehiculo
+
+
+        #Anexado a un vehiculo
+        if movil is not None:
+            histvehiculo = HistorialCambioVehiculo()
+            histvehiculo.terminal = term
+            histvehiculo.vehiculo = movil
+            histvehiculo.estado = False
+            histvehiculo.save()
+
+        #cambio del registro
+        term.estado = state
+        term.vehiculo = None
+        term.save()
+
+        #historial terminal
+
+        histo = HistorialEstadoTerminal()
+        histo.terminal = term
+        histo.estado = term.estado
+        histo.save()
+
+
+        data = {
+            'id': term.id,
+            'codigo': term.codigo,
+            'vehiculo': {
+                'id': '0',
+                'codigo': 'No Vehiculo'
+            },
+            'estado': {
+                'id': term.estado.id,
+                'nombre': term.estado.nombre
+            }
+        }
+        data = json.dumps(data, cls=DjangoJSONEncoder)
+        return HttpResponse(data, content_type='application/json')
+
+
 obtener_terminales = ObtenerTerminales.as_view()
 crear_terminal = CrearTerminal.as_view()
 remover_terminal = RemoverTerminal.as_view()
+maintenance = Maintenance.as_view()

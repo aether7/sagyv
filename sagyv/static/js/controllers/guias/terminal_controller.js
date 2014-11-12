@@ -60,13 +60,24 @@ TerminalController.mixin({
         console.log('editando terminal');
     },
 
-    remover: function(index, num_terminal){
+    remover: function(index){
         var _this = this,
-            confirmacion = confirm("Desea dar de baja la terminal " + num_terminal);
+            confirmacion = confirm("Desea dar de baja la terminal " + _this.terminales[index].codigo);
         if (confirmacion == true) {
             this.service.remove(_this.terminales[index].id, function(data){
                 _this.terminales.splice(index, 1);
                 common.agregarMensaje('terminal dada de baja exitosamente');
+            });
+        }
+    },
+
+    maintenance:function(index){
+        var _this = this,
+            confirmacion = confirm("Desea enviar a mantención la terminal " + _this.terminales[index].codigo);
+        if (confirmacion == true) {
+            this.service.maintenance(_this.terminales[index].id, function(data){
+                _this.terminales[index] = data;
+                common.agregarMensaje('terminal envidada a mantención exitosamente');
             });
         }
     }
