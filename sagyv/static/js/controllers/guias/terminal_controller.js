@@ -25,6 +25,14 @@ TerminalController.mixin({
         console.log('mostrando panel');
     },
 
+    mostrarPanelAsignar: function(index){
+        this.mensajes = {};
+        this.terminal = this.terminales[index];
+        this.terminal.vehiculoAsignado = null;
+        console.log(this.terminal);
+        $('#modal_terminal_asignar').modal('show');
+    },
+
     agregar: function(){
         var valido = true,
         _this = this;
@@ -56,8 +64,34 @@ TerminalController.mixin({
 
     },
 
-    editar: function(index){
-        console.log('editando terminal');
+    asignar: function(){
+        var valido = true,
+        _this = this;
+
+        this.mensajes = {};
+
+        if(!this.terminal.numero){
+            this.mensajes.numero = 'campo obligatorio';
+            valido = false;
+        }else if(isNaN(this.terminal.numero)){
+            this.mensajes.numero = 'número inválido';
+            valido = false;
+        }
+
+        if(!this.terminal.vehiculoAsignado){
+            this.mensajes.vehiculoAsignado = 'campo obligatorio';
+            valido = false;
+        }
+
+        if(!valido){
+            return;
+        }
+
+        //this.service.create(this.terminal, function(data){
+            //_this.terminales = data.terminales;
+            //common.agregarMensaje('terminal agregado exitosamente');
+            //$('#modal_terminal_agregar').modal('hide');
+        //});
     },
 
     remover: function(index){

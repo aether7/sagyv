@@ -53,13 +53,14 @@
                         <a href class="icon-pencil" ng-click="terminalCtrl.editar($index)"></a>
                         <a href class="icon-remove" ng-click="terminalCtrl.remover($index)"></a>
                         <a href ng-click="terminalCtrl.maintenance($index)">Mantencion</a>
-                        <a href class="">asignar</a>
+                        <a href class="" ng-click="terminalCtrl.mostrarPanelAsignar($index)">asignar</a>
                     </td>
                 </tr>
             </tbody>
         </table>
 
         {% include "guias/components/modal_terminal_agregar.html" %}
+        {% include "guias/components/modal_terminal_asignar.html" %}
     </div>
 </div>
 

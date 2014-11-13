@@ -1,0 +1,33 @@
+<div id="modal_terminal_asignar" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4>Asignar Terminal <span ng-bind="terminalCtrl.terminal.codigo"></span></h4>
+            </div>
+            <div class="modal-body">
+                <p>Al elegir un vehiculo y este cuente con una termina, esta se desasigna y asigna la nueva.</p>
+                <p>Recuerde que el estado de la terminal <b ng-bind="terminalCtrl.terminal.codigo"></b> es
+                    <b ng-bind="terminalCtrl.terminal.estado.nombre"></b></p>
+                <div class="form-group">
+                    <label for="terminal_agregar_vehiculo" class="control-label">Vehículo</label>
+                    <select id="" class="form-control" ng-model="terminalCtrl.terminal.vehiculoAsignado">
+                        {% for vehiculo in vehiculos %}
+                        <option value="{{ vehiculo.id }}">{{ vehiculo.numero }} - {{ vehiculo.patente }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="text-danger"
+                        ng-show="terminalCtrl.mensajes.vehiculoAsignado"
+                        ng-bind="terminalCtrl.mensajes.vehiculoAsignado"></span>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button class="btn btn-primary" data-ng-click="terminalCtrl.asignar()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
