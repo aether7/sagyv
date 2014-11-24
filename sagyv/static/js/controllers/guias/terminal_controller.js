@@ -86,12 +86,13 @@ TerminalController.mixin({
         if(!valido){
             return;
         }
+        this.terminal.vehiculo = this.terminal.vehiculoAsignado;
 
-        //this.service.create(this.terminal, function(data){
-            //_this.terminales = data.terminales;
-            //common.agregarMensaje('terminal agregado exitosamente');
-            //$('#modal_terminal_agregar').modal('hide');
-        //});
+        this.service.create(this.terminal, function(data){
+            _this.terminales = data.terminales;
+            common.agregarMensaje('terminal agregado exitosamente');
+            $('#modal_terminal_agregar').modal('hide');
+        });
     },
 
     remover: function(index){
