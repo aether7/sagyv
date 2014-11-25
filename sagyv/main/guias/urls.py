@@ -9,4 +9,5 @@ urlpatterns += patterns("main.guias.terminales_views",
     url(r"^crear\-terminal/$", "crear_terminal", name="crear_terminal"),
     url(r"^remover\-terminal/$", "remover_terminal", name="remover_terminal"),
     url(r"^maintenance/$", "maintenance", name="maintenance"),
+    url(r"reasignar\-terminal/$", "reasignar_terminal", name="reasignar_terminal"),
 )

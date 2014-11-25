@@ -23,6 +23,11 @@ def _get_terminales():
             id_vehiculo = terminal.vehiculo.id
             numero_vehiculo = 'Movil '+str(terminal.vehiculo.numero)
 
+        if terminal.estado.id == 2:
+            show_opt = True
+        else:
+            show_opt = False
+
         terminales.append({
             'id': terminal.id,
             'codigo': terminal.codigo,
@@ -32,11 +37,13 @@ def _get_terminales():
             },
             'estado': {
                 'id': terminal.estado.id,
-                'nombre': terminal.estado.nombre
+                'nombre': terminal.estado.nombre,
+                'show_opt' : show_opt
             }
         })
 
     return terminales
+
 
 class ObtenerTerminales(View):
 
@@ -49,7 +56,6 @@ class ObtenerTerminales(View):
 class CrearTerminal(View):
 
     def post(self, req):
-        print req.POST
         numero = req.POST.get('numero')
         vehiculo_id = req.POST.get('vehiculo')
 
@@ -148,11 +154,43 @@ class RemoverTerminal(View):
         data = json.dumps(data, cls=DjangoJSONEncoder)
         return HttpResponse(data, content_type='application/json')
 
-    def desvincularVehiculo(self, terminal):
-        pass
 
 class ReasignarTerminal(View):
-    pass
+
+    def post(self, req):
+        id_term = req.POST.get('id')
+        new_movil = req.POST.get('vehiculo')
+
+        #GetTerminal
+        terminal = Terminal.objects.get( pk = id_term )
+
+        #GetVehiculo
+        vehiculo = Vehiculo.objects.get( pk = new_movil )
+
+        #Desvincular vehiculo existente
+        if terminal.vehiculo is not None:
+            histvehiculo = HistorialCambioVehiculo()
+            histvehiculo.terminal = terminal
+            histvehiculo.vehiculo = vehiculo
+            histvehiculo.estado = False
+            histvehiculo.save()
+
+        #DESASIGNAR EXISTENTES
+
+        terminal.vehiculo = vehiculo
+        terminal.save()
+
+        #Incluir vehiculo
+        histvehiculo = HistorialCambioVehiculo()
+        histvehiculo.terminal = terminal
+        histvehiculo.vehiculo = vehiculo
+        histvehiculo.estado = True
+        histvehiculo.save()
+
+        #OUT
+        data = {'terminales': _get_terminales()}
+        data = json.dumps(data, cls=DjangoJSONEncoder)
+        return HttpResponse(data, content_type='application/json')
 
 
 class Maintenance(View):
@@ -206,3 +244,4 @@ obtener_terminales = ObtenerTerminales.as_view()
 crear_terminal = CrearTerminal.as_view()
 remover_terminal = RemoverTerminal.as_view()
 maintenance = Maintenance.as_view()
+reasignar_terminal = ReasignarTerminal.as_view()

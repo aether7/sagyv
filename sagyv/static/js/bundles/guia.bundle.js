@@ -87,28 +87,22 @@ TerminalController.mixin({
 
         this.mensajes = {};
 
-        if(!this.terminal.numero){
-            this.mensajes.numero = 'campo obligatorio';
-            valido = false;
-        }else if(isNaN(this.terminal.numero)){
-            this.mensajes.numero = 'número inválido';
-            valido = false;
-        }
-
         if(!this.terminal.vehiculoAsignado){
             this.mensajes.vehiculoAsignado = 'campo obligatorio';
             valido = false;
         }
 
         if(!valido){
+            console.log(this.mensajes.vehiculoAsignado);
             return;
         }
         this.terminal.vehiculo = this.terminal.vehiculoAsignado;
+        console.log(this.terminal);
 
-        this.service.create(this.terminal, function(data){
+        this.service.asignar(this.terminal, function(data){
             _this.terminales = data.terminales;
             common.agregarMensaje('terminal agregado exitosamente');
-            $('#modal_terminal_agregar').modal('hide');
+            $('#modal_terminal_asignar').modal('hide');
         });
     },
 
@@ -242,12 +236,13 @@ function terminalService($http){
         },
 
         remove: function(id, callback){
-            var url = App.urls.get('guias:remover_terminal')
+            var url = App.urls.get('guias:remover_terminal');
             post(url, { id : id }, callback);
         },
 
-        asignar: function(){
-
+        asignar: function(terminal, callback){
+            var url = App.urls.get('guias:asignar');
+            post(url, terminal, callback);
         },
 
         maintenance: function(id, callback){

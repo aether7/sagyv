@@ -22,12 +22,13 @@ function terminalService($http){
         },
 
         remove: function(id, callback){
-            var url = App.urls.get('guias:remover_terminal')
+            var url = App.urls.get('guias:remover_terminal');
             post(url, { id : id }, callback);
         },
 
-        asignar: function(){
-
+        asignar: function(terminal, callback){
+            var url = App.urls.get('guias:asignar');
+            post(url, terminal, callback);
         },
 
         maintenance: function(id, callback){
