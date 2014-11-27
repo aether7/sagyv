@@ -169,13 +169,37 @@ class ReasignarTerminal(View):
 
         #Desvincular vehiculo existente
         if terminal.vehiculo is not None:
-            histvehiculo = HistorialCambioVehiculo()
-            histvehiculo.terminal = terminal
-            histvehiculo.vehiculo = vehiculo
-            histvehiculo.estado = False
-            histvehiculo.save()
+            historico_existente = HistorialCambioVehiculo.objects.filter(estado = True, vehiculo = vehiculo)
 
-        #DESASIGNAR EXISTENTES
+            for hist in historico_existente:
+                print hist.terminal
+                hist.estado = False
+                hist.save()
+
+                terms = Terminal.objects.filter(vehiculo = hist.vehiculo)
+                for t in terms:
+                    print t.vehiculo
+                    t.vehiculo = None
+                    t.save()
+
+        else:
+            try:
+                historico_existente = HistorialCambioVehiculo.objects.filter(estado = True, vehiculo = vehiculo)
+
+                for hist in historico_existente:
+                    print hist.terminal
+                    hist.estado = False
+                    hist.save()
+
+                    terms = Terminal.objects.filter(vehiculo = hist.vehiculo)
+                    for t in terms:
+                        print t.vehiculo
+                        t.vehiculo = None
+                        t.save()
+
+            except HistorialCambioVehiculo.DoesNotExist:
+                pass
+
 
         terminal.vehiculo = vehiculo
         terminal.save()
