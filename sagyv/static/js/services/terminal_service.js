@@ -32,8 +32,13 @@ function terminalService($http){
         },
 
         maintenance: function(id, callback){
-            var url = App.urls.get('guias:maintenance')
+            var url = App.urls.get('guias:maintenance');
             post(url, { id : id }, callback);
+        },
+
+        returnMaintenance: function(id, callback){
+            var url = App.urls.get('guias:return_maintenance');
+            post(url, {id : id}, callback);
         }
     };
 

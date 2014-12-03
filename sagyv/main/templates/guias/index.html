@@ -52,8 +52,12 @@
                     <td>
                         <a href class="icon-pencil" ng-click="terminalCtrl.editar($index)"></a>
                         <a href class="icon-remove" ng-click="terminalCtrl.remover($index)"></a>
-                        <a href ng-click="terminalCtrl.maintenance($index)">Mantencion</a>
-                        <a href class="" ng-click="terminalCtrl.mostrarPanelAsignar($index)">asignar</a>
+                        <a href ng-show="terminal.estado.show_opt"
+                            ng-click="terminalCtrl.maintenance($index)">Mantencion</a>
+                        <a href ng-hide="terminal.estado.show_opt"
+                            ng-click="terminalCtrl.returnMaintenance($index)">Reincorporación</a>
+                        <a href class="" ng-show="terminal.estado.show_opt"
+                            ng-click="terminalCtrl.mostrarPanelAsignar($index)">asignar</a>
                     </td>
                 </tr>
             </tbody>
@@ -76,6 +80,7 @@
     App.urls.set("guias:crear_terminal","{% url 'guias:crear_terminal' %}");
     App.urls.set("guias:remover_terminal","{% url 'guias:remover_terminal' %}");
     App.urls.set("guias:maintenance","{% url 'guias:maintenance' %}");
+    App.urls.set("guias:return_maintenance","{% url 'guias:return_maintenance' %}");
     App.urls.set("guias:asignar","{% url 'guias:reasignar_terminal' %}");
 </script>
 {% endblock %}

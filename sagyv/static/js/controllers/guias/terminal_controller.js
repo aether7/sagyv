@@ -109,7 +109,18 @@ TerminalController.mixin({
                 common.agregarMensaje('terminal envidada a mantención exitosamente');
             });
         }
-    }
+    },
+
+    returnMaintenance:function(index){
+        var _this = this,
+            confirmacion = confirm("Desea reincorporar la terminal " + _this.terminales[index].codigo);
+        if(confirmacion == true){
+            this.service.returnMaintenance(_this.terminales[index].id, function(data){
+                _this.terminales[index] = data;
+                common.agregarMensaje('La terminar a retornado de mantenimiento');
+            });
+        }
+    },
 });
 
 module.exports = TerminalController;

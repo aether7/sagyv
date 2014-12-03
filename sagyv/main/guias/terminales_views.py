@@ -24,9 +24,9 @@ def _get_terminales():
             numero_vehiculo = 'Movil '+str(terminal.vehiculo.numero)
 
         if terminal.estado.id == 2:
-            show_opt = True
-        else:
             show_opt = False
+        else:
+            show_opt = True
 
         terminales.append({
             'id': terminal.id,
@@ -257,9 +257,43 @@ class Maintenance(View):
             },
             'estado': {
                 'id': term.estado.id,
-                'nombre': term.estado.nombre
+                'nombre': term.estado.nombre,
+                'show_opt' : False
             }
         }
+        data = json.dumps(data, cls=DjangoJSONEncoder)
+        return HttpResponse(data, content_type='application/json')
+
+
+class ReturnMaintenance(View):
+
+    def post(self, req):
+        id_term = req.POST.get('id')
+        state = EstadoTerminal.objects.get(pk = int(1))
+
+        term = Terminal.objects.get( pk = int(id_term))
+        term.estado = state
+        term.save()
+
+        histo = HistorialEstadoTerminal()
+        histo.terminal = term
+        histo.estado = term.estado
+        histo.save()
+
+        data = {
+            'id': term.id,
+            'codigo': term.codigo,
+            'vehiculo': {
+                'id': '0',
+                'codigo': 'No Vehiculo'
+            },
+            'estado': {
+                'id': term.estado.id,
+                'nombre': term.estado.nombre,
+                'show_opt' : True
+            }
+        }
+
         data = json.dumps(data, cls=DjangoJSONEncoder)
         return HttpResponse(data, content_type='application/json')
 
@@ -268,4 +302,5 @@ obtener_terminales = ObtenerTerminales.as_view()
 crear_terminal = CrearTerminal.as_view()
 remover_terminal = RemoverTerminal.as_view()
 maintenance = Maintenance.as_view()
+return_maintenance = ReturnMaintenance.as_view()
 reasignar_terminal = ReasignarTerminal.as_view()
