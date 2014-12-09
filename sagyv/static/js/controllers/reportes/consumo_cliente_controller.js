@@ -12,8 +12,6 @@ ConsumoClienteController.mixin(ReporteController, {
     },
 
     cargaConsumos: function(data){
-        console.log('data');
-        console.log(data);
         this.consumos = data;
     },
 

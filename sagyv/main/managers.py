@@ -1,6 +1,14 @@
-from django.db import connection, models
+from django.db import connections, models
 from django.db.models import Q, Sum
 from main import trabajador
+
+def dictfetchall(cursor):
+    "Returns all rows from a cursor as a dict"
+    desc = cursor.description
+    return [
+        dict(zip([col[0] for col in desc], row))
+        for row in cursor.fetchall()
+    ]
 
 class DetalleCredito(object):
 
@@ -34,17 +42,6 @@ class KilosVendidos(object):
         suma_kilos = 0
 
 
-class ConsumoCliente(object):
-
-    def __init__(self):
-        self.id_cliente = 0
-        self.nombre_cliente = ""
-        self.producto_id = 0
-        self.producto_nombre = ""
-        self.producto_codigo = ""
-        self.suma_monto = 0
-
-
 class Stock(object):
 
     def __init__(self):
@@ -54,40 +51,114 @@ class Stock(object):
         self.cantidad = 0
 
 
+class ConsumoCliente(object):
+
+    def __init__(self):
+        self.id_cliente = 0
+        self.nombre_cliente = None
+        self.rut_cliente = None
+        self.es_lipigas = False
+        self.es_propio = False
+        self.credito = False
+        self.monto_descuento = False
+        self.tipo_descuento = None
+
+        self.id_producto = 0
+        self.nombre_producto = None
+        self.codigo_producto = None
+        self.cantidad_producto = None
+        self.suma_monto = 0
+
+    def get_tipo_cliente(self):
+        texto = 'Cliente '
+
+        if self.es_lipigas and self.es_propio:
+            texto += 'Lipigas y Propio'
+        elif self.es_lipigas:
+            texto += 'Lipigas'
+        elif self.es_propio:
+            texto += 'Propio'
+
+        return texto
+
+
 class ReportesManager(models.Manager):
 
     ###TODO: agregar fechas en un between en la consulta
-    def get_consumos_cliente_producto(self,fecha_inicio = None, fecha_termino = None):
+    def get_consumos_cliente_producto(self,cliente = None, fecha_inicio = None, fecha_termino = None):
 
         consulta_sql = """
             SELECT
-                main_cliente.id AS cliente_id,
-                main_cliente.nombre AS cliente_nombre,
-                main_detalleventa.producto_id AS producto_id,
-                main_producto.nombre AS producto_nombre,
-                main_producto.codigo AS producto_codigo,
-                SUM(main_detalleventa.monto) AS monto
-            FROM main_cliente
-            INNER JOIN main_venta ON main_cliente.id = main_venta.cliente_id
-            LEFT JOIN main_detalleventa ON main_venta.id = main_detalleventa.venta_id
-            LEFT JOIN main_producto ON main_detalleventa.producto_id = main_producto.id
-            GROUP BY main_cliente.id, main_cliente.nombre, main_detalleventa.producto_id
+                c.id as id_cliente,
+                c.nombre as nombre_cliente,
+                c.rut as rut_cliente,
+                c.es_lipigas as es_lipigas_cliente,
+                c.es_propio as es_propio_cliente,
+                c.credito as tiene_credito_cliente,
+                sc.monto_descuento as descuento_sc,
+                td.tipo as tipo_descuento,
+                (
+                    SELECT * FROM (
+                        SELECT p.id as pid
+                        FROM main_venta v
+                        INNER JOIN main_detalleventa dv ON(dv.venta_id = v.id)
+                        INNER JOIN main_producto p ON(dv.producto_id = p.id)
+                        WHERE v.cliente_id = c.id
+                        GROUP BY dv.producto_id
+                        ORDER BY cantidad
+                    ) as rest
+                    LIMIT 1
+                ) as id_producto,
+                (
+                    SELECT * FROM (
+                        SELECT p.codigo as codigo
+                        FROM main_venta v
+                        INNER JOIN main_detalleventa dv ON(dv.venta_id = v.id)
+                        INNER JOIN main_producto p ON(dv.producto_id = p.id)
+                        WHERE v.cliente_id = c.id
+                        GROUP BY dv.producto_id
+                        ORDER BY cantidad
+                    ) as rest
+                    LIMIT 1
+                ) as codigo_producto,
+                (
+                    SELECT * FROM (
+                        SELECT
+                        SUM(dv.cantidad) as cantidad
+                        FROM main_venta v
+                        INNER JOIN main_detalleventa dv ON(dv.venta_id = v.id)
+                        INNER JOIN main_producto p ON(dv.producto_id = p.id)
+                        WHERE v.cliente_id = c.id
+                        GROUP BY dv.producto_id
+                        ORDER BY cantidad
+                    ) as rest2
+                    LIMIT 1
+                ) as cantidad_producto
+            FROM main_cliente c
+            INNER JOIN main_descuentocliente sc ON(sc.id = c.situacion_comercial_id)
+            INNER JOIN main_tipodescuento td ON(sc.tipo_descuento_id = td.id)
         """
 
-        query = connection.cursor()
-        query.execute(consulta_sql)
+        cursor = connections['default'].cursor()
+        cursor.execute(consulta_sql)
+        data = dictfetchall(cursor)
 
         resultado = []
 
-        for row in query.fetchall():
+        for row in data:
             fila = ConsumoCliente()
 
-            fila.id_cliente = row[0]
-            fila.nombre_cliente = row[1]
-            fila.producto_id = row[2]
-            fila.producto_nombre = row[3]
-            fila.producto_codigo = row[4]
-            fila.suma_monto = row[5]
+            fila.id_cliente = row['id_cliente']
+            fila.nombre_cliente = row['nombre_cliente']
+            fila.rut_cliente = row['rut_cliente']
+            fila.es_lipigas = row['es_lipigas_cliente']
+            fila.es_propio = row['es_propio_cliente']
+            fila.credito = row['tiene_credito_cliente']
+            fila.monto_descuento = row['descuento_sc']
+            fila.tipo_descuento = row['tipo_descuento']
+            fila.id_producto = row['id_producto']
+            fila.codigo_producto = row['codigo_producto']
+            fila.cantidad_producto = row['cantidad_producto']
 
             resultado.append(fila)
 

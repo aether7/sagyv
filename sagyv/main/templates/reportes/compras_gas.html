@@ -3,12 +3,12 @@
 
 <section ng-controller="GasController as gasCtrl">
     <label for="desde">Desde</label>
-    <input id="desde" type="text" ng-model="gasCtrl.desde" />
+    <input id="desde" type="date" ng-model="gasCtrl.desde" />
 
     <label for="hasta">Hasta</label>
-    <input id="hasta" type="text" ng-model="gasCtrl.hasta" />
+    <input id="hasta" type="date" ng-model="gasCtrl.hasta" />
 
-    <a href="{% url 'reportes:compras_gas' %}" class="btn btn-primary" ng-click="gasCtrl.filtrar()">Filtrar</a>
+    <a href class="btn btn-primary" ng-click="gasCtrl.filtrar()">Filtrar</a>
     <a href class="btn btn-primary" ng-click="gasCtrl.exportar()">Exportar a excel</a>
     <a href class="btn btn-primary" ng-click="gasCtrl.graficar()">Ver gráfico</a>
 </section>
@@ -35,4 +35,10 @@
         {% endfor %}
     </tbody>
 </table>
+{% endblock %}
+
+{% block js_reportes %}
+<script>
+    App.urls.set("reportes:obtener_gas", "{% url 'reportes:obtener_gas' %}");
+</script>
 {% endblock %}

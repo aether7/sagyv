@@ -16,7 +16,6 @@
     <a href class="btn btn-primary" ng-click="consumoCtrl.graficar()">Ver gráfico</a>
 </aside>
 
-<!-- Nav tabs -->
 <ul class="nav nav-tabs" role="tablist">
     <li role="presentation" class="active">
         <a id="tabDetalle" href="#detalle" role="tab" data-toggle="tab">Detalle</a>
@@ -27,24 +26,21 @@
     </li>
 </ul>
 
-<!-- Tab panes -->
 <div class="tab-content">
     <div role="tabpanel" class="tab-pane active" id="detalle">
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>ID CLIENTE</th>
+                    <th>TIPO DE CLIENTE</th>
                     <th>NOMBRE</th>
-                    <th>PRODUCTO</th>
-                    <th>CODIGO</th>
-                    <th>MONTO</th>
+                    <th>FORMATO CONSUMIDO</th>
+                    <th>MONTO(descuento)</th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="consumo in consumoCtrl.consumos">
-                    <td ng-bind="consumo.cliente.id"></td>
+                    <td ng-bind="consumo.cliente.tipo"></td>
                     <td ng-bind="consumo.cliente.nombre"></td>
-                    <td ng-bind="consumo.producto.nombre"></td>
                     <td ng-bind="consumo.producto.codigo"></td>
                     <td ng-bind="consumo.producto.suma"></td>
                 </tr>

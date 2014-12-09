@@ -14,37 +14,31 @@ class ConsumoClientes(View):
         consumos = ReportesManager().get_consumos_cliente_producto(fecha_inicio, fecha_termino)
         data = []
 
-
-        # lipigas / propio
-        # nombre cliente
-        # formato consumido normalmente
-        # monto(descuento)
-
-        # Si es un cliente credito, no mostrar monto
-        # ingresar x cliente
-
         for consumo in consumos:
             data.append({
                 "cliente": {
                     "id": consumo.id_cliente,
-                    "nombre": consumo.nombre_cliente
+                    "nombre": consumo.nombre_cliente,
+                    "tipo": consumo.get_tipo_cliente()
                 },
                 "producto": {
-                    "id": consumo.producto_id,
-                    "codigo": consumo.producto_codigo,
-                    "suma": consumo.suma_producto
+                    "id": consumo.id_producto,
+                    "codigo": consumo.codigo_producto,
+                    "cantidad": consumo.cantidad_producto,
+                    "suma": consumo.suma_monto
                 }
             })
 
+        data = json.dumps(data, cls = DjangoJSONEncoder)
+        return HttpResponse(data, content_type = "application/json")
+
+
+class ComprasGas(View):
+    def get(self, req):
+        data = []
+
         data = json.dumps(data, cls=DjangoJSONEncoder)
         return HttpResponse(data, content_type="application/json")
-
-
-class ComprasGas(TemplateView):
-    template_name = "reportes/compras_gas.html"
-
-    def post(self, req):
-        pass
 
 
 class KilosVendidos(TemplateView):
@@ -82,7 +76,9 @@ index = TemplateView.as_view(template_name="reportes/index.html")
 consumo_clientes = TemplateView.as_view(template_name="reportes/consumo_clientes.html")
 obtener_consumo = ConsumoClientes.as_view()
 
-compras_gas = ComprasGas.as_view()
+compras_gas = TemplateView.as_view(template_name="reportes/compras_gas.html")
+obtener_gas = ComprasGas.as_view()
+
 kilos_vendidos = KilosVendidos.as_view()
 creditos = Creditos.as_view()
 venta_masa = VentaMasa.as_view()

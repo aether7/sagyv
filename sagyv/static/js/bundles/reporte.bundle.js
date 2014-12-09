@@ -4,61 +4,25 @@
 
 var app = angular.module('reporteApp', []),
     ConsumoClienteController = require('../controllers/reportes/consumo_cliente_controller.js'),
-    consumoService = require('../services/consumo_service.js');
+    CreditoController = require('../controllers/reportes/credito_controller.js'),
+    GasController = require('../controllers/reportes/gas_controller.js'),
+    KilosController = require('../controllers/reportes/kilos_controller.js'),
+    VentaController = require('../controllers/reportes/venta_controller.js'),
+    consumoService = require('../services/reportes/consumo_service.js'),
+    gasService = require('../services/reportes/gas_service.js');
 
 app.factory('consumoService', consumoService);
-
-function ReporteController(){
-    this.desde = null;
-    this.hasta = null;
-}
-
-ReporteController.mixin({
-    filtrar: function(){
-        console.log('filtrando');
-    },
-
-    exportar: function(){
-        console.log('exportando');
-    },
-
-    graficar: function(){
-        console.log('graficando');
-    }
-});
-
-function CreditoController(){
-    ReporteController.call(this);
-}
-
-CreditoController.mixin(ReporteController, {});
-
-function GasController(){
-    ReporteController.call(this);
-}
-
-GasController.mixin(ReporteController, {});
-
-function KilosController(){
-    ReporteController.call(this);
-}
-
-KilosController.mixin(ReporteController, {});
-
-function VentaController(){
-    ReporteController.call(this);
-}
-
-VentaController.mixin(ReporteController, {});
+app.factory('gasService', gasService);
 
 app.controller('ConsumoClienteController', ['consumoService', ConsumoClienteController]);
 app.controller('CreditoController', [CreditoController]);
-app.controller('GasController', [GasController]);
+app.controller('GasController', ['gasService', GasController]);
 app.controller('KilosController', [KilosController]);
 app.controller('VentaController', [VentaController]);
+
 })();
 
-},{"../controllers/reportes/consumo_cliente_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/reportes/consumo_cliente_controller.js","../services/consumo_service.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/consumo_service.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/reportes/consumo_cliente_controller.js":[function(require,module,exports){
+},{"../controllers/reportes/consumo_cliente_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/reportes/consumo_cliente_controller.js","../controllers/reportes/credito_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/reportes/credito_controller.js","../controllers/reportes/gas_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/reportes/gas_controller.js","../controllers/reportes/kilos_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/reportes/kilos_controller.js","../controllers/reportes/venta_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/reportes/venta_controller.js","../services/reportes/consumo_service.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/reportes/consumo_service.js","../services/reportes/gas_service.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/reportes/gas_service.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/reportes/consumo_cliente_controller.js":[function(require,module,exports){
 var ReporteController = require('./reporte_controller.js');
 
 function ConsumoClienteController(service){
@@ -73,8 +37,6 @@ ConsumoClienteController.mixin(ReporteController, {
     },
 
     cargaConsumos: function(data){
-        console.log('data');
-        console.log(data);
         this.consumos = data;
     },
 
@@ -138,6 +100,60 @@ ConsumoClienteController.mixin(ReporteController, {
 
 module.exports = ConsumoClienteController;
 
+},{"./reporte_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/reportes/reporte_controller.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/reportes/credito_controller.js":[function(require,module,exports){
+var ReporteController = require('./reporte_controller.js');
+
+function CreditoController(){
+    ReporteController.call(this);
+}
+
+CreditoController.mixin(ReporteController, {});
+
+module.exports = CreditoController;
+
+},{"./reporte_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/reportes/reporte_controller.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/reportes/gas_controller.js":[function(require,module,exports){
+var ReporteController = require('./reporte_controller.js');
+
+function GasController(service){
+    ReporteController.call(this, service);
+}
+
+GasController.mixin(ReporteController, {
+    filtrar: function(){
+        var fechaInicio = this.desde,
+            fechaTermino = this.hasta;
+
+        console.log('fecha inicio : ' + fechaInicio);
+        console.log('fecha termino : ' + fechaTermino);
+
+        this.service.findAll(function(data){
+            console.log('llegando del server');
+            console.log(data);
+        });
+    },
+
+    exportar: function(){
+        console.log('exportando');
+    },
+
+    graficar: function(){
+        console.log('graficando');
+    }
+});
+
+module.exports = GasController;
+
+},{"./reporte_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/reportes/reporte_controller.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/reportes/kilos_controller.js":[function(require,module,exports){
+var ReporteController = require('./reporte_controller.js');
+
+function KilosController(){
+    ReporteController.call(this);
+}
+
+KilosController.mixin(ReporteController, {});
+
+module.exports = KilosController;
+
 },{"./reporte_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/reportes/reporte_controller.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/reportes/reporte_controller.js":[function(require,module,exports){
 function ReporteController(service){
     this.desde = null;
@@ -167,8 +183,19 @@ ReporteController.mixin({
 
 module.exports = ReporteController;
 
-},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/consumo_service.js":[function(require,module,exports){
-var serviceUtil = require('./service_util.js');
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/reportes/venta_controller.js":[function(require,module,exports){
+var ReporteController = require('./reporte_controller.js');
+
+function VentaController(){
+    ReporteController.call(this);
+}
+
+VentaController.mixin(ReporteController, {});
+
+module.exports = VentaController;
+
+},{"./reporte_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/reportes/reporte_controller.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/reportes/consumo_service.js":[function(require,module,exports){
+var serviceUtil = require('../service_util.js');
 
 function consumoService($http){
     var services, get, post;
@@ -195,7 +222,32 @@ function consumoService($http){
 
 module.exports = consumoService;
 
-},{"./service_util.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/service_util.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/service_util.js":[function(require,module,exports){
+},{"../service_util.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/service_util.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/reportes/gas_service.js":[function(require,module,exports){
+var serviceUtil = require('../service_util.js');
+
+function gasService($http){
+    var get, post, services;
+
+    get = serviceUtil.getMaker($http);
+    post = serviceUtil.postMaker($http);
+
+    services = {
+        findAll: function(callback){
+            var url = App.urls.get('reportes:obtener_gas');
+            get(url, callback);
+        },
+
+        filtrar: function(){
+
+        }
+    };
+
+    return services;
+}
+
+module.exports = gasService;
+
+},{"../service_util.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/service_util.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/service_util.js":[function(require,module,exports){
 function noop(){}
 
 function standardError(data){

@@ -1,4 +1,4 @@
-var serviceUtil = require('./service_util.js');
+var serviceUtil = require('../service_util.js');
 
 function consumoService($http){
     var services, get, post;
