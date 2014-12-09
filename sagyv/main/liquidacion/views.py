@@ -14,18 +14,21 @@ from main.helpers.fecha import convierte_texto_fecha, convierte_fecha_texto
 from main.managers import ReportesManager
 from main.reportes import templates
 
+
+from main.models import Banco
+from main.models import BoletaTrabajador
 from main.models import Cliente
 from main.models import Trabajador
 from main.models import TarjetaCredito
 from main.models import Producto
 from main.models import GuiaDespacho
-from main.models import BoletaTrabajador
-from main.models import Banco
 from main.models import HistorialStock
 from main.models import Terminal
 from main.models import Cheque
 from main.models import Cupon
 from main.models import Otros
+from main.models import Venta
+from main.models import TipoPago
 
 
 class IndexView(TemplateView):
@@ -190,17 +193,56 @@ class Cerrar(View):
 
     @transaction.atomic
     def post(self, req):
-        print req.POST
+        """
+        TODO :
+            - Añadir al Json: nuevo_km.                     NOK
+            - Añadir al Json: boleta_actual.                NOK
+            - Cupones de prepago, añadir boleta.            NOK
 
-        productos = req.POST.get('productos')
-        vouchers = req.POST.get('vouchers')
-        cheques = req.POST.get('cheques')
+        .- Retirar Elementos desde el vehiculo             ~OK
+        .- Obtener chofer con la guia                      ~OK
+        .- Actualizar datos
+            - vehiculo                                      ~OK
+            - talonarios                                    ~OK
+            - Retirar Carga del vehiculo                    NOK
+        .- Ingreso de cupones                               NOK
+        .- Ingreso de cheques                               NOK
+        .- Ingreso de voucher lipigas                       NOK
+        .- Ingreso de voucher Transbank                     NOK
+        .- Ingreso de Otros                                 NOK
+        .- Guia Propia                                      NOK
+        .- Guia Lipigas                                     NOK
+        """
+        json_guia = json.loads(req.POST.get('guia_despacho'))
         cupones_prepago = req.POST.get('cupones_prepago')
-        otros = req.POST.get('otros')
-        productos = req.POST.get('productos')
-        guias = req.POST.get('guias')
-        this_guia = req.POST.get('guia_despacho')
-        montos = req.POST.get('montos')
+
+        this_guia = GuiaDespacho.objects.get(pk = int(json_guia['id']))
+
+        this_vehiculo = this_guia.vehiculo
+        """
+        this_vehiculo.km = nuevo_km
+        this_vehiculo.save()
+        """
+
+        self.this_trabajador = this_vehiculo.get_ultimo_chofer()
+        talonario_boleta = BoletaTrabajador.objects.get(trabajador = self.this_trabajador)
+        """
+        talonario_boleta.actual = boleta_actual
+        talonario_boleta.save()
+        """
+
+        if cupones_prepago != '':
+            self.ingreso_cupones(json.loads(cupones_prepago))
+
+        #productos = req.POST.get('productos')
+        #vouchers = req.POST.get('vouchers')
+        #cheques = req.POST.get('cheques')
+
+        #otros = req.POST.get('otros')
+        #productos = req.POST.get('productos')
+        #guias = req.POST.get('guias')
+        #this_guia = req.POST.get('guia_despacho')
+        #montos = req.POST.get('montos')
 
         #if vouchers != "":
             #self.ingreso_vouchers(json.loads())
@@ -219,13 +261,38 @@ class Cerrar(View):
         #self.ingreso_guia(json.loads())
         #self.ingreso_guias(json.loads())
         #self.ingreso_montos(json.loads())
+        dato = {'status': 'WIP'}
+        dato = json.dumps(dato, cls=DjangoJSONEncoder)
+
+        return HttpResponse(dato, content_type="application/json")
+
+    #def crear_venta(self, tipo_pago, num_boleta, cliente, monto, descuento):
+    #    new = Venta()
+    #    new.numero_serie = num_boleta
+    #    new.trabajador = self.this_trabajador
+    #    new.cliente = cliente
+    #    new.monto = monto
+    #    new.fecha =
+    #    new.tipo_pago = tipo_pago
+    #    new.descuento = descuento
+    #    new.descripcion_descuento =
+    #    new.save()
+
+    #    return new
+
 
     def ingreso_cupones(self, cupones):
+        tipo_pago = TipoPago.objects.get(pk=int(3))
+
         for i in cupones:
+            cliente = Cliente.objects.get(pk = int(i['cliente']['id']))
+            monto = int(i['descuento'])
+
+
             cupon = Cupon()
             cupon.numero_cupon = i['numero']
             #cupon.fecha Auto now
-            cupon.descuento = i['descuento']
+            cupon.descuento = monto
             #cupon.venta por aclarar
 
     def ingreso_vouchers(self, vouchers):
