@@ -81,17 +81,6 @@ class CuotaVoucherAdmin(admin.ModelAdmin):
     list_editable = ("voucher", "monto", "pagado")
     ordering = ("-id",)
 
-class VentaAdmin(admin.ModelAdmin):
-    list_display = ("id", "numero_serie", "trabajador", "cliente",  "monto", "fecha", "tipo_pago", "descuento",
-                    "descripcion_descuento")
-    list_editable = ( "numero_serie", "trabajador", "cliente",  "monto", "fecha", "tipo_pago", "descuento", "descripcion_descuento")
-    ordering = ("-id",)
-
-class DetalleVentaAdmin(admin.ModelAdmin):
-    list_display = ("id", "cantidad", "venta", "producto", "monto" )
-    list_editable = ( "cantidad", "venta", "producto", "monto" )
-    ordering = ("-id",)
-
 class BancoAdmin(admin.ModelAdmin):
     list_display = ("id", "nombre","cheques_recibidos")
     list_editable = ("nombre","cheques_recibidos")
@@ -114,7 +103,5 @@ admin.site.register(DescuentoCliente,DescuentoClienteAdmin)
 admin.site.register(Voucher,VoucherAdmin)
 admin.site.register(CuotaVoucher,CuotaVoucherAdmin)
 admin.site.register(StockVehiculo)
-admin.site.register(Venta,VentaAdmin)
-admin.site.register(DetalleVenta, DetalleVentaAdmin)
 admin.site.register(EstadoTerminal)
 admin.site.register(Banco, BancoAdmin)

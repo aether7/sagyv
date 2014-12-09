@@ -494,64 +494,6 @@ class HistorialCambioVehiculo(models.Model):
         return self.terminal.codigo + "(" + self.vehiculo.p + ") " + self.fecha
 
 
-class Venta(models.Model):
-    numero_serie = models.IntegerField(null=True)
-    trabajador = models.ForeignKey(Trabajador)
-    cliente = models.ForeignKey(Cliente)
-    monto = models.IntegerField()
-    fecha = models.DateTimeField()
-    tipo_pago = models.ForeignKey(TipoPago)
-    descuento = models.IntegerField()
-    descripcion_descuento = models.CharField(max_length = 140, null = True)
-
-    def __unicode__(self):
-        return self.monto
-
-
-class DetalleVenta(models.Model):
-    cantidad = models.IntegerField()
-    venta = models.ForeignKey(Venta)
-    producto = models.ForeignKey(Producto)
-    monto = models.IntegerField()
-
-    def __unicode__(self):
-        return self.producto + " " + self.cantidad
-
-
-class Cupon(models.Model):
-    numero_cupon = models.IntegerField()
-    fecha = models.DateField(auto_now_add=True)
-    descuento = models.IntegerField()
-    venta = models.ForeignKey(Venta, null=True)
-
-    def __unicode__(self):
-        return self.numero_cupon
-
-
-class Voucher(models.Model):
-    tipo_tarjeta = models.ForeignKey(TipoTarjeta, null = True)
-    tipo_cuotas = models.CharField(max_length = 140, null = True)
-    terminal = models.ForeignKey(Terminal)
-    numero_tarjeta = models.IntegerField(null = True)
-    numero_operacion = models.IntegerField(null = True)
-    codigo_autorizacion = models.IntegerField()
-    numero_cuotas = models.IntegerField(default = 1)
-    venta = models.ForeignKey(Venta, null = True)
-
-    def __unicode__(self):
-        return self.monto
-
-
-class CuotaVoucher(models.Model):
-    voucher = models.ForeignKey(Voucher)
-    monto = models.IntegerField()
-    pagado = models.NullBooleanField()
-    fecha = models.DateField(auto_now_add=True)
-
-    def __unicode__(self):
-        return self.monto
-
-
 class Cierre(models.Model):
     fecha = models.DateField(auto_now_add=True)
     correlativo_cierre = models.IntegerField()
@@ -630,14 +572,9 @@ class Liquidacion(models.Model):
     terminada = models.BooleanField(default = False)
 
 
-class TipoGuiaVenta(models.Model):
-    nombre = models.CharField(max_length = 140)
-
-
 class GuiaVenta(models.Model):
     cliente = models.ForeignKey(Cliente)
-    fecha = models.DateTimeField(auto_now_add = True)
-    tipo = models.ForeignKey(TipoGuiaVenta)
+    propia = models.NullBooleanField()
     liquidacion = models.ForeignKey(Liquidacion)
 
 
@@ -661,11 +598,45 @@ class Cheque(models.Model):
 
 
 class Otros(models.Model):
-    concepto = models.CharField(max_length=255)
+    concepto = models.CharField(max_length = 255)
     monto = models.IntegerField()
-    fecha = models.DateField(auto_now=True)
+    fecha = models.DateField(auto_now = True)
     trabajador = models.ForeignKey(Trabajador)
     liquidacion = models.ForeignKey(Liquidacion)
 
     def __unicode__(self):
         return str(self.fecha) + ' ' + str(self.trabajador.get_nombre_completo)
+
+
+class CuponPrepago(models.Model):
+    numero_cupon = models.IntegerField()
+    fecha = models.DateField(auto_now_add = True)
+    descuento = models.IntegerField()
+    liquidacion = models.ForeignKey(Liquidacion)
+
+    def __unicode__(self):
+        return self.numero_cupon
+
+
+class Voucher(models.Model):
+    tipo_tarjeta = models.ForeignKey(TipoTarjeta, null = True)
+    tipo_cuotas = models.CharField(max_length = 140, null = True)
+    terminal = models.ForeignKey(Terminal)
+    numero_tarjeta = models.IntegerField(null = True)
+    numero_operacion = models.IntegerField(null = True)
+    codigo_autorizacion = models.IntegerField()
+    numero_cuotas = models.IntegerField(default = 1)
+    liquidacion = models.ForeignKey(Liquidacion)
+
+    def __unicode__(self):
+        return self.monto
+
+
+class CuotaVoucher(models.Model):
+    voucher = models.ForeignKey(Voucher)
+    monto = models.IntegerField()
+    pagado = models.NullBooleanField()
+    fecha = models.DateField(auto_now_add=True)
+
+    def __unicode__(self):
+        return self.monto
