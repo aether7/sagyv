@@ -204,14 +204,14 @@ class Cerrar(View):
 
         #if vouchers != "":
             #self.ingreso_vouchers(json.loads())
-        if cheques != '':
-            self.ingreso_cheques(json.loads(cheques))
+        #if cheques != '':
+        #    self.ingreso_cheques(json.loads(cheques))
 
-        if cupones_prepago != '':
-            self.ingreso_cupones(json.loads(cupones_prepago))
+        #if cupones_prepago != '':
+        #    self.ingreso_cupones(json.loads(cupones_prepago))
 
-        if otros != '':
-            pass
+        #if otros != '':
+        #   pass
             #por validar
             #self.ingreso_otros(json.loads(otros))
 
