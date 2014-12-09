@@ -256,6 +256,7 @@ class Cerrar(View):
             #otro.fecha auto now
             #otro.trabajador Por validar
             otro.save()
+
     def ingreso_guia(self, this_guia):
         pass
 
@@ -264,50 +265,6 @@ class Cerrar(View):
 
     def ingreso_montos(self, montos):
         pass
-
-    # def get(self, req):
-    #
-    #     productos = Producto.objects.order_by("nombre")
-    #     clientes = Cliente.objects.order_by("nombre")
-    #
-    #     reporte = templates.ConsumoClientesComerciales()
-    #
-    #     reporte.set_clientes(clientes)
-    #     reporte.set_productos(productos)
-    #
-    #     datos = ReportesManager().get_consumos_cliente_producto()
-    #     excel = reporte.construir_reporte(datos)
-    #
-    #     response = HttpResponse(excel, content_type='application/vnd.ms-excel')
-    #     response['Content-Disposition'] = 'attachment; filename="consumo_clientes_comerciales.xls"'
-    #
-    #     return response
-
-    # def get(self, req):
-    #
-    #     productos = Producto.objects.order_by("nombre")
-    #     choferes = Trabajador.objects.order_by("nombre")
-    #
-    #     reporte = templates.KilosDeVentasPorChofer()
-    #
-    #     datos = ReportesManager().get_kilos_vendidos_trabajor()
-    #     excel = reporte.construir_reporte(datos,productos,choferes)
-    #     response = HttpResponse(excel, content_type='application/vnd.ms-excel')
-    #     response['Content-Disposition'] = 'attachment; filename="%s.xls"'%(reporte.nombre)
-    #
-    #     return response
-
-
-    # def get(self, req):
-
-    #     reporte = templates.DetalleCuotasCreditos()
-
-    #     datos = ReportesManager().detalle_cuotas_creditos()
-    #     excel = reporte.construir_reporte(creditos= datos)
-    #     response = HttpResponse(excel, content_type='application/vnd.ms-excel')
-    #     response['Content-Disposition'] = 'attachment; filename="%s.xls"'%(reporte.nombre)
-
-    #     return response
 
 
 index = IndexView.as_view()

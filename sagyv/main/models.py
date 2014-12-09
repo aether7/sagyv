@@ -522,7 +522,7 @@ class Cupon(models.Model):
     numero_cupon = models.IntegerField()
     fecha = models.DateField(auto_now_add=True)
     descuento = models.IntegerField()
-    venta = models.ForeignKey(Venta)
+    venta = models.ForeignKey(Venta, null=True)
 
     def __unicode__(self):
         return self.numero_cupon
