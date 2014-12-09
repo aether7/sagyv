@@ -1,4 +1,4 @@
-from django.db import connections, models
+from django.db import connections, models, connection
 from django.db.models import Q, Sum
 from main import trabajador
 

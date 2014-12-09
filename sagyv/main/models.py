@@ -624,16 +624,40 @@ class BoletaTrabajador(models.Model):
     objects = BoletaTrabajadorManager()
 
 
+class Liquidacion(models.Model):
+    fecha = models.DateTimeField(auto_now_add = True)
+    guia_despacho = models.ForeignKey(GuiaDespacho)
+    terminada = models.BooleanField(default = False)
+
+
+class TipoGuiaVenta(models.Model):
+    nombre = models.CharField(max_length = 140)
+
+
+class GuiaVenta(models.Model):
+    cliente = models.ForeignKey(Cliente)
+    fecha = models.DateTimeField(auto_now_add = True)
+    tipo = models.ForeignKey(TipoGuiaVenta)
+    liquidacion = models.ForeignKey(Liquidacion)
+
+
+class DetalleGuiaVenta(models.Model):
+    cantidad = models.IntegerField()
+    producto = models.ForeignKey(Producto)
+    guia_venta = models.ForeignKey(GuiaVenta)
+
+
 class Cheque(models.Model):
     monto = models.IntegerField()
-    banco = models.ForeignKey(Banco)
     emisor = models.ForeignKey(Cliente, null = True)
     fecha = models.DateField()
     numero = models.IntegerField()
     cobrado = models.BooleanField(default = False)
+    banco = models.ForeignKey(Banco)
+    liquidacion = models.ForeignKey(Liquidacion)
 
     def __unicode__(self):
-        return str(self.numero) + " " + str(self.monto)
+        return str(self.numero) + ' ' + str(self.monto)
 
 
 class Otros(models.Model):
@@ -641,7 +665,7 @@ class Otros(models.Model):
     monto = models.IntegerField()
     fecha = models.DateField(auto_now=True)
     trabajador = models.ForeignKey(Trabajador)
+    liquidacion = models.ForeignKey(Liquidacion)
 
     def __unicode__(self):
-        return str(self.fecha)+' '+str(self.trabajador.get_nombre_completo)
-
+        return str(self.fecha) + ' ' + str(self.trabajador.get_nombre_completo)
