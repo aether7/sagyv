@@ -30,6 +30,8 @@ from main.models import Otros
 from main.models import Venta
 from main.models import TipoPago
 
+from main.models import Liquidacion
+
 
 class IndexView(TemplateView):
     template_name = "liquidacion/index.html"
@@ -201,9 +203,13 @@ class Cerrar(View):
 
         .- Retirar Elementos desde el vehiculo              ~OK
         .- Obtener chofer con la guia                       ~OK
+        .- Llenar tabla Liquidacion                         ~OK
+            - Llenar datos GuiaVenta                        NOK
+            - Llenar datos DetalleGuiaVenta                 NOK
+            PD : Solo en caso de guia propia/lipigas
         .- Actualizar datos
-            - vehiculo                                      ~OK
-            - talonarios                                    ~OK
+            - vehiculo                                      ~OK :: Falta dato desde Frontend
+            - talonarios                                    ~OK :: Falta dato desde Frontend
             - Retirar Carga del vehiculo                    NOK
         .- Ingreso de cupones                               NOK
         .- Ingreso de cheques                               NOK
@@ -231,36 +237,19 @@ class Cerrar(View):
         talonario_boleta.save()
         """
 
+        self.this_liquidacion = new Liquidacion()
+        this_liquidacion.guia_despacho = this_guia
+        this_liquidacion.save()
+
+
+
+
         if cupones_prepago != '':
             self.ingreso_cupones(json.loads(cupones_prepago))
 
-        #productos = req.POST.get('productos')
-        #vouchers = req.POST.get('vouchers')
-        #cheques = req.POST.get('cheques')
-
-        #otros = req.POST.get('otros')
-        #productos = req.POST.get('productos')
-        #guias = req.POST.get('guias')
-        #this_guia = req.POST.get('guia_despacho')
-        #montos = req.POST.get('montos')
-
-        #if vouchers != "":
-            #self.ingreso_vouchers(json.loads())
-        #if cheques != '':
-        #    self.ingreso_cheques(json.loads(cheques))
-
-        #if cupones_prepago != '':
-        #    self.ingreso_cupones(json.loads(cupones_prepago))
-
-        #if otros != '':
-        #   pass
-            #por validar
-            #self.ingreso_otros(json.loads(otros))
-
-
-        #self.ingreso_guia(json.loads())
-        #self.ingreso_guias(json.loads())
-        #self.ingreso_montos(json.loads())
+        """
+        Se debe definir la respuesta del proceso.
+        """
         dato = {'status': 'WIP'}
         dato = json.dumps(dato, cls=DjangoJSONEncoder)
 
@@ -271,15 +260,16 @@ class Cerrar(View):
         tipo_pago = TipoPago.objects.get(pk=int(3))
 
         for i in cupones:
-            cliente = Cliente.objects.get(pk = int(i['cliente']['id']))
-            monto = int(i['descuento'])
-
+            client = Cliente.objects.get( pk = int(i['cliente']['id']) )
+            format = Producto.objects.get( pk = int(i['formato']['id']) )
 
             cupon = Cupon()
             cupon.numero_cupon = i['numero']
-            #cupon.fecha Auto now
-            cupon.descuento = monto
-            #cupon.venta por aclarar
+            cupon.descuento = int(i['descuento'])
+            cupon.liquidacion = self.this_liquidacion
+            cupon.formato = format
+            cupon.cliente = client
+            cupon.save()
 
     def ingreso_vouchers(self, vouchers):
         pass

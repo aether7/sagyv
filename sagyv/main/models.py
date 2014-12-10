@@ -612,6 +612,8 @@ class CuponPrepago(models.Model):
     numero_cupon = models.IntegerField()
     fecha = models.DateField(auto_now_add = True)
     descuento = models.IntegerField()
+    formato = models.ForeignKey(Producto)
+    cliente = models.ForeignKey(Cliente)
     liquidacion = models.ForeignKey(Liquidacion)
 
     def __unicode__(self):
