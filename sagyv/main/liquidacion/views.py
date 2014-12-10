@@ -199,8 +199,8 @@ class Cerrar(View):
             - Añadir al Json: boleta_actual.                NOK
             - Cupones de prepago, añadir boleta.            NOK
 
-        .- Retirar Elementos desde el vehiculo             ~OK
-        .- Obtener chofer con la guia                      ~OK
+        .- Retirar Elementos desde el vehiculo              ~OK
+        .- Obtener chofer con la guia                       ~OK
         .- Actualizar datos
             - vehiculo                                      ~OK
             - talonarios                                    ~OK
@@ -265,20 +265,6 @@ class Cerrar(View):
         dato = json.dumps(dato, cls=DjangoJSONEncoder)
 
         return HttpResponse(dato, content_type="application/json")
-
-    #def crear_venta(self, tipo_pago, num_boleta, cliente, monto, descuento):
-    #    new = Venta()
-    #    new.numero_serie = num_boleta
-    #    new.trabajador = self.this_trabajador
-    #    new.cliente = cliente
-    #    new.monto = monto
-    #    new.fecha =
-    #    new.tipo_pago = tipo_pago
-    #    new.descuento = descuento
-    #    new.descripcion_descuento =
-    #    new.save()
-
-    #    return new
 
 
     def ingreso_cupones(self, cupones):
