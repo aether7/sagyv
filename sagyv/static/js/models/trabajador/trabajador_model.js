@@ -107,12 +107,6 @@ Trabajador.prototype = {
 
         rut = rut.replace(/\./g, '');
 
-        if(rut.indexOf('-') !== -1){
-           rut = rut.split('');
-           rut = rut.pop() + '-' + rut.slice(0).reverse().join('');
-           rut = rut.split('').reverse().join('');
-        }
-
         json = {
             nombre: this.nombre,
             apellido: this.apellido,

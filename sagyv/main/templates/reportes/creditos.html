@@ -3,54 +3,50 @@
 {% block reporte_content %}
 
 <section ng-controller="CreditoController as creditoCtrl">
+
+<aside>
     <label for="desde">Desde</label>
-    <input id="desde" type="text" ng-model="creditoCtrl.desde" />
+    <input id="desde" type="date" ng-model="creditoCtrl.desde" />
 
     <label for="hasta">Hasta</label>
-    <input id="hasta" type="text" ng-model="creditoCtrl.hasta" />
+    <input id="hasta" type="date" ng-model="creditoCtrl.hasta" />
 
     <a href="{% url 'reportes:creditos' %}" class="btn btn-primary" ng-click="creditoCtrl.filtrar()">Filtrar</a>
     <a href class="btn btn-primary" ng-click="creditoCtrl.exportar()">Exportar a excel</a>
     <a href class="btn btn-primary" ng-click="creditoCtrl.graficar()">Ver gráfico</a>
-</section>
+</aside>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>ID VENTA</th>
-            <th>Nº SERIE</th>
-            <th>MONTO</th>
-            <th>FECHA</th>
-            <th>CLIENTE</th>
-            <th>TIPO CUOTAS</th>
-            <th>Nº TARJETA</th>
-            <th>Nº OPERACIÓN</th>
-            <th>Nº CUOTAS</th>
-            <th>CUOTAS PAGADAS</th>
-            <th>CANTIDAD CUOTAS PAGADAS</th>
-            <th>CUOTAS IMPAGAS</th>
-            <th>CANTIDAD CUOTAS IMPAGAS</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for credito in creditos %}
-        <tr>
-            <td>{{ credito.venta_id }}</td>
-            <td>{{ credito.numero_serie }}</td>
-            <td>{{ credito.monto }}</td>
-            <td>{{ credito.fecha }}</td>
-            <td>{{ credito.nombre_cliente }}</td>
-            <td>{{ credito.tipo_cuotas }}</td>
-            <td>{{ credito.numero_tarjeta }}</td>
-            <td>{{ credito.numero_operacion }}</td>
-            <td>{{ credito.numero_cuotas }}</td>
-            <td>{{ credito.cuotas_pagadas }}</td>
-            <td>{{ credito.cant_cuotas_pagadas }}</td>
-            <td>{{ credito.cuotas_impagas }}</td>
-            <td>{{ credito.cant_cuotas_impagas }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active">
+        <a id="tabDetalle" href="#detalle" role="tab" data-toggle="tab">Detalle</a>
+    </li>
+
+    <li role="presentation">
+        <a id="tabGrafico" href="#grafico" role="tab" data-toggle="tab">Gráfico</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="detalle">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>TIPO DE CLIENTE</th>
+                    <th>NOMBRE</th>
+                    <th>FORMATO CONSUMIDO</th>
+                    <th>MONTO(descuento)</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    <div role="tabpanel" class="tab-pane" id="grafico">
+        <div id="canvas_grafico"></div>
+    </div>
+</div>
+
+</section>
 
 {% endblock %}

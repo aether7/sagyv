@@ -3,6 +3,7 @@
 {% block reporte_content %}
 
 <section ng-controller="VentaController as ventaCtrl">
+<aside>
     <label for="desde">Desde</label>
     <input id="desde" type="text" ng-model="ventaCtrl.desde" />
 
@@ -12,28 +13,39 @@
     <a href="{% url 'reportes:venta_masa' %}" class="btn btn-primary" ng-click="ventaCtrl.filtrar()">Filtrar</a>
     <a href class="btn btn-primary" ng-click="ventaCtrl.exportar()">Exportar a excel</a>
     <a href class="btn btn-primary" ng-click="ventaCtrl.graficar()">Ver gráfico</a>
+</aside>
+
+<ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active">
+        <a id="tabDetalle" href="#detalle" role="tab" data-toggle="tab">Detalle</a>
+    </li>
+
+    <li role="presentation">
+        <a id="tabGrafico" href="#grafico" role="tab" data-toggle="tab">Gráfico</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="detalle">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>TIPO DE CLIENTE</th>
+                    <th>NOMBRE</th>
+                    <th>FORMATO CONSUMIDO</th>
+                    <th>MONTO(descuento)</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    <div role="tabpanel" class="tab-pane" id="grafico">
+        <div id="canvas_grafico"></div>
+    </div>
+</div>
+
 </section>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>ID CLIENTE</th>
-            <th>NOMBRE</th>
-            <th>PRODUCTO</th>
-            <th>CODIGO</th>
-            <th>MONTO</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for producto in productos %}
-        <tr>
-            <td>{{ producto.id_cliente }}</td>
-            <td>{{ producto.nombre_cliente }}</td>
-            <td>{{ producto.producto_nombre }}</td>
-            <td>{{ producto.producto_codigo }}</td>
-            <td>{{ producto.suma_monto }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
 {% endblock %}

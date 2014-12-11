@@ -1,4 +1,4 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/home/worker8/proyectos/sagyv/sagyv/static/js/bundles/trabajador_bundle.js":[function(require,module,exports){
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/Aether/Proyectos/sagyv/sagyv/static/js/bundles/trabajador_bundle.js":[function(require,module,exports){
 (function(){
 'use strict';
 var app = angular.module('trabajadorApp', [], App.httpProvider),
@@ -10,7 +10,7 @@ app.controller('TrabajadorController',['trabajadorService', TrabajadorController
 
 })();
 
-},{"../controllers/trabajador_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/trabajador_controller.js","../services/trabajador_service.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/services/trabajador_service.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/trabajador_controller.js":[function(require,module,exports){
+},{"../controllers/trabajador_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/trabajador_controller.js","../services/trabajador_service.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/trabajador_service.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/trabajador_controller.js":[function(require,module,exports){
 var Trabajador = require('../models/trabajador/trabajador_model.js'),
     Boleta = require('../models/trabajador/boleta_model.js');
 
@@ -71,7 +71,7 @@ TrabajadorController.mixin({
     existeTrabajador: function(trabajador){
         var resultado = this.trabajadores.filter(function(t){
             return t.rut === trabajador.rut;
-        });trabajadores
+        });
 
         return resultado.length;
     },
@@ -201,7 +201,7 @@ TrabajadorController.mixin({
 
 module.exports = TrabajadorController;
 
-},{"../models/trabajador/boleta_model.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/models/trabajador/boleta_model.js","../models/trabajador/trabajador_model.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/models/trabajador/trabajador_model.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/models/trabajador/boleta_model.js":[function(require,module,exports){
+},{"../models/trabajador/boleta_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/trabajador/boleta_model.js","../models/trabajador/trabajador_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/trabajador/trabajador_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/trabajador/boleta_model.js":[function(require,module,exports){
 function Boleta(){
     this.numeroAnterior = 0;
     this.boletaInicial = 1;
@@ -271,7 +271,7 @@ Boleta.mixin({
 
 module.exports = Boleta;
 
-},{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/models/trabajador/trabajador_model.js":[function(require,module,exports){
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/trabajador/trabajador_model.js":[function(require,module,exports){
 var Trabajador = function(){
     this.id = null;
     this.nombre = null;
@@ -381,12 +381,6 @@ Trabajador.prototype = {
 
         rut = rut.replace(/\./g, '');
 
-        if(rut.indexOf('-') !== -1){
-           rut = rut.split('');
-           rut = rut.pop() + '-' + rut.slice(0).reverse().join('');
-           rut = rut.split('').reverse().join('');
-        }
-
         json = {
             nombre: this.nombre,
             apellido: this.apellido,
@@ -457,9 +451,11 @@ Trabajador.prototype = {
 
 module.exports = Trabajador;
 
-},{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/services/service_util.js":[function(require,module,exports){
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/service_util.js":[function(require,module,exports){
+function noop(){}
+
 function standardError(data){
-    alert('ha ocurrido un error en el servidor !!!');
+    alert('ha ocurrido un error en el servidor !!!, por favor informe al administrador');
 };
 
 function processURL(url, params){
@@ -479,12 +475,13 @@ function URLMaker(){
 
 URLMaker.prototype.withThis = function(url){
     this.url = url;
+    return this;
 };
 
-URLMaker.prototype.doQuery = function(obj){
+URLMaker.prototype.doQuery = function(params){
     var queryStr = [];
 
-    Objects.keys(params).forEach(function(key){
+    Object.keys(params).forEach(function(key){
         queryStr.push(key + '=' + params[key]);
     });
 
@@ -494,55 +491,71 @@ URLMaker.prototype.doQuery = function(obj){
 
 exports.standardError = standardError;
 exports.processURL = processURL;
+exports.URLMaker = URLMaker;
 
-},{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/services/trabajador_service.js":[function(require,module,exports){
+exports.getMaker = function($http){
+    return function(){
+        var args = Array.prototype.slice.call(arguments),
+            callback = args.pop(),
+            url = args.shift();
+
+        if(args.length){
+            url = new URLMaker().withThis(url).doQuery(args[0]);
+        }
+
+        $http.get(url).success(callback || noop).error(standardError);
+    };
+};
+
+exports.postMaker = function($http){
+    return function(url, params, callback){
+        $http.post(url, params).success(callback || noop).error(standardError);
+    };
+};
+
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/trabajador_service.js":[function(require,module,exports){
 var serviceUtil = require('./service_util.js');
 
 function service($http){
-    var error, services;
+    var services, get, post;
 
-    error = function(){
-        alert('Ha ocurrido un error en el servicor');
-    };
+    get = serviceUtil.getMaker($http);
+    post = serviceUtil.postMaker($http);
 
     services = {
         findAll: function(callback){
             var action = App.urls.get('trabajador:todos');
-            $http.get(action).success(callback).error(serviceUtil.standardError);
+            get(action, callback);
         },
 
         crear: function(param, callback){
             var action = App.urls.get('trabajador:crear');
-            $http.post(action, param).success(callback).error(serviceUtil.standardError);
+            post(action, param, callback);
         },
 
         obtener: function(id, callback){
-            var action = App.urls.get('trabajador:obtener') + '?id=' + id;
-            $http.get(action).success(callback).error(serviceUtil.standardError);
+            var action = App.urls.get('trabajador:obtener');
+            get(action, { id: id }, callback);
         },
 
         actualizar: function(params, callback){
             var action = App.urls.get('trabajador:actualizar');
-            $http.post(action, params).success(callback).error(serviceUtil.standardError);
+            post(action, params, callback);
         },
 
         eliminar: function(id, callback){
-            var action = App.urls.get('trabajador:eliminar'),
-                json = { id : id };
-
-            $http.post(action, json, callback).error(serviceUtil.standardError);
+            var action = App.urls.get('trabajador:eliminar');
+            post(action, { id: id }, callback);
         },
 
         guardarBoleta: function(json, callback){
             var url = App.urls.get('trabajador:guardar_boleta');
-            $http.post(url, json).success(callback).error(serviceUtil.standardError);
+            post(url, json, callback);
         },
 
         buscarBoleta: function(id, callback){
             var url = App.urls.get('trabajador:buscar_boleta');
-            url += '?id=' + id;
-
-            $http.get(url).success(callback).error(serviceUtil.standardError);
+            get(url, { id: id }, callback);
         }
     };
 
@@ -551,4 +564,4 @@ function service($http){
 
 module.exports = service;
 
-},{"./service_util.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/services/service_util.js"}]},{},["/home/worker8/proyectos/sagyv/sagyv/static/js/bundles/trabajador_bundle.js"]);
+},{"./service_util.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/service_util.js"}]},{},["/Users/Aether/Proyectos/sagyv/sagyv/static/js/bundles/trabajador_bundle.js"]);

@@ -58,7 +58,7 @@ TrabajadorController.mixin({
     existeTrabajador: function(trabajador){
         var resultado = this.trabajadores.filter(function(t){
             return t.rut === trabajador.rut;
-        });trabajadores
+        });
 
         return resultado.length;
     },
