@@ -22,14 +22,14 @@
                     <li role="presentation">
                         <a href="{% url 'vehiculos:index' %}" tabindex="-1" role="menuitem">Vehículos</a>
                     </li>
-
+                    {% if es_admin %}
                     <li role="presentation">
                         <a href="{% url 'precios:index' %}" tabindex="-1" role="menuitem">Precios / Stock</a>
                     </li>
                     <li role="presentation">
                         <a href="{% url 'guias:index' %}" tabindex="-1" role="menuitem">Guías / Talonarios / Terminales</a>
                     </li>
-
+                    {% endif %}
                 </ul>
             </li>
             <li>
