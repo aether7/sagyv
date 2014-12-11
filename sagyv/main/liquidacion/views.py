@@ -226,6 +226,11 @@ class Cerrar(View):
         json_guia = json.loads(req.POST.get('guia_despacho'))
         cupones_prepago = req.POST.get('cupones_prepago')
         otros = req.POST.get('otros')
+        cheques = req.POST.get('cheques')
+        guias = req.POST.get('guias')
+
+        propias = guias['propias']
+        lipigas = guias['lipigas']
 
         this_guia = GuiaDespacho.objects.get(pk = int(json_guia['id']))
 
@@ -254,6 +259,15 @@ class Cerrar(View):
 
         if otros != '':
             self.ingreso_otros(json.loads(otros))
+
+        if cheques != '':
+            self.ingreso_cheques(json.loads(cheques))
+
+        if propias != '':
+            self.ingreso_guias_propia(json.loads(propias))
+
+        if lipigas != '':
+            self.ingreso_guia_lipigas(json.loads(lipigas))
 
         """
         Se debe definir la respuesta del proceso.
