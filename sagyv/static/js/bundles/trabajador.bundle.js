@@ -77,6 +77,8 @@ TrabajadorController.mixin({
     },
 
     renderNuevoTrabajador: function(data){
+        this.trabajador.id = data.id;
+        this.trabajador.estadoVacacion = { nombre: data.estado_vacaciones };
         this.trabajadores.push(this.trabajador);
 
         $('#modal_nuevo').modal('hide');
