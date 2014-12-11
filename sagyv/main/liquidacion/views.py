@@ -200,7 +200,7 @@ class Cerrar(View):
         TODO :
             - Añadir al Json: nuevo_km.                     NOK
             - Añadir al Json: boleta_actual.                NOK
-            - Cupones de prepago, añadir boleta.            NOK
+            - CuponPrepagoes de prepago, añadir boleta.            NOK
 
         .- Retirar Elementos desde el vehiculo              ~OK
         .- Obtener chofer con la guia                       ~OK

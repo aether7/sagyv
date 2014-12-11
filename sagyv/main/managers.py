@@ -89,55 +89,26 @@ class ReportesManager(models.Manager):
 
         consulta_sql = """
             SELECT
-                c.id as id_cliente,
-                c.nombre as nombre_cliente,
-                c.rut as rut_cliente,
-                c.es_lipigas as es_lipigas_cliente,
-                c.es_propio as es_propio_cliente,
-                c.credito as tiene_credito_cliente,
-                sc.monto_descuento as descuento_sc,
-                td.tipo as tipo_descuento,
-                (
-                    SELECT * FROM (
-                        SELECT p.id as pid
-                        FROM main_venta v
-                        INNER JOIN main_detalleventa dv ON(dv.venta_id = v.id)
-                        INNER JOIN main_producto p ON(dv.producto_id = p.id)
-                        WHERE v.cliente_id = c.id
-                        GROUP BY dv.producto_id
-                        ORDER BY cantidad
-                    ) as rest
-                    LIMIT 1
-                ) as id_producto,
-                (
-                    SELECT * FROM (
-                        SELECT p.codigo as codigo
-                        FROM main_venta v
-                        INNER JOIN main_detalleventa dv ON(dv.venta_id = v.id)
-                        INNER JOIN main_producto p ON(dv.producto_id = p.id)
-                        WHERE v.cliente_id = c.id
-                        GROUP BY dv.producto_id
-                        ORDER BY cantidad
-                    ) as rest
-                    LIMIT 1
-                ) as codigo_producto,
-                (
-                    SELECT * FROM (
-                        SELECT
-                        SUM(dv.cantidad) as cantidad
-                        FROM main_venta v
-                        INNER JOIN main_detalleventa dv ON(dv.venta_id = v.id)
-                        INNER JOIN main_producto p ON(dv.producto_id = p.id)
-                        WHERE v.cliente_id = c.id
-                        GROUP BY dv.producto_id
-                        ORDER BY cantidad
-                    ) as rest2
-                    LIMIT 1
-                ) as cantidad_producto
+                c.id as cliente_id,
+                c.rut as cliente_rut,
+                c.nombre as cliente_nombre,
+                c.es_lipigas as cliente_lipigas,
+                c.es_propio as cliente_propio,
+                c.credito as cliente_credito
             FROM main_cliente c
-            INNER JOIN main_descuentocliente sc ON(sc.id = c.situacion_comercial_id)
-            INNER JOIN main_tipodescuento td ON(sc.tipo_descuento_id = td.id)
         """
+
+        condiciones = []
+
+        if fecha_inicio is not None and fecha_termino is not None:
+            condiciones.append( "l.fecha BETWEEN '%s' AND '%s'" % (fecha_inicio, fecha_termino) )
+        elif fecha_inicio is not None:
+            condiciones.append("l.fecha >= '%s' " % (fecha_inicio))
+        elif fecha_termino is not None:
+            condiciones.append("l.fecha <= '%s'" % (fecha_termino))
+
+        if len(condiciones) > 0:
+            consulta_sql += "WHERE " + " AND ".join(condiciones)
 
         cursor = connections['default'].cursor()
         cursor.execute(consulta_sql)
@@ -148,40 +119,32 @@ class ReportesManager(models.Manager):
         for row in data:
             fila = ConsumoCliente()
 
-            fila.id_cliente = row['id_cliente']
-            fila.nombre_cliente = row['nombre_cliente']
-            fila.rut_cliente = row['rut_cliente']
-            fila.es_lipigas = row['es_lipigas_cliente']
-            fila.es_propio = row['es_propio_cliente']
-            fila.credito = row['tiene_credito_cliente']
-            fila.monto_descuento = row['descuento_sc']
-            fila.tipo_descuento = row['tipo_descuento']
-            fila.id_producto = row['id_producto']
-            fila.codigo_producto = row['codigo_producto']
-            fila.cantidad_producto = row['cantidad_producto']
+            fila.id_cliente = row['cliente_id']
+            fila.nombre_cliente = row['cliente_nombre']
+            fila.rut_cliente = row['cliente_rut']
+            fila.es_propio = row['cliente_propio']
+            fila.es_lipigas = row['cliente_lipigas']
+            fila.credito = row['cliente_credito']
 
             resultado.append(fila)
+
+            # fila.id_cliente = row['id_cliente']
+            # fila.nombre_cliente = row['nombre_cliente']
+            # fila.rut_cliente = row['rut_cliente']
+            # fila.es_lipigas = row['es_lipigas_cliente']
+            # fila.es_propio = row['es_propio_cliente']
+            # fila.credito = row['tiene_credito_cliente']
+            # fila.monto_descuento = row['descuento_sc']
+            # fila.tipo_descuento = row['tipo_descuento']
+            # fila.id_producto = row['id_producto']
+            # fila.codigo_producto = row['codigo_producto']
+            # fila.cantidad_producto = row['cantidad_producto']
 
         return resultado
 
     def get_kilos_vendidos_trabajor(self, fecha_inicio=None, fecha_termino=None):
 
-        consulta_sql = """
-            SELECT
-                trabajador.id,
-                trabajador.nombre,
-                producto.id,
-                producto.nombre,
-                producto.peso,
-                sum(detalle_v.cantidad) * producto.peso as kilos,
-                producto.codigo
-            FROM main_trabajador trabajador
-            JOIN main_venta venta on venta.trabajador_id = trabajador.id
-            JOIN main_detalleventa detalle_v on venta.id = detalle_v.venta_id
-            LEFT JOIN main_producto producto  on producto.id = detalle_v.producto_id
-            JOIN main_tipoproducto tipo_p on producto.tipo_producto_id = tipo_p.id
-            GROUP BY trabajador.id, trabajador.nombre,tipo_p.nombre, producto.id, producto.nombre , producto.peso
-        """
+        consulta_sql = ""
 
         query = connection.cursor()
         query.execute(consulta_sql)
@@ -204,49 +167,7 @@ class ReportesManager(models.Manager):
 
     def detalle_cuotas_creditos(self, fecha_inicio = None, fecha_termino = None):
 
-        consulta_sql = """
-                SELECT venta.id, venta.numero_serie, venta.monto ,
-                       venta.fecha, venta.cliente_id, cliente.nombre   , voucher.tipo_cuotas,
-                       voucher.numero_tarjeta, voucher.numero_operacion, voucher.numero_cuotas,
-                       (
-                            SELECT sum(cuota_pagada.monto)
-                            FROM main_cuotavoucher cuota_pagada
-                            WHERE
-                                voucher.id = cuota_pagada.voucher_id AND cuota_pagada.pagado = 1
-                        )  as pagada,
-                        (
-                           SELECT count(cuota_pagada.id)
-                           FROM main_cuotavoucher cuota_pagada
-                           WHERE voucher.id = cuota_pagada.voucher_id AND cuota_pagada.pagado = 1
-
-                        )  as cant_cp,
-                        (
-                          SELECT sum(cuota_impagada.monto)
-                          FROM main_cuotavoucher cuota_impagada
-                          WHERE voucher.id = cuota_impagada.voucher_id AND cuota_impagada.pagado = 0
-                        )  as impaga,
-                        (
-                          SELECT count(cuota_impagada.id)
-                          FROM main_cuotavoucher cuota_impagada
-                          WHERE voucher.id = cuota_impagada.voucher_id AND cuota_impagada.pagado = 0
-                        )  as cant_cimp
-                FROM main_venta venta
-
-                INNER JOIN main_voucher voucher ON venta.id = voucher.venta_id
-                INNER JOIN main_cliente cliente ON cliente.id = venta.cliente_id
-                GROUP BY
-                    venta.id,
-                    venta.numero_serie,
-                    venta.monto,
-                    venta.fecha,
-                    venta.cliente_id,
-                    cliente.nombre,
-                    voucher.tipo_cuotas,
-                    voucher.numero_tarjeta,
-                    voucher.numero_operacion,
-                    voucher.numero_cuotas
-                ORDER BY cliente.nombre
-        """
+        consulta_sql = ""
 
         query = connection.cursor()
         query.execute(consulta_sql)
