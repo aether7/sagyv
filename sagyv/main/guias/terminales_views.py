@@ -66,7 +66,6 @@ class CrearTerminal(View):
         historico = self.crearHistoricoVehiculo(terminal)
         state = self.crearHistoricoEstado(terminal)
 
-
         data = {'terminales': _get_terminales()}
         data = json.dumps(data, cls=DjangoJSONEncoder)
         return HttpResponse(data, content_type='application/json')
@@ -83,8 +82,10 @@ class CrearTerminal(View):
 
     def crearHistoricoVehiculo(self, obj_terminal):
         historico = HistorialCambioVehiculo()
+
         try:
             historico_existente = HistorialCambioVehiculo.objects.filter(estado = True, vehiculo = obj_terminal.vehiculo)
+
             for h in historico_existente:
                 h.estado = False
                 h.save()

@@ -83,8 +83,6 @@ class ConsumoCliente(object):
 
 
 class ReportesManager(models.Manager):
-
-    ###TODO: agregar fechas en un between en la consulta
     def get_consumos_cliente_producto(self,cliente = None, fecha_inicio = None, fecha_termino = None):
 
         consulta_sql = """
@@ -94,11 +92,46 @@ class ReportesManager(models.Manager):
                 c.nombre as cliente_nombre,
                 c.es_lipigas as cliente_lipigas,
                 c.es_propio as cliente_propio,
-                c.credito as cliente_credito
+                c.credito as cliente_credito,
+                (
+                    SELECT
+                        p.id as id_producto
+                    FROM main_guiaventa gv
+                    INNER JOIN main_detalleguiaventa dgv ON(dgv.guia_venta_id = gv.id)
+                    INNER JOIN main_producto p ON(dgv.producto_id = p.id)
+                    WHERE gv.cliente_id = c.id
+                    GROUP BY dgv.producto_id
+                    ORDER BY SUM(dgv.cantidad) DESC
+                    LIMIT 1
+                ) as producto_id,
+                (
+                    SELECT
+                        SUM(dgv.cantidad) as cantidad
+                    FROM main_guiaventa gv
+                    INNER JOIN main_detalleguiaventa dgv ON(dgv.guia_venta_id = gv.id)
+                    WHERE gv.cliente_id = c.id
+                    GROUP BY dgv.producto_id
+                    ORDER BY cantidad DESC
+                    LIMIT 1
+                ) as producto_cantidad,
+                (
+                    SELECT
+                        p.codigo as codigo
+                    FROM main_guiaventa gv
+                    INNER JOIN main_detalleguiaventa dgv ON(dgv.guia_venta_id = gv.id)
+                    INNER JOIN main_producto p ON(dgv.producto_id = p.id)
+                    WHERE gv.cliente_id = c.id
+                    GROUP BY dgv.producto_id
+                    ORDER BY SUM(dgv.cantidad) DESC
+                    LIMIT 1
+                ) as producto_codigo
             FROM main_cliente c
         """
 
         condiciones = []
+
+        if cliente is not None:
+            condiciones.append("c.id = %s" % cliente.id )
 
         if fecha_inicio is not None and fecha_termino is not None:
             condiciones.append( "l.fecha BETWEEN '%s' AND '%s'" % (fecha_inicio, fecha_termino) )
@@ -125,20 +158,11 @@ class ReportesManager(models.Manager):
             fila.es_propio = row['cliente_propio']
             fila.es_lipigas = row['cliente_lipigas']
             fila.credito = row['cliente_credito']
+            fila.id_producto = row['producto_id']
+            fila.codigo_producto = row['codigo_producto']
+            fila.cantidad_producto = row['cantidad_producto']
 
             resultado.append(fila)
-
-            # fila.id_cliente = row['id_cliente']
-            # fila.nombre_cliente = row['nombre_cliente']
-            # fila.rut_cliente = row['rut_cliente']
-            # fila.es_lipigas = row['es_lipigas_cliente']
-            # fila.es_propio = row['es_propio_cliente']
-            # fila.credito = row['tiene_credito_cliente']
-            # fila.monto_descuento = row['descuento_sc']
-            # fila.tipo_descuento = row['tipo_descuento']
-            # fila.id_producto = row['id_producto']
-            # fila.codigo_producto = row['codigo_producto']
-            # fila.cantidad_producto = row['cantidad_producto']
 
         return resultado
 

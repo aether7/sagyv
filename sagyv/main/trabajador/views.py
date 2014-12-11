@@ -49,8 +49,6 @@ class CrearTrabajadorView(View):
         self.estado_civil_id = req.POST.get("estado_civil")
         self.estado_vacacion_id = req.POST.get("estado_vacacion")
 
-        print "rut del trabajador : " + self.rut
-
         estado_vacaciones = EstadoVacacion.objects.get(pk = self.estado_vacacion_id)
 
         trabajador = self.crear_trabajador()
