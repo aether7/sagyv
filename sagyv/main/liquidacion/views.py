@@ -216,10 +216,10 @@ class Cerrar(View):
         .- Ingreso de cheques                               ~OK
         .- Ingreso de voucher lipigas                       NOK
         .- Ingreso de voucher Transbank                     NOK
-        .- Ingreso de Otros                                 NOK
-        .- Guia Propia                                      NOK
+        .- Ingreso de Otros                                 ~OK
+        .- Guia Propia                                      ~OK
             - añadir cliente                                NOK
-        .- Guia Lipigas                                     NOK
+        .- Guia Lipigas                                     ~OK
             - añadir cliente                                NOK
         """
         json_guia = json.loads(req.POST.get('guia_despacho'))
@@ -227,9 +227,13 @@ class Cerrar(View):
         otros = req.POST.get('otros')
         cheques = req.POST.get('cheques')
         guias = req.POST.get('guias')
+        vouchers = req.POST.get('vouchers')
 
         propias = guias['propias']
         lipigas = guias['lipigas']
+
+        voucher_transbank = vouchers['transbank']
+        voucher_lipigas = vouchers['lipigas']
 
         this_guia = GuiaDespacho.objects.get(pk = int(json_guia['id']))
 
@@ -267,6 +271,12 @@ class Cerrar(View):
 
         if lipigas != '':
             self.ingreso_guia_lipigas(json.loads(lipigas))
+
+        if voucher_lipigas != '':
+            self.ingreso_vouchers(json.loads(voucher_lipigas))
+
+        if voucher_transbank != '':
+            self.ingreso_vouchers(json.loads(voucher_transbank))
 
         """
         Se debe definir la respuesta del proceso.

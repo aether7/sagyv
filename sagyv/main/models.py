@@ -626,7 +626,7 @@ class Voucher(models.Model):
     terminal = models.ForeignKey(Terminal)
     numero_tarjeta = models.IntegerField(null = True)
     numero_operacion = models.IntegerField(null = True)
-    codigo_autorizacion = models.IntegerField()
+    codigo_autorizacion = models.IntegerField(null = True)
     numero_cuotas = models.IntegerField(default = 1)
     liquidacion = models.ForeignKey(Liquidacion)
 
