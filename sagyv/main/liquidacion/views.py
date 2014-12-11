@@ -226,14 +226,29 @@ class Cerrar(View):
         cupones_prepago = req.POST.get('cupones_prepago')
         otros = req.POST.get('otros')
         cheques = req.POST.get('cheques')
-        guias = req.POST.get('guias')
-        vouchers = req.POST.get('vouchers')
 
-        propias = guias['propias']
-        lipigas = guias['lipigas']
 
-        voucher_transbank = vouchers['transbank']
-        voucher_lipigas = vouchers['lipigas']
+        guias = ''
+        propias = ''
+        lipigas = ''
+        vouchers = ''
+        voucher_transbank = ''
+        voucher_lipigas = ''
+
+
+        if req.POST.get('vouchers') != '':
+            vouchers = json.loads(req.POST.get('vouchers'))
+
+            voucher_transbank = vouchers['transbank']
+            voucher_lipigas = vouchers['lipigas']
+
+        if json.loads(req.POST.get('guias')) != '':
+            guias = json.loads(req.POST.get('guias'))
+
+            propias = guias['propias']
+            lipigas = guias['lipigas']
+
+
 
         this_guia = GuiaDespacho.objects.get(pk = int(json_guia['id']))
 
@@ -251,11 +266,21 @@ class Cerrar(View):
         """
 
         self.this_liquidacion = Liquidacion()
-        this_liquidacion.guia_despacho = this_guia
-        this_liquidacion.save()
+        self.this_liquidacion.guia_despacho = this_guia
+        self.this_liquidacion.save()
 
+        if propias != '':
+            self.ingreso_guias_propia(propias)
 
+        if lipigas != '':
+            self.ingreso_guia_lipigas(lipigas)
 
+        """
+        if voucher_lipigas != '':
+            self.ingreso_vouchers(voucher_lipigas)
+
+        if voucher_transbank != '':
+            self.ingreso_vouchers(voucher_transbank)
 
         if cupones_prepago != '':
             self.ingreso_cupones(json.loads(cupones_prepago))
@@ -265,26 +290,14 @@ class Cerrar(View):
 
         if cheques != '':
             self.ingreso_cheques(json.loads(cheques))
-
-        if propias != '':
-            self.ingreso_guias_propia(json.loads(propias))
-
-        if lipigas != '':
-            self.ingreso_guia_lipigas(json.loads(lipigas))
-
-        if voucher_lipigas != '':
-            self.ingreso_vouchers(json.loads(voucher_lipigas))
-
-        if voucher_transbank != '':
-            self.ingreso_vouchers(json.loads(voucher_transbank))
-
+        """
         """
         Se debe definir la respuesta del proceso.
         """
         dato = {'status': 'WIP'}
         dato = json.dumps(dato, cls=DjangoJSONEncoder)
 
-        return HttpResponse(dato, content_type="application/json")
+        #return HttpResponse(dato, content_type="application/json")
 
 
     def ingreso_cupones(self, cupones):
