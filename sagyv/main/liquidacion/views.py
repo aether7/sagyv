@@ -25,9 +25,8 @@ from main.models import GuiaDespacho
 from main.models import HistorialStock
 from main.models import Terminal
 from main.models import Cheque
-from main.models import Cupon
+from main.models import CuponPrepago
 from main.models import Otros
-from main.models import Venta
 from main.models import TipoPago
 
 from main.models import Liquidacion
@@ -285,7 +284,7 @@ class Cerrar(View):
             client = Cliente.objects.get( pk = int(i['cliente']['id']) )
             format = Producto.objects.get( pk = int(i['formato']['id']) )
 
-            cupon = Cupon()
+            cupon = CuponPrepago()
             cupon.numero_cupon = i['numero']
             cupon.descuento = int(i['descuento'])
             cupon.liquidacion = self.this_liquidacion
@@ -331,7 +330,7 @@ class Cerrar(View):
             this.liquidacion = self.this_liquidacion
             this.save()
 
-            #self.ingresar_productos_guia(guia['productos'], this)
+            self.ingresar_productos_guia(guia['productos'], this)
 
     def ingreso_guia_lipigas(self, some):
         for guia in guias:
@@ -343,7 +342,7 @@ class Cerrar(View):
             this.liquidacion = self.this_liquidacion
             this.save()
 
-            #self.ingresar_productos_guia(guia['productos'], this)
+            self.ingresar_productos_guia(guia['productos'], this)
 
     def ingresar_productos_guia(self, productos, guia):
         for prod in productos:
