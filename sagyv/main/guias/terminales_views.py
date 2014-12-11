@@ -12,18 +12,19 @@ from main.models import HistorialEstadoTerminal
 
 def _get_terminales():
     terminales = []
-    state = EstadoTerminal.objects.get(pk = 3)
-    rs = Terminal.objects.exclude(estado = state).order_by('-vehiculo')
+
+    rs = Terminal.objects.exclude(estado_id = EstadoTerminal.RETIRADO).order_by('-vehiculo')
 
     for terminal in rs:
+
         if terminal.vehiculo is None:
-            id_vehiculo = "0"
-            numero_vehiculo = "No Vehiculo"
+            id_vehiculo = 0
+            numero_vehiculo = 'No Vehiculo'
         else:
             id_vehiculo = terminal.vehiculo.id
-            numero_vehiculo = 'Movil '+str(terminal.vehiculo.numero)
+            numero_vehiculo = 'Movil ' + str(terminal.vehiculo.numero)
 
-        if terminal.estado.id == 2:
+        if terminal.estado.id == EstadoTerminal.MANTENCION:
             show_opt = False
         else:
             show_opt = True

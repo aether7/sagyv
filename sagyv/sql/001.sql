@@ -15,3 +15,7 @@ INSERT INTO main_banco(id, nombre, cheques_recibidos) VALUES(13, 'Corp Banca', 0
 INSERT INTO main_banco(id, nombre, cheques_recibidos) VALUES(14, 'Rabobank', 0);
 INSERT INTO main_banco(id, nombre, cheques_recibidos) VALUES(15, 'Scotiabank', 0);
 INSERT INTO main_banco(id, nombre, cheques_recibidos) VALUES(16, 'HSBC Bank', 0);
+
+INSERT INTO main_estadoterminal(id, nombre) VALUES(1, 'activo');
+INSERT INTO main_estadoterminal(id, nombre) VALUES(2, 'mantención');
+INSERT INTO main_estadoterminal(id, nombre) VALUES(3, 'retirado');

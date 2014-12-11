@@ -460,6 +460,10 @@ class Cliente(models.Model):
 
 
 class EstadoTerminal(models.Model):
+    ACTIVO = 1
+    MANTENCION = 2
+    RETIRADO = 3
+
     nombre = models.CharField(max_length=140)
 
     def __unicode__(self):
