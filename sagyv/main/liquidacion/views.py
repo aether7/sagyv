@@ -31,6 +31,8 @@ from main.models import Venta
 from main.models import TipoPago
 
 from main.models import Liquidacion
+from main.models import GuiaVenta
+from main.models import DetalleGuiaVenta
 
 
 class IndexView(TemplateView):
@@ -211,16 +213,19 @@ class Cerrar(View):
             - vehiculo                                      ~OK :: Falta dato desde Frontend
             - talonarios                                    ~OK :: Falta dato desde Frontend
             - Retirar Carga del vehiculo                    NOK
-        .- Ingreso de cupones                               NOK
-        .- Ingreso de cheques                               NOK
+        .- Ingreso de cupones                               ~OK
+        .- Ingreso de cheques                               ~OK
         .- Ingreso de voucher lipigas                       NOK
         .- Ingreso de voucher Transbank                     NOK
         .- Ingreso de Otros                                 NOK
         .- Guia Propia                                      NOK
+            - añadir cliente                                NOK
         .- Guia Lipigas                                     NOK
+            - añadir cliente                                NOK
         """
         json_guia = json.loads(req.POST.get('guia_despacho'))
         cupones_prepago = req.POST.get('cupones_prepago')
+        otros = req.POST.get('otros')
 
         this_guia = GuiaDespacho.objects.get(pk = int(json_guia['id']))
 
@@ -237,7 +242,7 @@ class Cerrar(View):
         talonario_boleta.save()
         """
 
-        self.this_liquidacion = new Liquidacion()
+        self.this_liquidacion = Liquidacion()
         this_liquidacion.guia_despacho = this_guia
         this_liquidacion.save()
 
@@ -246,6 +251,9 @@ class Cerrar(View):
 
         if cupones_prepago != '':
             self.ingreso_cupones(json.loads(cupones_prepago))
+
+        if otros != '':
+            self.ingreso_otros(json.loads(otros))
 
         """
         Se debe definir la respuesta del proceso.
@@ -284,27 +292,54 @@ class Cerrar(View):
 
             cheque.monto = int(c["monto"])
             cheque.banco = bank
-            #cheque.emisor
+            cheque.liquidacion = self.this_liquidacion
             cheque.fecha = convierte_texto_fecha(c['fecha'])
             cheque.numero = c['numero']
             cheque.cobrado = False
             cheque.save()
-            #print c
 
     def ingreso_otros(self, otros):
         for o in otros:
             otro = Otros()
             otro.concepto = o['concepto']
             otro.monto = o['monto']
-            #otro.fecha auto now
-            #otro.trabajador Por validar
+            otro.trabajador = self.this_trabajador
+            otro.liquidacion = self.this_liquidacion
             otro.save()
 
-    def ingreso_guia(self, this_guia):
-        pass
+    def ingreso_guias_propia(self, guias):
+        for guia in guias:
+            client = Cliente.objects.get( pk = int(guia['cliente']['id']) )
 
-    def ingreso_guias(self, guias):
-        pass
+            this = GuiaVenta()
+            this.cliente = client
+            this.propia = True
+            this.liquidacion = self.this_liquidacion
+            this.save()
+
+            #self.ingresar_productos_guia(guia['productos'], this)
+
+    def ingreso_guia_lipigas(self, some):
+        for guia in guias:
+            client = Cliente.objects.get( pk = int(guia['cliente']['id']) )
+
+            this = GuiaVenta()
+            this.cliente = client
+            this.propia = False
+            this.liquidacion = self.this_liquidacion
+            this.save()
+
+            #self.ingresar_productos_guia(guia['productos'], this)
+
+    def ingresar_productos_guia(self, productos, guia):
+        for prod in productos:
+            producto = Producto.objects.get( codigo = int(prod['codigo']) )
+
+            this = DetalleGuiaVenta()
+            this.cantidad = int(prod['catidad'])
+            this.producto = producto
+            this.guia_venta = guia
+            this.save()
 
     def ingreso_montos(self, montos):
         pass
