@@ -200,13 +200,15 @@ class Cerrar(View):
         TODO :
             - Añadir al Json: nuevo_km.                     NOK
             - Añadir al Json: boleta_actual.                NOK
-            - CuponPrepagoes de prepago, añadir boleta.            NOK
+            - CuponPrepagoes de prepago, añadir boleta      NOK
+
+            - Añadir al modelo el numero de guia            NOK
 
         .- Retirar Elementos desde el vehiculo              ~OK
         .- Obtener chofer con la guia                       ~OK
         .- Llenar tabla Liquidacion                         ~OK
-            - Llenar datos GuiaVenta                        NOK
-            - Llenar datos DetalleGuiaVenta                 NOK
+            - Llenar datos GuiaVenta                        ~OK
+            - Llenar datos DetalleGuiaVenta                 ~OK
             PD : Solo en caso de guia propia/lipigas
         .- Actualizar datos
             - vehiculo                                      ~OK :: Falta dato desde Frontend
@@ -214,13 +216,13 @@ class Cerrar(View):
             - Retirar Carga del vehiculo                    NOK
         .- Ingreso de cupones                               ~OK
         .- Ingreso de cheques                               ~OK
-        .- Ingreso de voucher lipigas                       NOK
-        .- Ingreso de voucher Transbank                     NOK
+        .- Ingreso de voucher lipigas                       NOK --
+        .- Ingreso de voucher Transbank                     NOK --
         .- Ingreso de Otros                                 ~OK
         .- Guia Propia                                      ~OK
-            - añadir cliente                                NOK
+            - añadir cliente                                ~OK
         .- Guia Lipigas                                     ~OK
-            - añadir cliente                                NOK
+            - añadir cliente                                ~OK
         """
         json_guia = json.loads(req.POST.get('guia_despacho'))
         cupones_prepago = req.POST.get('cupones_prepago')
@@ -269,18 +271,11 @@ class Cerrar(View):
         self.this_liquidacion.guia_despacho = this_guia
         self.this_liquidacion.save()
 
-        if propias != '':
+        if propias != '' or len(propias) > 0:
             self.ingreso_guias_propia(propias)
 
-        if lipigas != '':
+        if lipigas != '' or len(lipigas) > 0:
             self.ingreso_guia_lipigas(lipigas)
-
-        """
-        if voucher_lipigas != '':
-            self.ingreso_vouchers(voucher_lipigas)
-
-        if voucher_transbank != '':
-            self.ingreso_vouchers(voucher_transbank)
 
         if cupones_prepago != '':
             self.ingreso_cupones(json.loads(cupones_prepago))
@@ -290,14 +285,20 @@ class Cerrar(View):
 
         if cheques != '':
             self.ingreso_cheques(json.loads(cheques))
-        """
+
+        # if voucher_lipigas != '':
+        #     self.ingreso_vouchers(voucher_lipigas)
+
+        # if voucher_transbank != '':
+        #     self.ingreso_vouchers(voucher_transbank)
+
         """
         Se debe definir la respuesta del proceso.
         """
         dato = {'status': 'WIP'}
         dato = json.dumps(dato, cls=DjangoJSONEncoder)
 
-        #return HttpResponse(dato, content_type="application/json")
+        return HttpResponse(dato, content_type="application/json")
 
 
     def ingreso_cupones(self, cupones):
@@ -355,9 +356,9 @@ class Cerrar(View):
 
             self.ingresar_productos_guia(guia['productos'], this)
 
-    def ingreso_guia_lipigas(self, some):
+    def ingreso_guia_lipigas(self, guias):
         for guia in guias:
-            client = Cliente.objects.get( pk = int(guia['cliente']['id']) )
+            client = Cliente.objects.get( pk = int(guia['cliente']['idCliente']) )
 
             this = GuiaVenta()
             this.cliente = client
@@ -372,7 +373,7 @@ class Cerrar(View):
             producto = Producto.objects.get( codigo = int(prod['codigo']) )
 
             this = DetalleGuiaVenta()
-            this.cantidad = int(prod['catidad'])
+            this.cantidad = int(prod['cantidad'])
             this.producto = producto
             this.guia_venta = guia
             this.save()
