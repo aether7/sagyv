@@ -87,6 +87,7 @@ GuiaPropiaController.mixin({
     },
 
     guardar: function(){
+        this.venta.cliente.id = this.idCliente;
         this.scope.$emit("guia:agregarVenta", this.venta);
         common.agregarMensaje('Se ha guardado guía propia exitosamente');
         $('#modal_guia_propia').modal('hide');

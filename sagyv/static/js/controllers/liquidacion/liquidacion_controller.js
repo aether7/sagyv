@@ -114,9 +114,6 @@ LiquidacionController.mixin({
             _this.kilosVendidos += vacios * peso;
         });
         this.productos_dump = JSON.stringify(this.productos);
-
-
-        console.log(this.guia);
     },
 
     resetearValores: function(){

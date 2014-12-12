@@ -14,6 +14,7 @@ GuiaLipigasController.mixin(GuiaPropiaController, {
 
     guardar: function(){
         this.venta.tipoVenta = 'lipigas';
+        this.venta.cliente.idCliente = this.idCliente;
 
         this.scope.$emit("guia:agregarVenta", this.venta);
         common.agregarMensaje('Se ha guardado guía lipigas exitosamente');
