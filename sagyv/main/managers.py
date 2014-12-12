@@ -106,7 +106,7 @@ class ReportesManager(models.Manager):
                 ) as producto_id,
                 (
                     SELECT
-                        SUM(dgv.cantidad) as cantidad
+                        SUM(dgv.cantidad) as producto_cantidad
                     FROM main_guiaventa gv
                     INNER JOIN main_detalleguiaventa dgv ON(dgv.guia_venta_id = gv.id)
                     WHERE gv.cliente_id = c.id
@@ -116,7 +116,7 @@ class ReportesManager(models.Manager):
                 ) as producto_cantidad,
                 (
                     SELECT
-                        p.codigo as codigo
+                        p.codigo as producto_codigo
                     FROM main_guiaventa gv
                     INNER JOIN main_detalleguiaventa dgv ON(dgv.guia_venta_id = gv.id)
                     INNER JOIN main_producto p ON(dgv.producto_id = p.id)
@@ -159,8 +159,8 @@ class ReportesManager(models.Manager):
             fila.es_lipigas = row['cliente_lipigas']
             fila.credito = row['cliente_credito']
             fila.id_producto = row['producto_id']
-            fila.codigo_producto = row['codigo_producto']
-            fila.cantidad_producto = row['cantidad_producto']
+            fila.codigo_producto = row['producto_codigo']
+            fila.cantidad_producto = row['producto_cantidad']
 
             resultado.append(fila)
 

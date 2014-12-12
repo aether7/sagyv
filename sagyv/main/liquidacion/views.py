@@ -253,6 +253,8 @@ class Cerrar(View):
 
 
         this_guia = GuiaDespacho.objects.get(pk = int(json_guia['id']))
+        this_guia.estado = True
+        this_guia.save()
 
         this_vehiculo = this_guia.vehiculo
         """
@@ -295,7 +297,7 @@ class Cerrar(View):
         """
         Se debe definir la respuesta del proceso.
         """
-        dato = {'status': 'WIP'}
+        dato = {'mensaje': 'El PDF se encuentra en proceso disculpe las molestias'}
         dato = json.dumps(dato, cls=DjangoJSONEncoder)
 
         return HttpResponse(dato, content_type="application/json")
