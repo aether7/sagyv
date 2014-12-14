@@ -36,6 +36,15 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="kilometraje" class="control-label">Kilometraje Actual</label>
+                    <input id="kilometraje" type="text" class="form-control"
+                        value="" data-ng-model="bodega.guia.kilometraje"/>
+                    <span class="text-danger"
+                        data-ng-bind="bodega.guia.mensajes.kilometraje"
+                        data-ng-show="bodega.guia.mensajes.kilometraje"></span>
+                </div>
+
+                <div class="form-group">
                     <label for="fecha_despacho" class="control-label">Fecha</label>
 
                     <input id="fecha_despacho" class="form-control" type="date"
