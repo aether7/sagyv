@@ -45,10 +45,12 @@ class CrearGuiaDespachoView(View):
 
     @transaction.atomic
     def post(self,req):
+        print req.POST
         self.productosActualizados = []
 
         self.numero_guia = req.POST.get("numero")
         self.id_vehiculo = req.POST.get("vehiculo")
+        self.kilometraje = req.POST.get("kilometraje")
         self.fecha_creacion = req.POST.get("fecha")
         lista_producto = req.POST.get("productos")
 
@@ -74,6 +76,8 @@ class CrearGuiaDespachoView(View):
 
     def crear_guia_despacho(self):
         movil = Vehiculo.objects.get(pk = self.id_vehiculo)
+        movil.km = int(self.kilometraje)
+        movil.save()
 
         guia_despacho = GuiaDespacho()
         guia_despacho.numero = self.numero_guia
