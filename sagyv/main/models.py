@@ -1,8 +1,10 @@
 #-*- coding: utf-8 -*-
 
 import json
+
 from django.db import models
 from django.contrib.auth.models import User
+
 from main.managers import StockManager
 from main.managers import ClienteManager
 from main.managers import TarjetaCreditoManager
@@ -177,16 +179,16 @@ class EstadoVacacion(models.Model):
 
 
 class Trabajador(models.Model):
-    nombre = models.CharField(max_length=140)
-    apellido = models.CharField(max_length=140)
-    rut = models.CharField(max_length=140)
-    domicilio = models.CharField(max_length=140,null=True,blank=True)
-    nacimiento = models.DateField(null=True,blank=True)
-    fecha_inicio_contrato = models.DateField(null=True,blank=True)
-    vigencia_licencia = models.DateField(null=True,blank=True)
-    afp = models.ForeignKey(Afp,null=True,blank=True)
-    sistema_salud = models.ForeignKey(SistemaSalud,null=True,default=1)
-    estado_civil = models.ForeignKey(EstadoCivil,null=True,default=1)
+    nombre = models.CharField(max_length = 140)
+    apellido = models.CharField(max_length = 140)
+    rut = models.CharField(max_length = 140)
+    domicilio = models.CharField(max_length = 140, null = True, blank = True)
+    nacimiento = models.DateField(null = True, blank = True)
+    fecha_inicio_contrato = models.DateField(null = True, blank = True)
+    vigencia_licencia = models.DateField(null = True, blank = True)
+    afp = models.ForeignKey(Afp,null = True,blank = True)
+    sistema_salud = models.ForeignKey(SistemaSalud,null = True, default = 1)
+    estado_civil = models.ForeignKey(EstadoCivil,null = True, default = 1)
 
     objects = TrabajadorManager()
 
@@ -254,8 +256,8 @@ class HerramientaTrabajador(models.Model):
 class TrabajadorVehiculo(models.Model):
     trabajador = models.ForeignKey(Trabajador)
     vehiculo = models.ForeignKey(Vehiculo)
-    fecha = models.DateTimeField(auto_now_add=True)
-    activo = models.BooleanField(default=True)
+    fecha = models.DateTimeField(auto_now_add = True)
+    activo = models.BooleanField(default = True)
 
     def __unicode__(self):
         return self.trabajador.nombre + ", " + self.vehiculo.patente
@@ -459,69 +461,6 @@ class Cliente(models.Model):
         return self.nombre + " " + self.telefono
 
 
-class EstadoTerminal(models.Model):
-    ACTIVO = 1
-    MANTENCION = 2
-    RETIRADO = 3
-
-    nombre = models.CharField(max_length=140)
-
-    def __unicode__(self):
-        return self.nombre
-
-
-class Terminal(models.Model):
-    codigo = models.CharField(max_length=140)
-    vehiculo = models.ForeignKey(Vehiculo, null = True)
-    estado = models.ForeignKey(EstadoTerminal)
-
-    def __unicode__(self):
-        return self.codigo
-
-
-class HistorialEstadoTerminal(models.Model):
-    terminal = models.ForeignKey(Terminal)
-    estado = models.ForeignKey(EstadoTerminal)
-    fecha = models.DateField(auto_now_add=True)
-
-    def __unicode__(self):
-        return self.terminal.codigo + "(" + self.estado + ") " + self.fecha
-
-
-class HistorialCambioVehiculo(models.Model):
-    terminal = models.ForeignKey(Terminal)
-    vehiculo = models.ForeignKey(Vehiculo)
-    fecha = models.DateField(auto_now_add=True)
-    estado = models.NullBooleanField()
-
-    def __unicode__(self):
-        return self.terminal.codigo + "(" + self.vehiculo.p + ") " + self.fecha
-
-
-class Cierre(models.Model):
-    fecha = models.DateField(auto_now_add=True)
-    correlativo_cierre = models.IntegerField()
-    numero_cierre = models.IntegerField(null=True)
-    terminal = models.ForeignKey(Terminal)
-
-    def __unicode__(self):
-        return self.correlativo_cierre
-
-
-class DetalleCierre(models.Model):
-    cantidad_ventas = models.IntegerField(default=0)
-    cantidad_anuladas = models.IntegerField(default=0)
-    valor_venta = models.IntegerField(default=0)
-    valor_anuladas = models.IntegerField(default=0)
-    cierre = models.ForeignKey(Cierre)
-
-    def __unicode__(self):
-        return self.id + " " + self.valor_venta
-
-    def get_valor_total(self):
-        return self.valor_venta - self.valor_anuladas
-
-
 class PrecioProducto(models.Model):
     producto = models.ForeignKey(Producto)
     precio = models.IntegerField(null=True)
@@ -622,6 +561,75 @@ class CuponPrepago(models.Model):
 
     def __unicode__(self):
         return self.numero_cupon
+
+
+class Movil(models.Model):
+    numero = models.IntegerField(null = True)
+    trabajador = models.ForeignKey(Trabajador, unique = True)
+    vehiculo = models.ForeignKey(Vehiculo, unique = True)
+
+
+class EstadoTerminal(models.Model):
+    ACTIVO = 1
+    MANTENCION = 2
+    RETIRADO = 3
+
+    nombre = models.CharField(max_length=140)
+
+    def __unicode__(self):
+        return self.nombre
+
+
+class Terminal(models.Model):
+    codigo = models.CharField(max_length=140)
+    movil = models.ForeignKey(Movil, null = True)
+    estado = models.ForeignKey(EstadoTerminal)
+
+    def __unicode__(self):
+        return self.codigo
+
+
+class HistorialEstadoTerminal(models.Model):
+    terminal = models.ForeignKey(Terminal)
+    estado = models.ForeignKey(EstadoTerminal)
+    fecha = models.DateField(auto_now_add=True)
+
+    def __unicode__(self):
+        return self.terminal.codigo + "(" + self.estado + ") " + self.fecha
+
+
+class HistorialCambioVehiculo(models.Model):
+    terminal = models.ForeignKey(Terminal)
+    movil = models.ForeignKey(Movil, null = True)
+    fecha = models.DateField(auto_now_add = True)
+    estado = models.NullBooleanField()
+
+    def __unicode__(self):
+        return self.terminal.codigo + "(" + ") " + self.fecha
+
+
+class Cierre(models.Model):
+    fecha = models.DateField(auto_now_add=True)
+    correlativo_cierre = models.IntegerField()
+    numero_cierre = models.IntegerField(null=True)
+    terminal = models.ForeignKey(Terminal)
+
+    def __unicode__(self):
+        return self.correlativo_cierre
+
+
+class DetalleCierre(models.Model):
+    cantidad_ventas = models.IntegerField(default=0)
+    cantidad_anuladas = models.IntegerField(default=0)
+    valor_venta = models.IntegerField(default=0)
+    valor_anuladas = models.IntegerField(default=0)
+    cierre = models.ForeignKey(Cierre)
+
+    def __unicode__(self):
+        return self.id + " " + self.valor_venta
+
+    def get_valor_total(self):
+        return self.valor_venta - self.valor_anuladas
 
 
 class Voucher(models.Model):

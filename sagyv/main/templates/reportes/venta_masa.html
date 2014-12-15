@@ -5,10 +5,10 @@
 <section ng-controller="VentaController as ventaCtrl">
 <aside>
     <label for="desde">Desde</label>
-    <input id="desde" type="text" ng-model="ventaCtrl.desde" />
+    <input id="desde" type="date" ng-model="ventaCtrl.desde" />
 
     <label for="hasta">Hasta</label>
-    <input id="hasta" type="text" ng-model="ventaCtrl.hasta" />
+    <input id="hasta" type="date" ng-model="ventaCtrl.hasta" />
 
     <a href="{% url 'reportes:venta_masa' %}" class="btn btn-primary" ng-click="ventaCtrl.filtrar()">Filtrar</a>
     <a href class="btn btn-primary" ng-click="ventaCtrl.exportar()">Exportar a excel</a>

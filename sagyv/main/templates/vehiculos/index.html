@@ -2,12 +2,16 @@
 {% load static from staticfiles %}
 
 {% block content %}
+
+<section ng-app="vehiculoApp">
+<div ng-controller="VehiculoController as vc">
+
 <h1 class="center">Vehículos</h1>
 
 {% include "mensaje.html" %}
 
 {% if es_admin %}
-<button id="btn_nuevo_vehiculo" class="btn btn-primary">Nuevo</button>
+<button id="btn_nuevo_vehiculo" class="btn btn-primary" ng-click="vc.mostrarNuevo()">Nuevo</button>
 {% endif %}
 
 <table id="lista_vehiculos" class="table table-striped">
@@ -26,30 +30,21 @@
         </tr>
     </thead>
     <tbody>
-        {% for vehiculo in vehiculos %}
-        <tr id="vehiculo_{{ vehiculo.id }}">
-            <td data-numero="{{ vehiculo.numero }}">{{ vehiculo.numero }}</td>
-            <td data-patente="{{ vehiculo.patente }}">{{ vehiculo.patente }}</td>
-            <td data-km="{{ vehiculo.km }}">{{ vehiculo.km }}</td>
-            <td data-fecha-revision-tecnica="{{ vehiculo.fecha_revision_tecnica }}">{{ vehiculo.fecha_revision_tecnica }}</td>
-            <td data-estado-sec="{{ vehiculo.estado_sec }}">
-                {% if vehiculo.estado_sec %}Sí{% else %}No{% endif %}
-            </td>
-            <td data-estado-pago="{{ vehiculo.estado_pago }}">
-                {% if vehiculo.estado_pago %}Sí{% else %}No{% endif %}
-            </td>
-            <td data-nombre-chofer="{{ vehiculo.get_nombre_ultimo_chofer }}">{{ vehiculo.get_nombre_ultimo_chofer }}</td>
+        <tr ng-repeat="vehiculo in vc.vehiculos">
+            <td ng-bind="vehiculo.movil.numero"></td>
+            <td ng-bind="vehiculo.patente"></td>
+            <td ng-bind="vehiculo.kilometraje"></td>
+            <td ng-bind="vehiculo.fechaRevision"></td>
+            <td ng-bind="vehiculo.estadoSec"></td>
+            <td ng-bind="vehiculo.estadoPago"></td>
+            <td ng-bind="vehiculo.chofer.nombre"></td>
             {% if es_admin %}
             <td>
-                <a href="#" class="icon-pencil" data-id="{{ vehiculo.id }}"
-                    data-accion="editar" class="btn-acciones"></a>
-
-                <a href="#" data-id="{{ vehiculo.id }}"
-                    data-accion="anexar" class="btn-acciones">Anexar chofer</a>
+                <a href class="icon-pencil"></a>
+                <a href>anexar chofer</a>
             </td>
             {% endif %}
         </tr>
-        {% endfor %}
     </tbody>
 </table>
 
@@ -58,26 +53,23 @@
 {% include "vehiculos/components/modal_anexar_chofer.html" %}
 {% include "vehiculos/components/modal_editar_vehiculo.html" %}
 
+</div>
+</section>
+
 {% endblock %}
 
 {% block js %}
-<script src="{% static 'js/vendor/handlebars.min.js' %}"></script>
+
 <script src="{% static 'js/common_functions.js' %}"></script>
-<script src="{% static 'js/models/vehiculo_model.js' %}"></script>
-<script src="{% static 'js/controllers/vehiculo_controller.js' %}"></script>
-<script src="{% static 'js/views/vehiculo_view.js' %}"></script>
-<script id="tmpl_nuevo_vehiculo" type="x-template/javascript">
-    {% include "vehiculos/components/tpl_vehiculo_item.html" %}
-</script>
+<script src="{% static 'js/vendor/angular.min.js' %}"></script>
+<script src="{% static 'js/bundles/vehiculo.bundle.js' %}"></script>
+
 <script>
     App.urls.set("vehiculos:nuevo", "{% url 'vehiculos:agregar_nuevo_vehiculo' %}");
     App.urls.set("vehiculos:editar", "{% url 'vehiculos:modificar' %}");
     App.urls.set("vehiculos:obtener", "{% url 'vehiculos:obtener' 0 %}");
     App.urls.set("vehiculos:obtener_vehiculos", "{% url 'vehiculos:obtener_vehiculos' %}");
     App.urls.set("vehiculos:anexar", "{% url 'vehiculos:anexar_vehiculo' %}");
-
-    App.vehiculoView = new App.Views.Vehiculo();
-    App.vehiculoView.init();
 </script>
 {% endblock %}
 

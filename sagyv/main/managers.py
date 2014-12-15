@@ -131,7 +131,7 @@ class ReportesManager(models.Manager):
         condiciones = []
 
         if cliente is not None:
-            condiciones.append("c.id = %s" % cliente.id )
+            condiciones.append( "c.id = %s" % cliente.id )
 
         if fecha_inicio is not None and fecha_termino is not None:
             condiciones.append( "l.fecha BETWEEN '%s' AND '%s'" % (fecha_inicio, fecha_termino) )

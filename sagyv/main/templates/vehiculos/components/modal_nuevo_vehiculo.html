@@ -1,6 +1,4 @@
 <div id="modal_nuevo_vehiculo" class="modal fade">
-    <form id="f_nuevo_vehiculo" action="{% url 'vehiculos:agregar_nuevo_vehiculo' %}" method="post">
-    {% csrf_token %}
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -11,63 +9,86 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label for="numero_vehiculo_nuevo" class="control-label">Móvil:</label>
+
                     <input id="numero_vehiculo_nuevo" name="numero_vehiculo_nuevo"
-                        type="text" value="" class="form-control" />
-                    <span class="help-block"></span>
+                        type="text" class="form-control" ng-model="vc.vehiculo.numero" />
+
+                    <span class="text-danger"
+                        ng-bind="vc.vehiculo.mensaje.numero"
+                        ng-show="vc.vehiculo.mensaje.numero"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="patente_vehiculo_nuevo " class="control-label">Patente:</label>
-                    <input id="patente_vehiculo_nuevo" class="form-control" type="text" value="" />
-                    <span class="help-block"></span>
+                    <input id="patente_vehiculo_nuevo" class="form-control" type="text" ng-model="vc.vehiculo.patente" />
+
+                    <span class="text-danger"
+                        ng-bind="vc.vehiculo.mensaje.patente"
+                        bg-show="vc.vehiculo.mensaje.patente"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="revision_tecnica_vehiculo_nuevo" class="control-label">Fecha revisión técnica:</label>
-                    <input id="revision_tecnica_vehiculo_nuevo" type="date" class="form-control" value="" />
-                    <span class="help-block"></span>
+                    <input id="revision_tecnica_vehiculo_nuevo" type="date" class="form-control" ng-model="vc.vehiculo.fechaRevision" />
+
+                    <span class="text-danger"
+                        ng-bind="vc.vehiculo.mensaje.fechaRevision"
+                        bg-show="vc.vehiculo.mensaje.fechaRevision"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="kilometraje_vehiculo_nuevo" class="control-label">Kilometraje:</label>
-                    <input id="kilometraje_vehiculo_nuevo" class="form-control" type="text" value="" />
-                    <span class="help-block"></span>
+                    <input id="kilometraje_vehiculo_nuevo" class="form-control" type="text" ng-model="vc.vehiculo.kilometraje" />
+
+                    <span class="text-danger"
+                        ng-bind="vc.vehiculo.mensaje.km"
+                        ng-show="vc.vehiculo.mensaje.km"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="estado_sec_vehiculo_nuevo" class="control-label">Estado Sec:</label>
-                    <select name="estado_sec_vehiculo_nuevo" id="estado_sec_vehiculo_nuevo" class="form-control">
+
+                    <select name="estado_sec_vehiculo_nuevo" id="estado_sec_vehiculo_nuevo" class="form-control" ng-model="vc.vehiculo.estadoSec">
                         <option value="1">SI</option>
                         <option value="0">NO</option>
                     </select>
-                    <span class="help-block"></span>
+
+                    <span class="text-danger"
+                        ng-bind="vc.vehiculo.mensaje.estadoSec"
+                        ng-show="vc.vehiculo.mensaje.estadoSec"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="estado_pago_vehiculo_nuevo" class="control-label">Estado pago:</label>
-                    <select name="estado_pago_vehiculo_nuevo" id="estado_pago_vehiculo_nuevo" class="form-control">
+                    <select name="estado_pago_vehiculo_nuevo" id="estado_pago_vehiculo_nuevo" class="form-control" ng-model="vc.vehiculo.estadoPago">
                         <option value="1">SI</option>
                         <option value="0">NO</option>
                     </select>
-                    <span class="help-block"></span>
+
+                    <span class="text-danger"
+                        ng-bind="vc.vehiculo.mensaje.estadoPago"
+                        ng-show="vc.vehiculo.mensaje.estadoPago"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="chofer_vehiculo_nuevo" class="control-label">Chofer:</label>
-                    <select name="chofer_vehiculo_nuevo" id="chofer_vehiculo_nuevo" class="form-control">
+                    <select name="chofer_vehiculo_nuevo" id="chofer_vehiculo_nuevo" class="form-control" ng-model="vc.vehiculo.chofer.id">
                         <option value="">...</option>
                         {% for trabajador in trabajadores %}
                         <option value="{{ trabajador.id }}">{{ trabajador.get_nombre_completo }}</option>
                         {% endfor %}
                     </select>
+
+                    <span class="text-danger"
+                        ng-bind="vc.vehiculo.mensaje.chofer"
+                        bg-show="vc.vehiculo.mensaje.chofer"></span>
                 </div>
             </div>
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <button id="btn_guardar_nuevo_vehiculo" type="button" class="btn btn-primary">Guardar</button>
+                <button id="btn_guardar_nuevo_vehiculo" type="button" class="btn btn-primary" ng-click="vc.crearVehiculo()">Guardar</button>
             </div>
         </div>
     </div>
-    </form>
 </div>
