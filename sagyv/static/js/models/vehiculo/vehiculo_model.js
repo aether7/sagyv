@@ -7,6 +7,8 @@ function Vehiculo(){
     this.estadoSec = null;
     this.estadoPago = null;
     this.chofer = null;
+
+    this.mensaje = {};
 }
 
 Vehiculo.mixin({
@@ -15,10 +17,67 @@ Vehiculo.mixin({
         this.numero = data.numero;
         this.patente = data.patente;
         this.kilometraje = data.km;
-        this.fechaRevision = data.fechaRevisionTecnica;
+        this.fechaRevision = common.fecha.jsonToDate(data.fechaRevisionTecnica);
         this.estadoSec = data.estadoSec;
         this.estadoPago = data.estadoPago;
         this.chofer = data.chofer;
+    },
+
+    esValido: function(){
+        var valido = true;
+        this.mensaje = {};
+
+        valido = this.esNumeroValido() && valido;
+        valido = this.esPatenteValida() && valido;
+        valido = this.esFechaValida() && valido;
+        valido = this.esKilometrajeValido() && valido;
+
+        return valido;
+    },
+
+    esNumeroValido: function(){
+        if(!this.numero || isNaN(this.numero)){
+            this.mensaje.numero = 'Campo inválido';
+            return false;
+        }else if(parseInt(this.numero) < 1){
+            this.mensaje.numero = 'Ingrese numero mayor a 0';
+            return false;
+        }
+
+        return true;
+    },
+
+    esPatenteValida: function(){
+        var formato1 = /^[A-z]{4}\d{2}$/,
+            formato2 = /^[A-z]{2}\d{4}$/;
+
+        if(!formato1.test(this.patente) && !formato2.test(this.patente)){
+            this.mensaje.patente = 'Patente inválida';
+            return false;
+        }
+
+        return true;
+    },
+
+    esFechaValida: function(){
+        if(this.fechaRevision === null){
+            this.mensaje.fechaRevision = 'Fecha obligatoria';
+            return false;
+        }
+
+        return true;
+    },
+
+    esKilometrajeValido: function(){
+        if(isNaN(this.kilometraje)){
+            this.mensaje.kilometraje = 'Campo inválido';
+            return false;
+        }else if(parseInt(this.kilometraje) < 0){
+            this.mensaje.kilometraje = 'Ingrese numero mayor o igual a 0';
+            return false;
+        }
+
+        return true;
     },
 
     toJSON: function(){
@@ -29,7 +88,7 @@ Vehiculo.mixin({
             fechaRevisionTecnica: common.fecha.fechaToJSON(this.fechaRevision),
             estadoSec: this.estadoSec,
             estadoPago: this.estadoPago,
-            chofer: this.chofer
+            chofer: JSON.stringify(this.chofer)
         };
 
         if(this.id){

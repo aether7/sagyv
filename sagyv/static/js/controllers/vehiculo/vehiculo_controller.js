@@ -30,11 +30,19 @@ VehiculoController.mixin({
     },
 
     crearVehiculo: function(){
-        console.log(this.vehiculo);
-        console.log(this.vehiculo.toJSON());
+        if(!this.vehiculo.esValido()){
+            return;
+        }
 
-        return;
+        var json = this.vehiculo.toJSON();
+        this.service.crearVehiculo(json, this.processAgregarVehiculo.bind(this));
+    },
+
+    processAgregarVehiculo: function(data){
+        console.log(data);
+
         this.vehiculos.push(this.vehiculo);
+        this.vehiculo = null;
         $('#modal_nuevo_vehiculo').modal('hide');
         common.agregarMensaje('El vehículo fue creado exitosamente');
     }

@@ -6,11 +6,13 @@ from django.core import serializers
 from django.http import HttpResponse
 from django.db.models import Q
 from django.views.generic import View, TemplateView, ListView
+from django.core.serializers.json import DjangoJSONEncoder
 from main.helpers.fecha import convierte_texto_fecha, convierte_fecha_texto
 
 from main.models import Vehiculo
 from main.models import Trabajador
 from main.models import TrabajadorVehiculo
+from main.models import Movil
 
 @transaction.atomic
 def actualizar_estado_vehiculos(vehiculo, chofer):
@@ -20,6 +22,23 @@ def actualizar_estado_vehiculos(vehiculo, chofer):
     for vehiculo_antiguo in vehiculos_antiguos:
         vehiculo_antiguo.activo = False
         vehiculo_antiguo.save()
+
+def llenar_vehiculo_json(vehiculo):
+    data = {
+        "id": vehiculo.id,
+        "numero": None,
+        "patente": vehiculo.patente,
+        "km": vehiculo.km,
+        "fechaRevisionTecnica": vehiculo.fecha_revision_tecnica,
+        "estadoSec": vehiculo.estado_sec,
+        "estadoPago": vehiculo.estado_pago,
+        "chofer": {
+            "id": vehiculo.get_ultimo_chofer_id(),
+            "nombre": vehiculo.get_nombre_ultimo_chofer()
+        }
+    }
+
+    return data
 
 
 class VehiculoList(ListView):
@@ -35,6 +54,36 @@ class VehiculoList(ListView):
         return context_data
 
 
+class ObtenerVehiculosView(View):
+    def get(self, request):
+        vehiculo_id = request.GET.get('id')
+
+        if vehiculo_id is not None:
+            data = self.obtener_vehiculo(vehiculo_id)
+        else:
+            data = self.obtener_vehiculos()
+
+        data = json.dumps(data, cls=DjangoJSONEncoder)
+
+        return HttpResponse(data, content_type="application/json")
+
+    def obtener_vehiculo(self, id):
+        vehiculo = Vehiculo.objects.get(pk = int(id))
+        data = llenar_vehiculo_json(vehiculo)
+
+        return data
+
+    def obtener_vehiculos(self):
+        vehiculos = Vehiculo.objects.order_by("id")
+        data = []
+
+        for vehiculo in vehiculos:
+            v = llenar_vehiculo_json(vehiculo)
+            data.append(v)
+
+        return data
+
+
 class AgregarNuevoVehiculoView(View):
     def post(self, request):
         fecha = request.POST.get('fechaRevisionTecnica')
@@ -45,30 +94,19 @@ class AgregarNuevoVehiculoView(View):
         self.estado_sec = request.POST.get('estadoSec')
         self.estado_pago = request.POST.get('estadoPago')
         self.chofer = json.loads(request.POST.get('chofer'))
+
         self.revision_tecnica = convierte_texto_fecha(fecha)
 
         vehiculo = self.__crear_nuevo_vehiculo()
 
-        data = {
-            "status" : "ok",
-            "vehiculo": {
-                "id": vehiculo.id,
-                "numero": vehiculo.numero,
-                "patente": vehiculo.patente,
-                "km": vehiculo.km,
-                "fecha_revision_tecnica": fecha,
-                "estado_sec": vehiculo.estado_sec,
-                "estado_pago": vehiculo.estado_pago,
-                "get_ultimo_chofer": vehiculo.get_nombre_ultimo_chofer()
-            }
-        }
+        data = llenar_vehiculo_json(vehiculo)
+        data = json.dumps(data, cls=DjangoJSONEncoder)
 
-        return HttpResponse(json.dumps(data),content_type="application/json")
+        return HttpResponse(data, content_type="application/json")
 
     @transaction.atomic
     def __crear_nuevo_vehiculo(self):
         vehiculo = Vehiculo()
-        vehiculo.numero = self.numero
         vehiculo.patente = self.patente
         vehiculo.fecha_revision_tecnica = self.revision_tecnica
         vehiculo.km = self.kilometraje
@@ -85,13 +123,14 @@ class AgregarNuevoVehiculoView(View):
 
         vehiculo.save()
 
-        if self.chofer is not None and self.chofer != "":
-            self.anexar_vehiculo_chofer()
+        if int(self.chofer.get('id')) != 0:
+            self.anexar_vehiculo_chofer(vehiculo)
 
         return vehiculo
 
-    def anexar_vehiculo_chofer(self):
-        trabajador = Trabajador.objects.get(pk = self.chofer)
+    def anexar_vehiculo_chofer(self, vehiculo):
+        chofer_id = int(self.chofer.get('id'))
+        trabajador = Trabajador.objects.get(pk = chofer_id)
 
         self.desanexar_vehiculos_chofer(trabajador)
 
@@ -100,31 +139,25 @@ class AgregarNuevoVehiculoView(View):
         trabajador_vehiculo.vehiculo = vehiculo
         trabajador_vehiculo.save()
 
+        self.anexar_movil(trabajador, vehiculo)
+
+    def anexar_movil(self, trabajador, vehiculo):
+        if Movil.objects.filter(trabajador = trabajador).exists():
+            movil = Movil.objects.filter(trabajador = trabajador)
+        else:
+            movil = Movil()
+
+        movil.vehiculo = vehiculo
+        movil.trabajador = trabajador
+        movil.numero = int(self.numero)
+        movil.save()
+
     def desanexar_vehiculos_chofer(self, chofer):
         vehiculos_antiguos = TrabajadorVehiculo.objects.filter(trabajador = chofer, activo = True)
 
         for vehiculo_antiguo in vehiculos_antiguos:
             vehiculo_antiguo.activo = False
             vehiculo_antiguo.save()
-
-
-class ObtenerView(View):
-    def get(self, request, id_vehiculo):
-        vehiculo_id = int(id_vehiculo)
-        vehiculo = Vehiculo.objects.get(pk = vehiculo_id)
-
-        data = {
-            "id" : vehiculo.id,
-            "numero" : vehiculo.numero,
-            "patente" : vehiculo.patente,
-            "fecha_revision_tecnica" : convierte_fecha_texto(vehiculo.fecha_revision_tecnica),
-            "km" : vehiculo.km,
-            "estado_sec" : vehiculo.estado_sec,
-            "estado_pago" : vehiculo.estado_pago,
-            "chofer" : vehiculo.get_ultimo_chofer_id()
-        }
-
-        return HttpResponse(json.dumps(data), content_type="application/json")
 
 
 class AnexarVehiculoView(View):
@@ -191,7 +224,6 @@ class ModificarView(View):
                 self.anexar_chofer_vehiculo(id_chofer, vehiculo, fecha_revision_tecnica)
 
         data = {
-            "status": "ok",
             "vehiculo": {
                 "id": vehiculo.id,
                 "numero": vehiculo.numero,
@@ -219,35 +251,9 @@ class ModificarView(View):
         trabajador_vehiculo.save()
 
 
-class ObtenerVehiculosView(View):
-    def get(self, request):
-        vehiculos = Vehiculo.objects.all().order_by("id")
-        data = []
-
-        for vehiculo in vehiculos:
-            v = {
-                "id" : vehiculo.id,
-                "numero" : vehiculo.numero,
-                "patente" : vehiculo.patente,
-                "km" : vehiculo.km,
-                "fechaRevisionTecnica" : convierte_fecha_texto(vehiculo.fecha_revision_tecnica),
-                "estadoSec" : vehiculo.estado_sec,
-                "estadoPago" : vehiculo.estado_pago,
-                "chofer": {
-                    "id": vehiculo.get_ultimo_chofer_id(),
-                    "nombre": vehiculo.get_nombre_ultimo_chofer()
-                }
-            }
-
-            data.append(v)
-
-        return HttpResponse(json.dumps(data),content_type="application/json")
-
 index = VehiculoList.as_view()
 agregar_nuevo_vehiculo = AgregarNuevoVehiculoView.as_view()
 anexar_vehiculo = AnexarVehiculoView.as_view()
-obtener = ObtenerView.as_view()
 modificar = ModificarView.as_view()
-
 
 obtener_vehiculos = ObtenerVehiculosView.as_view()

@@ -34,9 +34,11 @@
             <td ng-bind="vehiculo.movil.numero"></td>
             <td ng-bind="vehiculo.patente"></td>
             <td ng-bind="vehiculo.kilometraje"></td>
-            <td ng-bind="vehiculo.fechaRevision"></td>
-            <td ng-bind="vehiculo.estadoSec"></td>
-            <td ng-bind="vehiculo.estadoPago"></td>
+            <td ng-bind="vehiculo.fechaRevision | date:'yyyy-M-dd' "></td>
+            <td ng-if="vehiculo.estadoSec == 1">Sí</td>
+            <td ng-if="vehiculo.estadoSec == 0">No</td>
+            <td ng-if="vehiculo.estadoPago == 1">Sí</td>
+            <td ng-if="vehiculo.estadoPago == 0">No</td>
             <td ng-bind="vehiculo.chofer.nombre"></td>
             {% if es_admin %}
             <td>
@@ -62,13 +64,13 @@
 
 <script src="{% static 'js/common_functions.js' %}"></script>
 <script src="{% static 'js/vendor/angular.min.js' %}"></script>
+<script src="{% static 'js/plugins/angular.provider.js' %}"></script>
 <script src="{% static 'js/bundles/vehiculo.bundle.js' %}"></script>
 
 <script>
+    App.urls.set("vehiculos:obtener_vehiculos", "{% url 'vehiculos:obtener_vehiculos' %}");
     App.urls.set("vehiculos:nuevo", "{% url 'vehiculos:agregar_nuevo_vehiculo' %}");
     App.urls.set("vehiculos:editar", "{% url 'vehiculos:modificar' %}");
-    App.urls.set("vehiculos:obtener", "{% url 'vehiculos:obtener' 0 %}");
-    App.urls.set("vehiculos:obtener_vehiculos", "{% url 'vehiculos:obtener_vehiculos' %}");
     App.urls.set("vehiculos:anexar", "{% url 'vehiculos:anexar_vehiculo' %}");
 </script>
 {% endblock %}
