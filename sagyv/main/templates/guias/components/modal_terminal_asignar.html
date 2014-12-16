@@ -15,7 +15,7 @@
                     <label for="terminal_agregar_vehiculo" class="control-label">Vehículo</label>
                     <select id="" class="form-control" ng-model="terminalCtrl.terminal.vehiculoAsignado">
                         {% for vehiculo in vehiculos %}
-                        <option value="{{ vehiculo.id }}">{{ vehiculo.numero }} - {{ vehiculo.patente }}</option>
+                        <option value="{{ vehiculo.id }}">{{ vehiculo.patente }} - {{ vehiculo.patente }}</option>
                         {% endfor %}
                     </select>
                     <span class="text-danger"

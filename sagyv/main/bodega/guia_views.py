@@ -34,7 +34,7 @@ class ObtenerGuiaDespacho(View):
         data = {
             'productos' : productos,
             'fecha' : convierte_fecha_texto(guia.fecha),
-            'movil' : guia.vehiculo.numero,
+            'movil' : guia.vehiculo.patente,
             'numero_guia' : guia.numero
         }
 
@@ -65,7 +65,7 @@ class CrearGuiaDespachoView(View):
             "guia" : {
                 "id" : guia.id,
                 "numero" : guia.numero,
-                "vehiculo" : guia.vehiculo.numero,
+                "vehiculo" : guia.vehiculo.patente,
                 "fecha" : guia.fecha,
                 "productos" : self.productosActualizados,
             }
