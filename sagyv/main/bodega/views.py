@@ -127,7 +127,7 @@ class ObtenerVehiculosPorProductoView(View):
                 "vehiculo" : {
                     "id" : stock_vehiculo.vehiculo.id,
                     "patente" : stock_vehiculo.vehiculo.patente,
-                    "numero" : stock_vehiculo.vehiculo.numero
+                    "numero" : stock_vehiculo.vehiculo.patente
                 },
                 "producto" : {
                     "cantidad" : stock_vehiculo.cantidad,
@@ -157,7 +157,7 @@ class FiltrarGuias(View):
                 "numero": guia.numero,
                 "vehiculo": {
                     "id": guia.vehiculo_id,
-                    "numero": guia.vehiculo.numero
+                    "numero": guia.vehiculo.patente
                 },
                 "fecha": convierte_fecha_texto(guia.fecha),
                 "estado" : guia.estado
@@ -232,7 +232,7 @@ class ObtenerVehiculosSeleccionables(View):
         for vehiculo in vehiculos:
             response.append({
                 "id" : vehiculo.id,
-                "numero" : vehiculo.numero,
+                "numero" : vehiculo.patente,
                 "patente" : vehiculo.patente,
                 "estado_ultima_guia" : vehiculo.get_estado_ultima_guia()
             })
@@ -255,7 +255,7 @@ class ObtenerDetalleConsolidado(View):
         for item in items:
             res['transito'].append({
                 'id': item.vehiculo.id,
-                'numero': item.vehiculo.numero,
+                'numero': item.vehiculo.patente,
                 'codigo': item.producto.codigo,
                 'patente': item.vehiculo.patente,
                 'cantidad': item.cantidad

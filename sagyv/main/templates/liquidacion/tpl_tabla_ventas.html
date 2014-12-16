@@ -5,8 +5,8 @@
 <tr>
     <td class="celda-header" rowspan="{{ propia.rowspan }}">Propia</td>
     <td class="celda-header" rowspan="{{ propia.ventas.[0].productos.length }}">{{ propia.ventas.[0].numero }}</td>
-    <td>{{ propia.ventas.[0].productos.[0].codigo }}</td>
-    <td>{{ propia.ventas.[0].productos.[0].total }}</td>
+    <td>{{ propia.ventas.[0].productos.[0].codigo }} (x {{ propia.ventas.[0].productos.[0].cantidad }})</td>
+    <td>$ {{ propia.ventas.[0].productos.[0].total }}</td>
 </tr>
 
 {{! se recorre primera guia resto de productos }}
@@ -14,8 +14,8 @@
 {{#each propia.ventas.[0].productos }}
     {{#unless @first}}
     <tr>
-        <td>{{ codigo }}</td>
-        <td>{{ total }}</td>
+        <td>{{ codigo }} (x {{cantidad}})</td>
+        <td>$ {{ total }}</td>
     </tr>
     {{/unless}}
 {{/each}}
@@ -35,7 +35,7 @@
             {{#unless @first}}
             <tr>
                 <td>{{ codigo }}</td>
-                <td>{{ total }}</td>
+                <td>$ {{ total }}</td>
             </tr>
             {{/unless}}
         {{/each}}
@@ -49,8 +49,8 @@
 <tr>
     <td class="celda-header" rowspan="{{ lipigas.rowspan }}">Lipigas</td>
     <td class="celda-header" rowspan="{{ lipigas.ventas.[0].productos.length }}">{{ lipigas.ventas.[0].numero }}</td>
-    <td>{{ lipigas.ventas.[0].productos.[0].codigo }}</td>
-    <td>{{ lipigas.ventas.[0].productos.[0].total }}</td>
+    <td>{{ lipigas.ventas.[0].productos.[0].codigo }} (x {{ lipigas.ventas.[0].productos.[0].cantidad }})</td>
+    <td>$ {{ lipigas.ventas.[0].productos.[0].total }}</td>
 </tr>
 
 {{! se recorre primera guia resto de productos }}
@@ -58,7 +58,7 @@
 {{#each lipigas.ventas.[0].productos }}
     {{#unless @first}}
     <tr>
-        <td>{{ codigo }}</td>
+        <td>{{ codigo }} (x {{cantidad}})</td>
         <td>{{ total }}</td>
     </tr>
     {{/unless}}

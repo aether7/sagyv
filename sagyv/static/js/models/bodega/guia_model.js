@@ -2,6 +2,7 @@ function Guia(){
     this.id = null;
     this.numero = null;
     this.vehiculo = null;
+    this.kilometraje = null;
     this.fecha = new Date();
     this.productos = []; //siempre debe comenzar con una nueva lista de productos
     this.observaciones = null;
@@ -97,6 +98,10 @@ Guia.mixin({
         return valido;
     },
 
+    esKilometajeValido: function(){
+        return this._esNumeroValido('kilometraje')
+    },
+
     esValida: function(){
         var valido = true;
 
@@ -104,6 +109,7 @@ Guia.mixin({
         valido = this.esVehiculoValido() && valido;
         valido = this.esFechaValida() && valido;
         valido = this.esProductosValido() && valido;
+        valido = this.esKilometajeValido() && valido;
 
         return valido;
     },
@@ -114,7 +120,8 @@ Guia.mixin({
             factura: this.factura,
             vehiculo: this.vehiculo,
             fecha: common.fecha.fechaToJSON(this.fecha),
-            productos: JSON.stringify(this.productos)
+            productos: JSON.stringify(this.productos),
+            kilometraje: this.kilometraje,
         };
 
         if(this.id){
