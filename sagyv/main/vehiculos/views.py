@@ -16,8 +16,10 @@ from main.models import Movil
 
 @transaction.atomic
 def actualizar_estado_vehiculos(vehiculo, chofer):
-    vehiculos_antiguos = TrabajadorVehiculo.objects.filter(Q(vehiculo = vehiculo, activo = True) |
-        Q(trabajador = chofer, activo = True))
+    vehiculos_antiguos = TrabajadorVehiculo.objects.filter(
+        Q(vehiculo = vehiculo, activo = True) |
+        Q(trabajador = chofer, activo = True)
+    )
 
     for vehiculo_antiguo in vehiculos_antiguos:
         vehiculo_antiguo.activo = False
@@ -32,8 +34,8 @@ def llenar_vehiculo_json(vehiculo):
         "patente": vehiculo.patente,
         "km": vehiculo.km,
         "fechaRevisionTecnica": vehiculo.fecha_revision_tecnica,
-        "estadoSec": vehiculo.estado_sec,
-        "estadoPago": vehiculo.estado_pago,
+        "estadoSec": vehiculo.estado_sec and "1" or "0",
+        "estadoPago": vehiculo.estado_pago and "1" or "0",
         "chofer": {
             "id": vehiculo.get_ultimo_chofer_id(),
             "nombre": vehiculo.get_nombre_ultimo_chofer()
@@ -224,18 +226,7 @@ class ModificarView(View):
             if (not(chofer_actual is None) and chofer_actual.id != id_chofer) or chofer_actual is None:
                 self.anexar_chofer_vehiculo(id_chofer, vehiculo, fecha_revision_tecnica)
 
-        data = {
-            "vehiculo": {
-                "id": vehiculo.id,
-                "numero": vehiculo.numero,
-                "patente": vehiculo.patente,
-                "km": vehiculo.km,
-                "fecha_revision_tecnica": convierte_fecha_texto(vehiculo.fecha_revision_tecnica),
-                "estado_sec": vehiculo.estado_sec,
-                "estado_pago": vehiculo.estado_pago,
-                "get_nombre_ultimo_chofer": vehiculo.get_nombre_ultimo_chofer()
-            }
-        }
+        data = llenar_vehiculo_json(vehiculo)
 
         return HttpResponse(json.dumps(data), content_type="application/json")
 

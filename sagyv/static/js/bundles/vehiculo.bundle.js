@@ -43,6 +43,13 @@ VehiculoController.mixin({
         this.vehiculo = new Vehiculo();
     },
 
+    mostrarEditar: function(index){
+        $('#modal_editar').modal('show');
+        this.vehiculo = this.vehiculos[index];
+        console.log(this.vehiculo.estadoSec);
+        console.log(this.vehiculo.estadoPago);
+    },
+
     crearVehiculo: function(){
         if(!this.vehiculo.esValido()){
             return;
