@@ -23,7 +23,8 @@ class ProductoTestCase(TestCase):
             'valor' : 2000,
             'producto' : 1
         }
-        print res.context
-        res = client.post('/panel-control/crear-situacion-comercial/', post)
+
+        res = client.post('/panel-control/cliente/crear-situacion-comercial/', post)
+        print res.content
 
         res.assertEqual(res.status_code, 200)

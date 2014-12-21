@@ -1,6 +1,7 @@
 #-*- coding: utf-8 -*-
 
 import json
+from django.core.serializers.json import DjangoJSONEncoder
 from django.db import transaction
 from django.views.generic import TemplateView,View
 from django.http import HttpResponse
@@ -261,8 +262,8 @@ class CrearSituacionComercial(View):
                 "nombre_tipo_producto" : descuento_cliente.producto.tipo_producto.nombre
             }
         }
-
-        return HttpResponse(json.dumps(dato),content_type="application/json")
+        data = json.dumps(dato, cls=DjangoJSONEncoder)
+        return HttpResponse(data,content_type="application/json")
 
     def crear_nueva_situacion(self):
         tipo = self.request.POST.get('tipo')
