@@ -26,7 +26,9 @@ def actualizar_estado_vehiculos(vehiculo, chofer):
 def llenar_vehiculo_json(vehiculo):
     data = {
         "id": vehiculo.id,
-        "numero": None,
+        "movil": {
+            "numero": vehiculo.get_numero_movil()
+        },
         "patente": vehiculo.patente,
         "km": vehiculo.km,
         "fechaRevisionTecnica": vehiculo.fecha_revision_tecnica,
@@ -39,6 +41,17 @@ def llenar_vehiculo_json(vehiculo):
     }
 
     return data
+
+def anexar_movil(trabajador, vehiculo, numero):
+    if Movil.objects.filter(trabajador = trabajador).exists():
+        movil = Movil.objects.get(trabajador = trabajador)
+    else:
+        movil = Movil()
+
+    movil.vehiculo = vehiculo
+    movil.trabajador = trabajador
+    movil.numero = int(numero)
+    movil.save()
 
 
 class VehiculoList(ListView):
@@ -139,18 +152,7 @@ class AgregarNuevoVehiculoView(View):
         trabajador_vehiculo.vehiculo = vehiculo
         trabajador_vehiculo.save()
 
-        self.anexar_movil(trabajador, vehiculo)
-
-    def anexar_movil(self, trabajador, vehiculo):
-        if Movil.objects.filter(trabajador = trabajador).exists():
-            movil = Movil.objects.filter(trabajador = trabajador)
-        else:
-            movil = Movil()
-
-        movil.vehiculo = vehiculo
-        movil.trabajador = trabajador
-        movil.numero = int(self.numero)
-        movil.save()
+        anexar_movil(trabajador, vehiculo, self.numero)
 
     def desanexar_vehiculos_chofer(self, chofer):
         vehiculos_antiguos = TrabajadorVehiculo.objects.filter(trabajador = chofer, activo = True)
@@ -215,7 +217,6 @@ class ModificarView(View):
             vehiculo.estado_pago = False
         else:
             vehiculo.estado_pago = True
-
 
         vehiculo.save()
 

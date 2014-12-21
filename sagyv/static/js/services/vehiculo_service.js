@@ -15,6 +15,11 @@ function vehiculoService($http){
         crearVehiculo: function(data, callback){
             var url = App.urls.get('vehiculos:nuevo');
             post(url, data, callback);
+        },
+
+        actualizarVehiculo: function(data, callback){
+            var url = App.urls.get('vehiculos:modificar');
+            post(url, data, callback);
         }
     };
 

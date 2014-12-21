@@ -73,7 +73,7 @@ function Vehiculo(){
     this.fechaRevision = null;
     this.estadoSec = null;
     this.estadoPago = null;
-    this.chofer = null;
+    this.chofer = {};
 
     this.mensaje = {};
 }
@@ -81,7 +81,7 @@ function Vehiculo(){
 Vehiculo.mixin({
     addData: function(data){
         this.id = data.id;
-        this.numero = data.numero;
+        this.numero = data.movil.numero;
         this.patente = data.patente;
         this.kilometraje = data.km;
         this.fechaRevision = common.fecha.jsonToDate(data.fechaRevisionTecnica);
@@ -247,6 +247,11 @@ function vehiculoService($http){
 
         crearVehiculo: function(data, callback){
             var url = App.urls.get('vehiculos:nuevo');
+            post(url, data, callback);
+        },
+
+        actualizarVehiculo: function(data, callback){
+            var url = App.urls.get('vehiculos:modificar');
             post(url, data, callback);
         }
     };

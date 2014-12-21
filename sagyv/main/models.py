@@ -94,6 +94,12 @@ class Vehiculo(models.Model):
 
         return ultima_guia.estado
 
+    def get_numero_movil(self):
+        if Movil.objects.filter(vehiculo = self).exists():
+            return Movil.objects.get(vehiculo = self).numero
+        else:
+            return None
+
     def __unicode__(self):
         return self.patente
 
