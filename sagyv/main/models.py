@@ -259,7 +259,7 @@ class HerramientaTrabajador(models.Model):
 
 
 class TrabajadorVehiculo(models.Model):
-    trabajador = models.ForeignKey(Trabajador)
+    trabajador = models.ForeignKey(Trabajador, null = True)
     vehiculo = models.ForeignKey(Vehiculo)
     fecha = models.DateTimeField(auto_now_add = True)
     activo = models.BooleanField(default = True)
@@ -570,8 +570,9 @@ class CuponPrepago(models.Model):
 
 class Movil(models.Model):
     numero = models.IntegerField(null = True)
-    trabajador = models.ForeignKey(Trabajador, unique = True)
+    trabajador = models.ForeignKey(Trabajador, null = True)
     vehiculo = models.ForeignKey(Vehiculo, unique = True)
+    fecha = models.DateTimeField(auto_now_add = True, auto_now = True)
 
 
 class EstadoTerminal(models.Model):

@@ -84,8 +84,6 @@ VehiculoController.mixin({
     },
 
     processAnexarChofer: function(data){
-        console.log(data);
-
         $("#modal_anexar").modal('hide');
     },
 

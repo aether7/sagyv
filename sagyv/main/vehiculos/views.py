@@ -164,25 +164,28 @@ class AgregarNuevoVehiculoView(View):
 
 class AnexarVehiculoView(View):
 
+    @transaction.atomic
     def post(self, req):
-        print req.POST
         id_vehiculo = int(req.POST.get("id"))
-        chofer = json.loads(req.POST.get("chofer"))
+        chofer_obj = json.loads(req.POST.get("chofer"))
         fecha = req.POST.get("fecha")
 
-        new_chofer = None
+        chofer = None
+        vehiculo = Vehiculo.objects.get( pk = id_vehiculo )
+        movil = Movil.objects.filter( vehiculo = vehiculo )
 
-        if(chofer['id'] != ''):
-            new_chofer = Trabajador.objects.get(pk = int(chofer['id']))
+        if chofer_obj['id'] != '':
+            chofer = Trabajador.objects.get( pk = int(chofer_obj['id']) )
 
-        vehiculo = Vehiculo.objects.get(pk = id_vehiculo)
+        movil.trabajador = chofer
+        movil.save()
+
         actualizar_estado_vehiculos(vehiculo, chofer)
 
         # trabajador_vehiculo = TrabajadorVehiculo()
         # trabajador_vehiculo.vehiculo = vehiculo
         # trabajador_vehiculo.trabajador = chofer
         # trabajador_vehiculo.activo = True
-        # trabajador_vehiculo.fecha = convierte_texto_fecha(fecha)
         # trabajador_vehiculo.save()
 
         # data = {
@@ -192,9 +195,9 @@ class AnexarVehiculoView(View):
         #     "id" : vehiculo.id
         # }
 
-        data = json.dumps(data, cls=DjangoJSONEncoder)
+        # data = json.dumps(data, cls=DjangoJSONEncoder)
 
-        return HttpResponse(data, content_type="application/json")
+        # return HttpResponse(data, content_type="application/json")
 
 
 class ModificarView(View):
