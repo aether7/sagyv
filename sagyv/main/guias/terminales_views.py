@@ -63,6 +63,21 @@ def cambiar_estado_terminal(terminal, estado):
 
     return terminal
 
+def get_terminal_json(terminal):
+    data = {
+        "id": terminal.id,
+        "estado": {
+            "id": estado_terminal.id,
+            "nombre": estado_terminal.nombre
+        },
+        "movil": {
+            "id": terminal.movil.id,
+            "numero": terminal.movil.numero
+        }
+    }
+
+    return data
+
 
 class ObtenerTerminales(View):
 
@@ -78,7 +93,22 @@ class ObtenerTerminales(View):
 class CrearTerminal(View):
 
     def post(self, req):
-        pass
+        codigo = req.POST.get('codigo')
+        movil_obj = json.loads(req.POST.get('movil'))
+
+        estado_terminal = EstadoTerminal.objects.get(pk = EstadoTerminal.ACTIVO)
+        movil = Movil.objects.get(pk = int(movil_obj['id']))
+
+        terminal = Terminal()
+        terminal.codigo = codigo
+        terminal.estado = estado_terminal
+        terminal.movil = movil
+        terminal.save()
+
+        data = get_terminal_json(terminal)
+        data = json.dumps(data, cls=DjangoJSONEncoder)
+
+        return HttpResponse(data, content_type="application/json")
         # numero = req.POST.get('numero')
         # vehiculo_id = req.POST.get('vehiculo')
 

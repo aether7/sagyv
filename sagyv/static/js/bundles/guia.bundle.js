@@ -15,12 +15,13 @@ app.controller('TerminalController', ['terminalService', TerminalController]);
 })();
 
 },{"../controllers/guias/terminal_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guias/terminal_controller.js","../services/guia_service.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/guia_service.js","../services/terminal_service.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/terminal_service.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guias/terminal_controller.js":[function(require,module,exports){
+var Terminal = require('../../models/guias/terminal_model.js');
+
 function TerminalController(service){
     this.service = service;
 
-    this.terminal = {};
-    this.mensajes = {};
     this.terminales = [];
+    this.terminal = null;
 
     this.init();
 }
@@ -30,55 +31,40 @@ TerminalController.mixin({
         var _this = this;
 
         this.service.findAll(function(data){
+            console.log(data);
             _this.terminales = data.terminales;
         });
     },
 
     mostrarPanel: function(){
-        this.terminal = {};
-        this.mensajes = {};
-
         $('#modal_terminal_agregar').modal('show');
-        console.log('mostrando panel');
+        this.terminal = new Terminal();
     },
 
     mostrarPanelAsignar: function(index){
         this.mensajes = {};
         this.terminal = this.terminales[index];
         this.terminal.vehiculoAsignado = null;
-        console.log(this.terminal);
         $('#modal_terminal_asignar').modal('show');
     },
 
     agregar: function(){
-        var valido = true,
-        _this = this;
-
-        this.mensajes = {};
-
-        if(!this.terminal.numero){
-            this.mensajes.numero = 'campo obligatorio';
-            valido = false;
-        }else if(isNaN(this.terminal.numero)){
-            this.mensajes.numero = 'número inválido';
-            valido = false;
-        }
-
-        if(!this.terminal.vehiculo){
-            this.mensajes.vehiculo = 'campo obligatorio';
-            valido = false;
-        }
-
-        if(!valido){
+        if(!this.terminal.esValido()){
             return;
         }
 
-        this.service.create(this.terminal, function(data){
-            _this.terminales = data.terminales;
-            common.agregarMensaje('terminal agregado exitosamente');
-            $('#modal_terminal_agregar').modal('hide');
-        });
+        var json = this.terminal.toJSON();
+        this.service.create(json, this.procesarAgregar.bind(this));
+    },
 
+    procesarAgregar: function(data){
+        this.terminal.id = data.id;
+        this.terminal.codigo = data.codigo;
+        this.terminal.estado = data.estado;
+        this.terminal.movil = data.movil;
+
+        this.terminales.push(this.terminal);
+        this.terminal = null;
     },
 
     asignar: function(){
@@ -141,6 +127,62 @@ TerminalController.mixin({
 });
 
 module.exports = TerminalController;
+
+},{"../../models/guias/terminal_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/guias/terminal_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/guias/terminal_model.js":[function(require,module,exports){
+function Terminal(){
+    this.id = null;
+    this.codigo = null;
+    this.movil = {};
+    this.estado = {};
+
+    this.mensajes = {};
+}
+
+Terminal.mixin({
+    esValido: function(){
+        var valido = true;
+        this.mensajes = {};
+
+        valido = this.esCodigoValido() && valido;
+        valido = this.esVehiculoValido() && valido;
+
+        return valido;
+    },
+
+    esCodigoValido: function(){
+        if(!this.codigo){
+            this.mensajes.codigo = 'Campo obligatorio';
+            return false;
+        }
+
+        return true;
+    },
+
+    esVehiculoValido: function(){
+        if(!this.movil.id){
+            this.mensajes.movil = 'Campo obligatorio';
+            return false;
+        }
+
+        return true;
+    },
+
+    toJSON: function(){
+        var json = {
+            codigo: this.codigo,
+            movil: JSON.stringify(this.movil),
+            estado: JSON.stringify(this.estado)
+        };
+
+        if(this.id){
+            json.id = id;
+        }
+
+        return json;
+    }
+});
+
+module.exports = Terminal;
 
 },{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/guia_service.js":[function(require,module,exports){
 var serviceUtil = require('./service_util.js');

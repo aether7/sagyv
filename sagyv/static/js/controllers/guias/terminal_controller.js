@@ -1,9 +1,10 @@
+var Terminal = require('../../models/guias/terminal_model.js');
+
 function TerminalController(service){
     this.service = service;
 
-    this.terminal = {};
-    this.mensajes = {};
     this.terminales = [];
+    this.terminal = null;
 
     this.init();
 }
@@ -13,55 +14,40 @@ TerminalController.mixin({
         var _this = this;
 
         this.service.findAll(function(data){
+            console.log(data);
             _this.terminales = data.terminales;
         });
     },
 
     mostrarPanel: function(){
-        this.terminal = {};
-        this.mensajes = {};
-
         $('#modal_terminal_agregar').modal('show');
-        console.log('mostrando panel');
+        this.terminal = new Terminal();
     },
 
     mostrarPanelAsignar: function(index){
         this.mensajes = {};
         this.terminal = this.terminales[index];
         this.terminal.vehiculoAsignado = null;
-        console.log(this.terminal);
         $('#modal_terminal_asignar').modal('show');
     },
 
     agregar: function(){
-        var valido = true,
-        _this = this;
-
-        this.mensajes = {};
-
-        if(!this.terminal.numero){
-            this.mensajes.numero = 'campo obligatorio';
-            valido = false;
-        }else if(isNaN(this.terminal.numero)){
-            this.mensajes.numero = 'número inválido';
-            valido = false;
-        }
-
-        if(!this.terminal.vehiculo){
-            this.mensajes.vehiculo = 'campo obligatorio';
-            valido = false;
-        }
-
-        if(!valido){
+        if(!this.terminal.esValido()){
             return;
         }
 
-        this.service.create(this.terminal, function(data){
-            _this.terminales = data.terminales;
-            common.agregarMensaje('terminal agregado exitosamente');
-            $('#modal_terminal_agregar').modal('hide');
-        });
+        var json = this.terminal.toJSON();
+        this.service.create(json, this.procesarAgregar.bind(this));
+    },
 
+    procesarAgregar: function(data){
+        this.terminal.id = data.id;
+        this.terminal.codigo = data.codigo;
+        this.terminal.estado = data.estado;
+        this.terminal.movil = data.movil;
+
+        this.terminales.push(this.terminal);
+        this.terminal = null;
     },
 
     asignar: function(){

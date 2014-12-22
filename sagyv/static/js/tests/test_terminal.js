@@ -68,10 +68,6 @@ describe('Terminal', function(){
             terminal.codigo = 'sadf15';
 
             assert.equal(terminal.esValido(), true);
-
-            json = terminal.toJSON();
-
-            assert.equal(terminal.)
         });
     });
 });

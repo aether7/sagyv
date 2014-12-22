@@ -2,7 +2,7 @@ function Terminal(){
     this.id = null;
     this.codigo = null;
     this.movil = {};
-    this.estado = null;
+    this.estado = {};
 
     this.mensajes = {};
 }
@@ -10,6 +10,7 @@ function Terminal(){
 Terminal.mixin({
     esValido: function(){
         var valido = true;
+        this.mensajes = {};
 
         valido = this.esCodigoValido() && valido;
         valido = this.esVehiculoValido() && valido;
@@ -37,7 +38,9 @@ Terminal.mixin({
 
     toJSON: function(){
         var json = {
-
+            codigo: this.codigo,
+            movil: JSON.stringify(this.movil),
+            estado: JSON.stringify(this.estado)
         };
 
         if(this.id){
