@@ -47,6 +47,10 @@ VehiculoController.mixin({
             return;
         }
 
+        if(this.vehiculo.chofer.id){
+            this.vehiculo.chofer.nombre = $('#chofer_vehiculo_nuevo option:selected').text();
+        }
+
         var json = this.vehiculo.toJSON();
         this.service.crearVehiculo(json, this.processAgregarVehiculo.bind(this));
     },
@@ -57,8 +61,6 @@ VehiculoController.mixin({
         }
 
         var json = this.vehiculo.toJSON();
-        console.log(json);
-
         this.service.actualizarVehiculo(json, this.procesarEditarVehiculo.bind(this));
     },
 

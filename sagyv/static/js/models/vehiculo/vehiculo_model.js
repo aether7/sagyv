@@ -27,7 +27,7 @@ Vehiculo.mixin({
         var valido = true;
         this.mensaje = {};
 
-        //valido = this.esNumeroValido() && valido;
+        valido = this.esNumeroValido() && valido;
         valido = this.esPatenteValida() && valido;
         valido = this.esFechaValida() && valido;
         valido = this.esKilometrajeValido() && valido;
@@ -80,6 +80,14 @@ Vehiculo.mixin({
         return true;
     },
 
+    getNombreChofer: function(){
+        if(this.chofer.id){
+            return this.chofer.nombre;
+        }else{
+            return 'No anexado';
+        }
+    },
+
     toJSON: function(){
         var json = {
             numero: this.numero,
@@ -87,9 +95,14 @@ Vehiculo.mixin({
             kilometraje: this.kilometraje,
             fechaRevisionTecnica: common.fecha.fechaToJSON(this.fechaRevision),
             estadoSec: this.estadoSec,
-            estadoPago: this.estadoPago,
-            chofer: JSON.stringify(this.chofer)
+            estadoPago: this.estadoPago
         };
+
+        if(this.chofer.id){
+            json.chofer = JSON.stringify(this.chofer);
+        }else{
+            json.chofer = JSON.stringify({ id: 0, nombre: '' });
+        }
 
         if(this.id){
             json.id = this.id;
