@@ -8,6 +8,13 @@ function Terminal(){
 }
 
 Terminal.mixin({
+    addData: function(terminal){
+        this.id = terminal.id;
+        this.codigo = terminal.codigo;
+        this.movil = terminal.movil;
+        this.estado = terminal.estado;
+    },
+
     esValido: function(){
         var valido = true;
         this.mensajes = {};

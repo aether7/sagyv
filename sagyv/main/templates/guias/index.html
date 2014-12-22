@@ -52,12 +52,17 @@
                     <td ng-bind="terminal.vehiculo.codigo"></td>
                     <td ng-bind="terminal.estado.nombre"></td>
                     <td>
-                        <a href class="icon-pencil" ng-click="terminalCtrl.editar($index)"></a>
-                        <a href class="icon-remove" ng-click="terminalCtrl.remover($index)"></a>
+                        <a href class="icon-pencil" ng-click="terminalCtrl.editar($index)" title="editar"></a>
+
+                        <a href class="icon-remove" ng-click="terminalCtrl.remover($index)" title="eliminar"></a>
+
                         <a href ng-show="terminal.estado.show_opt"
-                            ng-click="terminalCtrl.maintenance($index)">Mantencion</a>
+                            ng-click="terminalCtrl.maintenance($index)" class="glyphicon glyphicon-wrench"
+                            title="mantencion"></a>
+
                         <a href ng-hide="terminal.estado.show_opt"
                             ng-click="terminalCtrl.returnMaintenance($index)">Reincorporación</a>
+
                         <a href class="" ng-show="terminal.estado.show_opt"
                             ng-click="terminalCtrl.mostrarPanelAsignar($index)">asignar</a>
                     </td>

@@ -1,0 +1,35 @@
+[
+    {
+        "model": "main.vehiculo",
+        "pk": 1,
+        "fields": {
+            "patente": "rene13",
+            "km": 10,
+            "fecha_revision_tecnica": "2014-12-01"
+        }
+    },
+    {
+        "model": "main.movil",
+        "pk": 1,
+        "fields": {
+            "numero": 1,
+            "vehiculo": 1,
+            "fecha": "2014-12-01"
+        }
+    },
+    {
+        "model": "main.estadoterminal",
+        "pk": 1,
+        "fields": {
+            "nombre": "Activo"
+        }
+    },
+    {
+        "model": "main.terminal",
+        "pk": 1,
+        "fields": {
+            "codigo": "eaea1313",
+            "estado": 1
+        }
+    }
+]

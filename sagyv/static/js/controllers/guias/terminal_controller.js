@@ -14,8 +14,21 @@ TerminalController.mixin({
         var _this = this;
 
         this.service.findAll(function(data){
-            console.log(data);
-            _this.terminales = data.terminales;
+
+            data.terminales.forEach(function(t){
+                var terminal = new Terminal();
+                terminal.addData(t);
+                _this.terminales.push(terminal);
+            });
+        });
+    },
+
+    procesarTerminales: function(data){
+        var _this = this;
+
+        data.terminales.forEach(function(){
+            var terminal = new Terminal();
+            _this.terminales.push(terminal);
         });
     },
 

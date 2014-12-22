@@ -2,6 +2,7 @@
 import json
 
 from django.http import HttpResponse
+from django.db import transaction
 from django.views.generic import View
 from django.core.serializers.json import DjangoJSONEncoder
 
@@ -9,6 +10,7 @@ from main.models import Terminal
 from main.models import EstadoTerminal
 from main.models import HistorialCambioVehiculo
 from main.models import HistorialEstadoTerminal
+from main.models import Movil
 
 def _get_terminales():
     terminales = []
@@ -67,8 +69,8 @@ def get_terminal_json(terminal):
     data = {
         "id": terminal.id,
         "estado": {
-            "id": estado_terminal.id,
-            "nombre": estado_terminal.nombre
+            "id": terminal.estado.id,
+            "nombre": terminal.estado.nombre
         },
         "movil": {
             "id": terminal.movil.id,
@@ -82,9 +84,7 @@ def get_terminal_json(terminal):
 class ObtenerTerminales(View):
 
     def get(self, req):
-        data = {
-            'terminales': _get_terminales()
-        }
+        data = { 'terminales': _get_terminales() }
 
         data = json.dumps(data, cls=DjangoJSONEncoder)
         return HttpResponse(data, content_type='application/json')
@@ -92,47 +92,30 @@ class ObtenerTerminales(View):
 
 class CrearTerminal(View):
 
+    @transaction.atomic
     def post(self, req):
         codigo = req.POST.get('codigo')
         movil_obj = json.loads(req.POST.get('movil'))
+        movil_id = int(movil_obj.get('id'))
 
-        estado_terminal = EstadoTerminal.objects.get(pk = EstadoTerminal.ACTIVO)
-        movil = Movil.objects.get(pk = int(movil_obj['id']))
-
-        terminal = Terminal()
-        terminal.codigo = codigo
-        terminal.estado = estado_terminal
-        terminal.movil = movil
-        terminal.save()
+        terminal = self.crear_terminal(movil_id, codigo)
 
         data = get_terminal_json(terminal)
         data = json.dumps(data, cls=DjangoJSONEncoder)
 
         return HttpResponse(data, content_type="application/json")
-        # numero = req.POST.get('numero')
-        # vehiculo_id = req.POST.get('vehiculo')
 
-        # obj_vehiculo = Vehiculo.objects.get(pk = int(vehiculo_id))
-        # estado_terminal = EstadoTerminal.objects.get(pk = EstadoTerminal.ACTIVO)
+    def crear_terminal(self, movil_id, codigo):
+        estado = EstadoTerminal.objects.get(pk = EstadoTerminal.ACTIVO)
+        movil = Movil.objects.get(pk = movil_id)
 
-        # terminal = self.crear_terminal(numero, obj_vehiculo, estado_terminal)
-        # historico = self.crear_historico_vehiculo(terminal)
-        # state = self.crear_historico_estado(terminal)
+        terminal = Terminal()
+        terminal.codigo = codigo
+        terminal.estado = estado
+        terminal.movil = movil
+        terminal.save()
 
-        # data = {'terminales': _get_terminales()}
-        # data = json.dumps(data, cls=DjangoJSONEncoder)
-
-        # return HttpResponse(data, content_type='application/json')
-
-    def crear_terminal(self, numero, vehiculo, estado):
-        obj_terminal = Terminal()
-        obj_terminal.codigo = numero
-        obj_terminal.vehiculo = vehiculo
-        obj_terminal.estado = estado
-
-        obj_terminal.save()
-
-        return obj_terminal
+        return terminal
 
     def crear_historico_vehiculo(self, obj_terminal):
         historico = HistorialCambioVehiculo()

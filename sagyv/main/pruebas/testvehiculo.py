@@ -3,7 +3,6 @@ import json
 from django.core.urlresolvers import reverse
 
 from django.test import TestCase, Client
-from django.test import Client
 from main.models import Vehiculo
 
 from main.models import Afp
@@ -157,6 +156,7 @@ class VehiculoTestCase(TestCase):
 
     def test_anexar_chofer(self):
         client = Client()
+
         """ Creo movil"""
         post_data = {
             "numero" : 32,
@@ -172,7 +172,7 @@ class VehiculoTestCase(TestCase):
         data = json.loads(res.content)
 
         moviles = Movil.objects.all()
-        print moviles
+
         """ Anexo """
 
         post_data = {
