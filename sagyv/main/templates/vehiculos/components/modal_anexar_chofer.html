@@ -21,7 +21,7 @@
                     <label for="anexar_chofer" class="control-label">Chofer:</label>
                     <select name="anexar_chofer" id="anexar_chofer" class="form-control"
                         ng-model="vc.vehiculo.chofer.id">
-                        <option value="">...</option>
+                        <option value="">No anexado</option>
                         {% for trabajador in trabajadores %}
                             <option value="{{ trabajador.id }}">{{ trabajador.get_nombre_completo }}</option>
                         {% endfor %}

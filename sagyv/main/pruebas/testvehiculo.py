@@ -177,7 +177,7 @@ class VehiculoTestCase(TestCase):
 
         post_data = {
             "id" : 3,
-            "chofer" : "{ \"id\": \"\", \"nombre\" : \"Karla Vargas\" }",
+            "chofer" : "{ \"id\": 0, \"nombre\" : \"Karla Vargas\" }",
             "fecha" : "2014-12-10"
         }
 
