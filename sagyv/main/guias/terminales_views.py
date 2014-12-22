@@ -297,7 +297,7 @@ class EditarTerminal(View):
         term.codigo = new_code
         term.save()
 
-        data = get_terminal_json(term)
+        data = {}
         data = json.dumps(data, cls = DjangoJSONEncoder)
 
         return HttpResponse(data, content_type='application/json')
