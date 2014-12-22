@@ -45,6 +45,8 @@ VehiculoController.mixin({
     },
 
     mostrarAnexar: function(index){
+        this.index = index;
+
         $("#modal_anexar").modal('show');
         this.vehiculo = this.vehiculos[index];
     },
@@ -88,6 +90,9 @@ VehiculoController.mixin({
 
     procesarEditarVehiculo: function(data){
         this.vehiculos[this.index] = this.vehiculo;
+
+        $('#modal_nuevo_vehiculo').modal('hide');
+        common.agregarMensaje('El vehículo fue actualizado exitosamente');
     },
 
     anexarChofer: function(){
@@ -95,12 +100,17 @@ VehiculoController.mixin({
             return;
         }
 
+        this.vehiculo.chofer.nombre = $('#anexar_chofer option:selected').text();
+
         var json = this.vehiculo.toJSON();
         this.service.anexarChofer(json, this.processAnexarChofer.bind(this));
     },
 
     processAnexarChofer: function(data){
+        this.vehiculos[this.index] = this.vehiculo;
+
         $("#modal_anexar").modal('hide');
+        common.agregarMensaje('El vehículo fue anexado con trabajador exitosamente');
     },
 
 });
