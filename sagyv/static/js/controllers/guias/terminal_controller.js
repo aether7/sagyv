@@ -50,6 +50,13 @@ TerminalController.mixin({
         this.terminal.resetearMovil();
     },
 
+    _editar: function(index){
+        this.index = index;
+
+        $('#modal_terminal_editar').modal('show');
+        this.terminal = this.terminales[index];
+    },
+
     agregar: function(){
         if(!this.terminal.esValido()){
             return;
@@ -96,6 +103,22 @@ TerminalController.mixin({
 
         $('#modal_terminal_asignar').modal('hide');
         common.agregarMensaje('la asignación fue realizada exitosamente');
+    },
+
+    editar: function(){
+        if(!this.terminal.esValido()){
+            return;
+        }
+
+        var json = this.terminal.toJSON();
+        this.service.edit(json, this.procesarEditar.bind(this));
+    },
+
+    procesarEditar: function(data){
+        this.terminales[this.index] = this.terminal;
+
+        $('#modal_terminal_editar').modal('hide');
+        common.agregarMensaje('La terminal fue editada exitosamente');
     },
 
     maintenance:function(index){

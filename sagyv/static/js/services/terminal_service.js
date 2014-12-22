@@ -18,6 +18,8 @@ function terminalService($http){
         },
 
         edit: function(terminal, callback){
+            var url = App.urls.get('guias:editar_teminal');
+
             post(url, terminal, callback);
         },
 

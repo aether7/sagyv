@@ -157,6 +157,7 @@ class ModificarTerminal(View):
 
 class RemoverTerminal(View):
 
+    @transaction.atomic
     def post(self, req):
 
         id_term = int(req.POST.get('id'))
@@ -173,7 +174,7 @@ class RemoverTerminal(View):
         terminal = cambiar_estado_terminal(terminal, state)
 
         data = get_terminal_json(terminal)
-        data = json.dumps(data, cls=DjangoJSONEncoder)
+        data = json.dumps(data, cls = DjangoJSONEncoder)
 
         return HttpResponse(data, content_type='application/json')
 
@@ -288,9 +289,15 @@ class ReturnMaintenance(View):
         return HttpResponse(data, content_type='application/json')
 
 
+class EditarTerminal(View):
+    def post(self, req):
+        pass
+
+
 obtener_terminales = ObtenerTerminales.as_view()
 crear_terminal = CrearTerminal.as_view()
 remover_terminal = RemoverTerminal.as_view()
+editar_terminal = EditarTerminal.as_view()
 maintenance = Maintenance.as_view()
 return_maintenance = ReturnMaintenance.as_view()
 reasignar_terminal = ReasignarTerminal.as_view()
