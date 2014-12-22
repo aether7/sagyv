@@ -1,4 +1,4 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/Aether/Proyectos/sagyv/sagyv/static/js/bundles/vehiculo_bundle.js":[function(require,module,exports){
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/home/worker8/proyectos/sagyv/sagyv/static/js/bundles/vehiculo_bundle.js":[function(require,module,exports){
 (function(){
 'use strict';
 
@@ -11,7 +11,7 @@ app.controller('VehiculoController', ['vehiculoService', VehiculoController]);
 
 })();
 
-},{"../controllers/vehiculo/vehiculo_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/vehiculo/vehiculo_controller.js","../services/vehiculo_service.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/vehiculo_service.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/vehiculo/vehiculo_controller.js":[function(require,module,exports){
+},{"../controllers/vehiculo/vehiculo_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/vehiculo/vehiculo_controller.js","../services/vehiculo_service.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/services/vehiculo_service.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/vehiculo/vehiculo_controller.js":[function(require,module,exports){
 var Vehiculo = require('../../models/vehiculo/vehiculo_model.js');
 
 function VehiculoController(service){
@@ -42,6 +42,11 @@ VehiculoController.mixin({
     mostrarNuevo: function(){
         $('#modal_nuevo_vehiculo').modal('show');
         this.vehiculo = new Vehiculo();
+    },
+
+    mostrarAnexar: function(index){
+        $("#modal_anexar").modal('show');
+        this.vehiculo = this.vehiculos[index];
     },
 
     mostrarEditar: function(index){
@@ -81,12 +86,28 @@ VehiculoController.mixin({
 
     procesarEditarVehiculo: function(data){
         this.vehiculos[this.index] = this.vehiculo;
-    }
+    },
+
+    anexarChofer: function(){
+        if(!this.vehiculo.esValido()){
+            return;
+        }
+
+        var json = this.vehiculo.toJSON();
+        this.service.anexarChofer(json, this.processAnexarChofer.bind(this));
+    },
+
+    processAnexarChofer: function(data){
+        console.log(data);
+
+        $("#modal_anexar").modal('hide');
+    },
+
 });
 
 module.exports = VehiculoController;
 
-},{"../../models/vehiculo/vehiculo_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/vehiculo/vehiculo_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/vehiculo/vehiculo_model.js":[function(require,module,exports){
+},{"../../models/vehiculo/vehiculo_model.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/models/vehiculo/vehiculo_model.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/models/vehiculo/vehiculo_model.js":[function(require,module,exports){
 function Vehiculo(){
     this.id = null;
     this.numero = null;
@@ -116,7 +137,7 @@ Vehiculo.mixin({
         var valido = true;
         this.mensaje = {};
 
-        valido = this.esNumeroValido() && valido;
+        //valido = this.esNumeroValido() && valido;
         valido = this.esPatenteValida() && valido;
         valido = this.esFechaValida() && valido;
         valido = this.esKilometrajeValido() && valido;
@@ -190,7 +211,7 @@ Vehiculo.mixin({
 
 module.exports = Vehiculo;
 
-},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/service_util.js":[function(require,module,exports){
+},{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/services/service_util.js":[function(require,module,exports){
 function noop(){}
 
 function standardError(data){
@@ -252,7 +273,7 @@ exports.postMaker = function($http){
     };
 };
 
-},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/vehiculo_service.js":[function(require,module,exports){
+},{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/services/vehiculo_service.js":[function(require,module,exports){
 var serviceUtil = require('./service_util.js');
 
 function vehiculoService($http){
@@ -275,6 +296,11 @@ function vehiculoService($http){
         actualizarVehiculo: function(data, callback){
             var url = App.urls.get('vehiculos:modificar');
             post(url, data, callback);
+        },
+
+        anexarChofer: function(data, callback){
+            var url = App.urls.get('vehiculos:anexar');
+            post(url, data, callback);
         }
     };
 
@@ -283,4 +309,4 @@ function vehiculoService($http){
 
 module.exports = vehiculoService;
 
-},{"./service_util.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/service_util.js"}]},{},["/Users/Aether/Proyectos/sagyv/sagyv/static/js/bundles/vehiculo_bundle.js"]);
+},{"./service_util.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/services/service_util.js"}]},{},["/home/worker8/proyectos/sagyv/sagyv/static/js/bundles/vehiculo_bundle.js"]);

@@ -20,6 +20,11 @@ function vehiculoService($http){
         actualizarVehiculo: function(data, callback){
             var url = App.urls.get('vehiculos:modificar');
             post(url, data, callback);
+        },
+
+        anexarChofer: function(data, callback){
+            var url = App.urls.get('vehiculos:anexar');
+            post(url, data, callback);
         }
     };
 

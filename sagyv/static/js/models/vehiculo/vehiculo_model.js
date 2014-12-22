@@ -27,7 +27,7 @@ Vehiculo.mixin({
         var valido = true;
         this.mensaje = {};
 
-        valido = this.esNumeroValido() && valido;
+        //valido = this.esNumeroValido() && valido;
         valido = this.esPatenteValida() && valido;
         valido = this.esFechaValida() && valido;
         valido = this.esKilometrajeValido() && valido;

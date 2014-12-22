@@ -16,10 +16,8 @@ from main.models import Movil
 
 @transaction.atomic
 def actualizar_estado_vehiculos(vehiculo, chofer):
-    vehiculos_antiguos = TrabajadorVehiculo.objects.filter(
-        Q(vehiculo = vehiculo, activo = True) |
-        Q(trabajador = chofer, activo = True)
-    )
+    vehiculos_antiguos = TrabajadorVehiculo.objects.filter(Q(vehiculo = vehiculo, activo = True) |
+        Q(trabajador = chofer, activo = True))
 
     for vehiculo_antiguo in vehiculos_antiguos:
         vehiculo_antiguo.activo = False
@@ -34,8 +32,8 @@ def llenar_vehiculo_json(vehiculo):
         "patente": vehiculo.patente,
         "km": vehiculo.km,
         "fechaRevisionTecnica": vehiculo.fecha_revision_tecnica,
-        "estadoSec": vehiculo.estado_sec and "1" or "0",
-        "estadoPago": vehiculo.estado_pago and "1" or "0",
+        "estadoSec": vehiculo.estado_sec,
+        "estadoPago": vehiculo.estado_pago,
         "chofer": {
             "id": vehiculo.get_ultimo_chofer_id(),
             "nombre": vehiculo.get_nombre_ultimo_chofer()
@@ -167,30 +165,36 @@ class AgregarNuevoVehiculoView(View):
 class AnexarVehiculoView(View):
 
     def post(self, req):
+        print req.POST
         id_vehiculo = int(req.POST.get("id"))
-        chofer_id = int(req.POST.get("chofer"))
+        chofer = json.loads(req.POST.get("chofer"))
         fecha = req.POST.get("fecha")
 
-        vehiculo = Vehiculo.objects.get(pk = id_vehiculo)
-        chofer = Trabajador.objects.get(pk = chofer_id)
+        new_chofer = None
 
+        if(chofer['id'] != ''):
+            new_chofer = Trabajador.objects.get(pk = int(chofer['id']))
+
+        vehiculo = Vehiculo.objects.get(pk = id_vehiculo)
         actualizar_estado_vehiculos(vehiculo, chofer)
 
-        trabajador_vehiculo = TrabajadorVehiculo()
-        trabajador_vehiculo.vehiculo = vehiculo
-        trabajador_vehiculo.trabajador = chofer
-        trabajador_vehiculo.activo = True
-        trabajador_vehiculo.fecha = convierte_texto_fecha(fecha)
-        trabajador_vehiculo.save()
+        # trabajador_vehiculo = TrabajadorVehiculo()
+        # trabajador_vehiculo.vehiculo = vehiculo
+        # trabajador_vehiculo.trabajador = chofer
+        # trabajador_vehiculo.activo = True
+        # trabajador_vehiculo.fecha = convierte_texto_fecha(fecha)
+        # trabajador_vehiculo.save()
 
-        data = {
-            "status" : "ok",
-            "nombre_chofer" : chofer.get_nombre_completo(),
-            "numero_vehiculo" : vehiculo.numero,
-            "id" : vehiculo.id
-        }
+        # data = {
+        #     "status" : "ok",
+        #     "nombre_chofer" : chofer.get_nombre_completo(),
+        #     "numero_vehiculo" : vehiculo.numero,
+        #     "id" : vehiculo.id
+        # }
 
-        return HttpResponse(json.dumps(data), content_type="application/json")
+        data = json.dumps(data, cls=DjangoJSONEncoder)
+
+        return HttpResponse(data, content_type="application/json")
 
 
 class ModificarView(View):
@@ -217,6 +221,7 @@ class ModificarView(View):
             vehiculo.estado_pago = True
 
         vehiculo.save()
+
 
         self.procesar_chofer(chofer, vehiculo)
         data = llenar_vehiculo_json(vehiculo)

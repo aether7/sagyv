@@ -30,6 +30,11 @@ VehiculoController.mixin({
         this.vehiculo = new Vehiculo();
     },
 
+    mostrarAnexar: function(index){
+        $("#modal_anexar").modal('show');
+        this.vehiculo = this.vehiculos[index];
+    },
+
     mostrarEditar: function(index){
         this.index = index;
 
@@ -67,7 +72,23 @@ VehiculoController.mixin({
 
     procesarEditarVehiculo: function(data){
         this.vehiculos[this.index] = this.vehiculo;
-    }
+    },
+
+    anexarChofer: function(){
+        if(!this.vehiculo.esValido()){
+            return;
+        }
+
+        var json = this.vehiculo.toJSON();
+        this.service.anexarChofer(json, this.processAnexarChofer.bind(this));
+    },
+
+    processAnexarChofer: function(data){
+        console.log(data);
+
+        $("#modal_anexar").modal('hide');
+    },
+
 });
 
 module.exports = VehiculoController;
