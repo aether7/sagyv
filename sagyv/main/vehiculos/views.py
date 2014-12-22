@@ -182,22 +182,22 @@ class AnexarVehiculoView(View):
 
         actualizar_estado_vehiculos(vehiculo, chofer)
 
-        # trabajador_vehiculo = TrabajadorVehiculo()
-        # trabajador_vehiculo.vehiculo = vehiculo
-        # trabajador_vehiculo.trabajador = chofer
-        # trabajador_vehiculo.activo = True
-        # trabajador_vehiculo.save()
+        trabajador_vehiculo = TrabajadorVehiculo()
+        trabajador_vehiculo.vehiculo = vehiculo
+        trabajador_vehiculo.trabajador = chofer
+        trabajador_vehiculo.activo = True
+        trabajador_vehiculo.save()
 
-        # data = {
-        #     "status" : "ok",
-        #     "nombre_chofer" : chofer.get_nombre_completo(),
-        #     "numero_vehiculo" : vehiculo.numero,
-        #     "id" : vehiculo.id
-        # }
+        data = {
+            "status" : "ok",
+            "nombre_chofer" : chofer.get_nombre_completo(),
+            "numero_vehiculo" : vehiculo.numero,
+            "id" : vehiculo.id
+        }
 
-        # data = json.dumps(data, cls=DjangoJSONEncoder)
+        data = json.dumps(data, cls=DjangoJSONEncoder)
 
-        # return HttpResponse(data, content_type="application/json")
+        return HttpResponse(data, content_type="application/json")
 
 
 class ModificarView(View):
