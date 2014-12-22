@@ -22,6 +22,7 @@ function TerminalController(service){
 
     this.terminales = [];
     this.terminal = null;
+    this.index = null;
 
     this.init();
 }
@@ -58,11 +59,12 @@ TerminalController.mixin({
         this.terminal = new Terminal();
     },
 
-    mostrarPanelAsignar: function(index){
-        this.mensajes = {};
-        this.terminal = this.terminales[index];
-        this.terminal.vehiculoAsignado = null;
+    _asignar: function(index){
+        this.index = index;
+
         $('#modal_terminal_asignar').modal('show');
+        this.terminal = this.terminales[index];
+        this.terminal.resetearMovil();
     },
 
     agregar: function(){
@@ -102,51 +104,21 @@ TerminalController.mixin({
     },
 
     asignar: function(){
-        var valido = true,
-        _this = this;
-
-        this.mensajes = {};
-
-        if(!this.terminal.vehiculoAsignado){
-            this.mensajes.vehiculoAsignado = 'campo obligatorio';
-            valido = false;
-        }
-
-        if(!valido){
-            console.log(this.mensajes.vehiculoAsignado);
+        if(!this.terminal.esValido()){
             return;
         }
 
-        this.terminal.vehiculo = this.terminal.vehiculoAsignado;
-        console.log(this.terminal);
+        var json = this.terminal.toJSON();
+        this.terminales[this.index] = this.terminal;
 
-        this.service.asignar(this.terminal, function(data){
-            _this.terminales = data.terminales;
-            common.agregarMensaje('terminal agregado exitosamente');
-            $('#modal_terminal_asignar').modal('hide');
-        });
+        $('#modal_terminal_asignar').modal('hide');
+        common.agregarMensaje('la asignación fue realizada exitosamente');
     },
 
     maintenance:function(index){
-        var _this = this,
-            confirmacion = confirm("Desea enviar a mantención la terminal " + _this.terminales[index].codigo);
-        if (confirmacion == true) {
-            this.service.maintenance(_this.terminales[index].id, function(data){
-                _this.terminales[index] = data;
-                common.agregarMensaje('terminal envidada a mantención exitosamente');
-            });
-        }
     },
 
     returnMaintenance:function(index){
-        var _this = this,
-            confirmacion = confirm("Desea reincorporar la terminal " + _this.terminales[index].codigo);
-        if(confirmacion == true){
-            this.service.returnMaintenance(_this.terminales[index].id, function(data){
-                _this.terminales[index] = data;
-                common.agregarMensaje('La terminar a retornado de mantenimiento');
-            });
-        }
     },
 });
 
@@ -206,10 +178,17 @@ Terminal.mixin({
         };
 
         if(this.id){
-            json.id = id;
+            json.id = this.id;
         }
 
         return json;
+    },
+
+    resetearMovil: function(){
+        this.movil = {
+            id: 0,
+            numero: null
+        };
     }
 });
 

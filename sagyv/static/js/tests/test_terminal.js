@@ -36,6 +36,29 @@ var assert = require('assert'),
     Terminal = require('../models/guias/terminal_model.js');
 
 describe('Terminal', function(){
+    describe('#toJSON', function(){
+        it('Debe crear el json correctamente cuando no tiene id', function(){
+            var terminal = new Terminal(), json;
+
+            terminal.movil.id = 3;
+            terminal.codigo = 'sadf45';
+            json = terminal.toJSON();
+
+            assert.equal(terminal.codigo, 'sadf45');
+        });
+
+        it('Debe crear el json correctamente cuando tiene id', function(){
+            var terminal = new Terminal(), json;
+
+            terminal.id = 1;
+            terminal.movil.id = 3;
+            terminal.codigo = 'sadf45';
+            json = terminal.toJSON();
+
+            assert.equal(terminal.id, 1);
+        });
+    });
+
     describe('#esValido', function(){
         it('No debería aceptar terminales sin numero ni movil', function(){
             var terminal = new Terminal();

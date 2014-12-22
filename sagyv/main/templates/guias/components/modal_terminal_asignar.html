@@ -8,19 +8,25 @@
                 <h4>Asignar Terminal <span ng-bind="terminalCtrl.terminal.codigo"></span></h4>
             </div>
             <div class="modal-body">
-                <p>Al elegir un vehiculo y este cuente con una termina, esta se desasigna y asigna la nueva.</p>
-                <p>Recuerde que el estado de la terminal <b ng-bind="terminalCtrl.terminal.codigo"></b> es
-                    <b ng-bind="terminalCtrl.terminal.estado.nombre"></b></p>
+                <p>Al elegir un móvil y este cuente con una terminal, esta se desasigna y asigna la nueva.</p>
+                <p>
+                    Recuerde que el estado de la terminal
+                    <strong ng-bind="terminalCtrl.terminal.codigo"></strong> es
+                    <strong ng-bind="terminalCtrl.terminal.estado.nombre" style="text-transform:uppercase"></strong>
+                </p>
+
                 <div class="form-group">
-                    <label for="terminal_agregar_vehiculo" class="control-label">Vehículo</label>
-                    <select id="" class="form-control" ng-model="terminalCtrl.terminal.vehiculoAsignado">
-                        {% for vehiculo in vehiculos %}
-                        <option value="{{ vehiculo.id }}">{{ vehiculo.patente }} - {{ vehiculo.patente }}</option>
+                    <label for="terminal_agregar_movil" class="control-label">Móvil:</label>
+
+                    <select id="terminal_agregar_movil" class="form-control" ng-model="terminalCtrl.terminal.movil.id">
+                        {% for movil in moviles %}
+                        <option value="{{ movil.id }}">{{ movil.numero }}</option>
                         {% endfor %}
                     </select>
+
                     <span class="text-danger"
-                        ng-show="terminalCtrl.mensajes.vehiculoAsignado"
-                        ng-bind="terminalCtrl.mensajes.vehiculoAsignado"></span>
+                        ng-show="terminalCtrl.terminal.mensajes.movil"
+                        ng-bind="terminalCtrl.terminal.mensajes.movil"></span>
                 </div>
             </div>
 

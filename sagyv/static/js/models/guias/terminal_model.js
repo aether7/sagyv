@@ -51,10 +51,17 @@ Terminal.mixin({
         };
 
         if(this.id){
-            json.id = id;
+            json.id = this.id;
         }
 
         return json;
+    },
+
+    resetearMovil: function(){
+        this.movil = {
+            id: 0,
+            numero: null
+        };
     }
 });
 
