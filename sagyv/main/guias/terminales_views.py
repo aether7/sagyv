@@ -69,6 +69,10 @@ def cambiar_estado_terminal(terminal, estado):
     return terminal
 
 def get_terminal_json(terminal):
+    print "****"
+    print terminal.movil is None
+    print "****"
+
     data = {
         "id": terminal.id,
         "codigo": terminal.codigo,

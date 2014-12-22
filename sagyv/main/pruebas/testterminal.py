@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 
 from main.models import Terminal
 from main.models import EstadoTerminal
+from main.models import Movil
 
 class TerminalTestCase(TestCase):
     fixtures = ['terminales.json']
@@ -27,7 +28,10 @@ class TerminalTestCase(TestCase):
 
     def test_remover_terminal(self):
         post_data = { "id": 1 }
-
+        print "****"
+        mvl = Movil.objects.all()
+        print mvl
+        print "****"
         response = self.client.post(reverse('guias:remover_terminal'), post_data)
         self.assertEqual(response.status_code, 200, "No se pudo eliminar terminal")
 
