@@ -67,7 +67,7 @@ class Vehiculo(models.Model):
     def get_nombre_ultimo_chofer(self):
         trabajador_vehiculo = TrabajadorVehiculo.objects.filter(vehiculo_id = self.id, activo = True)
 
-        if not trabajador_vehiculo.exists():
+        if not trabajador_vehiculo.exists() or trabajador_vehiculo[0].trabajador is None:
             return "No anexado"
         else:
             return trabajador_vehiculo[0].trabajador.get_nombre_completo()
@@ -75,7 +75,7 @@ class Vehiculo(models.Model):
     def get_ultimo_chofer(self):
         trabajador_vehiculo = TrabajadorVehiculo.objects.filter(vehiculo_id = self.id, activo = True)
 
-        if not trabajador_vehiculo.exists():
+        if not trabajador_vehiculo.exists() or trabajador_vehiculo[0].trabajador is None:
             return None
         else:
             return trabajador_vehiculo[0].trabajador
@@ -83,7 +83,7 @@ class Vehiculo(models.Model):
     def get_ultimo_chofer_id(self):
         trabajador_vehiculo = TrabajadorVehiculo.objects.filter(vehiculo_id = self.id, activo = True)
 
-        if not trabajador_vehiculo.exists():
+        if not trabajador_vehiculo.exists() or trabajador_vehiculo[0].trabajador is None:
             return 0
         else:
             return trabajador_vehiculo[0].trabajador.id
@@ -573,6 +573,9 @@ class Movil(models.Model):
     trabajador = models.ForeignKey(Trabajador, null = True)
     vehiculo = models.ForeignKey(Vehiculo, unique = True)
     fecha = models.DateTimeField(auto_now_add = True, auto_now = True)
+
+    def __unicode__(self):
+        return str(self.numero)+" "+str(self.vehiculo.id)
 
 
 class EstadoTerminal(models.Model):

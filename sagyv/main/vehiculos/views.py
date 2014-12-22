@@ -171,11 +171,13 @@ class AnexarVehiculoView(View):
         fecha = req.POST.get("fecha")
 
         chofer = None
+        nombre_chofer = "No Anexado"
         vehiculo = Vehiculo.objects.get( pk = id_vehiculo )
-        movil = Movil.objects.filter( vehiculo = vehiculo )
+        movil = Movil.objects.get( vehiculo = vehiculo )
 
-        if chofer_obj['id'] != '':
+        if chofer_obj['id'] > 0:
             chofer = Trabajador.objects.get( pk = int(chofer_obj['id']) )
+            nombre_chofer = chofer.get_nombre_completo()
 
         movil.trabajador = chofer
         movil.save()
@@ -190,8 +192,10 @@ class AnexarVehiculoView(View):
 
         data = {
             "status" : "ok",
-            "nombre_chofer" : chofer.get_nombre_completo(),
-            "numero_vehiculo" : vehiculo.numero,
+            "nombre_chofer" : nombre_chofer,
+            "movil": {
+                "numero": vehiculo.get_numero_movil()
+            },
             "id" : vehiculo.id
         }
 
@@ -248,7 +252,7 @@ class ModificarView(View):
         trabajador_vehiculo.vehiculo = vehiculo
         trabajador_vehiculo.trabajador = chofer
         trabajador_vehiculo.activo = True
-        trabajador_vehiculo.fecha = convierte_texto_fecha(fecha_revision_tecnica)
+        trabajador_vehiculo.fecha = fecha_revision_tecnica
         trabajador_vehiculo.save()
 
 
