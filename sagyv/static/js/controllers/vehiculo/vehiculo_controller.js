@@ -4,6 +4,7 @@ function VehiculoController(service){
     this.service = service;
     this.vehiculos = [];
     this.vehiculo = null;
+    this.index = null;
 
     this.init();
 }
@@ -30,10 +31,10 @@ VehiculoController.mixin({
     },
 
     mostrarEditar: function(index){
+        this.index = index;
+
         $('#modal_editar').modal('show');
         this.vehiculo = this.vehiculos[index];
-        console.log(this.vehiculo.estadoSec);
-        console.log(this.vehiculo.estadoPago);
     },
 
     crearVehiculo: function(){
@@ -45,13 +46,27 @@ VehiculoController.mixin({
         this.service.crearVehiculo(json, this.processAgregarVehiculo.bind(this));
     },
 
-    processAgregarVehiculo: function(data){
-        console.log(data);
+    actualizarVehiculo: function(){
+        if(!this.vehiculo.esValido()){
+            return;
+        }
 
+        var json = this.vehiculo.toJSON();
+        console.log(json);
+
+        this.service.actualizarVehiculo(json, this.procesarEditarVehiculo.bind(this));
+    },
+
+    processAgregarVehiculo: function(data){
         this.vehiculos.push(this.vehiculo);
         this.vehiculo = null;
+
         $('#modal_nuevo_vehiculo').modal('hide');
         common.agregarMensaje('El vehículo fue creado exitosamente');
+    },
+
+    procesarEditarVehiculo: function(data){
+        this.vehiculos[this.index] = this.vehiculo;
     }
 });
 

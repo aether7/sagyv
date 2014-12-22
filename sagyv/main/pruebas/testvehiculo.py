@@ -1,5 +1,7 @@
 import json
 
+from django.core.urlresolvers import reverse
+
 from django.test import TestCase, Client
 from django.test import Client
 from main.models import Vehiculo
@@ -25,14 +27,14 @@ class VehiculoTestCase(TestCase):
 
     def test_obtener_vehiculos(self):
         client = Client()
-        res = client.get('/panel-control/vehiculos/obtener/')
+        res = client.get(reverse('vehiculos:obtener_vehiculos'))
         data = json.loads(res.content)
 
         self.assertEqual(len(data), 2)
 
     def test_obtener_vehiculo(self):
         client = Client()
-        res = client.get('/panel-control/vehiculos/obtener/?id=1')
+        res = client.get(reverse('vehiculos:obtener_vehiculos') + '?id=1')
         data = json.loads(res.content)
 
         self.assertEqual(data['patente'], 'ec1313')
@@ -50,8 +52,26 @@ class VehiculoTestCase(TestCase):
             "chofer": "{ \"id\": 0 }"
         }
 
-        res = client.post('/panel-control/vehiculos/agregar-nuevo-vehiculo/', post_data)
+        res = client.post(reverse('vehiculos:agregar_nuevo_vehiculo'), post_data)
         data = json.loads(res.content)
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['chofer']['id'], 0)
+
+    def test_editar_vehiculo_sin_chofer(self):
+        client = Client()
+
+        post_data = {
+            "id": 1,
+            "patente": "pshr12",
+            "km": 10,
+            "estadoPago": "1",
+            "estadoSec": "1",
+            "fechaRevisionTecnica": "2014-12-21",
+            "chofer": "{ \"id\": 0 }"
+        }
+
+        res = client.post(reverse('vehiculos:modificar'), post_data)
+        data = json.loads(res.content)
+
+        self.assertEqual(res.status_code, 200)

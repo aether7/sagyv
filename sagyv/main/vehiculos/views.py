@@ -197,18 +197,14 @@ class ModificarView(View):
 
     @transaction.atomic
     def post(self, req):
-        id_vehiculo = req.POST.get('id_vehiculo')
-        fecha_revision_tecnica = req.POST.get('fecha_revision_tecnica')
-        estado_sec = req.POST.get('estado_sec')
-        estado_pago = req.POST.get('estado_pago')
-        id_chofer = req.POST.get('chofer')
+        id_vehiculo = req.POST.get('id')
+        fecha_revision_tecnica = req.POST.get('fechaRevisionTecnica')
+        estado_sec = req.POST.get('estadoSec')
+        estado_pago = req.POST.get('estadoPago')
+        chofer = json.loads(req.POST.get('chofer'))
 
         vehiculo = Vehiculo.objects.get(pk = id_vehiculo)
-        chofer_actual = vehiculo.get_ultimo_chofer()
-
         vehiculo.fecha_revision_tecnica = convierte_texto_fecha(fecha_revision_tecnica)
-        vehiculo.estado_sec = estado_sec
-        vehiculo.estado_pago = estado_pago
 
         if estado_sec == '0':
             vehiculo.estado_sec = False
@@ -222,13 +218,18 @@ class ModificarView(View):
 
         vehiculo.save()
 
-        if id_chofer != "":
-            if (not(chofer_actual is None) and chofer_actual.id != id_chofer) or chofer_actual is None:
-                self.anexar_chofer_vehiculo(id_chofer, vehiculo, fecha_revision_tecnica)
-
+        self.procesar_chofer(chofer, vehiculo)
         data = llenar_vehiculo_json(vehiculo)
+        data = json.dumps(data, cls = DjangoJSONEncoder)
 
-        return HttpResponse(json.dumps(data), content_type="application/json")
+        return HttpResponse(data, content_type="application/json")
+
+    def procesar_chofer(self, chofer, vehiculo):
+        chofer_actual = vehiculo.get_ultimo_chofer()
+
+        if chofer['id'] != 0:
+            if (chofer_actual is not None and chofer_actual.id != id_chofer) or chofer_actual is None:
+                self.anexar_chofer_vehiculo(chofer['id'], vehiculo, vehiculo.fecha_revision_tecnica)
 
     def anexar_chofer_vehiculo(self, id_chofer, vehiculo, fecha_revision_tecnica):
         chofer = Trabajador.objects.get(pk = int(id_chofer))
