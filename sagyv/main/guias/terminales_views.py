@@ -16,7 +16,6 @@ def _get_terminales():
     rs = Terminal.objects.exclude(estado_id = EstadoTerminal.RETIRADO).order_by('-movil')
 
     for terminal in rs:
-
         if terminal.movil is None:
             id_movil = 0
         else:
