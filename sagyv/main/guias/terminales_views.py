@@ -69,10 +69,6 @@ def cambiar_estado_terminal(terminal, estado):
     return terminal
 
 def get_terminal_json(terminal):
-    print "****"
-    print terminal.movil is None
-    print "****"
-
     data = {
         "id": terminal.id,
         "codigo": terminal.codigo,
@@ -155,10 +151,6 @@ class CrearTerminal(View):
         return state
 
 
-class ModificarTerminal(View):
-    pass
-
-
 class RemoverTerminal(View):
 
     @transaction.atomic
@@ -177,7 +169,8 @@ class RemoverTerminal(View):
         #cambio del registro
         terminal = cambiar_estado_terminal(terminal, state)
 
-        data = get_terminal_json(terminal)
+        #data = get_terminal_json(terminal)
+        data = {}
         data = json.dumps(data, cls = DjangoJSONEncoder)
 
         return HttpResponse(data, content_type='application/json')
@@ -187,23 +180,23 @@ class ReasignarTerminal(View):
 
     def post(self, req):
         id_term = req.POST.get('id')
-        new_movil = req.POST.get('vehiculo')
+        new_movil = req.POST.get('movil')
 
         #GetTerminal
         terminal = Terminal.objects.get( pk = id_term )
 
         #GetVehiculo
-        vehiculo = Vehiculo.objects.get( pk = new_movil )
+        movil = Movil.objects.get( pk = new_movil )
 
         #Desvincular vehiculo existente
-        if terminal.vehiculo is not None:
-            self.desvincular_vehiculo_existente(vehiculo)
+        if terminal.movil is not None:
+            self.desvincular_vehiculo_existente(movil)
 
-        terminal.vehiculo = vehiculo
+        terminal.movil = movil
         terminal.save()
 
         #Incluir vehiculo
-        anexar_vehiculo(terminal, vehiculo, True)
+        anexar_vehiculo(terminal, movil, True)
 
         #OUT
         data = {'terminales': _get_terminales()}
@@ -294,8 +287,20 @@ class ReturnMaintenance(View):
 
 
 class EditarTerminal(View):
+
+    @transaction.atomic
     def post(self, req):
-        pass
+        id_term = int(req.POST.get('id'))
+        new_code = req.POST.get('codigo')
+
+        term = Terminal.objects.get( pk = id_term )
+        term.codigo = new_code
+        term.save()
+
+        data = get_terminal_json(term)
+        data = json.dumps(data, cls = DjangoJSONEncoder)
+
+        return HttpResponse(data, content_type='application/json')
 
 
 obtener_terminales = ObtenerTerminales.as_view()

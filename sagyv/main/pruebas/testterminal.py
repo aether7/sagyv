@@ -28,13 +28,24 @@ class TerminalTestCase(TestCase):
 
     def test_remover_terminal(self):
         post_data = { "id": 1 }
-        print "****"
-        mvl = Movil.objects.all()
-        print mvl
-        print "****"
         response = self.client.post(reverse('guias:remover_terminal'), post_data)
         self.assertEqual(response.status_code, 200, "No se pudo eliminar terminal")
 
+    def test_asignar_terminal(self):
+        post_data = { "id" : 1, "movil" : 2}
+        response = self.client.post(reverse('guias:reasignar_terminal'), post_data)
+        self.assertEqual(response.status_code, 200, "No se pudo asignar terminal")
+
+    def test_editar_terminal(self):
+        post_data = {"id": 1, "codigo": "3131"}
+        terms = Terminal.objects.all()
+        print terms
+
+        response = self.client.post(reverse('guias:editar_terminal'), post_data)
+        self.assertEqual(response.status_code, 200, "No se pudo asignar terminal")
+
+        terms = Terminal.objects.all()
+        print terms
 
 # assertEqual(a, b)   a == b
 # assertNotEqual(a, b)    a != b

@@ -9,11 +9,29 @@
         }
     },
     {
+        "model": "main.vehiculo",
+        "pk": 2,
+        "fields": {
+            "patente": "wwgp13",
+            "km": 110,
+            "fecha_revision_tecnica": "2014-12-01"
+        }
+    },
+    {
         "model": "main.movil",
         "pk": 1,
         "fields": {
             "numero": 1,
             "vehiculo": 1,
+            "fecha": "2014-12-01"
+        }
+    },
+    {
+        "model": "main.movil",
+        "pk": 2,
+        "fields": {
+            "numero": 2,
+            "vehiculo": 2,
             "fecha": "2014-12-01"
         }
     },
