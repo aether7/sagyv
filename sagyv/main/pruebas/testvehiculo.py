@@ -9,6 +9,10 @@ from main.models import Vehiculo
 class VehiculoTestCase(TestCase):
 
     def setUp(self):
+        self.crear_vehiculos()
+        self.crear_trabajadores()
+
+    def crear_vehiculos(self):
         Vehiculo.objects.create(
             patente='ec1313',
             km=0,
@@ -24,6 +28,9 @@ class VehiculoTestCase(TestCase):
             estado_sec=1,
             fecha_revision_tecnica='2014-12-12'
         )
+
+    def crear_trabajadores(self):
+        pass
 
     def test_obtener_vehiculos(self):
         client = Client()
