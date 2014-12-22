@@ -35,7 +35,7 @@
     </div>
 
     <div class="tab-pane" id="terminales" ng-controller="TerminalController as terminalCtrl">
-        <button class="btn btn-primary" ng-click="terminalCtrl.mostrarPanel()">Nueva</button>
+        <button class="btn btn-primary" ng-click="terminalCtrl.mostrarPanel('agregar')">Nueva</button>
 
         <table class="table table-striped">
             <thead>
@@ -49,10 +49,11 @@
             <tbody>
                 <tr ng-repeat="terminal in terminalCtrl.terminales">
                     <td ng-bind="terminal.codigo"></td>
-                    <td ng-bind="terminal.vehiculo.codigo"></td>
+                    <td ng-bind="terminal.movil.numero"></td>
                     <td ng-bind="terminal.estado.nombre"></td>
                     <td>
-                        <a href class="icon-pencil" ng-click="terminalCtrl.editar($index)" title="editar"></a>
+                        <a href class="icon-pencil" ng-click="terminalCtrl.mostrarPanel('editar', $index)"
+                            title="editar"></a>
 
                         <a href class="icon-remove" ng-click="terminalCtrl.remover($index)" title="eliminar"></a>
 

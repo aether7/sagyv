@@ -20,8 +20,10 @@ def _get_terminales():
     for terminal in rs:
         if terminal.movil is None:
             id_movil = 0
+            numero_movil = None
         else:
             id_movil = terminal.movil.id
+            numero_movil = terminal.movil.numero
 
         if terminal.estado.id == EstadoTerminal.MANTENCION:
             show_opt = False
@@ -32,7 +34,8 @@ def _get_terminales():
             'id': terminal.id,
             'codigo': terminal.codigo,
             'movil': {
-                'id': id_movil
+                'id': id_movil,
+                'numero': numero_movil
             },
             'estado': {
                 'id': terminal.estado.id,
@@ -68,6 +71,7 @@ def cambiar_estado_terminal(terminal, estado):
 def get_terminal_json(terminal):
     data = {
         "id": terminal.id,
+        "codigo": terminal.codigo,
         "estado": {
             "id": terminal.estado.id,
             "nombre": terminal.estado.nombre
@@ -155,20 +159,20 @@ class RemoverTerminal(View):
 
     def post(self, req):
 
-        id_term = req.POST.get('id')
+        id_term = int(req.POST.get('id'))
         state = EstadoTerminal.objects.get(pk = EstadoTerminal.RETIRADO)
 
-        term = Terminal.objects.get(pk = int(id_term))
-        movil = term.vehiculo
+        terminal = Terminal.objects.get(pk = int(id_term))
+        movil = terminal.movil
 
         #Anexado a un vehiculo
-        if movil is not None:
-            anexar_vehiculo(term, movil, False)
+        if terminal.movil is not None:
+            anexar_vehiculo(terminal, movil, False)
 
         #cambio del registro
-        term = cambiar_estado_terminal(terminal, state)
+        terminal = cambiar_estado_terminal(terminal, state)
 
-        data = {'status':'ok'}
+        data = get_terminal_json(terminal)
         data = json.dumps(data, cls=DjangoJSONEncoder)
 
         return HttpResponse(data, content_type='application/json')

@@ -25,6 +25,20 @@
         }
     },
     {
+        "model": "main.estadoterminal",
+        "pk": 2,
+        "fields": {
+            "nombre": "Mantencion"
+        }
+    },
+    {
+        "model": "main.estadoterminal",
+        "pk": 3,
+        "fields": {
+            "nombre": "Retirado"
+        }
+    },
+    {
         "model": "main.terminal",
         "pk": 1,
         "fields": {

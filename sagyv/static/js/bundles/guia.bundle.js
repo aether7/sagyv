@@ -49,7 +49,11 @@ TerminalController.mixin({
         });
     },
 
-    mostrarPanel: function(){
+    mostrarPanel: function(nombrePanel, param){
+        this['_' + nombrePanel](param);
+    },
+
+    _agregar: function(){
         $('#modal_terminal_agregar').modal('show');
         this.terminal = new Terminal();
     },
@@ -78,6 +82,23 @@ TerminalController.mixin({
 
         this.terminales.push(this.terminal);
         this.terminal = null;
+
+        common.agregarMensaje('terminal agregado exitosamente');
+        $('#modal_terminal_agregar').modal('hide');
+    },
+
+    remover: function(index){
+        if(!confirm('Desea dar de baja la terminal ' + this.terminales[index].codigo)){
+            return;
+        }
+
+        var terminal = this.terminales[index],
+            _this = this;
+
+        this.service.remove(terminal.id, function(){
+            _this.terminales.splice(index, 1);
+            common.agregarMensaje('terminal eliminada exitosamente');
+        });
     },
 
     asignar: function(){
@@ -95,6 +116,7 @@ TerminalController.mixin({
             console.log(this.mensajes.vehiculoAsignado);
             return;
         }
+
         this.terminal.vehiculo = this.terminal.vehiculoAsignado;
         console.log(this.terminal);
 
@@ -103,17 +125,6 @@ TerminalController.mixin({
             common.agregarMensaje('terminal agregado exitosamente');
             $('#modal_terminal_asignar').modal('hide');
         });
-    },
-
-    remover: function(index){
-        var _this = this,
-            confirmacion = confirm("Desea dar de baja la terminal " + _this.terminales[index].codigo);
-        if (confirmacion == true) {
-            this.service.remove(_this.terminales[index].id, function(data){
-                _this.terminales.splice(index, 1);
-                common.agregarMensaje('terminal dada de baja exitosamente');
-            });
-        }
     },
 
     maintenance:function(index){

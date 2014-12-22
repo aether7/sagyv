@@ -25,6 +25,12 @@ class TerminalTestCase(TestCase):
         response = self.client.post(reverse("guias:crear_terminal"), post_data)
         self.assertEqual(response.status_code, 200, "Error al crear terminal con movil")
 
+    def test_remover_terminal(self):
+        post_data = { "id": 1 }
+
+        response = self.client.post(reverse('guias:remover_terminal'), post_data)
+        self.assertEqual(response.status_code, 200, "No se pudo eliminar terminal")
+
 
 # assertEqual(a, b)   a == b
 # assertNotEqual(a, b)    a != b
