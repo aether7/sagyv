@@ -42,7 +42,7 @@
             <td ng-bind="vehiculo.chofer.nombre"></td>
             {% if es_admin %}
             <td>
-                <a href class="icon-pencil" ng-click="vc.mostrarEditar($index)"></a>
+                <a href title="editar" class="icon-pencil" ng-click="vc.mostrarEditar($index)"></a>
                 <a href ng-click="vc.mostrarAnexar($index)">anexar chofer</a>
             </td>
             {% endif %}
