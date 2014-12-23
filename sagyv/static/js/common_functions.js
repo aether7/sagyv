@@ -21,10 +21,13 @@ var common = {
     },
 
     agregarMensaje: function(mensaje){
-        var $mensaje = $("#mensaje").addClass("alert-success").show().text(mensaje);
+        var $mensaje = $("#mensaje")
+            .addClass("alert-success")
+            .show()
+            .html("<span class='glyphicon glyphicon-ok'></span>&nbsp;<span>" + mensaje + "</span>");
 
         setTimeout(function(){
-            $mensaje.removeClass("alert-success").hide().text("");
+            $mensaje.removeClass("alert-success").hide().html("");
         },2500);
     },
 

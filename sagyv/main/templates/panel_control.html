@@ -38,10 +38,33 @@
             <li>
                 <a href="{% url 'bodega:index' %}">Bodega</a>
             </li>
-            <li>
-                <a href="{% url 'reportes:index' %}">Reportes</a>
+            <li class="dropdown">
+                <a id="dropdownMenu2" href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    Reportes
+                    <span class="caret"></span>
+                </a>
+
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu2">
+                    <li role="presentation">
+                        <a href="#">Consumo clientes comerciales</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#">Compras de gas</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#">Kilos de ventas por chofer</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#">Créditos</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#">Venta Masa</a>
+                    </li>
+                </ul>
             </li>
             <li>
+                <span class="glyphicon glyphicon-user"></span>
+                <span>{{ user.username }}</span>
                 <a href="{% url 'logout' %}">Salir</a>
             </li>
         </ul>
