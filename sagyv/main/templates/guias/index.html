@@ -30,8 +30,35 @@
         </table>
     </div>
 
-    <div class="tab-pane" id="talonarios">
-        talonarios b
+    <div class="tab-pane" id="talonarios" ng-controller="BoletaController as boletaCtrl">
+        <button class="btn btn-primary" ng-click="boletaCtrl.mostrarPanel('nueva')">Nuevo</button>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Boleta inicial</th>
+                    <th>Boleta final</th>
+                    <th>Boleta actual</th>
+                    <th>Trabajador</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="boleta in boletaCtrl.boletas">
+                    <td ng-bind="boleta.inicial"></td>
+                    <td ng-bind="boleta.ultima"></td>
+                    <td ng-bind="boleta.actual"></td>
+                    <td ng-bind="boleta.trabajador.nombre"></td>
+                    <td>
+                        <a href title="editar" class="icon-pencil"
+                            ng-click="boletaCtrl.mostrarPanel('editar', $index)"></a>
+
+                        <a href title="eliminar" class="icon-remove"
+                            ng-click="boletaCtrl.eliminar($index)"></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
     <div class="tab-pane" id="terminales" ng-controller="TerminalController as terminalCtrl">
