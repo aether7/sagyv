@@ -13,3 +13,8 @@ urlpatterns += patterns("main.guias.terminales_views",
     url(r"^maintenance/$", "maintenance", name="maintenance"),
     url(r"return\-maintenance/$", "return_maintenance", name="return_maintenance"),
 )
+
+urlpatterns += patterns("main.guias.talonarios_views",
+    url(r"obtener\-talonarios", "obtener_talonarios", name="obtener_talonarios"),
+    url(r"crear\-talonarios", "crear_talonarios", name="crear_talonarios"),
+)
