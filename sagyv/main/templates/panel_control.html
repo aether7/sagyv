@@ -46,19 +46,19 @@
 
                 <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu2">
                     <li role="presentation">
-                        <a href="#">Consumo clientes comerciales</a>
+                        <a href="{% url 'reportes:consumo_clientes' %}">Consumo clientes comerciales</a>
                     </li>
                     <li role="presentation">
-                        <a href="#">Compras de gas</a>
+                        <a href="{% url 'reportes:compras_gas' %}">Compras de gas</a>
                     </li>
                     <li role="presentation">
-                        <a href="#">Kilos de ventas por chofer</a>
+                        <a href="{% url 'reportes:kilos_vendidos' %}">Kilos de ventas por chofer</a>
                     </li>
                     <li role="presentation">
-                        <a href="#">Créditos</a>
+                        <a href="{% url 'reportes:creditos' %}">Créditos</a>
                     </li>
                     <li role="presentation">
-                        <a href="#">Venta Masa</a>
+                        <a href="{% url 'reportes:venta_masa' %}">Venta Masa</a>
                     </li>
                 </ul>
             </li>

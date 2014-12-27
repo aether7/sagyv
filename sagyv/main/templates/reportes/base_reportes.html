@@ -13,17 +13,8 @@
 
 {% block content %}
 
-<section class="panel-reportes">
-    <a href="{% url 'reportes:consumo_clientes' %}" class="btn btn-default">Consumo clientes comerciales</a>
-    <a href="{% url 'reportes:compras_gas' %}" class="btn btn-default">Compras de gas (en kilos)</a>
-    <a href="{% url 'reportes:kilos_vendidos' %}" class="btn btn-default">Kilos de ventas por chofer</a>
-    <a href="{% url 'reportes:creditos' %}" class="btn btn-default">Créditos</a>
-    <a href="{% url 'reportes:venta_masa' %}" class="btn btn-default">Venta masa</a>
-</section>
-
-<section ng-app="reporteApp">
+{% block titulo_reporte %}<h1 class="center">Título sin agregar</h1>{% endblock %}
 {% block reporte_content %}No hay nada definido{% endblock %}
-</section>
 
 {% endblock %}
 
@@ -32,7 +23,6 @@
 <script src="{% static 'js/vendor/angular.min.js' %}"></script>
 <script src="{% static 'js/vendor/highcharts.js' %}"></script>
 <script src="{% static 'js/plugins/exporting.js' %}"></script>
-<script src="{% static 'js/bundles/reporte.bundle.js' %}"></script>
 
 {% block js_reportes %}
 {% endblock %}

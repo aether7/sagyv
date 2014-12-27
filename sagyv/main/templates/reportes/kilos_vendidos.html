@@ -1,5 +1,9 @@
 {% extends "reportes/base_reportes.html" %}
 
+{% block titulo_reporte %}
+<h1 class="center">Kilos vendidos por chofer</h1>
+{% endblock %}
+
 {% block reporte_content %}
 
 <section ng-controller="KilosController as kilosCtrl">

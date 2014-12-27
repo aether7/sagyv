@@ -1,8 +1,13 @@
 {% extends "reportes/base_reportes.html" %}
+{% load static from staticfiles %}
+
+{% block titulo_reporte %}
+<h1 class="center">Consumo de clientes</h1>
+{% endblock %}
 
 {% block reporte_content %}
 
-<section ng-controller="ConsumoClienteController as consumoCtrl">
+<section ng-app="consumoClienteApp" ng-controller="ConsumoClienteController as consumoCtrl">
 
 <aside>
     <label for="desde">Desde</label>
@@ -11,9 +16,9 @@
     <label for="hasta">Hasta</label>
     <input id="hasta" type="date" ng-model="consumoCtrl.hasta" />
 
-    <a href class="btn btn-primary" ng-click="consumoCtrl.filtrar()">Filtrar</a>
-    <a href class="btn btn-primary" ng-click="consumoCtrl.exportar()">Exportar a excel</a>
-    <a href class="btn btn-primary" ng-click="consumoCtrl.graficar()">Ver gráfico</a>
+    <button type="button" class="btn btn-success" ng-click="consumoCtrl.filtrar()">Filtrar</button>
+    <button type="button" class="btn btn-warning" ng-click="consumoCtrl.exportar()">Exportar a excel</button>
+    <button type="button" class="btn btn-primary" ng-click="consumoCtrl.graficar()">Ver gráfico</button>
 </aside>
 
 <ul class="nav nav-tabs" role="tablist">
@@ -57,6 +62,7 @@
 {% endblock %}
 
 {% block js_reportes %}
+<script src="{% static 'js/bundles/reportes/consumo_cliente.bundle.js' %}"></script>
 <script>
     App.urls.set("reportes:obtener_consumo", "{% url 'reportes:obtener_consumo' %}");
 </script>
