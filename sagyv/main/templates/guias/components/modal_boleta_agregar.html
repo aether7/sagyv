@@ -10,7 +10,8 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label for="boleta_agregar_inicial" class="control-label">Boleta inicial</label>
-                    <input id="boleta_agregar_inicial" type="text" class="form-control" />
+                    <input id="boleta_agregar_inicial" type="text"
+                        class="form-control" ng-model="boletaCtrl.boleta.inicial" />
 
                     <span class="text-danger"
                         ng-show="boletaCtrl.boleta.mensajes.inicial"
@@ -19,7 +20,8 @@
 
                 <div class="form-group">
                     <label for="boleta_agregar_ultima" class="control-label">Boleta final</label>
-                    <input for="boleta_agregar_ultima" type="text" class="form-control" />
+                    <input for="boleta_agregar_ultima" type="text"
+                        class="form-control" ng-model="boletaCtrl.boleta.ultima" />
 
                     <span class="text-danger"
                         ng-show="boletaCtrl.boleta.mensajes.ultima"
@@ -28,7 +30,12 @@
 
                 <div class="form-group">
                     <label for="boleta_agregar_trabajador" class="control-label">Trabajador</label>
-                    <select name="" id="boleta_agregar_trabajador" clasS="form-control"></select>
+                    <select id="boleta_agregar_trabajador" class="form-control"
+                        ng-model="boletaCtrl.boleta.trabajador.id">
+                        {% for trabajador in trabajadores %}
+                        <option value="{{ trabajador.id }}">{{ trabajador.get_nombre_completo }}</option>
+                        {% endfor %}
+                    </select>
 
                     <span class="text-danger"
                         ng-show="boletaCtrl.boleta.mensajes.trabajador"
@@ -38,7 +45,7 @@
 
             <div class="modal-footer">
                 <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <button class="btn btn-primary">Guardar</button>
+                <button class="btn btn-primary" ng-click="boletaCtrl.agregar()">Guardar</button>
             </div>
         </div>
     </div>

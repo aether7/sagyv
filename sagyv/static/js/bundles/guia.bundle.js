@@ -52,12 +52,31 @@ BoletaController.mixin({
     },
 
     _nuevo: function(){
+        this.boleta = new Boleta();
         console.log('nueva boleta');
         $('#modal_boleta_agregar').modal('show');
     },
 
     _editar: function(index){
         console.log('editar boleta');
+    },
+
+    agregar: function(){
+        if(!this.boleta.esValido()){
+            return;
+        }
+
+        this.boleta.trabajador.nombre = $('#boleta_agregar_trabajador option:selected').text();
+
+        var json = this.boleta.toJSON();
+        this.service.agregar(json, this.procesarAgregar.bind(this));
+    },
+
+    procesarAgregar: function(data){
+        this.boletas.push(this.boleta);
+
+        common.agregarMensaje('El talonario ha sido creado exitosamente');
+        $('#modal_boleta_agregar').modal('hide');
     },
 
     eliminar: function(index){
@@ -371,40 +390,18 @@ function boletaService($http){
 
     services = {
         findAll: function(callback){
-            var boletas = [
-                {
-                    id: 1,
-                    inicial: 1,
-                    ultima: 50,
-                    actual: 20,
-                    trabajador: {
-                        id: 3,
-                        nombre: "alberto"
-                    }
-                },
-                {
-                    id: 2,
-                    inicial: 51,
-                    ultima: 100,
-                    actual: 60,
-                    trabajador: {
-                        id: 2,
-                        nombre: "juanito"
-                    }
-                },
-                {
-                    id: 3,
-                    inicial: 101,
-                    ultima: 200,
-                    actual: 125,
-                    trabajador: {
-                        id: 3,
-                        nombre: "mauricio"
-                    }
-                }
-            ];
+            var url = App.urls.get('guias:obtener_talonarios');
+            get(url, callback);
+        },
 
-            callback(boletas);
+        agregar: function(json, callback){
+            var url = App.urls.get('guias:crear_talonario');
+            post(url, json, callback);
+        },
+
+        editar: function(json, callback){
+            var url = App.urls.get('guias:editar_talonario');
+            console.warn('por implementar');
         }
     };
 

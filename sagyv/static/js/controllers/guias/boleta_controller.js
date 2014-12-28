@@ -31,12 +31,31 @@ BoletaController.mixin({
     },
 
     _nuevo: function(){
+        this.boleta = new Boleta();
         console.log('nueva boleta');
         $('#modal_boleta_agregar').modal('show');
     },
 
     _editar: function(index){
         console.log('editar boleta');
+    },
+
+    agregar: function(){
+        if(!this.boleta.esValido()){
+            return;
+        }
+
+        this.boleta.trabajador.nombre = $('#boleta_agregar_trabajador option:selected').text();
+
+        var json = this.boleta.toJSON();
+        this.service.agregar(json, this.procesarAgregar.bind(this));
+    },
+
+    procesarAgregar: function(data){
+        this.boletas.push(this.boleta);
+
+        common.agregarMensaje('El talonario ha sido creado exitosamente');
+        $('#modal_boleta_agregar').modal('hide');
     },
 
     eliminar: function(index){

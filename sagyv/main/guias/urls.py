@@ -16,5 +16,6 @@ urlpatterns += patterns("main.guias.terminales_views",
 
 urlpatterns += patterns("main.guias.talonarios_views",
     url(r"obtener\-talonarios", "obtener_talonarios", name="obtener_talonarios"),
-    url(r"crear\-talonarios", "crear_talonarios", name="crear_talonarios"),
+    url(r"crear\-talonario", "crear_talonario", name="crear_talonario"),
+    url(r"editar-\talonario", "editar_talonario", name="editar_talonario"),
 )
