@@ -20,6 +20,10 @@ function boletaService($http){
         editar: function(json, callback){
             var url = App.urls.get('guias:editar_talonario');
             console.warn('por implementar');
+        },
+
+        eliminar: function(id, callback){
+            console.warm('por implementar');
         }
     };
 

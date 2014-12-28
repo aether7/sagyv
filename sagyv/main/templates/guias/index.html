@@ -61,6 +61,7 @@
         </table>
 
         {% include "guias/components/modal_boleta_agregar.html" %}
+        {% include "guias/components/modal_boleta_editar.html" %}
     </div>
 
     <div class="tab-pane" id="terminales" ng-controller="TerminalController as terminalCtrl">
@@ -124,6 +125,6 @@
 
     App.urls.set("guias:obtener_talonarios", "{% url 'guias:obtener_talonarios' %}");
     App.urls.set("guias:crear_talonario", "{% url 'guias:crear_talonario' %}");
-    App.urls.set("guias_editar_talonario", "{% url 'guias:editar_talonario' %}");
+    App.urls.set("guias:editar_talonario", "{% url 'guias:editar_talonario' %}");
 </script>
 {% endblock %}

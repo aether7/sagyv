@@ -32,16 +32,19 @@ BoletaController.mixin({
 
     _nuevo: function(){
         this.boleta = new Boleta();
-        console.log('nueva boleta');
         $('#modal_boleta_agregar').modal('show');
     },
 
     _editar: function(index){
-        console.log('editar boleta');
+        this.boleta = this.boletas[index];
+        $('#modal_boleta_editar').modal('show');
     },
 
     agregar: function(){
         if(!this.boleta.esValido()){
+            return;
+        }else if(this.estaDuplicadoTrabajador(this.boleta)){
+            this.boleta.mensajes.trabajador = 'El trabajador ya tiene otro talonario anexado';
             return;
         }
 
@@ -49,6 +52,15 @@ BoletaController.mixin({
 
         var json = this.boleta.toJSON();
         this.service.agregar(json, this.procesarAgregar.bind(this));
+    },
+
+    estaDuplicadoTrabajador: function(){
+        var trabajadorSeleccionado = $('#boleta_agregar_trabajador option:selected').text(),
+            trabajadoresAsignados = this.boletas.filter(function(boleta){
+                return boleta.trabajador.nombre === trabajadorSeleccionado;
+            });
+
+        return trabajadoresAsignados.length;
     },
 
     procesarAgregar: function(data){

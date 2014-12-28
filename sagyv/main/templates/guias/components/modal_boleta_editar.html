@@ -1,33 +1,13 @@
-<div id="modal_boleta_agregar" class="modal fade">
+<div id="modal_boleta_editar" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button class="close" data-dismiss="modal">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4>Nuevo talonario</h4>
+                <h4>Editar talonario</h4>
             </div>
             <div class="modal-body">
-                <div class="form-group">
-                    <label for="boleta_agregar_inicial" class="control-label">Boleta inicial</label>
-                    <input id="boleta_agregar_inicial" type="text"
-                        class="form-control" ng-model="boletaCtrl.boleta.inicial" />
-
-                    <span class="text-danger"
-                        ng-show="boletaCtrl.boleta.mensajes.inicial"
-                        ng-bind="boletaCtrl.boleta.mensajes.inicial"></span>
-                </div>
-
-                <div class="form-group">
-                    <label for="boleta_agregar_ultima" class="control-label">Boleta final</label>
-                    <input for="boleta_agregar_ultima" type="text"
-                        class="form-control" ng-model="boletaCtrl.boleta.ultima" />
-
-                    <span class="text-danger"
-                        ng-show="boletaCtrl.boleta.mensajes.ultima"
-                        ng-bind="boletaCtrl.boleta.mensajes.ultima"></span>
-                </div>
-
                 <div class="form-group">
                     <label for="boleta_agregar_trabajador" class="control-label">Trabajador</label>
                     <select id="boleta_agregar_trabajador" class="form-control"

@@ -42,7 +42,7 @@ def _cambio_estado_talonario_existente(trabajador):
 
 class ObtenerTalonarios(View):
     def get(self, req):
-        data = { 'boletas': _get_talonarios() }
+        data = _get_talonarios()
 
         data = json.dumps(data, cls=DjangoJSONEncoder)
         return HttpResponse(data, content_type='application/json')
@@ -91,6 +91,7 @@ class EditarTalonario(View):
 
         data = {'boletas': _get_talonarios()}
         data = json.dumps(data, cls=DjangoJSONEncoder)
+
         return HttpResponse(data, content_type='application/json')
 
 obtener_talonarios = ObtenerTalonarios.as_view()
