@@ -1,47 +1,38 @@
-function BoletaController(){
-    // this.boletas = [
-    //     {
-    //         id: 1,
-    //         inicial: 1,
-    //         ultima: 50,
-    //         actual: 20,
-    //         trabajador: {
-    //             id: 3,
-    //             nombre: "alberto"
-    //         }
-    //     },
-    //     {
-    //         id: 2,
-    //         inicial: 51,
-    //         ultima: 100,
-    //         actual: 60,
-    //         trabajador: {
-    //             id: 2,
-    //             nombre: "juanito"
-    //         }
-    //     },
-    //     {
-    //         id: 3,
-    //         inicial: 101,
-    //         ultima: 200,
-    //         actual: 125,
-    //         trabajador: {
-    //             id: 3,
-    //             nombre: "mauricio"
-    //         }
-    //     }
-    // ];
+var Boleta = require('../../models/guias/boleta_model.js');
 
+function BoletaController(service){
+    this.service = service;
+    this.boletas = [];
     this.boleta = null;
+
+    this.init();
 }
 
 BoletaController.mixin({
+    init: function(){
+        this.service.findAll(this.procesarBoletas.bind(this));
+    },
+
+    procesarBoletas: function(data){
+        var _this = this;
+
+        data.forEach(function(b){
+            var boleta = new Boleta();
+            boleta.inicial = b.inicial;
+            boleta.ultima = b.ultima;
+            boleta.actual = b.actual;
+            boleta.trabajador = b.trabajador;
+            _this.boletas.push(boleta);
+        });
+    },
+
     mostrarPanel: function(nombre, index){
         this['_' + nombre](index);
     },
 
     _nuevo: function(){
         console.log('nueva boleta');
+        $('#modal_boleta_agregar').modal('show');
     },
 
     _editar: function(index){

@@ -1,66 +1,59 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/home/worker8/proyectos/sagyv/sagyv/static/js/bundles/guia_bundle.js":[function(require,module,exports){
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/Aether/Proyectos/sagyv/sagyv/static/js/bundles/guia_bundle.js":[function(require,module,exports){
 (function(){
 'use strict';
 
 var app = angular.module('guiaApp', [], App.httpProvider),
     guiaService = require('../services/guia_service.js'),
     terminalService = require('../services/terminal_service.js'),
+    boletaService = require('../services/boleta_service.js'),
     TerminalController = require('../controllers/guias/terminal_controller.js'),
     BoletaController = require('../controllers/guias/boleta_controller.js');
 
 app.factory('guiaService', ['$http', guiaService]);
 app.factory('terminalService', ['$http', terminalService]);
+app.factory('boletaService', ['$http', boletaService]);
 
 app.controller('TerminalController', ['terminalService', TerminalController]);
-app.controller('BoletaController', [BoletaController]);
+app.controller('BoletaController', ['boletaService', BoletaController]);
 
 })();
 
-},{"../controllers/guias/boleta_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/guias/boleta_controller.js","../controllers/guias/terminal_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/guias/terminal_controller.js","../services/guia_service.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/services/guia_service.js","../services/terminal_service.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/services/terminal_service.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/guias/boleta_controller.js":[function(require,module,exports){
-function BoletaController(){
-    // this.boletas = [
-    //     {
-    //         id: 1,
-    //         inicial: 1,
-    //         ultima: 50,
-    //         actual: 20,
-    //         trabajador: {
-    //             id: 3,
-    //             nombre: "alberto"
-    //         }
-    //     },
-    //     {
-    //         id: 2,
-    //         inicial: 51,
-    //         ultima: 100,
-    //         actual: 60,
-    //         trabajador: {
-    //             id: 2,
-    //             nombre: "juanito"
-    //         }
-    //     },
-    //     {
-    //         id: 3,
-    //         inicial: 101,
-    //         ultima: 200,
-    //         actual: 125,
-    //         trabajador: {
-    //             id: 3,
-    //             nombre: "mauricio"
-    //         }
-    //     }
-    // ];
+},{"../controllers/guias/boleta_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guias/boleta_controller.js","../controllers/guias/terminal_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guias/terminal_controller.js","../services/boleta_service.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/boleta_service.js","../services/guia_service.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/guia_service.js","../services/terminal_service.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/terminal_service.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guias/boleta_controller.js":[function(require,module,exports){
+var Boleta = require('../../models/guias/boleta_model.js');
 
+function BoletaController(service){
+    this.service = service;
+    this.boletas = [];
     this.boleta = null;
+
+    this.init();
 }
 
 BoletaController.mixin({
+    init: function(){
+        this.service.findAll(this.procesarBoletas.bind(this));
+    },
+
+    procesarBoletas: function(data){
+        var _this = this;
+
+        data.forEach(function(b){
+            var boleta = new Boleta();
+            boleta.inicial = b.inicial;
+            boleta.ultima = b.ultima;
+            boleta.actual = b.actual;
+            boleta.trabajador = b.trabajador;
+            _this.boletas.push(boleta);
+        });
+    },
+
     mostrarPanel: function(nombre, index){
         this['_' + nombre](index);
     },
 
     _nuevo: function(){
         console.log('nueva boleta');
+        $('#modal_boleta_agregar').modal('show');
     },
 
     _editar: function(index){
@@ -79,7 +72,7 @@ BoletaController.mixin({
 
 module.exports = BoletaController;
 
-},{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/guias/terminal_controller.js":[function(require,module,exports){
+},{"../../models/guias/boleta_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/guias/boleta_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guias/terminal_controller.js":[function(require,module,exports){
 var Terminal = require('../../models/guias/terminal_model.js');
 
 function TerminalController(service){
@@ -212,7 +205,92 @@ TerminalController.mixin({
 
 module.exports = TerminalController;
 
-},{"../../models/guias/terminal_model.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/models/guias/terminal_model.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/models/guias/terminal_model.js":[function(require,module,exports){
+},{"../../models/guias/terminal_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/guias/terminal_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/guias/boleta_model.js":[function(require,module,exports){
+function Boleta(){
+    this.id = null;
+    this.inicial = 0;
+    this.ultima = 0;
+    this.actual = 0;
+
+    this.trabajador = {
+        id: 0,
+        nombre: null
+    };
+
+    this.mensajes = {};
+}
+
+Boleta.prototype = {
+    constructor: Boleta,
+
+    esValido: function(){
+        var valido = true;
+
+        this.mensajes = {};
+
+        valido = this.esInicialValido() && valido;
+        valido = this.esUltimaValido() && valido;
+        valido = this.esTrabajadorValido() && valido;
+
+        return valido;
+    },
+
+    esInicialValido: function(){
+        if(!this.inicial || isNaN(this.inicial)){
+            this.mensajes.inicial = 'Campo obligatorio';
+            return false;
+        }else if(parseInt(this.inicial) < 1){
+            this.mensajes.inicial = 'El número de boleta inicial debe al menos ser 1';
+            return false;
+        }
+
+        return true;
+    },
+
+    esUltimaValido: function(){
+        if(!this.ultima || isNaN(this.ultima)){
+            this.mensajes.ultima = 'Campo obligatorio';
+            return false;
+        }else if(parseInt(this.ultima) < 1){
+            this.mensajes.ultima = 'El número de boleta final debe al menos ser 1';
+            return false;
+        }else if(parseInt(this.inicial) >= parseInt(this.ultima)){
+            this.mensajes.inicial = 'El número de boleta final debe ser mayor a la boleta inicial';
+            this.mensajes.ultima = 'El número de boleta final debe ser mayor a la boleta inicial';
+            return false;
+        }
+
+        return true;
+    },
+
+    esTrabajadorValido: function(){
+        if(!this.trabajador.id){
+            this.mensajes.trabajador = 'Campo obligatorio';
+            return false;
+        }
+
+        return true;
+    },
+
+    toJSON: function(){
+        var json = {
+            inicial: this.inicial,
+            ultima: this.ultima,
+            actual: this.actual,
+            trabajador: JSON.stringify(this.trabajador)
+        };
+
+        if(this.id){
+            json.id = this.id;
+        }
+
+        return json;
+    }
+};
+
+module.exports = Boleta;
+
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/guias/terminal_model.js":[function(require,module,exports){
 function Terminal(){
     this.id = null;
     this.codigo = null;
@@ -282,7 +360,60 @@ Terminal.mixin({
 
 module.exports = Terminal;
 
-},{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/services/guia_service.js":[function(require,module,exports){
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/boleta_service.js":[function(require,module,exports){
+var serviceUtil = require('./service_util.js');
+
+function boletaService($http){
+    var get, post, services;
+
+    get = serviceUtil.getMaker($http);
+    post = serviceUtil.postMaker($http);
+
+    services = {
+        findAll: function(callback){
+            var boletas = [
+                {
+                    id: 1,
+                    inicial: 1,
+                    ultima: 50,
+                    actual: 20,
+                    trabajador: {
+                        id: 3,
+                        nombre: "alberto"
+                    }
+                },
+                {
+                    id: 2,
+                    inicial: 51,
+                    ultima: 100,
+                    actual: 60,
+                    trabajador: {
+                        id: 2,
+                        nombre: "juanito"
+                    }
+                },
+                {
+                    id: 3,
+                    inicial: 101,
+                    ultima: 200,
+                    actual: 125,
+                    trabajador: {
+                        id: 3,
+                        nombre: "mauricio"
+                    }
+                }
+            ];
+
+            callback(boletas);
+        }
+    };
+
+    return services;
+}
+
+module.exports = boletaService;
+
+},{"./service_util.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/service_util.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/guia_service.js":[function(require,module,exports){
 var serviceUtil = require('./service_util.js');
 
 function guiaService($http){
@@ -300,7 +431,7 @@ function guiaService($http){
 
 module.exports = guiaService;
 
-},{"./service_util.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/services/service_util.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/services/service_util.js":[function(require,module,exports){
+},{"./service_util.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/service_util.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/service_util.js":[function(require,module,exports){
 function noop(){}
 
 function standardError(data){
@@ -362,7 +493,7 @@ exports.postMaker = function($http){
     };
 };
 
-},{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/services/terminal_service.js":[function(require,module,exports){
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/terminal_service.js":[function(require,module,exports){
 var serviceUtil = require('./service_util.js');
 
 function terminalService($http){
@@ -414,4 +545,4 @@ function terminalService($http){
 
 module.exports = terminalService;
 
-},{"./service_util.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/services/service_util.js"}]},{},["/home/worker8/proyectos/sagyv/sagyv/static/js/bundles/guia_bundle.js"]);
+},{"./service_util.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/service_util.js"}]},{},["/Users/Aether/Proyectos/sagyv/sagyv/static/js/bundles/guia_bundle.js"]);
