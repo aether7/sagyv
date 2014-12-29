@@ -4,6 +4,7 @@ function BoletaController(service){
     this.service = service;
     this.boletas = [];
     this.boleta = null;
+    this.index = null;
 
     this.init();
 }
@@ -36,6 +37,7 @@ BoletaController.mixin({
     },
 
     _editar: function(index){
+        this.index = index;
         this.boleta = this.boletas[index];
         $('#modal_boleta_editar').modal('show');
     },
@@ -54,6 +56,19 @@ BoletaController.mixin({
         this.service.agregar(json, this.procesarAgregar.bind(this));
     },
 
+    editar: function(){
+        if(!this.boleta.esValido()){
+            return;
+        }else if(this.estaDuplicadoTrabajador(this.boleta)){
+            this.boleta.mensajes.trabajador = 'El trabajador ya tiene otro talonario anexado';
+            return;
+        }
+
+        this.boleta.trabajador.nombre = $('#boleta_editar_trabajador option:selected').text();
+        var json = this.boleta.toJSON();
+        this.service.editar(json, this.procesarEditar.bind(this));
+    },
+
     estaDuplicadoTrabajador: function(){
         var trabajadorSeleccionado = $('#boleta_agregar_trabajador option:selected').text(),
             trabajadoresAsignados = this.boletas.filter(function(boleta){
@@ -70,13 +85,24 @@ BoletaController.mixin({
         $('#modal_boleta_agregar').modal('hide');
     },
 
+    procesarEditar: function(){
+        this.boletas[this.index] = this.boleta;
+
+        common.agregarMensaje('El talonario fue editado exitosamente');
+        $('#modal_boleta_editar').modal('hide');
+    }
+
     eliminar: function(index){
         if(!confirm('¿Está seguro(a) de que desea realizar esta acción?')){
             return;
         }
 
-        this.boletas.splice(index, 1);
-        common.agregarMensaje('El talonario fue eliminado exitosamente');
+        var boleta = this.boletas[index], _this = this;
+
+        this.service.eliminar(boleta.id, function(data){
+            _this.boletas.splice(index, 1);
+            common.agregarMensaje('El talonario fue eliminado exitosamente');
+        });
     }
 });
 

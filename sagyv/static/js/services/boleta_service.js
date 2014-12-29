@@ -19,11 +19,12 @@ function boletaService($http){
 
         editar: function(json, callback){
             var url = App.urls.get('guias:editar_talonario');
-            console.warn('por implementar');
+            post(url, json, callback);
         },
 
         eliminar: function(id, callback){
-            console.warm('por implementar');
+            var url = App.urls.get('guias:eliminar_talonario');
+            post(url, { id : id }, callback);
         }
     };
 
