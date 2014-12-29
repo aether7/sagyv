@@ -430,6 +430,7 @@ function boletaService($http){
         },
 
         eliminar: function(id, callback){
+            var url = App.urls.get('guias:eliminar_talonario');
             console.warm('por implementar');
         }
     };

@@ -94,6 +94,25 @@ class EditarTalonario(View):
 
         return HttpResponse(data, content_type='application/json')
 
+
+class EliminarTalonario(View):
+
+    @transaction.atomic
+    def post(self, req):
+        talonario_id = int(req.POST.get('id'))
+
+        talonario = BoletaTrabajador.objects.get( pk = talonario_id )
+        talonario.activo = False
+        talonario.save()
+
+
+        data = {'boletas': _get_talonarios()}
+        data = json.dumps(data, cls=DjangoJSONEncoder)
+
+        return HttpResponse(data, content_type='application/json')
+
+
 obtener_talonarios = ObtenerTalonarios.as_view()
 crear_talonario = CrearTalonario.as_view()
 editar_talonario = EditarTalonario.as_view()
+eliminar_talonario = EliminarTalonario.as_view()

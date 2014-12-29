@@ -18,4 +18,5 @@ urlpatterns += patterns("main.guias.talonarios_views",
     url(r"^obtener\-talonarios/$", "obtener_talonarios", name="obtener_talonarios"),
     url(r"^crear\-talonario/$", "crear_talonario", name="crear_talonario"),
     url(r"^editar\-talonario/$", "editar_talonario", name="editar_talonario"),
+    url(r"eliminar\-talonario/$", "eliminar_talonario", name="eliminar_talonario"),
 )
