@@ -24,7 +24,7 @@ App.Controllers.SituacionComercial.prototype = {
         }
 
         json = situacionComercial.getJSON();
-        action = App.urls.get("cliente:crear_situacion_comercial");
+        action = App.urls.get("clientes:crear_situacion_comercial");
 
         $.post(action, json, function(data){
             pubsub.publish("sitComercial:procesarCrear",[ data ]);
@@ -32,7 +32,7 @@ App.Controllers.SituacionComercial.prototype = {
     },
 
     cargarSituacion: function(id){
-        var url = App.urls.get("cliente:obtener_situacion_comercial").replace("0", id);
+        var url = App.urls.get("clientes:obtener_situacion_comercial").replace("0", id);
         this.idSituacion = id;
 
         $.get(url, function(data){
@@ -54,7 +54,7 @@ App.Controllers.SituacionComercial.prototype = {
             return;
         }
 
-        url = App.urls.get("cliente:modificar_situacion_comercial");
+        url = App.urls.get("clientes:modificar_situacion_comercial");
         json = situacionComercial.getJSON();
 
         $.post(url, json, function(data){
