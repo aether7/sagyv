@@ -25,7 +25,7 @@ def get_talonario(talonario):
 
 def _get_talonarios():
     talonarios = []
-    rs = BoletaTrabajador.objects.order_by("-fecha_creacion")
+    rs = BoletaTrabajador.objects.order_by("-fecha_creacion").exclude(activo = True)
 
     for talonario in rs:
         data = get_talonario(talonario)
@@ -53,7 +53,7 @@ class CrearTalonario(View):
     @transaction.atomic
     def post(self, req):
         inicial = int(req.POST.get('inicial'))
-        final = int(req.POST.get('final'))
+        final = int(req.POST.get('ultima'))
         worker_obj = json.loads(req.POST.get('trabajador'))
         trabajador_id = int(worker_obj.get('id'))
 
