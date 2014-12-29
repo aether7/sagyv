@@ -49,6 +49,9 @@ BoletaController.mixin({
         }else if(this.estaDuplicadoTrabajador(this.boleta)){
             this.boleta.mensajes.trabajador = 'El trabajador ya tiene otro talonario anexado';
             return;
+        }else if(this.estaDuplicadoRango()){
+            this.boleta.mensajes.inicial = 'El número inicial de guía no puede coincidir con un inicial o final existente';
+            return;
         }
 
         this.boleta.trabajador.nombre = $('#boleta_agregar_trabajador option:selected').text();
@@ -80,8 +83,18 @@ BoletaController.mixin({
         return trabajadoresAsignados.length;
     },
 
+    estaDuplicadoRango: function(){
+        var rangoInicial = this.boleta.inicial,
+            duplicados = this.boletas.filter(function(boleta){
+                return boleta.inicial == rangoInicial || boleta.ultima == rangoInicial;
+            });
+
+        return duplicados.length;
+    },
+
     procesarAgregar: function(data){
         this.boleta.id = data.id;
+        this.boleta.actual = this.boleta.inicial;
         this.boletas.push(this.boleta);
 
         common.agregarMensaje('El talonario ha sido creado exitosamente');

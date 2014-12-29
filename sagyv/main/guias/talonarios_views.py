@@ -25,7 +25,7 @@ def get_talonario(talonario):
 
 def _get_talonarios():
     talonarios = []
-    rs = BoletaTrabajador.objects.order_by("-fecha_creacion").exclude(activo = True)
+    rs = BoletaTrabajador.objects.order_by("-fecha_creacion").exclude(activo = False)
 
     for talonario in rs:
         data = get_talonario(talonario)
