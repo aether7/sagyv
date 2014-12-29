@@ -8,7 +8,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 
 from main.models import GuiaTrabajador
 from main.models import Trabajador
-from main.models import GuiaVenta
+from liquidacion.models import GuiaVenta
 
 """
 Tengo duda si definirlo como Guia o Guias.

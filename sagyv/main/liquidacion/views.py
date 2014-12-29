@@ -11,27 +11,22 @@ from reportlab.lib.units import inch
 
 from main.helpers.fecha import convierte_texto_fecha, convierte_fecha_texto
 
-from main.managers import ReportesManager
-from main.reportes import templates
-
-
-from main.models import Banco
 from main.models import BoletaTrabajador
-from main.models import Cliente
 from main.models import Trabajador
-from main.models import TarjetaCredito
-from main.models import Producto
-from main.models import GuiaDespacho
-from main.models import HistorialStock
-from main.models import Terminal
-from main.models import Cheque
-from main.models import CuponPrepago
-from main.models import Otros
-from main.models import TipoPago
-
-from main.models import Liquidacion
-from main.models import GuiaVenta
-from main.models import DetalleGuiaVenta
+from bodega.models import Producto
+from bodega.models import GuiaDespacho
+from bodega.models import HistorialStock
+from clientes.models import Cliente
+from liquidacion.models import Banco
+from liquidacion.models import TarjetaCredito
+from liquidacion.models import Terminal
+from liquidacion.models import Cheque
+from liquidacion.models import CuponPrepago
+from liquidacion.models import Otros
+from liquidacion.models import TipoPago
+from liquidacion.models import Liquidacion
+from liquidacion.models import GuiaVenta
+from liquidacion.models import DetalleGuiaVenta
 
 
 class IndexView(TemplateView):

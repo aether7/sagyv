@@ -1,0 +1,55 @@
+{% extends "reportes/base_reportes.html" %}
+
+{% block titulo_reporte %}
+<h1 class="center">Venta de masa</h1>
+{% endblock %}
+
+{% block reporte_content %}
+
+<section ng-controller="VentaController as ventaCtrl">
+<aside>
+    <label for="desde">Desde</label>
+    <input id="desde" type="date" ng-model="ventaCtrl.desde" />
+
+    <label for="hasta">Hasta</label>
+    <input id="hasta" type="date" ng-model="ventaCtrl.hasta" />
+
+    <a href="{% url 'reportes:venta_masa' %}" class="btn btn-primary" ng-click="ventaCtrl.filtrar()">Filtrar</a>
+    <a href class="btn btn-primary" ng-click="ventaCtrl.exportar()">Exportar a excel</a>
+    <a href class="btn btn-primary" ng-click="ventaCtrl.graficar()">Ver gráfico</a>
+</aside>
+
+<ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active">
+        <a id="tabDetalle" href="#detalle" role="tab" data-toggle="tab">Detalle</a>
+    </li>
+
+    <li role="presentation">
+        <a id="tabGrafico" href="#grafico" role="tab" data-toggle="tab">Gráfico</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="detalle">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>TIPO DE CLIENTE</th>
+                    <th>NOMBRE</th>
+                    <th>FORMATO CONSUMIDO</th>
+                    <th>MONTO(descuento)</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    <div role="tabpanel" class="tab-pane" id="grafico">
+        <div id="canvas_grafico"></div>
+    </div>
+</div>
+
+</section>
+
+{% endblock %}

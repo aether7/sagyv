@@ -1,0 +1,16 @@
+<section {% if controller %}ng-controller="{{ controller }}"{% endif %}>
+    <label for="desde">Desde</label>
+    <input id="desde" type="text" />
+
+    <label for="hasta">Hasta</label>
+    <input id="hasta" type="text" />
+
+    <a href="{% url url_filtrar %}" class="btn btn-primary"
+        {% if filtrar_action %}ng-click="{{ filtrar_accion }}"{% endif %}>Filtrar</a>
+
+    <a href class="btn btn-primary"
+        {% if exportar_accion %}ng-click="{{ exportar_accion }}"{% endif %}>Exportar a excel</a>
+
+    <a href class="btn btn-primary"
+        {% if ver_grafico_accion %}ng-click="{{ ver_grafico_accion }}"{% endif %}>Ver gráfico</a>
+</section>

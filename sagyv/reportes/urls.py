@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, url
 
-urlpatterns = patterns("main.reportes.views",
+urlpatterns = patterns("reportes.views",
     url(r"^$", "index", name="index"),
     url(r"^consumo\-clientes/$", "consumo_clientes", name="consumo_clientes"),
     url(r"^compras\-gas/$", "compras_gas", name="compras_gas"),

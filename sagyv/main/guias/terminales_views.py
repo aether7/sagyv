@@ -6,11 +6,11 @@ from django.db import transaction
 from django.views.generic import View
 from django.core.serializers.json import DjangoJSONEncoder
 
-from main.models import Terminal
-from main.models import EstadoTerminal
-from main.models import HistorialCambioVehiculo
-from main.models import HistorialEstadoTerminal
-from main.models import Movil
+from bodega.models import Movil
+from liquidacion.models import HistorialCambioVehiculo
+from liquidacion.models import Terminal
+from liquidacion.models import EstadoTerminal
+from liquidacion.models import HistorialEstadoTerminal
 
 def _get_terminales():
     terminales = []

@@ -9,10 +9,10 @@ from django.views.generic import View, TemplateView, ListView
 from django.core.serializers.json import DjangoJSONEncoder
 from main.helpers.fecha import convierte_texto_fecha, convierte_fecha_texto
 
-from main.models import Vehiculo
 from main.models import Trabajador
-from main.models import TrabajadorVehiculo
-from main.models import Movil
+from bodega.models import Movil
+from bodega.models import Vehiculo
+from bodega.models import TrabajadorVehiculo
 
 @transaction.atomic
 def actualizar_estado_vehiculos(vehiculo, chofer):

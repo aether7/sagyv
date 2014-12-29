@@ -8,13 +8,13 @@ from django.db import transaction
 from django.http import HttpResponse
 from main.helpers.fecha import convierte_texto_fecha, convierte_fecha_texto
 
-from main.models import Producto
-from main.models import HistorialStock
-from main.models import PrecioProducto
-from main.models import StockVehiculo
-from main.models import Vehiculo
-from main.models import GuiaDespacho
-from main.models import Factura
+from bodega.models import Producto
+from bodega.models import HistorialStock
+from bodega.models import PrecioProducto
+from bodega.models import StockVehiculo
+from bodega.models import Vehiculo
+from bodega.models import GuiaDespacho
+from bodega.models import Factura
 
 
 class IndexView(TemplateView):

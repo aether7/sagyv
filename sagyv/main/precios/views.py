@@ -1,11 +1,13 @@
 import json
+
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponse
 from django.db import transaction
 from django.views.generic import View, TemplateView, ListView
 from main.helpers.auth import permiso_admin
-from main.models import Producto
-from main.models import PrecioProducto
+
+from bodega.models import Producto
+from bodega.models import PrecioProducto
 
 class IndexView(TemplateView):
     template_name = "precios/index.html"

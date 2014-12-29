@@ -3,9 +3,10 @@ import json
 from django.http import HttpResponse
 from django.template import RequestContext
 from django.views.generic import TemplateView, View
-from main.managers import ReportesManager
 from django.shortcuts import render
 from django.core.serializers.json import DjangoJSONEncoder
+
+from reportes.managers import ReportesManager
 
 class ConsumoClientes(View):
     def get(self, req):
