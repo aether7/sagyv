@@ -25,5 +25,5 @@ urlpatterns += patterns("main.guias.guias_views",
     url(r"^obtener\-guias/$", "obtener_guias", name="obtener_guias"),
     url(r"^crear\-guias/$", "crear_guias", name="crear_guias"),
     url(r"^editar\-guias/$", "editar_guias", name="editar_guias"),
-    url(r"eliminar\-guias/$", "eliminar_guias", name="eliminar_guias"),
+    url(r"^eliminar\-guias/$", "eliminar_guias", name="eliminar_guias"),
 )

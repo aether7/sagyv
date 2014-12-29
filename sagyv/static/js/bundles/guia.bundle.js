@@ -665,24 +665,23 @@ function guiaService($http){
 
     services = {
         findAll: function(callback){
-            callback([
-                { inicial: 1, ultima: 2, actual: 1, trabajador: {id:1,nombre:"Alberto"} }
-            ]);
+            var url = App.urls.get('guias:obtener_guias');
+            get(url, callback);
         },
 
         agregar: function(json, callback){
-            callback({ id: 3 });
-            console.warn('WIP');
+            var url = App.urls.get('guias:crear_guias');
+            post(url, json, callback);
         },
 
         editar: function(json, callback){
-            callback();
-            console.warn('WIP');
+            var url = App.urls.get('guias:editar_guia');
+            post(url, json, callback);
         },
 
         eliminar: function(id, callback){
-            callback();
-            console.warn('WIP');
+            var url = App.urls.get('guias:eliminar_guias');
+            post(url, { id : id }, callback);
         },
 
         detalleTalonario: function(id, callback){
