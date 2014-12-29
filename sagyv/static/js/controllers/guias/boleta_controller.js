@@ -79,6 +79,7 @@ BoletaController.mixin({
     },
 
     procesarAgregar: function(data){
+        this.boleta.id = data.id;
         this.boletas.push(this.boleta);
 
         common.agregarMensaje('El talonario ha sido creado exitosamente');

@@ -1,18 +1,25 @@
 <div class="tab-pane active" id="guias" ng-controller="GuiaController as guiaCtrl">
+    <button class="btn btn-primary">Nuevo</button>
+
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Número Guía</th>
+                <th>Guía inicial</th>
+                <th>Guía final</th>
+                <th>Guía actual</th>
+                <th>Trabajador</th>
                 <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
             <tr ng-repeat="guia in guiaCtrl.guias">
-                <td ng-bind="guia.numero"></td>
+                <td ng-bind="guia.inicial"></td>
+                <td ng-bind="guia.ultima"></td>
+                <td ng-bind="guia.actual"></td>
+                <td ng-bind="guia.trabajador.nombre"></td>
                 <td>
-                    <a href>eliminar</a>
-                    <a href>editar</a>
-                    <a href>ver detalle</a>
+                    <a href class="icon-search" title="ver detalle"></a>
+                    <a href>reasignar</a>
                 </td>
             </tr>
         </tbody>
