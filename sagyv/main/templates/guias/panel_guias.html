@@ -19,7 +19,7 @@
                 <td ng-bind="guia.trabajador.nombre"></td>
                 <td>
                     <a href class="icon-search" title="ver detalle" ng-click="detalleCtrl.ver(guia)"></a>
-                    <a href>reasignar</a>
+                    <a href ng-click="guiaCtrl._editar($index)">reasignar</a>
                 </td>
             </tr>
         </tbody>
@@ -27,4 +27,5 @@
 
     {% include "guias/components/modal_guia_agregar.html" %}
     {% include "guias/components/modal_guia_detalle.html" %}
+    {% include "guias/components/modal_guia_editar.html" %}
 </div>

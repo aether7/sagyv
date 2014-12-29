@@ -190,6 +190,7 @@ GuiaController.mixin({
 
         data.forEach(function(d){
             var guia = new Guia();
+            guia.id = d.id;
             guia.inicial = d.inicial;
             guia.ultima = d.ultima;
             guia.actual = d.actual;
@@ -207,8 +208,9 @@ GuiaController.mixin({
         $('#modal_guia_agregar').modal('show');
     },
 
-    _editar: function(){
-        console.warn('WIP');
+    _editar: function(index){
+        this.guia = this.guias[index];
+        $('#modal_guia_editar').modal('show');
     },
 
     agregar: function(){
@@ -223,6 +225,20 @@ GuiaController.mixin({
 
         var json = this.guia.toJSON();
         this.service.agregar(json, this.procesarAgregar.bind(this));
+    },
+
+    editar: function(){
+        if(!this.guia.esValido()){
+            return;
+        }else if(this.estaDuplicadoTrabajador(this.guia)){
+            this.guia.mensajes.trabajador = 'El trabajador ya tiene otro talonario de guías anexado';
+            return;
+        }
+
+        this.guia.trabajador.nombre = $('#guia_editar_trabajador option:selected').text();
+
+        var json = this.guia.toJSON();
+        this.service.editar(json, this.procesarEditar.bind(this));
     },
 
     estaDuplicadoTrabajador: function(){
@@ -240,6 +256,11 @@ GuiaController.mixin({
 
         common.agregarMensaje('La guía fue creada exitosamente');
         $('#modal_guia_agregar').modal('hide');
+    },
+
+    procesarEditar: function(data){
+        common.agregarMensaje('la guía fue reasignada exitosamente');
+        $('#modal_guia_editar').modal('hide');
     }
 });
 
@@ -532,6 +553,7 @@ Guia.prototype = {
 
     toJSON: function(){
         var json = {
+            id : this.id,
             inicial: this.inicial,
             ultima: this.ultima,
             actual: this.actual,
@@ -675,7 +697,7 @@ function guiaService($http){
         },
 
         editar: function(json, callback){
-            var url = App.urls.get('guias:editar_guia');
+            var url = App.urls.get('guias:editar_guias');
             post(url, json, callback);
         },
 
