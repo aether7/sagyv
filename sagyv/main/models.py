@@ -513,6 +513,14 @@ class BoletaTrabajador(models.Model):
 
     objects = BoletaTrabajadorManager()
 
+class GuiaTrabajador(models.Model):
+    guia_inicial = models.IntegerField(default = 1)
+    guia_final = models.IntegerField(default = 2)
+    actual = models.IntegerField(default = 1)
+    trabajador = models.ForeignKey(Trabajador)
+    fecha_creacion = models.DateTimeField(auto_now_add = True)
+    fecha_modificacion = models.DateTimeField(auto_now = True)
+    activo = models.NullBooleanField()
 
 class Liquidacion(models.Model):
     fecha = models.DateTimeField(auto_now_add = True)
