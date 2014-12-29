@@ -330,28 +330,6 @@ class TipoCambioStock(models.Model):
         return self.nombre
 
 
-class GuiaDespacho(models.Model):
-    numero = models.IntegerField(null = True)
-    vehiculo = models.ForeignKey(Vehiculo, null=True)
-    fecha = models.DateTimeField(auto_now_add=True)
-    valor_total = models.IntegerField(default=0)
-    estado = models.NullBooleanField()
-
-    objects = GuiaDespachoManager()
-
-    def __unicode__(self):
-        return str(self.numero)
-
-
-class AbonoGuia(models.Model):
-    guia_despacho = models.ForeignKey(GuiaDespacho)
-    monto = models.IntegerField()
-    fecha = models.DateField(auto_now_add=True)
-
-    def __unicode__(self):
-        return str(self.guia_despacho.numero)
-
-
 class Factura(models.Model):
     numero_factura = models.IntegerField()
     fecha = models.DateTimeField(auto_now_add=True)
@@ -359,20 +337,6 @@ class Factura(models.Model):
 
     def __unicode__(self):
         return str(self.numero_factura)
-
-
-class HistorialStock(models.Model):
-    guia_despacho = models.ForeignKey(GuiaDespacho, null=True)
-    factura = models.ForeignKey(Factura, null=True)
-    producto = models.ForeignKey(Producto)
-    cantidad = models.IntegerField()
-    fecha = models.DateField(auto_now_add = True)
-    es_recarga = models.NullBooleanField()
-
-    objects = HistorialStockManager()
-
-    def __unicode__(self):
-        return ""
 
 
 class TipoTarjeta(models.Model):
@@ -525,60 +489,6 @@ class GuiaTrabajador(models.Model):
 
     objects = GuiaTrabajadorManager()
 
-class Liquidacion(models.Model):
-    fecha = models.DateTimeField(auto_now_add = True)
-    guia_despacho = models.ForeignKey(GuiaDespacho)
-    terminada = models.BooleanField(default = False)
-
-
-class GuiaVenta(models.Model):
-    numero = models.IntegerField(null = True)
-    cliente = models.ForeignKey(Cliente)
-    propia = models.NullBooleanField()
-    liquidacion = models.ForeignKey(Liquidacion)
-
-
-class DetalleGuiaVenta(models.Model):
-    cantidad = models.IntegerField()
-    producto = models.ForeignKey(Producto)
-    guia_venta = models.ForeignKey(GuiaVenta)
-
-
-class Cheque(models.Model):
-    monto = models.IntegerField()
-    emisor = models.ForeignKey(Cliente, null = True)
-    fecha = models.DateField()
-    numero = models.IntegerField()
-    cobrado = models.BooleanField(default = False)
-    banco = models.ForeignKey(Banco)
-    liquidacion = models.ForeignKey(Liquidacion)
-
-    def __unicode__(self):
-        return str(self.numero) + ' ' + str(self.monto)
-
-
-class Otros(models.Model):
-    concepto = models.CharField(max_length = 255)
-    monto = models.IntegerField()
-    fecha = models.DateField(auto_now = True)
-    trabajador = models.ForeignKey(Trabajador)
-    liquidacion = models.ForeignKey(Liquidacion)
-
-    def __unicode__(self):
-        return str(self.fecha) + ' ' + str(self.trabajador.get_nombre_completo)
-
-
-class CuponPrepago(models.Model):
-    numero_cupon = models.IntegerField()
-    fecha = models.DateField(auto_now_add = True)
-    descuento = models.IntegerField()
-    formato = models.ForeignKey(Producto)
-    cliente = models.ForeignKey(Cliente)
-    liquidacion = models.ForeignKey(Liquidacion)
-
-    def __unicode__(self):
-        return self.numero_cupon
-
 
 class Movil(models.Model):
     numero = models.IntegerField(null = True)
@@ -587,7 +497,43 @@ class Movil(models.Model):
     fecha = models.DateTimeField(auto_now_add = True, auto_now = True)
 
     def __unicode__(self):
-        return str(self.numero)+" "+str(self.vehiculo.id)
+        return str(self.numero) + " " + str(self.vehiculo.id)
+
+
+class GuiaDespacho(models.Model):
+    numero = models.IntegerField(null = True)
+    movil = models.ForeignKey(Movil)
+    fecha = models.DateTimeField(auto_now_add=True)
+    valor_total = models.IntegerField(default=0)
+    estado = models.NullBooleanField()
+
+    objects = GuiaDespachoManager()
+
+    def __unicode__(self):
+        return str(self.numero)
+
+
+class AbonoGuia(models.Model):
+    guia_despacho = models.ForeignKey(GuiaDespacho)
+    monto = models.IntegerField()
+    fecha = models.DateField(auto_now_add=True)
+
+    def __unicode__(self):
+        return str(self.guia_despacho.numero)
+
+
+class HistorialStock(models.Model):
+    guia_despacho = models.ForeignKey(GuiaDespacho, null=True)
+    factura = models.ForeignKey(Factura, null=True)
+    producto = models.ForeignKey(Producto)
+    cantidad = models.IntegerField()
+    fecha = models.DateField(auto_now_add = True)
+    es_recarga = models.NullBooleanField()
+
+    objects = HistorialStockManager()
+
+    def __unicode__(self):
+        return ""
 
 
 class EstadoTerminal(models.Model):
@@ -651,6 +597,61 @@ class DetalleCierre(models.Model):
 
     def get_valor_total(self):
         return self.valor_venta - self.valor_anuladas
+
+
+class Liquidacion(models.Model):
+    fecha = models.DateTimeField(auto_now_add = True)
+    guia_despacho = models.ForeignKey(GuiaDespacho)
+    terminada = models.BooleanField(default = False)
+
+
+class GuiaVenta(models.Model):
+    numero = models.IntegerField(null = True)
+    cliente = models.ForeignKey(Cliente)
+    propia = models.NullBooleanField()
+    liquidacion = models.ForeignKey(Liquidacion)
+
+
+class DetalleGuiaVenta(models.Model):
+    cantidad = models.IntegerField()
+    producto = models.ForeignKey(Producto)
+    guia_venta = models.ForeignKey(GuiaVenta)
+
+
+class Cheque(models.Model):
+    monto = models.IntegerField()
+    emisor = models.ForeignKey(Cliente, null = True)
+    fecha = models.DateField()
+    numero = models.IntegerField()
+    cobrado = models.BooleanField(default = False)
+    banco = models.ForeignKey(Banco)
+    liquidacion = models.ForeignKey(Liquidacion)
+
+    def __unicode__(self):
+        return str(self.numero) + ' ' + str(self.monto)
+
+
+class Otros(models.Model):
+    concepto = models.CharField(max_length = 255)
+    monto = models.IntegerField()
+    fecha = models.DateField(auto_now = True)
+    trabajador = models.ForeignKey(Trabajador)
+    liquidacion = models.ForeignKey(Liquidacion)
+
+    def __unicode__(self):
+        return str(self.fecha) + ' ' + str(self.trabajador.get_nombre_completo)
+
+
+class CuponPrepago(models.Model):
+    numero_cupon = models.IntegerField()
+    fecha = models.DateField(auto_now_add = True)
+    descuento = models.IntegerField()
+    formato = models.ForeignKey(Producto)
+    cliente = models.ForeignKey(Cliente)
+    liquidacion = models.ForeignKey(Liquidacion)
+
+    def __unicode__(self):
+        return self.numero_cupon
 
 
 class Voucher(models.Model):

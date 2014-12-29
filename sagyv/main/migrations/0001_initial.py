@@ -164,6 +164,7 @@ class Migration(migrations.Migration):
                 ('numero_cupon', models.IntegerField()),
                 ('fecha', models.DateField(auto_now_add=True)),
                 ('descuento', models.IntegerField()),
+                ('cliente', models.ForeignKey(to='main.Cliente')),
             ],
             options={
             },
@@ -271,9 +272,25 @@ class Migration(migrations.Migration):
             bases=(models.Model,),
         ),
         migrations.CreateModel(
+            name='GuiaTrabajador',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('guia_inicial', models.IntegerField(default=1)),
+                ('guia_final', models.IntegerField(default=2)),
+                ('actual', models.IntegerField(default=1)),
+                ('fecha_creacion', models.DateTimeField(auto_now_add=True)),
+                ('fecha_modificacion', models.DateTimeField(auto_now=True)),
+                ('activo', models.NullBooleanField()),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
             name='GuiaVenta',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('numero', models.IntegerField(null=True)),
                 ('propia', models.NullBooleanField()),
                 ('cliente', models.ForeignKey(to='main.Cliente')),
             ],
@@ -374,6 +391,17 @@ class Migration(migrations.Migration):
                 ('fecha', models.DateField(auto_now_add=True)),
                 ('km', models.IntegerField()),
                 ('descripcion', models.CharField(max_length=500)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Movil',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('numero', models.IntegerField(null=True)),
+                ('fecha', models.DateTimeField(auto_now=True, auto_now_add=True)),
             ],
             options={
             },
@@ -492,6 +520,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('codigo', models.CharField(max_length=140)),
                 ('estado', models.ForeignKey(to='main.EstadoTerminal')),
+                ('movil', models.ForeignKey(to='main.Movil', null=True)),
             ],
             options={
             },
@@ -573,7 +602,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('fecha', models.DateTimeField(auto_now_add=True)),
                 ('activo', models.BooleanField(default=True)),
-                ('trabajador', models.ForeignKey(to='main.Trabajador')),
+                ('trabajador', models.ForeignKey(to='main.Trabajador', null=True)),
             ],
             options={
             },
@@ -597,7 +626,6 @@ class Migration(migrations.Migration):
             name='Vehiculo',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('numero', models.IntegerField()),
                 ('patente', models.CharField(max_length=140)),
                 ('fecha_revision_tecnica', models.DateField()),
                 ('km', models.IntegerField()),
@@ -615,7 +643,7 @@ class Migration(migrations.Migration):
                 ('tipo_cuotas', models.CharField(max_length=140, null=True)),
                 ('numero_tarjeta', models.IntegerField(null=True)),
                 ('numero_operacion', models.IntegerField(null=True)),
-                ('codigo_autorizacion', models.IntegerField()),
+                ('codigo_autorizacion', models.IntegerField(null=True)),
                 ('numero_cuotas', models.IntegerField(default=1)),
                 ('liquidacion', models.ForeignKey(to='main.Liquidacion')),
                 ('terminal', models.ForeignKey(to='main.Terminal')),
@@ -629,12 +657,6 @@ class Migration(migrations.Migration):
             model_name='trabajadorvehiculo',
             name='vehiculo',
             field=models.ForeignKey(to='main.Vehiculo'),
-            preserve_default=True,
-        ),
-        migrations.AddField(
-            model_name='terminal',
-            name='vehiculo',
-            field=models.ForeignKey(to='main.Vehiculo', null=True),
             preserve_default=True,
         ),
         migrations.AddField(
@@ -680,6 +702,18 @@ class Migration(migrations.Migration):
             preserve_default=True,
         ),
         migrations.AddField(
+            model_name='movil',
+            name='trabajador',
+            field=models.ForeignKey(to='main.Trabajador', null=True),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='movil',
+            name='vehiculo',
+            field=models.ForeignKey(to='main.Vehiculo', unique=True),
+            preserve_default=True,
+        ),
+        migrations.AddField(
             model_name='mantencion',
             name='vehiculo',
             field=models.ForeignKey(to='main.Vehiculo'),
@@ -699,14 +733,14 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='historialcambiovehiculo',
-            name='terminal',
-            field=models.ForeignKey(to='main.Terminal'),
+            name='movil',
+            field=models.ForeignKey(to='main.Movil', null=True),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='historialcambiovehiculo',
-            name='vehiculo',
-            field=models.ForeignKey(to='main.Vehiculo'),
+            name='terminal',
+            field=models.ForeignKey(to='main.Terminal'),
             preserve_default=True,
         ),
         migrations.AddField(
@@ -722,9 +756,15 @@ class Migration(migrations.Migration):
             preserve_default=True,
         ),
         migrations.AddField(
+            model_name='guiatrabajador',
+            name='trabajador',
+            field=models.ForeignKey(to='main.Trabajador'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
             model_name='guiadespacho',
-            name='vehiculo',
-            field=models.ForeignKey(to='main.Vehiculo', null=True),
+            name='movil',
+            field=models.ForeignKey(to='main.Movil'),
             preserve_default=True,
         ),
         migrations.AddField(
@@ -749,6 +789,12 @@ class Migration(migrations.Migration):
             model_name='descuentocliente',
             name='tipo_descuento',
             field=models.ForeignKey(to='main.TipoDescuento'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='cuponprepago',
+            name='formato',
+            field=models.ForeignKey(to='main.Producto'),
             preserve_default=True,
         ),
         migrations.AddField(

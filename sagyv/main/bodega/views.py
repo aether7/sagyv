@@ -145,8 +145,6 @@ class FiltrarGuias(View):
         if fecha == "null" or fecha is None:
             guia_results = GuiaDespacho.objects.order_by("-id")
         else:
-            print "FECHA"
-            print fecha
             guia_results = GuiaDespacho.objects.filter(fecha__startswith=fecha).order_by("-id")
 
         guias = []
