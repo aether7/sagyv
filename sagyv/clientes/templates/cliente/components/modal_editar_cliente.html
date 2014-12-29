@@ -9,7 +9,7 @@
                 <h4 class="modal-title">Editar Cliente</h4>
             </div>
             <div class="modal-body">
-                <form id="f_editar_cliente" action="{% url 'cliente:modificar' %}" method="post">
+                <form id="f_editar_cliente" action="{% url 'clientes:modificar' %}" method="post">
                     {% csrf_token %}
 
                     <div class="form-group">

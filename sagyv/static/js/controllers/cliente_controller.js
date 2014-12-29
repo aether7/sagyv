@@ -8,9 +8,9 @@ App.Controllers.Cliente.prototype = {
     constructor: App.Controllers.Cliente,
 
     verCliente: function(id){
-        var url = App.urls.get("cliente:obtener").replace("0", id),
-            urlSitComercial = App.urls.get("cliente:obtener_situacion_comercial"),
-            urlProducto = App.urls.get("cliente:buscar_producto");
+        var url = App.urls.get("clientes:obtener").replace("0", id),
+            urlSitComercial = App.urls.get("clientes:obtener_situacion_comercial"),
+            urlProducto = App.urls.get("clientes:buscar_producto");
 
         function callback(data, dataB, dataC){
             data.situacion_comercial = dataB;
@@ -52,7 +52,7 @@ App.Controllers.Cliente.prototype = {
     },
 
     cargarCliente: function(id){
-        var url = App.urls.get("cliente:obtener").replace("0", id),
+        var url = App.urls.get("clientes:obtener").replace("0", id),
             _this = this;
 
         _this.idCliente = id;
@@ -63,7 +63,7 @@ App.Controllers.Cliente.prototype = {
 
     eliminarCliente: function(id){
         var _this = this,
-            url = App.urls.get("cliente:eliminar");
+            url = App.urls.get("clientes:eliminar");
 
         $.post(url, { id_cliente : id }, function(data){
             pubsub.publish("cliente:removerCliente",[ data ]);
@@ -102,7 +102,7 @@ App.Controllers.Cliente.prototype = {
             return;
         }
 
-        url = App.urls.get("cliente:crear");
+        url = App.urls.get("clientes:crear");
         json = cliente.getJSON();
 
         $.post(url, json, function(data){
@@ -136,7 +136,7 @@ App.Controllers.Cliente.prototype = {
             return;
         }
 
-        url = App.urls.get("cliente:update");
+        url = App.urls.get("clientes:update");
         json = cliente.getJSON();
 
         $.post(url, json, function(data){

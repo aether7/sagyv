@@ -9,7 +9,7 @@
                 <h4 class="modal-title">Agregar nuevo cliente</h4>
             </div>
             <div class="modal-body">
-                <form id="f_agregar_cliente" action="{% url 'cliente:crear' %}" method="post">
+                <form id="f_agregar_cliente" action="{% url 'clientes:crear' %}" method="post">
                     {% csrf_token %}
 
                     <div class="form-group">
