@@ -138,13 +138,51 @@ module.exports = BoletaController;
 },{"../../models/guias/boleta_model.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/models/guias/boleta_model.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/guias/guia_controller.js":[function(require,module,exports){
 var Guia = require('../../models/guias/guia_model.js');
 
-function GuiaController(){
+function GuiaController(service){
+    this.service = service;
     this.guias = [];
+    this.guia = null;
+
+    this.init();
 }
 
 GuiaController.mixin({
     init: function(){
+        this.service.findAll(this.procesarGuias.bind(this));
+    },
 
+    procesarGuias: function(data){
+        var _this = this;
+
+        data.forEach(function(d){
+            var guia = new Guia();
+            guia.inicial = d.inicial;
+            guia.ultima = d.ultima;
+            guia.actual = d.actual;
+            guia.trabajador = d.trabajador;
+            _this.guias.push(guia);
+        });
+    },
+
+    mostrarPanel: function(nombre, index){
+        this['_' + nombre](index);
+    },
+
+    _nuevo: function(){
+        this.guia = new Guia();
+        $('#modal_guia_agregar').modal('show');
+    },
+
+    _editar: function(){
+        console.warn('WIP');
+    },
+
+    agregar: function(){
+        if(!this.guia.esValido()){
+            return;
+        }
+
+        console.warn('WIP');
     }
 });
 
@@ -570,7 +608,15 @@ function guiaService($http){
     post = serviceUtil.postMaker($http);
 
     services = {
+        findAll: function(callback){
+            callback([
+                { inicial: 1, ultima: 2, actual: 1, trabajador: {id:1,nombre:"Alberto"} }
+            ]);
+        },
 
+        agregar: function(json, callback){
+            callback();
+        }
     };
 
     return services;

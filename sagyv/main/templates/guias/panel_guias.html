@@ -1,5 +1,5 @@
 <div class="tab-pane active" id="guias" ng-controller="GuiaController as guiaCtrl">
-    <button class="btn btn-primary">Nuevo</button>
+    <button class="btn btn-primary" ng-click="guiaCtrl.mostrarPanel('nuevo')">Nuevo</button>
 
     <table class="table table-striped">
         <thead>
@@ -24,4 +24,6 @@
             </tr>
         </tbody>
     </table>
+
+    {% include "guias/components/modal_guia_agregar.html" %}
 </div>
