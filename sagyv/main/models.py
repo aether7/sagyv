@@ -13,6 +13,7 @@ from main.managers import VehiculoManager
 from main.managers import TrabajadorManager
 from main.managers import BoletaTrabajadorManager
 from main.managers import HistorialStockManager
+from main.managers import GuiaTrabajadorManager
 
 """
 Como nota adicional: Todos los ingresos que sean representados como booleanos
@@ -522,6 +523,8 @@ class GuiaTrabajador(models.Model):
     fecha_modificacion = models.DateTimeField(auto_now = True)
     activo = models.NullBooleanField()
 
+    objects = GuiaTrabajadorManager()
+
 class Liquidacion(models.Model):
     fecha = models.DateTimeField(auto_now_add = True)
     guia_despacho = models.ForeignKey(GuiaDespacho)
@@ -529,6 +532,7 @@ class Liquidacion(models.Model):
 
 
 class GuiaVenta(models.Model):
+    numero = models.IntegerField(null = True)
     cliente = models.ForeignKey(Cliente)
     propia = models.NullBooleanField()
     liquidacion = models.ForeignKey(Liquidacion)
