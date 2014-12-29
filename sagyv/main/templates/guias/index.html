@@ -19,92 +19,9 @@
 
 <!-- Tab panes -->
 <div class="tab-content" ng-app="guiaApp">
-    <div class="tab-pane active" id="guias">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Número Guía</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-        </table>
-    </div>
-
-    <div class="tab-pane" id="talonarios" ng-controller="BoletaController as boletaCtrl">
-        <button class="btn btn-primary" ng-click="boletaCtrl.mostrarPanel('nuevo')">Nuevo</button>
-
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Boleta inicial</th>
-                    <th>Boleta final</th>
-                    <th>Boleta actual</th>
-                    <th>Trabajador</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="boleta in boletaCtrl.boletas">
-                    <td ng-bind="boleta.inicial"></td>
-                    <td ng-bind="boleta.ultima"></td>
-                    <td ng-bind="boleta.actual"></td>
-                    <td ng-bind="boleta.trabajador.nombre"></td>
-                    <td>
-                        <a href title="editar" class="icon-pencil"
-                            ng-click="boletaCtrl.mostrarPanel('editar', $index)"></a>
-
-                        <a href title="eliminar" class="icon-remove"
-                            ng-click="boletaCtrl.eliminar($index)"></a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-
-        {% include "guias/components/modal_boleta_agregar.html" %}
-        {% include "guias/components/modal_boleta_editar.html" %}
-    </div>
-
-    <div class="tab-pane" id="terminales" ng-controller="TerminalController as terminalCtrl">
-        <button class="btn btn-primary" ng-click="terminalCtrl.mostrarPanel('agregar')">Nueva</button>
-
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Número Terminal</th>
-                    <th>Número Móvil</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="terminal in terminalCtrl.terminales">
-                    <td ng-bind="terminal.codigo"></td>
-                    <td ng-bind="terminal.movil.numero"></td>
-                    <td ng-bind="terminal.estado.nombre"></td>
-                    <td>
-                        <a href class="icon-pencil" ng-click="terminalCtrl.mostrarPanel('editar', $index)"
-                            title="editar"></a>
-
-                        <a href class="icon-remove" ng-click="terminalCtrl.remover($index)" title="eliminar"></a>
-
-                        <a href ng-show="terminal.estado.show_opt"
-                            ng-click="terminalCtrl.maintenance($index)" class="glyphicon glyphicon-wrench"
-                            title="mantencion"></a>
-
-                        <a href ng-hide="terminal.estado.show_opt"
-                            ng-click="terminalCtrl.returnMaintenance($index)">Reincorporación</a>
-
-                        <a href class="" ng-show="terminal.estado.show_opt"
-                            ng-click="terminalCtrl.mostrarPanel('asignar', $index)">asignar</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-
-        {% include "guias/components/modal_terminal_agregar.html" %}
-        {% include "guias/components/modal_terminal_editar.html" %}
-        {% include "guias/components/modal_terminal_asignar.html" %}
-    </div>
+    {% include "guias/panel_guias.html" %}
+    {% include "guias/panel_talonarios.html" %}
+    {% include "guias/panel_terminales.html" %}
 </div>
 
 {% endblock %}

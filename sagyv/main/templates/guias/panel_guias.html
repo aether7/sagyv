@@ -1,0 +1,20 @@
+<div class="tab-pane active" id="guias" ng-controller="GuiaController as guiaCtrl">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Número Guía</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="guia in guiaCtrl.guias">
+                <td ng-bind="guia.numero"></td>
+                <td>
+                    <a href>eliminar</a>
+                    <a href>editar</a>
+                    <a href>ver detalle</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

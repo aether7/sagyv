@@ -90,7 +90,7 @@ BoletaController.mixin({
 
         common.agregarMensaje('El talonario fue editado exitosamente');
         $('#modal_boleta_editar').modal('hide');
-    }
+    },
 
     eliminar: function(index){
         if(!confirm('¿Está seguro(a) de que desea realizar esta acción?')){

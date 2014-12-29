@@ -7,24 +7,27 @@ var app = angular.module('guiaApp', [], App.httpProvider),
     terminalService = require('../services/terminal_service.js'),
     boletaService = require('../services/boleta_service.js'),
     TerminalController = require('../controllers/guias/terminal_controller.js'),
-    BoletaController = require('../controllers/guias/boleta_controller.js');
+    BoletaController = require('../controllers/guias/boleta_controller.js'),
+    GuiaController = require('../controllers/guias/guia_controller.js');
 
 app.factory('guiaService', ['$http', guiaService]);
 app.factory('terminalService', ['$http', terminalService]);
 app.factory('boletaService', ['$http', boletaService]);
 
+app.controller('GuiaController', ['guiaService', GuiaController]);
 app.controller('TerminalController', ['terminalService', TerminalController]);
 app.controller('BoletaController', ['boletaService', BoletaController]);
 
 })();
 
-},{"../controllers/guias/boleta_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guias/boleta_controller.js","../controllers/guias/terminal_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guias/terminal_controller.js","../services/boleta_service.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/boleta_service.js","../services/guia_service.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/guia_service.js","../services/terminal_service.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/terminal_service.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guias/boleta_controller.js":[function(require,module,exports){
+},{"../controllers/guias/boleta_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guias/boleta_controller.js","../controllers/guias/guia_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guias/guia_controller.js","../controllers/guias/terminal_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guias/terminal_controller.js","../services/boleta_service.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/boleta_service.js","../services/guia_service.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/guia_service.js","../services/terminal_service.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/terminal_service.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guias/boleta_controller.js":[function(require,module,exports){
 var Boleta = require('../../models/guias/boleta_model.js');
 
 function BoletaController(service){
     this.service = service;
     this.boletas = [];
     this.boleta = null;
+    this.index = null;
 
     this.init();
 }
@@ -57,6 +60,7 @@ BoletaController.mixin({
     },
 
     _editar: function(index){
+        this.index = index;
         this.boleta = this.boletas[index];
         $('#modal_boleta_editar').modal('show');
     },
@@ -104,19 +108,43 @@ BoletaController.mixin({
         $('#modal_boleta_agregar').modal('hide');
     },
 
+    procesarEditar: function(){
+        this.boletas[this.index] = this.boleta;
+
+        common.agregarMensaje('El talonario fue editado exitosamente');
+        $('#modal_boleta_editar').modal('hide');
+    },
+
     eliminar: function(index){
         if(!confirm('¿Está seguro(a) de que desea realizar esta acción?')){
             return;
         }
 
-        this.boletas.splice(index, 1);
-        common.agregarMensaje('El talonario fue eliminado exitosamente');
+        var boleta = this.boletas[index], _this = this;
+
+        this.service.eliminar(boleta.id, function(data){
+            _this.boletas.splice(index, 1);
+            common.agregarMensaje('El talonario fue eliminado exitosamente');
+        });
     }
 });
 
 module.exports = BoletaController;
 
-},{"../../models/guias/boleta_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/guias/boleta_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guias/terminal_controller.js":[function(require,module,exports){
+},{"../../models/guias/boleta_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/guias/boleta_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guias/guia_controller.js":[function(require,module,exports){
+function GuiaController(){
+    this.guias = [];
+}
+
+GuiaController.mixin({
+    init: function(){
+
+    }
+});
+
+module.exports = GuiaController;
+
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guias/terminal_controller.js":[function(require,module,exports){
 var Terminal = require('../../models/guias/terminal_model.js');
 
 function TerminalController(service){
@@ -426,11 +454,12 @@ function boletaService($http){
 
         editar: function(json, callback){
             var url = App.urls.get('guias:editar_talonario');
-            console.warn('por implementar');
+            post(url, json, callback);
         },
 
         eliminar: function(id, callback){
-            console.warm('por implementar');
+            var url = App.urls.get('guias:eliminar_talonario');
+            post(url, { id : id }, callback);
         }
     };
 
