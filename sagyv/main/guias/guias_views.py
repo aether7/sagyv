@@ -31,10 +31,10 @@ def get_guias(guias):
 
 def _get_guias():
     guias = []
-    rs = GuiaTrabajador.objects.order_by("-fecha_creacion").exclude(activo = True)
+    rs = GuiaTrabajador.objects.order_by("-fecha_creacion").exclude(activo = False)
 
-    for guias in rs:
-        data = get_talonario(guias)
+    for guia in rs:
+        data = get_guias(guia)
         guias.append(data)
 
     return guias
@@ -72,14 +72,14 @@ class CrearGuias(View):
         data = json.dumps(data, cls=DjangoJSONEncoder)
         return HttpResponse(data, content_type='application/json')
 
-    def crear_guias(inicial, final, trabajador):
+    def crear_guias(self, inicial, final, trabajador):
         nueva_guia = GuiaTrabajador()
-        nueva_boleta.guia_inicial = inicial
-        nueva_boleta.guia_final = final
-        nueva_boleta.actual = inicial
-        nueva_boleta.trabajador = trabajador
-        nueva_boleta.activo = True
-        nueva_boleta.save()
+        nueva_guia.guia_inicial = inicial
+        nueva_guia.guia_final = final
+        nueva_guia.actual = inicial
+        nueva_guia.trabajador = trabajador
+        nueva_guia.activo = True
+        nueva_guia.save()
 
 
 class EditarGuias(View):
