@@ -9,8 +9,8 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="boleta_agregar_trabajador" class="control-label">Trabajador</label>
-                    <select id="boleta_agregar_trabajador" class="form-control"
+                    <label for="boleta_editar_trabajador" class="control-label">Trabajador</label>
+                    <select id="boleta_editar_trabajador" class="form-control"
                         ng-model="boletaCtrl.boleta.trabajador.id">
                         {% for trabajador in trabajadores %}
                         <option value="{{ trabajador.id }}">{{ trabajador.get_nombre_completo }}</option>

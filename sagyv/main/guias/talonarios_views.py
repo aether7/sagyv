@@ -81,7 +81,8 @@ class EditarTalonario(View):
     @transaction.atomic
     def post(self, req):
         talonario_id = int(req.POST.get('id'))
-        trabajador_id = int(req.POST.get('idTrabajador'))
+        worker_obj = json.loads(req.POST.get('trabajador'))
+        trabajador_id = int(worker_obj.get('id'))
 
         talonario = BoletaTrabajador.objects.get( pk = talonario_id )
         trabajador = Trabajador.objects.get( pk = trabajador_id )

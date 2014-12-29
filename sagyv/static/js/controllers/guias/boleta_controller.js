@@ -19,6 +19,7 @@ BoletaController.mixin({
 
         data.forEach(function(b){
             var boleta = new Boleta();
+            boleta.id = b.id;
             boleta.inicial = b.inicial;
             boleta.ultima = b.ultima;
             boleta.actual = b.actual;
@@ -63,6 +64,7 @@ BoletaController.mixin({
             this.boleta.mensajes.trabajador = 'El trabajador ya tiene otro talonario anexado';
             return;
         }
+
 
         this.boleta.trabajador.nombre = $('#boleta_editar_trabajador option:selected').text();
         var json = this.boleta.toJSON();

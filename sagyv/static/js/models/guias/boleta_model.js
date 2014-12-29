@@ -66,6 +66,7 @@ Boleta.prototype = {
 
     toJSON: function(){
         var json = {
+            id: this.id,
             inicial: this.inicial,
             ultima: this.ultima,
             actual: this.actual,
