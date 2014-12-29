@@ -42,9 +42,32 @@ GuiaController.mixin({
     agregar: function(){
         if(!this.guia.esValido()){
             return;
+        }else if(this.estaDuplicadoTrabajador(this.guia)){
+            this.guia.mensajes.trabajador = 'El trabajador ya tiene otro talonario de guías anexado';
+            return;
         }
 
-        console.warn('WIP');
+        this.guia.trabajador.nombre = $('#guia_agregar_trabajador option:selected').text();
+
+        var json = this.guia.toJSON();
+        this.service.agregar(json, this.procesarAgregar.bind(this));
+    },
+
+    estaDuplicadoTrabajador: function(){
+        var trabajadorSeleccionado = $('#guia_agregar_trabajador option:selected').text(),
+            trabajadoresAsignados = this.guias.filter(function(guia){
+                return guia.trabajador.nombre === trabajadorSeleccionado;
+            });
+
+        return trabajadoresAsignados.length;
+    },
+
+    procesarAgregar: function(data){
+        this.guia.id = data.id;
+        this.guias.push(this.guia);
+
+        common.agregarMensaje('La guía fue creada exitosamente');
+        $('#modal_guia_agregar').modal('hide');
     }
 });
 

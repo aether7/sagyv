@@ -1,7 +1,7 @@
 <div class="tab-pane active" id="guias" ng-controller="GuiaController as guiaCtrl">
     <button class="btn btn-primary" ng-click="guiaCtrl.mostrarPanel('nuevo')">Nuevo</button>
 
-    <table class="table table-striped">
+    <table class="table table-striped" ng-controller="DetalleGuiaController as detalleCtrl">
         <thead>
             <tr>
                 <th>Guía inicial</th>
@@ -18,7 +18,7 @@
                 <td ng-bind="guia.actual"></td>
                 <td ng-bind="guia.trabajador.nombre"></td>
                 <td>
-                    <a href class="icon-search" title="ver detalle"></a>
+                    <a href class="icon-search" title="ver detalle" ng-click="detalleCtrl.ver(guia)"></a>
                     <a href>reasignar</a>
                 </td>
             </tr>
@@ -26,4 +26,5 @@
     </table>
 
     {% include "guias/components/modal_guia_agregar.html" %}
+    {% include "guias/components/modal_guia_detalle.html" %}
 </div>

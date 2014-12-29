@@ -14,7 +14,23 @@ function guiaService($http){
         },
 
         agregar: function(json, callback){
+            callback({ id: 3 });
+            console.warn('WIP');
+        },
+
+        editar: function(json, callback){
             callback();
+            console.warn('WIP');
+        },
+
+        eliminar: function(id, callback){
+            callback();
+            console.warn('WIP');
+        },
+
+        detalleTalonario: function(id, callback){
+            callback();
+            console.warn('WIP');
         }
     };
 

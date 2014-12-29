@@ -25,7 +25,6 @@ function boletaService($http){
         eliminar: function(id, callback){
             var url = App.urls.get('guias:eliminar_talonario');
             post(url, { id : id }, callback);
-            console.warm('por implementar');
         }
     };
 

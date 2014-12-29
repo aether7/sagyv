@@ -7,13 +7,15 @@ var app = angular.module('guiaApp', [], App.httpProvider),
     boletaService = require('../services/boleta_service.js'),
     TerminalController = require('../controllers/guias/terminal_controller.js'),
     BoletaController = require('../controllers/guias/boleta_controller.js'),
-    GuiaController = require('../controllers/guias/guia_controller.js');
+    GuiaController = require('../controllers/guias/guia_controller.js'),
+    DetalleGuiaController = require('../controllers/guias/detalle_guia_controller.js');
 
 app.factory('guiaService', ['$http', guiaService]);
 app.factory('terminalService', ['$http', terminalService]);
 app.factory('boletaService', ['$http', boletaService]);
 
 app.controller('GuiaController', ['guiaService', GuiaController]);
+app.controller('DetalleGuiaController', ['guiaService', DetalleGuiaController]);
 app.controller('TerminalController', ['terminalService', TerminalController]);
 app.controller('BoletaController', ['boletaService', BoletaController]);
 
