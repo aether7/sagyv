@@ -1,4 +1,4 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/Aether/Proyectos/sagyv/sagyv/static/js/bundles/guia_bundle.js":[function(require,module,exports){
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/home/worker8/proyectos/sagyv/sagyv/static/js/bundles/guia_bundle.js":[function(require,module,exports){
 (function(){
 'use strict';
 
@@ -22,7 +22,7 @@ app.controller('BoletaController', ['boletaService', BoletaController]);
 
 })();
 
-},{"../controllers/guias/boleta_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guias/boleta_controller.js","../controllers/guias/detalle_guia_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guias/detalle_guia_controller.js","../controllers/guias/guia_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guias/guia_controller.js","../controllers/guias/terminal_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guias/terminal_controller.js","../services/boleta_service.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/boleta_service.js","../services/guia_service.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/guia_service.js","../services/terminal_service.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/terminal_service.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guias/boleta_controller.js":[function(require,module,exports){
+},{"../controllers/guias/boleta_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/guias/boleta_controller.js","../controllers/guias/detalle_guia_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/guias/detalle_guia_controller.js","../controllers/guias/guia_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/guias/guia_controller.js","../controllers/guias/terminal_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/guias/terminal_controller.js","../services/boleta_service.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/services/boleta_service.js","../services/guia_service.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/services/guia_service.js","../services/terminal_service.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/services/terminal_service.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/guias/boleta_controller.js":[function(require,module,exports){
 var Boleta = require('../../models/guias/boleta_model.js');
 
 function BoletaController(service){
@@ -150,7 +150,7 @@ BoletaController.mixin({
 
 module.exports = BoletaController;
 
-},{"../../models/guias/boleta_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/guias/boleta_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guias/detalle_guia_controller.js":[function(require,module,exports){
+},{"../../models/guias/boleta_model.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/models/guias/boleta_model.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/guias/detalle_guia_controller.js":[function(require,module,exports){
 function DetalleGuiaController(service){
     this.service = service;
     this.guia = null;
@@ -169,7 +169,7 @@ DetalleGuiaController.mixin({
 
 module.exports = DetalleGuiaController;
 
-},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guias/guia_controller.js":[function(require,module,exports){
+},{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/guias/guia_controller.js":[function(require,module,exports){
 var Guia = require('../../models/guias/guia_model.js');
 
 function GuiaController(service){
@@ -190,6 +190,7 @@ GuiaController.mixin({
 
         data.forEach(function(d){
             var guia = new Guia();
+            guia.id = d.id;
             guia.inicial = d.inicial;
             guia.ultima = d.ultima;
             guia.actual = d.actual;
@@ -207,8 +208,9 @@ GuiaController.mixin({
         $('#modal_guia_agregar').modal('show');
     },
 
-    _editar: function(){
-        console.warn('WIP');
+    _editar: function(index){
+        this.guia = this.guias[index];
+        $('#modal_guia_editar').modal('show');
     },
 
     agregar: function(){
@@ -223,6 +225,20 @@ GuiaController.mixin({
 
         var json = this.guia.toJSON();
         this.service.agregar(json, this.procesarAgregar.bind(this));
+    },
+
+    editar: function(){
+        if(!this.guia.esValido()){
+            return;
+        }else if(this.estaDuplicadoTrabajador(this.guia)){
+            this.guia.mensajes.trabajador = 'El trabajador ya tiene otro talonario de guías anexado';
+            return;
+        }
+
+        this.guia.trabajador.nombre = $('#guia_editar_trabajador option:selected').text();
+
+        var json = this.guia.toJSON();
+        this.service.editar(json, this.procesarEditar.bind(this));
     },
 
     estaDuplicadoTrabajador: function(){
@@ -240,12 +256,17 @@ GuiaController.mixin({
 
         common.agregarMensaje('La guía fue creada exitosamente');
         $('#modal_guia_agregar').modal('hide');
+    },
+
+    procesarEditar: function(data){
+        common.agregarMensaje('la guía fue reasignada exitosamente');
+        $('#modal_guia_editar').modal('hide');
     }
 });
 
 module.exports = GuiaController;
 
-},{"../../models/guias/guia_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/guias/guia_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/guias/terminal_controller.js":[function(require,module,exports){
+},{"../../models/guias/guia_model.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/models/guias/guia_model.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/guias/terminal_controller.js":[function(require,module,exports){
 var Terminal = require('../../models/guias/terminal_model.js');
 
 function TerminalController(service){
@@ -378,7 +399,7 @@ TerminalController.mixin({
 
 module.exports = TerminalController;
 
-},{"../../models/guias/terminal_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/guias/terminal_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/guias/boleta_model.js":[function(require,module,exports){
+},{"../../models/guias/terminal_model.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/models/guias/terminal_model.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/models/guias/boleta_model.js":[function(require,module,exports){
 function Boleta(){
     this.id = null;
     this.inicial = 0;
@@ -464,7 +485,7 @@ Boleta.prototype = {
 
 module.exports = Boleta;
 
-},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/guias/guia_model.js":[function(require,module,exports){
+},{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/models/guias/guia_model.js":[function(require,module,exports){
 function Guia(){
     this.id = null;
     this.inicial = 0;
@@ -532,6 +553,7 @@ Guia.prototype = {
 
     toJSON: function(){
         var json = {
+            id : this.id,
             inicial: this.inicial,
             ultima: this.ultima,
             actual: this.actual,
@@ -548,7 +570,7 @@ Guia.prototype = {
 
 module.exports = Guia;
 
-},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/guias/terminal_model.js":[function(require,module,exports){
+},{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/models/guias/terminal_model.js":[function(require,module,exports){
 function Terminal(){
     this.id = null;
     this.codigo = null;
@@ -618,7 +640,7 @@ Terminal.mixin({
 
 module.exports = Terminal;
 
-},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/boleta_service.js":[function(require,module,exports){
+},{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/services/boleta_service.js":[function(require,module,exports){
 var serviceUtil = require('./service_util.js');
 
 function boletaService($http){
@@ -654,7 +676,7 @@ function boletaService($http){
 
 module.exports = boletaService;
 
-},{"./service_util.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/service_util.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/guia_service.js":[function(require,module,exports){
+},{"./service_util.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/services/service_util.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/services/guia_service.js":[function(require,module,exports){
 var serviceUtil = require('./service_util.js');
 
 function guiaService($http){
@@ -675,7 +697,7 @@ function guiaService($http){
         },
 
         editar: function(json, callback){
-            var url = App.urls.get('guias:editar_guia');
+            var url = App.urls.get('guias:editar_guias');
             post(url, json, callback);
         },
 
@@ -695,7 +717,7 @@ function guiaService($http){
 
 module.exports = guiaService;
 
-},{"./service_util.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/service_util.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/service_util.js":[function(require,module,exports){
+},{"./service_util.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/services/service_util.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/services/service_util.js":[function(require,module,exports){
 function noop(){}
 
 function standardError(data){
@@ -757,7 +779,7 @@ exports.postMaker = function($http){
     };
 };
 
-},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/terminal_service.js":[function(require,module,exports){
+},{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/services/terminal_service.js":[function(require,module,exports){
 var serviceUtil = require('./service_util.js');
 
 function terminalService($http){
@@ -809,4 +831,4 @@ function terminalService($http){
 
 module.exports = terminalService;
 
-},{"./service_util.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/service_util.js"}]},{},["/Users/Aether/Proyectos/sagyv/sagyv/static/js/bundles/guia_bundle.js"]);
+},{"./service_util.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/services/service_util.js"}]},{},["/home/worker8/proyectos/sagyv/sagyv/static/js/bundles/guia_bundle.js"]);

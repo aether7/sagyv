@@ -87,6 +87,7 @@ class EditarGuias(View):
 
     @transaction.atomic
     def post(self, req):
+        print req.POST
         guias_id = int(req.POST.get('id'))
         worker_obj = json.loads(req.POST.get('trabajador'))
         trabajador_id = int(worker_obj.get('id'))
@@ -160,8 +161,8 @@ class NN(View):
                 'id' : gv.id,
                 'numero' : gv.numero,
                 'cliente' :{
-                    'id' :gv.cliente.id,
-                    'nombre' gv.cliente.nombre
+                    'id' : gv.cliente.id,
+                    'nombre' : gv.cliente.nombre
                 },
                 'fecha': gv.liquidacion.fecha,
                 'precio_total' : 'NONE~~',

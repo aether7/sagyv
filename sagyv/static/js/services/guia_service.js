@@ -18,7 +18,7 @@ function guiaService($http){
         },
 
         editar: function(json, callback){
-            var url = App.urls.get('guias:editar_guia');
+            var url = App.urls.get('guias:editar_guias');
             post(url, json, callback);
         },
 
