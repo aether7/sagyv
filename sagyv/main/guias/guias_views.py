@@ -9,6 +9,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 from main.models import GuiaTrabajador
 from main.models import Trabajador
 from main.models import GuiaVenta
+from main.models import DetalleGuiaVenta
 
 """
 Tengo duda si definirlo como Guia o Guias.
@@ -119,12 +120,73 @@ class EliminarGuias(View):
 class NN(View):
 
     def get(self, req):
+        """
+        Respuesta del metodo:
+        data = [
+        {
+            id : ,
+            numero : ,
+            cliente :{
+                id :
+                nombre:
+            },
+            fecha : ,
+            precio_total: ,
+            productos : [
+                {
+                    id :
+                    precio :
+                    codigo :
+                    cantidad :
+                },
+                {},...
+            ]
+        }
+        ,{},...
+        ]
+        """
         guias_id = int(req.GET.get('id'))
 
         guias_venta = GuiaVenta.objects.obtener_guias_rango(guias_id)
 
-    def procesar(guias_venta):
-        pass
+        data = self.procesar_guia(guias_venta)
+        data = json.dumps(data, cls=DjangoJSONEncoder)
+        return HttpResponse(data, content_type='application/json')
+
+    def procesar_guia(guias_venta):
+        guias = []
+        for gv in guias_venta:
+            guia = {
+                'id' : gv.id,
+                'numero' : gv.numero,
+                'cliente' :{
+                    'id' :gv.cliente.id,
+                    'nombre' gv.cliente.nombre
+                },
+                'fecha': gv.liquidacion.fecha,
+                'precio_total' : 'NONE~~',
+                'productos' : self.procesar_productos(gv)
+            }
+
+            guias.append(guia)
+
+        return guias
+
+    def procesar_productos(guia):
+        lista = []
+        detalle = DetalleGuiaVenta.objects.filter( guia_venta = guia )
+
+        for some in detalle:
+            item = {
+                'id': some.producto.id,
+                'codigo': some.producto.codigo,
+                'cantidad': some.cantidad,
+                'precio': some.producto.get_precio_producto()
+            }
+
+            lista.append(item)
+
+        return lista
 
 
 obtener_guias = ObtenerGuias.as_view()
