@@ -384,10 +384,9 @@ class GuiaTrabajadorManager(models.Manager):
     def obtener_guias_rango(self, id):
         query = """
             SELECT
-                dgv.*
+                gv.*
             FROM main_guiatrabajador gt
             INNER JOIN main_guiaventa gv ON(gv.numero BETWEEN gt.guia_inicial AND gt.guia_final)
-            INNER JOIN main_detalleguiaventa dgv ON(dgv.guia_venta_id = gv.id)
             WHERE gt.id = #{guia_id}
         """
 

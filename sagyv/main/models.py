@@ -523,7 +523,6 @@ class GuiaTrabajador(models.Model):
     fecha_modificacion = models.DateTimeField(auto_now = True)
     activo = models.NullBooleanField()
 
-    objects = GuiaTrabajadorManager()
 
 class Liquidacion(models.Model):
     fecha = models.DateTimeField(auto_now_add = True)
@@ -536,6 +535,8 @@ class GuiaVenta(models.Model):
     cliente = models.ForeignKey(Cliente)
     propia = models.NullBooleanField()
     liquidacion = models.ForeignKey(Liquidacion)
+
+    objects = GuiaTrabajadorManager()
 
 
 class DetalleGuiaVenta(models.Model):

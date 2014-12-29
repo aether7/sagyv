@@ -8,6 +8,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 
 from main.models import GuiaTrabajador
 from main.models import Trabajador
+from main.models import GuiaVenta
 
 """
 Tengo duda si definirlo como Guia o Guias.
@@ -113,6 +114,17 @@ class EliminarGuias(View):
         data = {'guias' : _get_guias()}
         data = json.dumps(data, cls=DjangoJSONEncoder)
         return HttpResponse(data, content_type='application/json')
+
+
+class NN(View):
+
+    def get(self, req):
+        guias_id = int(req.GET.get('id'))
+
+        guias_venta = GuiaVenta.objects.obtener_guias_rango(guias_id)
+
+    def procesar(guias_venta):
+        pass
 
 
 obtener_guias = ObtenerGuias.as_view()
