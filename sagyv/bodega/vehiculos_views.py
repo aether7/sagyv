@@ -53,16 +53,16 @@ def llenar_vehiculo_json(vehiculo):
 
     return data
 
-def anexar_movil(trabajador, vehiculo, numero):
-    if Movil.objects.filter(trabajador = trabajador).exists():
-        movil = Movil.objects.get(trabajador = trabajador)
-    else:
-        movil = Movil()
+# def anexar_movil(trabajador, vehiculo, numero):
+#     if Movil.objects.filter(trabajador = trabajador).exists():
+#         movil = Movil.objects.get(trabajador = trabajador)
+#     else:
+#         movil = Movil()
 
-    movil.vehiculo = vehiculo
-    movil.trabajador = trabajador
-    movil.numero = int(numero)
-    movil.save()
+#     movil.vehiculo = vehiculo
+#     movil.trabajador = trabajador
+#     movil.numero = int(numero)
+#     movil.save()
 
 
 class VehiculoList(ListView):
