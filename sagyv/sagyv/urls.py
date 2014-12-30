@@ -10,6 +10,7 @@ urlpatterns = patterns('',
     url(r'^trabajador/', include('trabajador.urls', namespace = 'trabajador')),
     url(r'^clientes/', include('clientes.urls', namespace = 'clientes')),
     url(r'^vehiculos/', include('bodega.vehiculos_urls', namespace = 'vehiculos')),
+    url(r'^bodega/', include('bodega.bodega_urls', namespace = 'bodega')),
     url(r'^reportes/', include('reportes.urls', namespace = 'reportes')),
 )
 

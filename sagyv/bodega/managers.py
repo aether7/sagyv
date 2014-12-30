@@ -55,9 +55,9 @@ class StockManager(models.Manager):
                     msv.producto_id as producto_id,
                     mtp.nombre as nombre,
                     SUM(msv.cantidad) as cantidad
-            FROM main_stockvehiculo msv
-            INNER JOIN main_producto mp ON(msv.producto_id = mp.id)
-            INNER JOIN main_tipoproducto mtp ON(mp.tipo_producto_id = mtp.id)
+            FROM bodega_stockvehiculo msv
+            INNER JOIN bodega_producto mp ON(msv.producto_id = mp.id)
+            INNER JOIN bodega_tipoproducto mtp ON(mp.tipo_producto_id = mtp.id)
             GROUP BY mp.codigo, mp.peso, msv.producto_id, mtp.nombre
         """
         query = connection.cursor()
@@ -82,10 +82,10 @@ class StockManager(models.Manager):
                     mp.peso,
                     mtp.nombre,
                     mp.stock as stock,
-                    (SELECT SUM(cantidad) FROM main_stockvehiculo WHERE producto_id = mp.id) as cantidad,
+                    (SELECT SUM(cantidad) FROM bodega_stockvehiculo WHERE producto_id = mp.id) as cantidad,
                     mp.id
-            FROM main_producto mp
-            INNER JOIN main_tipoproducto mtp ON(mp.tipo_producto_id = mtp.id)
+            FROM bodega_producto mp
+            INNER JOIN bodega_tipoproducto mtp ON(mp.tipo_producto_id = mtp.id)
             GROUP BY
                 mp.codigo,
                 mp.peso,
