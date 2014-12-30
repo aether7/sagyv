@@ -1,0 +1,75 @@
+[
+    {
+        "model": "bodega.tipoproducto",
+        "pk": 1,
+        "fields":{
+            "nombre": "llenos normales"
+        }
+    },
+    {
+        "model": "bodega.tipoproducto",
+        "pk": 2,
+        "fields":{
+            "nombre": "llenos cataliticos"
+        }
+    },
+    {
+        "model": "bodega.tipoproducto",
+        "pk": 3,
+        "fields":{
+            "nombre": "garantias"
+        }
+    },
+    {
+        "model": "bodega.producto",
+        "pk": 1,
+        "fields": {
+            "codigo": 1105,
+            "nombre": "balon 1105",
+            "peso": 5,
+            "stock": 0,
+            "nivel_critico": null,
+            "orden": 1,
+            "tipo_producto": 1
+        }
+    },
+    {
+        "model": "bodega.producto",
+        "pk": 2,
+        "fields": {
+            "codigo": 1115,
+            "nombre": "balon 1115",
+            "peso": 15,
+            "stock": 0,
+            "nivel_critico": null,
+            "orden": 2,
+            "tipo_producto": 1
+        }
+    },
+    {
+        "model": "bodega.producto",
+        "pk": 3,
+        "fields": {
+            "codigo": 3105,
+            "nombre": "balon 3105",
+            "peso": 5,
+            "stock": 0,
+            "nivel_critico": null,
+            "orden": 3,
+            "tipo_producto": 3
+        }
+    },
+    {
+        "model": "bodega.producto",
+        "pk": 4,
+        "fields": {
+            "codigo": 3115,
+            "nombre": "balon 3115",
+            "peso": 15,
+            "stock": 0,
+            "nivel_critico": null,
+            "orden": 4,
+            "tipo_producto": 3
+        }
+    }
+]

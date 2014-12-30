@@ -8,6 +8,19 @@ class Stock(object):
         self.cantidad = 0
 
 
+class ProductoManager(models.Manager):
+    GARANTIAS = 3
+
+    def get_productos_filtrados(self):
+        queryset = self.exclude(tipo_producto_id = ProductoManager.GARANTIAS)
+        productos = queryset.exclude(codigo = 1515).order_by('orden')
+        return productos
+
+    def get_garantias(self):
+        garantias = self.filter(tipo_producto_id = ProductoManager.GARANTIAS).order_by('id')
+        return garantias
+
+
 class HistorialStockManager(models.Manager):
     def get_productos_guia_recarga(self, guia):
         query = self.filter(guia_despacho = guia).values('producto_id','es_recarga','producto__codigo')

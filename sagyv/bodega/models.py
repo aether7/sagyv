@@ -6,6 +6,7 @@ from bodega.managers import GuiaDespachoManager
 from bodega.managers import HistorialStockManager
 from bodega.managers import VehiculoManager
 from bodega.managers import StockManager
+from bodega.managers import ProductoManager
 
 # Create your models here.
 
@@ -25,6 +26,8 @@ class Producto(models.Model):
     stock = models.IntegerField(default = 0)
     nivel_critico = models.IntegerField(null = True)
     orden =  models.IntegerField(default = 0)
+
+    objects = ProductoManager()
 
     def __unicode__(self):
         return str(self.codigo) + " " + self.nombre
