@@ -1,4 +1,4 @@
-import datetime
+import json, datetime
 
 from django.test import TestCase
 from django.core.urlresolvers import reverse
@@ -23,9 +23,9 @@ class TrabajadorTestCase(TestCase):
         trabajador.nombre = "Alberto"
         trabajador.apellido = "Jerez"
         trabajador.domicilio = "Mercedez 414"
-        trabajador.fecha_nacimiento = datetime.date(1990, 7, 13)
-        trabajador.inicio_contrato = datetime.date(2013, 10, 11)
-        trabajador.vigencia_licencia = datetime.date(2014,1, 10)
+        trabajador.nacimiento = datetime.date(1990, 7, 13)
+        trabajador.fecha_inicio_contrato = datetime.date(2013, 10, 11)
+        trabajador.vigencia_licencia = datetime.date(2014, 1, 10)
         trabajador.afp = afp
         trabajador.sistema_salud = salud
         trabajador.estado_civil = civil
@@ -95,3 +95,37 @@ class TrabajadorTestCase(TestCase):
 
         trabajador = Trabajador.objects.get(pk = 1)
         self.assertEqual(trabajador.domicilio, "una calle cualquiera123")
+
+    def test_eliminar_trabajador(self):
+        data = { "id": 1 }
+        response = self.client.post(reverse("trabajador:eliminar"), data)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(Trabajador.objects.all().exists())
+
+    def test_ver_detalle(self):
+        response = self.client.get(reverse("trabajador:obtener"), {"id": 1})
+        data = json.loads(response.content)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data.get("apellido"), "Jerez")
+
+
+    def test_buscar_boleta(self):
+        response = self.client.get(reverse("trabajador:buscar_boleta"), {"id": 1})
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_anexar_boleta(self):
+        data = {
+            "boleta_inicial": 1,
+            "boleta_final": 50,
+            "id": 1
+        }
+
+        response = self.client.post(reverse("trabajador:guardar_boleta"), data)
+        self.assertEqual(response.status_code, 200)
+
+        worker = Trabajador.objects.get(pk = 1)
+        boletas = worker.boletatrabajador_set.all()
+        self.assertEqual(len(boletas), 1)
