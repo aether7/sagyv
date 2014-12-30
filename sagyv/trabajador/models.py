@@ -13,14 +13,14 @@ como salidas del sistema
 """
 
 class Afp(models.Model):
-    nombre = models.CharField(max_length=140)
+    nombre = models.CharField(max_length = 140)
 
     def __unicode__(self):
         return self.nombre
 
 
 class SistemaSalud(models.Model):
-    nombre = models.CharField(max_length=140)
+    nombre = models.CharField(max_length = 140)
 
     def __unicode__(self):
         return self.nombre

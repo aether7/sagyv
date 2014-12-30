@@ -1,0 +1,30 @@
+[
+    {
+        "model": "trabajador.afp",
+        "pk": 1,
+        "fields":{
+            "nombre": "provida"
+        }
+    },
+    {
+        "model": "trabajador.estadocivil",
+        "pk": 1,
+        "fields":{
+            "nombre": "soltero"
+        }
+    },
+    {
+        "model": "trabajador.sistemasalud",
+        "pk": 1,
+        "fields":{
+            "nombre": "fonasa"
+        }
+    },
+    {
+        "model": "trabajador.estadovacacion",
+        "pk": 1,
+        "fields":{
+            "nombre": "al dia"
+        }
+    }
+]

@@ -256,7 +256,6 @@ class ModificarView(View):
 
         vehiculo.save()
 
-
         self.procesar_chofer(chofer, vehiculo)
         data = llenar_vehiculo_json(vehiculo)
         data = json.dumps(data, cls = DjangoJSONEncoder)
