@@ -24,6 +24,17 @@ def actualizar_estado_vehiculos(vehiculo, chofer):
         vehiculo_antiguo.save()
 
 def llenar_vehiculo_json(vehiculo):
+    estado_sec = 0
+    estado_pago = 0
+
+    if vehiculo.estado_sec:
+        estado_sec = 1
+
+    if vehiculo.estado_pago:
+        estado_pago = 1
+
+    print vehiculo.get_ultimo_chofer_id()
+
     data = {
         "id": vehiculo.id,
         "movil": {
@@ -32,8 +43,8 @@ def llenar_vehiculo_json(vehiculo):
         "patente": vehiculo.patente,
         "km": vehiculo.km,
         "fechaRevisionTecnica": vehiculo.fecha_revision_tecnica,
-        "estadoSec": vehiculo.estado_sec,
-        "estadoPago": vehiculo.estado_pago,
+        "estadoSec": estado_sec,
+        "estadoPago": estado_pago,
         "chofer": {
             "id": vehiculo.get_ultimo_chofer_id(),
             "nombre": vehiculo.get_nombre_ultimo_chofer()
@@ -139,12 +150,9 @@ class AgregarNuevoVehiculoView(View):
         if int(self.chofer.get('id')) != 0:
             self.anexar_vehiculo_chofer(vehiculo)
         else:
-            movil = Movil()
-            movil.vehiculo = vehiculo
-            movil.trabajador = None
-            movil.numero = int(self.numero)
-            movil.save()
-
+            print 'camino else'
+            self.crear_movil(vehiculo, None)
+            print 'no callo'
 
         return vehiculo
 
@@ -159,7 +167,8 @@ class AgregarNuevoVehiculoView(View):
         trabajador_vehiculo.vehiculo = vehiculo
         trabajador_vehiculo.save()
 
-        anexar_movil(trabajador, vehiculo, self.numero)
+        #anexar_movil(trabajador, vehiculo, self.numero)
+        self.crear_movil(vehiculo, trabajador)
 
     def desanexar_vehiculos_chofer(self, chofer):
         vehiculos_antiguos = TrabajadorVehiculo.objects.filter(trabajador = chofer, activo = True)
@@ -167,6 +176,17 @@ class AgregarNuevoVehiculoView(View):
         for vehiculo_antiguo in vehiculos_antiguos:
             vehiculo_antiguo.activo = False
             vehiculo_antiguo.save()
+
+    def crear_movil(self, vehiculo, trabajador):
+        if Movil.objects.filter(trabajador = trabajador).exists() and trabajador is not None:
+            movil = Movil.objects.get(trabajador = trabajador)
+        else:
+            movil = Movil()
+
+        movil.vehiculo = vehiculo
+        movil.trabajador = trabajador
+        movil.numero = int(self.numero)
+        movil.save()
 
 
 class AnexarVehiculoView(View):

@@ -72,7 +72,7 @@
                 <div class="form-group">
                     <label for="chofer_vehiculo_editar" class="control-label">Chofer:</label>
                     <select name="chofer_vehiculo_editar" id="chofer_vehiculo_editar" class="form-control" ng-model="vc.vehiculo.chofer.id">
-                        <option value="">...</option>
+                        <option value="0">...</option>
                         {% for trabajador in trabajadores %}
                         <option value="{{ trabajador.id }}">{{ trabajador.get_nombre_completo }}</option>
                         {% endfor %}

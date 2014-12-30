@@ -77,7 +77,7 @@ VehiculoController.mixin({
     procesarEditarVehiculo: function(data){
         this.vehiculos[this.index] = this.vehiculo;
 
-        $('#modal_nuevo_vehiculo').modal('hide');
+        $('#modal_editar').modal('hide');
         common.agregarMensaje('El vehículo fue actualizado exitosamente');
     },
 
