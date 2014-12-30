@@ -1,6 +1,5 @@
 from django.db import connections, models, connection
 from django.db.models import Q, Sum
-from main import trabajador
 
 def dictfetchall(cursor):
     "Returns all rows from a cursor as a dict"
@@ -194,10 +193,6 @@ class GuiaDespachoManager(models.Manager):
 class VehiculoManager(models.Manager):
     def get_vehiculos_con_chofer(self):
         return self.filter(trabajadorvehiculo__activo = 1)
-
-
-class TrabajadorManager(models.Manager):
-    pass
 
 
 class BoletaTrabajadorManager(models.Manager):

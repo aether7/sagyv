@@ -6,8 +6,8 @@ from django.db import transaction
 from django.views.generic import View
 from django.core.serializers.json import DjangoJSONEncoder
 
-from main.models import GuiaTrabajador
-from main.models import Trabajador
+from trabajador.models import GuiaTrabajador
+from trabajador.models import Trabajador
 
 from liquidacion.models import GuiaVenta
 from liquidacion.models import DetalleGuiaVenta

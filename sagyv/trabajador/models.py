@@ -4,9 +4,7 @@ import json
 from django.db import models
 from django.contrib.auth.models import User
 
-from main.managers import TrabajadorManager
-from main.managers import BoletaTrabajadorManager
-from main.managers import GuiaTrabajadorManager
+from trabajador.managers import BoletaTrabajadorManager
 
 """
 Como nota adicional: Todos los ingresos que sean representados como booleanos
@@ -60,8 +58,6 @@ class Trabajador(models.Model):
     sistema_salud = models.ForeignKey(SistemaSalud,null = True, default = 1)
     estado_civil = models.ForeignKey(EstadoCivil,null = True, default = 1)
 
-    objects = TrabajadorManager()
-
     def get_nombre_completo(self):
         return self.nombre + " " + self.apellido
 
@@ -113,18 +109,6 @@ class CargaFamiliar(models.Model):
         return self.edad
 
 
-class LogSistema(models.Model):
-    CREAR = 1
-    ACTUALIZAR = 2
-    BORRAR = 3
-    descripcion = models.TextField(null = True)
-    fecha = models.DateTimeField(auto_now_add = True)
-    tipo_accion = models.IntegerField()
-    user = models.ForeignKey(User)
-    tabla = models.CharField(max_length = 140)
-    registro_id = models.IntegerField()
-
-
 class BoletaTrabajador(models.Model):
     boleta_inicial = models.IntegerField(default = 1)
     boleta_final = models.IntegerField(default = 2)
@@ -145,5 +129,3 @@ class GuiaTrabajador(models.Model):
     fecha_creacion = models.DateTimeField(auto_now_add = True)
     fecha_modificacion = models.DateTimeField(auto_now = True)
     activo = models.NullBooleanField()
-
-    objects = GuiaTrabajadorManager()

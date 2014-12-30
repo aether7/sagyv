@@ -66,33 +66,33 @@ INSERT INTO clientes_tipodescuento(id, tipo) VALUES(2, 'Porcentaje');
 INSERT INTO clientes_descuentocliente(monto_descuento, tipo_descuento_id) VALUES(0, 1);
 
 -- AFPS
-INSERT INTO main_afp(id, nombre) VALUES(1, 'Bansander');
-INSERT INTO main_afp(id, nombre) VALUES(2, 'Cuprum');
-INSERT INTO main_afp(id, nombre) VALUES(3, 'Habitat');
-INSERT INTO main_afp(id, nombre) VALUES(4, 'Planvital');
-INSERT INTO main_afp(id, nombre) VALUES(5, 'Provida');
-INSERT INTO main_afp(id, nombre) VALUES(6, 'Santa María');
-INSERT INTO main_afp(id, nombre) VALUES(7, 'Modelo');
+INSERT INTO trabajador_afp(id, nombre) VALUES(1, 'Bansander');
+INSERT INTO trabajador_afp(id, nombre) VALUES(2, 'Cuprum');
+INSERT INTO trabajador_afp(id, nombre) VALUES(3, 'Habitat');
+INSERT INTO trabajador_afp(id, nombre) VALUES(4, 'Planvital');
+INSERT INTO trabajador_afp(id, nombre) VALUES(5, 'Provida');
+INSERT INTO trabajador_afp(id, nombre) VALUES(6, 'Santa María');
+INSERT INTO trabajador_afp(id, nombre) VALUES(7, 'Modelo');
 
 -- sistemas de salud
-INSERT INTO main_sistemasalud(id, nombre) VALUES(1, 'Fonasa');
-INSERT INTO main_sistemasalud(id, nombre) VALUES(2, 'Isapre Banmédica');
-INSERT INTO main_sistemasalud(id, nombre) VALUES(3, 'Isapre Colmena');
-INSERT INTO main_sistemasalud(id, nombre) VALUES(4, 'Isapre Consalud');
-INSERT INTO main_sistemasalud(id, nombre) VALUES(5, 'Isapre Cruz Blanca');
-INSERT INTO main_sistemasalud(id, nombre) VALUES(6, 'Isapre Más Vida');
-INSERT INTO main_sistemasalud(id, nombre) VALUES(7, 'Isapre Vida Tres');
+INSERT INTO trabajador_sistemasalud(id, nombre) VALUES(1, 'Fonasa');
+INSERT INTO trabajador_sistemasalud(id, nombre) VALUES(2, 'Isapre Banmédica');
+INSERT INTO trabajador_sistemasalud(id, nombre) VALUES(3, 'Isapre Colmena');
+INSERT INTO trabajador_sistemasalud(id, nombre) VALUES(4, 'Isapre Consalud');
+INSERT INTO trabajador_sistemasalud(id, nombre) VALUES(5, 'Isapre Cruz Blanca');
+INSERT INTO trabajador_sistemasalud(id, nombre) VALUES(6, 'Isapre Más Vida');
+INSERT INTO trabajador_sistemasalud(id, nombre) VALUES(7, 'Isapre Vida Tres');
 
 -- Estados Civiles
-INSERT INTO main_estadocivil(id, nombre) VALUES(1, 'Soltero');
-INSERT INTO main_estadocivil(id, nombre) VALUES(2, 'Casado');
-INSERT INTO main_estadocivil(id, nombre) VALUES(3, 'Divorciado');
-INSERT INTO main_estadocivil(id, nombre) VALUES(4, 'Viudo');
+INSERT INTO trabajador_estadocivil(id, nombre) VALUES(1, 'Soltero');
+INSERT INTO trabajador_estadocivil(id, nombre) VALUES(2, 'Casado');
+INSERT INTO trabajador_estadocivil(id, nombre) VALUES(3, 'Divorciado');
+INSERT INTO trabajador_estadocivil(id, nombre) VALUES(4, 'Viudo');
 
 -- Estados vacaciones
-INSERT INTO main_estadovacacion(id, nombre) VALUES(1, 'Al día');
-INSERT INTO main_estadovacacion(id, nombre) VALUES(2, 'Pendientes');
-INSERT INTO main_estadovacacion(id, nombre) VALUES(3, 'Programadas');
+INSERT INTO trabajador_estadovacacion(id, nombre) VALUES(1, 'Al día');
+INSERT INTO trabajador_estadovacacion(id, nombre) VALUES(2, 'Pendientes');
+INSERT INTO trabajador_estadovacacion(id, nombre) VALUES(3, 'Programadas');
 
 -- regiones
 INSERT INTO clientes_region (id, nombre, orden) VALUES (1, 'Región de Tarapacá', 1);

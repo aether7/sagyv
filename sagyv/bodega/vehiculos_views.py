@@ -9,7 +9,7 @@ from django.views.generic import View, TemplateView, ListView
 from django.core.serializers.json import DjangoJSONEncoder
 from main.helpers.fecha import convierte_texto_fecha, convierte_fecha_texto
 
-from main.models import Trabajador
+from trabajador.models import Trabajador
 from bodega.models import Movil
 from bodega.models import Vehiculo
 from bodega.models import TrabajadorVehiculo

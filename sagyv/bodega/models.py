@@ -1,6 +1,6 @@
 from django.db import models
 
-from main.models import Trabajador
+from trabajador.models import Trabajador
 
 from bodega.managers import GuiaDespachoManager
 from bodega.managers import HistorialStockManager

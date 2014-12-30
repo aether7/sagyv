@@ -5,8 +5,6 @@ urlpatterns = patterns('main.views',
 )
 
 urlpatterns += patterns("",
-    url(r'^trabajador/',include('main.trabajador.urls',namespace='trabajador')),
-
     url(r"^liquidacion/",include("main.liquidacion.urls",namespace="liquidacion")),
     url(r"^bodega/",include("main.bodega.urls",namespace = "bodega")),
     #url(r"^vehiculos/",include("main.vehiculos.urls",namespace="vehiculos")),

@@ -6,8 +6,8 @@ from django.db import transaction
 from django.views.generic import View
 from django.core.serializers.json import DjangoJSONEncoder
 
-from main.models import BoletaTrabajador
-from main.models import Trabajador
+from trabajador.models import BoletaTrabajador
+from trabajador.models import Trabajador
 
 def get_talonario(talonario):
     data = {

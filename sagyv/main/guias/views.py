@@ -1,6 +1,6 @@
 from django.views.generic import TemplateView, View
 
-from main.models import Trabajador
+from trabajador.models import Trabajador
 from bodega.models import Vehiculo
 from bodega.models import Movil
 

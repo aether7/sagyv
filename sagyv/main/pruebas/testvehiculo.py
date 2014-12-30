@@ -3,7 +3,7 @@ import json
 from django.core.urlresolvers import reverse
 
 from django.test import TestCase, Client
-from main.models import Vehiculo
+from bodega.models import Vehiculo
 
 from main.models import Afp
 from main.models import SistemaSalud

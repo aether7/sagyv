@@ -11,8 +11,8 @@ from reportlab.lib.units import inch
 
 from main.helpers.fecha import convierte_texto_fecha, convierte_fecha_texto
 
-from main.models import BoletaTrabajador
-from main.models import Trabajador
+from trabajador.models import BoletaTrabajador
+from trabajador.models import Trabajador
 from bodega.models import Producto
 from bodega.models import GuiaDespacho
 from bodega.models import HistorialStock
