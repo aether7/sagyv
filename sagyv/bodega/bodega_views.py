@@ -154,8 +154,8 @@ class FiltrarGuias(View):
                 "id": guia.id,
                 "numero": guia.numero,
                 "vehiculo": {
-                    "id": guia.vehiculo_id,
-                    "numero": guia.vehiculo.patente
+                    "id": guia.movil.vehiculo_id,
+                    "numero": guia.movil.vehiculo.patente
                 },
                 "fecha": convierte_fecha_texto(guia.fecha),
                 "estado" : guia.estado

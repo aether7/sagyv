@@ -12,6 +12,7 @@ from bodega.models import Producto
 from bodega.models import StockVehiculo
 from bodega.models import AbonoGuia
 from bodega.models import Vehiculo
+from bodega.models import Movil
 
 
 class ObtenerGuiaDespacho(View):
@@ -65,7 +66,7 @@ class CrearGuiaDespachoView(View):
             "guia" : {
                 "id" : guia.id,
                 "numero" : guia.numero,
-                "vehiculo" : guia.vehiculo.patente,
+                "vehiculo" : guia.movil.vehiculo.patente,
                 "fecha" : guia.fecha,
                 "productos" : self.productosActualizados,
             }
@@ -75,13 +76,15 @@ class CrearGuiaDespachoView(View):
         return HttpResponse(data, content_type="application/json")
 
     def crear_guia_despacho(self):
-        movil = Vehiculo.objects.get(pk = self.id_vehiculo)
-        movil.km = int(self.kilometraje)
-        movil.save()
+        vehiculo_obj = Vehiculo.objects.get( pk = self.id_vehiculo )
+        vehiculo_obj.km = int(self.kilometraje)
+        vehiculo_obj.save()
+
+        movil = Movil.objects.get( vehiculo = vehiculo_obj )
 
         guia_despacho = GuiaDespacho()
         guia_despacho.numero = self.numero_guia
-        guia_despacho.vehiculo = movil
+        guia_despacho.movil = movil
         guia_despacho.valor_total = 0
         guia_despacho.estado = False
         guia_despacho.save()
@@ -103,7 +106,7 @@ class CrearGuiaDespachoView(View):
 
             self.productosActualizados.append(this_prod)
             self.crear_historico(producto, cantidad, guia)
-            self.modificar_stock_vehiculo(guia.vehiculo, producto, cantidad)
+            self.modificar_stock_vehiculo(guia.movil.vehiculo, producto, cantidad)
 
     def crear_historico(self, producto, cantidad, guia):
         historico = HistorialStock()
