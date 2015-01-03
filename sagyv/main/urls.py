@@ -5,6 +5,5 @@ urlpatterns = patterns('main.views',
 )
 
 urlpatterns += patterns("",
-    url(r"^liquidacion/",include("main.liquidacion.urls",namespace="liquidacion")),
     url(r"^guias/", include("main.guias.urls", namespace="guias")),
 )

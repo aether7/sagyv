@@ -12,6 +12,7 @@ urlpatterns = patterns('',
     url(r'^bodega/', include('bodega.bodega_urls', namespace = 'bodega')),
     url(r'^reportes/', include('reportes.urls', namespace = 'reportes')),
     url(r'^precios/', include('precios.urls', namespace = 'precios')),
+    url(r"^liquidacion/",include("liquidacion.urls",namespace="liquidacion")),
 )
 
 urlpatterns += patterns('',
