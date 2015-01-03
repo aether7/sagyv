@@ -251,7 +251,7 @@ class Cerrar(View):
         this_guia.estado = True
         this_guia.save()
 
-        this_vehiculo = this_guia.vehiculo
+        this_vehiculo = this_guia.movil.vehiculo
         """
         this_vehiculo.km = nuevo_km
         this_vehiculo.save()
