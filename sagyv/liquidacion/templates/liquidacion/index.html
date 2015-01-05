@@ -20,61 +20,24 @@
     <section id="liquidacion" class="panel-liquidacion"
         data-ng-app="liquidacionApp" data-ng-controller="LiquidacionController as liqCtrl">
 
-        <section class="panel-busqueda">
+        <section class="panel-busqueda" ng-controller="PanelBusquedaController as busqueda">
             <label for="guias_despacho">Guía despacho</label>
-            <select id="guias_despacho" data-ng-model="liqCtrl.idGuiaDespacho">
+
+            <select id="guias_despacho" ng-model="busqueda.idGuiaDespacho">
                 {% for guia_despacho in guias_despacho %}
                 <option value="{{ guia_despacho.id }}" data-id="{{ guia_despacho.id }}">{{ guia_despacho.numero }}</option>
                 {% endfor %}
             </select>
-            <button class="btn btn-primary" data-ng-click="liqCtrl.buscarGuia()">Buscar</button>
+
+            <button class="btn btn-primary" ng-click="busqueda.buscar(liqCtrl.productos)">Buscar</button>
+
+            {% include "liquidacion/panel_cabecera.html" %}
         </section>
 
-        {% include "liquidacion/panel_cabecera.html" %}
         {% include "liquidacion/panel_detalle.html" %}
         {% include "liquidacion/seccion_venta.html" %}
         {% include "liquidacion/seccion_tabs.html" %}
-
-
-        <div class="totales">
-            <span>Subtotal:</span>
-            <span ng-bind="liqCtrl.montos.subTotal | currency"></span>
-        </div>
-
-        <div class="totales">
-            <span>Guías propias:</span>
-            <span ng-bind="liqCtrl.montos.propias | currency"></span>
-        </div>
-
-        <div class="totales">
-            <span>Guías lipigas:</span>
-            <span ng-bind="liqCtrl.montos.lipigas | currency"></span>
-        </div>
-
-        <div class="totales">
-            <span>Vouchers lipigas:</span>
-            <span ng-bind="liqCtrl.montos.voucherLipigas | currency"></span>
-        </div>
-
-        <div class="totales">
-            <span>Vouchers transbank:</span>
-            <span ng-bind="liqCtrl.montos.voucherTransbank | currency"></span>
-        </div>
-
-        <div class="totales">
-            <span>Cheques:</span>
-            <span ng-bind="liqCtrl.montos.cheques | currency"></span>
-        </div>
-
-        <div class="totales">
-            <span>Cupones descuento:</span>
-            <span ng-bind="liqCtrl.montos.cupones | currency"></span>
-        </div>
-
-        <div class="totales">
-            <span>Otros:</span>
-            <span ng-bind="liqCtrl.montos.otros | currency"></span>
-        </div>
+        {% include "liquidacion/seccion_montos.html" %}
 
         <button class="btn btn-primary" data-modal=""
             data-ng-click="liqCtrl.cerrarLiquidacion()">CERRAR LIQUIDACIÓN</button>

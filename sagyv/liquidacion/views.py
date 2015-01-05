@@ -2,7 +2,7 @@
 import json
 
 from django.core.serializers.json import DjangoJSONEncoder
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.views.generic import TemplateView, View
 from django.db import transaction
 
@@ -28,21 +28,20 @@ from liquidacion.models import Liquidacion
 from liquidacion.models import GuiaVenta
 from liquidacion.models import DetalleGuiaVenta
 
-
 class IndexView(TemplateView):
     template_name = "liquidacion/index.html"
 
     def get_context_data(self, **kwargs):
         context = super(IndexView, self).get_context_data(**kwargs)
         context["clientes"] = Cliente.objects.order_by("id")
-        context["clientes_propios"] = Cliente.objects.filter(es_propio=True).order_by("id")
-        context["clientes_lipigas"] = Cliente.objects.filter(es_lipigas=True).order_by("id")
+        context["clientes_propios"] = Cliente.objects.obtener_propios()
+        context["clientes_lipigas"] = Cliente.objects.obtener_lipigas()
         context["tarjetas_comerciales"] = TarjetaCredito.objects.get_tarjetas_comerciales()
         context["bancos"] = Banco.objects.order_by("-cheques_recibidos")
         context["tarjetas_bancarias"] = TarjetaCredito.objects.get_tarjetas_bancarias()
-        context["productos"] = Producto.objects.exclude(tipo_producto_id=3)
+        context["productos"] = Producto.objects.get_productos_filtrados()
         context["guias_despacho"] = GuiaDespacho.objects.filter(estado = 0).order_by("id")
-        context["terminales"] = {Terminal.objects.order_by("id")}
+        context["terminales"] = Terminal.objects.order_by("id")
 
         return context
 
@@ -50,24 +49,14 @@ class IndexView(TemplateView):
 class ObtenerGuiaDespacho(View):
     def get(self, req):
         id_guia_despacho = int(req.GET.get("id_guia_despacho"))
-        guia = GuiaDespacho.objects.get(pk=id_guia_despacho)
+        guia = GuiaDespacho.objects.get(pk = id_guia_despacho)
         vehiculo = guia.movil.vehiculo
-        productos = self.obtener_productos(guia)
-
         boleta = BoletaTrabajador.objects.obtener_por_trabajador(vehiculo.get_ultimo_chofer())
 
         datos = {
-            "vehiculo": {
-                "id": vehiculo.id,
-                "km": vehiculo.km,
-                "chofer": vehiculo.get_nombre_ultimo_chofer()
-            },
-            "guia": {
-                "id": guia.id,
-                "numero": guia.numero,
-                "fecha": convierte_fecha_texto(guia.fecha)
-            },
-            "productos": productos
+            'vehiculo': self._obtener_vehiculo(vehiculo),
+            'guia': self._obtener_guia(guia),
+            'productos': self._obtener_productos(guia)
         }
 
         if boleta is None:
@@ -75,17 +64,11 @@ class ObtenerGuiaDespacho(View):
                 "mensaje": "El trabajador no tiene una boleta asociada, por favor anexe una boleta antes de continuar"
             }
         else:
-            datos["boleta"] = {
-                "id": boleta.id,
-                "boleta_inicial": boleta.boleta_inicial,
-                "boleta_final": boleta.boleta_final,
-                "actual": boleta.actual
-            }
+            datos['boleta'] = self._obtener_boleta(boleta)
 
-        datos = json.dumps(datos, cls=DjangoJSONEncoder)
-        return HttpResponse(datos, content_type="application/json")
+        return JsonResponse(datos)
 
-    def obtener_productos(self, id_guia):
+    def _obtener_productos(self, id_guia):
         lote = HistorialStock.objects.get_productos_guia_total(id_guia)
         productos = []
 
@@ -99,6 +82,34 @@ class ObtenerGuiaDespacho(View):
             })
 
         return productos
+
+    def _obtener_vehiculo(self, vehiculo):
+        data = {
+            'id': vehiculo.id,
+            'km': vehiculo.km,
+            'chofer': vehiculo.get_nombre_ultimo_chofer()
+        }
+
+        return data
+
+    def _obtener_guia(self, guia):
+        data = {
+            'id': guia.id,
+            'numero': guia.numero,
+            'fecha': guia.fecha
+        }
+
+        return data
+
+    def _obtener_boleta(self, boleta):
+        data = {
+            'id': boleta.id,
+            'boleta_inicial': boleta.boleta_inicial,
+            'boleta_final': boleta.boleta_final,
+            'actual': boleta.actual
+        }
+
+        return data
 
 
 class BuscarCliente(View):

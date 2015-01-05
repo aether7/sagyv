@@ -13,3 +13,9 @@ class ClienteManager(models.Manager):
             resultados = self.all()
 
         return resultados
+
+    def obtener_propios(self):
+        return self.filter(es_propio = True).order_by('id')
+
+    def obtener_lipigas(self):
+        return self.filter(es_lipigas = True).order_by('id')

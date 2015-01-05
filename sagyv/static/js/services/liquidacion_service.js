@@ -8,7 +8,9 @@ function liquidacionService($http){
 
     services = {
         buscarGuia: function(data, callback){
-            var url = App.urls.get('liquidacion:obtener_guia');
+            var data = { id_guia_despacho: data },
+                url = App.urls.get('liquidacion:obtener_guia');
+
             get(url, data, callback);
         },
 

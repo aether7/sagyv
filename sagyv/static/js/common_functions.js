@@ -101,6 +101,19 @@ var common = {
             date.setDate(parseInt(aux[2]));
 
             return date;
+        },
+
+        djangoToDate: function(txt){
+            if(typeof txt !== 'string'){
+                throw TypeError('El tipo de dato no es string');
+            }
+
+            var regex = /(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})\.(\d+)/,
+                match = regex.exec(txt).map(function(value, index){ return index ? parseInt(value) : value }),
+                fecha;
+
+            fecha = new Date(match[1], match[2] - 1, match[3], match[4], match[5], match[6]);
+            return fecha;
         }
     }
 };

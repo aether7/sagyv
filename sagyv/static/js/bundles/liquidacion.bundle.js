@@ -17,6 +17,7 @@ var app = angular.module('liquidacionApp',[]),
 
 app.factory('liquidacionService', liquidacionService);
 
+app.controller('PanelBusquedaController', ['$scope', 'liquidacionService', PanelBusquedaController]);
 app.controller('LiquidacionController', ['$scope', 'liquidacionService', LiquidacionController]);
 app.controller('ProductoController', ['$scope', ProductoController]);
 app.controller('GuiaPropiaController', ['$scope', 'liquidacionService', GuiaPropiaController]);
@@ -237,104 +238,32 @@ GuiaPropiaController.mixin({
 module.exports = GuiaPropiaController;
 
 },{"./../../models/liquidacion/producto_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/producto_model.js","./../../models/liquidacion/venta_propia_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/venta_propia_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/liquidacion_controller.js":[function(require,module,exports){
-var GuiaVenta = require('./../../models/liquidacion/guia_venta_model.js');
+var Monto = require('../../models/liquidacion/monto_model.js'),
+    Dump = require('../../models/liquidacion/dump_model.js'),
+    GuiaVenta = require('../../models/liquidacion/guia_venta_model.js');
 
 function LiquidacionController($scope, liquidacionService){
     this.scope = $scope;
     this.service = liquidacionService;
 
-    this.productos_dump = '';
-    this.cheques_dump = '';
-    this.cuponesPrepago_dump = '';
-    this.otro_dump = '';
-    this.vouchers_dump = '';
-    this.guia_dump = '';
-    this.montos_dump = '';
-    this.this_guia_dump = '';
+    this.kilosVendidos = 0;
+    this.dump = new Dump();
 
     this.productos = [];
     this.cheques = [];
     this.cuponesPrepago = [];
     this.otro = [];
 
-    this.boleta = null;
-    this.guia = {};
-
-    this.vouchers = {
-        lipigas: null,
-        transbank: null
-    };
-
-    this.montos = {
-        subTotal: 0,
-        descuentos: 0,
-        total: 0,
-        propias: 0,
-        lipigas: 0,
-        voucherLipigas: 0,
-        voucherTransbank: 0,
-        cheques: 0,
-        cupones: 0,
-        otros: 0
-    };
-
+    this.vouchers = { lipigas: null,transbank: null };
+    this.monto = new Monto();
     this.guias = new GuiaVenta();
-    this.idGuiaDespacho = null;
-    this.kilosVendidos = 0;
-    this.fecha = null;
-    this.vehiculo = null;
 
     this.suscribeEvents();
 }
 
 LiquidacionController.mixin({
-    buscarGuia: function(){
-        var data = { id_guia_despacho: this.idGuiaDespacho };
-        this.service.buscarGuia(data, this.cargaDatosCabecera.bind(this));
-    },
-
-    cargaDatosCabecera: function(data){
-        if(data.boleta.mensaje){
-            alert(data.boleta.mensaje);
-            return;
-        }
-
-        this.guia = data.guia;
-        this.boleta = data.boleta;
-        this.guia.boleta = data.boleta.actual;
-
-        tmp = this.guia.fecha.split('-');
-        tmp[1] = (tmp[1] < 10)? '0' + tmp[1]: tmp[1];
-        tmp[2] = (tmp[2] < 10)? '0' + tmp[2]: tmp[2];
-        tmp[2] = parseInt(tmp[2]) + 1;
-
-        this.guia.fecha = new Date(tmp.join('-'));
-        this.productos = this.scope.productos = data.productos;
-
-        this.vehiculo = data.vehiculo;
-        this.vehiculo.kilometrosRecorridos = 0;
-        this.vehiculo.kmActual = 0;
-        this.this_guia_dump = JSON.stringify(this.guia);
-    },
-
-    actualizarKilometraje: function(){
-        this.vehiculo.kilometrosRecorridos = this.vehiculo.kmActual - this.vehiculo.km;
-    },
-
     calcularSubTotal: function(){
-        var _this = this;
-
-        this.montos.subTotal = 0;
-
-        this.productos.forEach(function(producto){
-            if(isNaN(producto.valorTotal)){
-                return;
-            }
-
-            _this.montos.subTotal += producto.valorTotal;
-        });
-
-        this.montos.total = this.montos.subTotal - this.montos.descuentos;
+        this.monto.calcularSubtotal(this.productos);
     },
 
     calcularKilos: function(){
@@ -364,6 +293,8 @@ LiquidacionController.mixin({
     },
 
     suscribeEvents: function(){
+        this.scope.$on('liquidacion:addProductos', this.addProductos.bind(this));
+
         this.scope.$on('guia:calcularSubTotal', this.calcularSubTotal.bind(this));
         this.scope.$on('guia:calcularKilos', this.calcularKilos.bind(this));
         this.scope.$on('guia:agregarVenta', this.addGuia.bind(this));
@@ -373,13 +304,19 @@ LiquidacionController.mixin({
         this.scope.$on('guia:agregaOtro', this.addOtro.bind(this));
     },
 
+    addProductos: function(evt, productos){
+        this.productos = this.scope.productos = productos;
+    },
+
     addGuia: function(evt, venta){
         this.guias.addGuia(venta);
         this.renderTabla('tpl_tabla_ventas', 'tabla_ventas', this.guias);
+
         var tmp = {
-                "propias": this.guias.propia.ventas,
-                "lipigas": this.guias.lipigas.ventas
-            };
+            "propias": this.guias.propia.ventas,
+            "lipigas": this.guias.lipigas.ventas
+        };
+
         this.guia_dump = tmp;
     },
 
@@ -389,7 +326,8 @@ LiquidacionController.mixin({
         }
 
         this.vouchers[voucher.tipo] = voucher;
-        this.vouchers_dump = JSON.stringify(this.vouchers);
+        this.dump.setVouchers(this.vouchers);
+
         this.renderTabla('tpl_tabla_vouchers', 'tabla_vouchers', this.vouchers);
     },
 
@@ -404,7 +342,7 @@ LiquidacionController.mixin({
 
     addOtro: function(evt, otro){
         this.otro.push(otro);
-        this.otro_dump = JSON.stringify(this.otro);
+        this.dump.setOtros(this.otro);
     },
 
     removeOtro: function(indice){
@@ -413,7 +351,7 @@ LiquidacionController.mixin({
 
     addCuponesPrepago: function(evt, cupones){
         this.cuponesPrepago.push(cupones);
-        this.cuponesPrepago_dump = JSON.stringify(this.cuponesPrepago);
+        this.dump.setCuponesPrepago(this.cuponesPrepago);
     },
 
     removeCuponDescuento: function(indice){
@@ -427,7 +365,7 @@ LiquidacionController.mixin({
             self.cheques.push(cheque);
         });
 
-        this.cheques_dump = JSON.stringify(this.cheques);
+        this.dump.setCheques(this.cheques);
     },
 
     removeCheque:function(indice){
@@ -446,7 +384,7 @@ LiquidacionController.mixin({
 
 module.exports = LiquidacionController;
 
-},{"./../../models/liquidacion/guia_venta_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/guia_venta_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/otro_controller.js":[function(require,module,exports){
+},{"../../models/liquidacion/dump_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/dump_model.js","../../models/liquidacion/guia_venta_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/guia_venta_model.js","../../models/liquidacion/monto_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/monto_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/otro_controller.js":[function(require,module,exports){
 var Otro = require('./../../models/liquidacion/otro_model.js');
 
 function OtroController($scope){
@@ -473,22 +411,44 @@ OtroController.mixin({
 module.exports = OtroController;
 
 },{"./../../models/liquidacion/otro_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/otro_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/panel_busqueda_controller.js":[function(require,module,exports){
-function PanelBusquedaController(){
-    this.idGuia = null;
-    this.numGuia = null;
-    this.fecha = null;
-    this.numBoleta = null;
+function PanelBusquedaController($scope, service){
+    this.scope = $scope;
+    this.service = service;
+    this.idGuiaDespacho = null;
+
     this.kilosVendidos = 0;
-    this.chofer = null;
-    this.kmActual = 0;
-    this.kmRecorridos = 0;
+    this.vehiculo = {};
+    this.guia = {};
+    this.boleta = {};
 }
 
 PanelBusquedaController.prototype = {
     constructor: PanelBusquedaController,
 
     buscar: function(){
+        if(!this.idGuiaDespacho){
+            return;
+        }
 
+        this.service.buscarGuia(this.idGuiaDespacho, this.procesarBusqueda.bind(this));
+    },
+
+    procesarBusqueda: function(data){
+        if(data.boleta.mensaje){
+            alert(data.boleta.mensaje);
+            return;
+        }
+
+        this.boleta = data.boleta;
+        this.guia = data.guia;
+        this.guia.fecha = common.fecha.djangoToDate(this.guia.fecha);
+        this.vehiculo = data.vehiculo;
+
+        this.scope.$emit('liquidacion:addProductos', data.productos);
+    },
+
+    actualizarKm: function(){
+        this.vehiculo.kilometrosRecorridos = this.vehiculo.kmActual - this.vehiculo.km;
     }
 };
 
@@ -945,6 +905,62 @@ CuponPrepago.mixin({
 
 module.exports = CuponPrepago;
 
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/dump_model.js":[function(require,module,exports){
+function Dump(){
+    this.productos = null;
+    this.cheques = null;
+    this.cuponesPrepago = null;
+    this.otros = null;
+    this.vouchers = null;
+    this.guia = null;
+    this.montos = null;
+}
+
+Dump.prototype = {
+    constructor: Dump,
+
+    setProductos: function(productos){
+        this.productos = JSON.stringify(productos);
+    },
+
+    setCheques: function(cheques){
+        this.cheques = JSON.stringify(cheques);
+    },
+
+    setCuponesPrepago: function(cuponesPrepago){
+        this.cuponesPrepago = JSON.stringify(cuponesPrepago);
+    },
+
+    setOtros: function(otros){
+        this.otros = JSON.stringify(otros);
+    },
+
+    setVouchers: function(vouchers){
+        this.vouchers = JSON.stringify(vouchers);
+    },
+
+    setGuia: function(){
+
+    },
+
+    setMontos: function(){
+
+    },
+
+    toJSON: function(){
+        return {
+            'productos': this.productos,
+            'cheques': this.cheques,
+            'cuponesPrepago': this.cuponesPrepago,
+            'otros': this.otros,
+            'vouchers': this.vouchers,
+            'guias': this.guias
+        };
+    }
+};
+
+module.exports = Dump;
+
 },{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/guia_venta_model.js":[function(require,module,exports){
 function GuiaVenta(){
     this.propia = {
@@ -987,6 +1003,46 @@ GuiaVenta.mixin({
 });
 
 module.exports = GuiaVenta;
+
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/monto_model.js":[function(require,module,exports){
+function Monto(){
+    this.subTotal = 0;
+    this.descuentos = 0;
+    this.total = 0;
+    this.propias = 0;
+    this.lipigas = 0;
+    this.voucherLipigas = 0;
+    this.voucherTransbank = 0;
+    this.cheques = 0;
+    this.cupones = 0;
+    this.otros = 0;
+}
+
+Monto.prototype = {
+    constructor: Monto,
+
+    calcularSubtotal: function(productos){
+        var i, producto;
+        this.subTotal = 0;
+
+        for(i = 0; i < productos.length; i++){
+            producto = productos[i];
+            this._sumarSubtotal(producto);
+        }
+
+        this.total = this.subTotal + this.descuentos;
+    },
+
+    _sumarSubtotal: function(producto){
+        if(isNaN(producto.valorTotal)){
+            return;
+        }
+
+        this.subTotal += producto.valorTotal;
+    }
+}
+
+module.exports = Monto;
 
 },{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/otro_model.js":[function(require,module,exports){
 var Otro = function(){
@@ -1248,7 +1304,9 @@ function liquidacionService($http){
 
     services = {
         buscarGuia: function(data, callback){
-            var url = App.urls.get('liquidacion:obtener_guia');
+            var data = { id_guia_despacho: data },
+                url = App.urls.get('liquidacion:obtener_guia');
+
             get(url, data, callback);
         },
 

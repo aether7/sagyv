@@ -1,0 +1,39 @@
+<div class="totales">
+    <span>Subtotal:</span>
+    <span ng-bind="liqCtrl.monto.subTotal | currency"></span>
+</div>
+
+<div class="totales">
+    <span>Guías propias:</span>
+    <span ng-bind="liqCtrl.monto.propias | currency"></span>
+</div>
+
+<div class="totales">
+    <span>Guías lipigas:</span>
+    <span ng-bind="liqCtrl.monto.lipigas | currency"></span>
+</div>
+
+<div class="totales">
+    <span>Vouchers lipigas:</span>
+    <span ng-bind="liqCtrl.monto.voucherLipigas | currency"></span>
+</div>
+
+<div class="totales">
+    <span>Vouchers transbank:</span>
+    <span ng-bind="liqCtrl.monto.voucherTransbank | currency"></span>
+</div>
+
+<div class="totales">
+    <span>Cheques:</span>
+    <span ng-bind="liqCtrl.monto.cheques | currency"></span>
+</div>
+
+<div class="totales">
+    <span>Cupones descuento:</span>
+    <span ng-bind="liqCtrl.monto.cupones | currency"></span>
+</div>
+
+<div class="totales">
+    <span>Otros:</span>
+    <span ng-bind="liqCtrl.monto.otros | currency"></span>
+</div>

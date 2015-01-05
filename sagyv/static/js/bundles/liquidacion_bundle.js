@@ -16,6 +16,7 @@ var app = angular.module('liquidacionApp',[]),
 
 app.factory('liquidacionService', liquidacionService);
 
+app.controller('PanelBusquedaController', ['$scope', 'liquidacionService', PanelBusquedaController]);
 app.controller('LiquidacionController', ['$scope', 'liquidacionService', LiquidacionController]);
 app.controller('ProductoController', ['$scope', ProductoController]);
 app.controller('GuiaPropiaController', ['$scope', 'liquidacionService', GuiaPropiaController]);
