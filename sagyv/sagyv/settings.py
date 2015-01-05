@@ -111,6 +111,8 @@ TEMPLATE_CONTEXT_PROCESSORS += (
     "main.context_processors.variables_roles",
 )
 
+LOGIN_URL = '/'
+
 try:
     from .local_settings import *
 except ImportError:

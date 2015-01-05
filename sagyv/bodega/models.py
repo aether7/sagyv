@@ -8,8 +8,6 @@ from bodega.managers import VehiculoManager
 from bodega.managers import StockManager
 from bodega.managers import ProductoManager
 
-# Create your models here.
-
 class TipoProducto(models.Model):
     GARANTIA = 3
     nombre = models.CharField(max_length = 140)

@@ -35,7 +35,7 @@ class ObtenerGuiaDespacho(View):
         data = {
             'productos' : productos,
             'fecha' : convierte_fecha_texto(guia.fecha),
-            'movil' : guia.vehiculo.patente,
+            'movil' : guia.movil.vehiculo.patente,
             'numero_guia' : guia.numero
         }
 
