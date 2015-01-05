@@ -45,7 +45,7 @@ class IndexView(TemplateView):
         context["tarjetas_bancarias"] = TarjetaCredito.objects.get_tarjetas_bancarias()
         context["productos"] = Producto.objects.exclude(tipo_producto_id=3)
         context["guias_despacho"] = GuiaDespacho.objects.filter(estado = 0).order_by("id")
-        context["terminales"] = {Terminal.objects.filter(estado = term_status).order_by("id")}
+        context["terminales"] = Terminal.objects.filter(estado = term_status).order_by("id")
 
         return context
 
