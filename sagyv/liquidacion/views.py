@@ -53,17 +53,18 @@ class IndexView(TemplateView):
 class ObtenerGuiaDespacho(View):
     def get(self, req):
         id_guia_despacho = int(req.GET.get("id_guia_despacho"))
-        guia = GuiaDespacho.objects.get(pk=id_guia_despacho)
+        guia = GuiaDespacho.objects.get( pk=id_guia_despacho )
         vehiculo = guia.movil.vehiculo
         productos = self.obtener_productos(guia)
+        trabajador = guia.movil.trabajador
 
-        boleta = BoletaTrabajador.objects.obtener_por_trabajador(vehiculo.get_ultimo_chofer())
+        boleta = BoletaTrabajador.objects.obtener_por_trabajador(trabajador)
 
         datos = {
             "vehiculo": {
                 "id": vehiculo.id,
                 "km": vehiculo.km,
-                "chofer": vehiculo.get_nombre_ultimo_chofer()
+                "chofer": trabajador.get_nombre_completo()
             },
             "guia": {
                 "id": guia.id,
