@@ -1,12 +1,12 @@
 from django.db import models
 
-from trabajador.models import Trabajador
 from bodega.models import GuiaDespacho
 from bodega.models import Producto
 from bodega.models import Movil
 from clientes.models import Cliente
-
+from trabajador.models import Trabajador
 from liquidacion.managers import TarjetaCreditoManager
+from liquidacion.managers import TerminalManager
 
 class EstadoTerminal(models.Model):
     ACTIVO = 1
@@ -23,6 +23,8 @@ class Terminal(models.Model):
     codigo = models.CharField(max_length=140)
     movil = models.ForeignKey(Movil, null = True)
     estado = models.ForeignKey(EstadoTerminal)
+
+    objects = TerminalManager()
 
     def __unicode__(self):
         return self.codigo

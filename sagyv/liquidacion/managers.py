@@ -26,3 +26,8 @@ class TarjetaCreditoManager(models.Manager):
         ).order_by("-tipo_tarjeta")
 
         return resultados
+
+
+class TerminalManager(models.Manager):
+    def get_activos(self):
+        return self.filter(estado_id = 1).order_by('id')
