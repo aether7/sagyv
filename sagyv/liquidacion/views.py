@@ -27,12 +27,15 @@ from liquidacion.models import TipoPago
 from liquidacion.models import Liquidacion
 from liquidacion.models import GuiaVenta
 from liquidacion.models import DetalleGuiaVenta
+from liquidacion.models import EstadoTerminal
 
 
 class IndexView(TemplateView):
     template_name = "liquidacion/index.html"
 
     def get_context_data(self, **kwargs):
+        term_status = EstadoTerminal.objects.get( pk = EstadoTerminal.ACTIVO )
+
         context = super(IndexView, self).get_context_data(**kwargs)
         context["clientes"] = Cliente.objects.order_by("id")
         context["clientes_propios"] = Cliente.objects.filter(es_propio=True).order_by("id")
@@ -42,7 +45,7 @@ class IndexView(TemplateView):
         context["tarjetas_bancarias"] = TarjetaCredito.objects.get_tarjetas_bancarias()
         context["productos"] = Producto.objects.exclude(tipo_producto_id=3)
         context["guias_despacho"] = GuiaDespacho.objects.filter(estado = 0).order_by("id")
-        context["terminales"] = {Terminal.objects.order_by("id")}
+        context["terminales"] = {Terminal.objects.filter(estado = term_status).order_by("id")}
 
         return context
 
