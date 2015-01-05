@@ -2,6 +2,7 @@
 'use strict';
 
 var app = angular.module('liquidacionApp',[]),
+    PanelBusquedaController = require('../controllers/liquidacion/panel_busqueda_controller.js'),
     LiquidacionController = require('../controllers/liquidacion/liquidacion_controller.js'),
     ProductoController = require('../controllers/liquidacion/producto_controller.js'),
     GuiaPropiaController = require('../controllers/liquidacion/guia_propia_controller.js'),
