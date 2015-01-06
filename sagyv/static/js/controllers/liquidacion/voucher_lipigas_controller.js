@@ -17,6 +17,7 @@ VoucherLipigasController.mixin({
     resetearVoucher: function(){
         this.mensajes = {};
         this.voucher = new VoucherLipigas();
+        console.log(this.voucher);
     },
 
     addTarjeta: function(){
@@ -44,7 +45,9 @@ VoucherLipigasController.mixin({
             return;
         }
 
+
         this.voucher.numero = this.numero;
+        this.voucher.terminal = this.terminal;
         this.scope.$emit("guia:agregarVoucher", this.voucher);
 
         $('#modal_voucher_lipigas').modal('hide');
