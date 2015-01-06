@@ -45,6 +45,14 @@ Monto.prototype = {
         guiasLipigas.forEach(function(venta){
             _this.lipigas += venta.total;
         });
+    },
+
+    calcularCuponesPrepago: function(cupones){
+        this.cupones = 0;
+
+        for(var i = 0; i < cupones.length; i++){
+            this.cupones += cupones[i].descuento;
+        }
     }
 }
 

@@ -359,6 +359,7 @@ LiquidacionController.mixin({
     addCuponesPrepago: function(evt, cupones){
         this.cuponesPrepago.push(cupones);
         this.dump.setCuponesPrepago(this.cuponesPrepago);
+        this.monto.calcularCuponesPrepago(this.cuponesPrepago);
     },
 
     removeCuponDescuento: function(indice){
@@ -870,6 +871,7 @@ CuponPrepago.mixin({
 
     esValido: function(){
         var valido = true;
+        this.mensajes = {};
 
         valido = this.esValidoNumero() && valido;
         valido = this.esValidoFormato() && valido;
@@ -903,7 +905,6 @@ CuponPrepago.mixin({
 
     esValidoClienteId: function(){
         var valido = true;
-        this.mensajes.clienteId = "";
 
         if(!this.clienteId){
             valido = false;
@@ -915,7 +916,6 @@ CuponPrepago.mixin({
 
     esValidoFormato: function(){
         var valido = true;
-        this.mensajes.formatoId = ""
 
         if(!this.formatoId){
             valido = false;
@@ -1088,6 +1088,14 @@ Monto.prototype = {
         guiasLipigas.forEach(function(venta){
             _this.lipigas += venta.total;
         });
+    },
+
+    calcularCuponesPrepago: function(cupones){
+        this.cupones = 0;
+
+        for(var i = 0; i < cupones.length; i++){
+            this.cupones += cupones[i].descuento;
+        }
     }
 }
 

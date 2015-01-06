@@ -106,6 +106,7 @@ LiquidacionController.mixin({
     addCuponesPrepago: function(evt, cupones){
         this.cuponesPrepago.push(cupones);
         this.dump.setCuponesPrepago(this.cuponesPrepago);
+        this.monto.calcularCuponesPrepago(this.cuponesPrepago);
     },
 
     removeCuponDescuento: function(indice){

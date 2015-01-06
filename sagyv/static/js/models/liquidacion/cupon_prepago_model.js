@@ -29,6 +29,7 @@ CuponPrepago.mixin({
 
     esValido: function(){
         var valido = true;
+        this.mensajes = {};
 
         valido = this.esValidoNumero() && valido;
         valido = this.esValidoFormato() && valido;
@@ -62,7 +63,6 @@ CuponPrepago.mixin({
 
     esValidoClienteId: function(){
         var valido = true;
-        this.mensajes.clienteId = "";
 
         if(!this.clienteId){
             valido = false;
@@ -74,7 +74,6 @@ CuponPrepago.mixin({
 
     esValidoFormato: function(){
         var valido = true;
-        this.mensajes.formatoId = ""
 
         if(!this.formatoId){
             valido = false;
