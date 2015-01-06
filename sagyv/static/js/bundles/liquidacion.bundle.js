@@ -545,7 +545,6 @@ VoucherLipigasController.mixin({
     resetearVoucher: function(){
         this.mensajes = {};
         this.voucher = new VoucherLipigas();
-        console.log(this.voucher);
     },
 
     addTarjeta: function(){
@@ -670,7 +669,7 @@ VoucherTransbankController.mixin({
     },
 
     guardar: function(){
-        if(this._esValidaVenta()){
+        if(!this._esValidaVenta()){
             return;
         }
 

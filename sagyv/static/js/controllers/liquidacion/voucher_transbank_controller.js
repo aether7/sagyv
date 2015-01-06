@@ -36,7 +36,7 @@ VoucherTransbankController.mixin({
     },
 
     guardar: function(){
-        if(this._esValidaVenta()){
+        if(!this._esValidaVenta()){
             return;
         }
 

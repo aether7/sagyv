@@ -17,7 +17,6 @@ VoucherLipigasController.mixin({
     resetearVoucher: function(){
         this.mensajes = {};
         this.voucher = new VoucherLipigas();
-        console.log(this.voucher);
     },
 
     addTarjeta: function(){
