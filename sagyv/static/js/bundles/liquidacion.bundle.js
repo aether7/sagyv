@@ -260,6 +260,7 @@ function LiquidacionController($scope, liquidacionService){
     this.service = liquidacionService;
 
     this.kilosVendidos = 0;
+    this.kilometros = 0;
     this.dump = new Dump();
 
     this.productos = [];
@@ -368,12 +369,12 @@ LiquidacionController.mixin({
     },
 
     addCheques: function(evt, cheques){
-        var self = this;
+        var self = this, tmp = 0;
 
         cheques.forEach(function(cheque){
             self.cheques.push(cheque);
+            self.monto.calcularCheques(cheque.monto);
         });
-
         this.dump.setCheques(this.cheques);
     },
 
@@ -1111,6 +1112,11 @@ Monto.prototype = {
                 this.voucherTransbank += parseInt(vouchers.transbank.tarjetas[i].monto);
             }
         }
+    },
+
+    calcularCheques : function(monto){
+        this.cheques += parseInt(monto);
+        console.log(this.cheques);
     }
 }
 

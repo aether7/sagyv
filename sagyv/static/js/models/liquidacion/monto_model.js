@@ -67,6 +67,11 @@ Monto.prototype = {
                 this.voucherTransbank += parseInt(vouchers.transbank.tarjetas[i].monto);
             }
         }
+    },
+
+    calcularCheques : function(monto){
+        this.cheques += parseInt(monto);
+        console.log(this.cheques);
     }
 }
 
