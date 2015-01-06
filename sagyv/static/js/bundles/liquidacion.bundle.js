@@ -146,13 +146,13 @@ function GuiaPropiaController($scope, service){
     this.service = service;
     this.scope = $scope;
 
-    this.venta = null;
+    this.totalGuia = 0;
     this.idCliente = null;
-    this.descripcionDescuento = 'nada';
+
+    this.venta = null;
+    this.descripcionDescuento = '';
     this.cliente = {};
     this.producto = {};
-
-    this.totalGuia = 0;
     this.descuento = {};
     this.mensajes = {};
 }
@@ -160,7 +160,7 @@ function GuiaPropiaController($scope, service){
 GuiaPropiaController.mixin({
     resetearGuia: function(){
         this.idCliente = null;
-        this.descripcionDescuento = 'nada';
+        this.descripcionDescuento = '';
         this.venta = new VentaPropia();
     },
 
@@ -182,8 +182,7 @@ GuiaPropiaController.mixin({
     },
 
     agregarProducto: function(){
-        var obj,
-            producto = null;
+        var obj, producto = null;
 
         if(!this.esValidoProducto()){
             return;
@@ -227,7 +226,33 @@ GuiaPropiaController.mixin({
         this.venta.removeProducto(index);
     },
 
+    esValido: function(){
+        var valido = true;
+        this.mensajes = {};
+
+        if(!this.idCliente){
+            valido = false;
+            this.mensajes.cliente = 'campo obligatorio';
+        }
+
+        if(!this.venta.numero){
+            valido = false;
+            this.mensajes.numeroVenta = 'campo obligatorio';
+        }
+
+        if(!this.venta.productos.length){
+            valido = false;
+            this.mensajes.producto = 'al menos se debe ingresar 1 producto';
+        }
+
+        return valido;
+    },
+
     guardar: function(){
+        if(!this.esValido()){
+            return;
+        }
+
         this.venta.cliente.id = this.idCliente;
         this.scope.$emit("guia:agregarVenta", this.venta);
         common.agregarMensaje('Se ha guardado guía propia exitosamente');
@@ -262,6 +287,18 @@ function LiquidacionController($scope, liquidacionService){
 }
 
 LiquidacionController.mixin({
+    suscribeEvents: function(){
+        this.scope.$on('liquidacion:addProductos', this.addProductos.bind(this));
+
+        this.scope.$on('guia:calcularSubTotal', this.calcularSubTotal.bind(this));
+        this.scope.$on('guia:calcularKilos', this.calcularKilos.bind(this));
+        this.scope.$on('guia:agregarVenta', this.addGuia.bind(this));
+        this.scope.$on('guia:agregarVoucher', this.addVouchers.bind(this));
+        this.scope.$on('guia:agregarCheques', this.addCheques.bind(this));
+        this.scope.$on('guia:agregarCuponesPrepago', this.addCuponesPrepago.bind(this));
+        this.scope.$on('guia:agregaOtro', this.addOtro.bind(this));
+    },
+
     calcularSubTotal: function(){
         this.monto.calcularSubtotal(this.productos);
     },
@@ -290,18 +327,6 @@ LiquidacionController.mixin({
         this.subTotal = 0;
         this.descuentos = 0;
         this.total = 0;
-    },
-
-    suscribeEvents: function(){
-        this.scope.$on('liquidacion:addProductos', this.addProductos.bind(this));
-
-        this.scope.$on('guia:calcularSubTotal', this.calcularSubTotal.bind(this));
-        this.scope.$on('guia:calcularKilos', this.calcularKilos.bind(this));
-        this.scope.$on('guia:agregarVenta', this.addGuia.bind(this));
-        this.scope.$on('guia:agregarVoucher', this.addVouchers.bind(this));
-        this.scope.$on('guia:agregarCheques', this.addCheques.bind(this));
-        this.scope.$on('guia:agregarCuponesPrepago', this.addCuponesPrepago.bind(this));
-        this.scope.$on('guia:agregaOtro', this.addOtro.bind(this));
     },
 
     addProductos: function(evt, productos){

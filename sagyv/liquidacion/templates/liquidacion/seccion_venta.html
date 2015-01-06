@@ -1,9 +1,9 @@
 <div>
-    <div class="box" data-ng-controller="GuiaPropiaController as gpCtrl">
+    <div class="box" data-ng-controller="GuiaPropiaController as guiaPropia">
         <button type="button" class="btn btn-default"
             data-accion="abre_modal"
             data-modal="guia_propia"
-            data-ng-click="gpCtrl.resetearGuia()">Guia propia</button>
+            data-ng-click="guiaPropia.resetearGuia()">Guia propia</button>
 
         {% include "liquidacion/components/modal_guia_propia.html" %}
     </div>
