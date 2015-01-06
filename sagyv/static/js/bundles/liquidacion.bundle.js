@@ -113,6 +113,7 @@ module.exports = CuponPrepagoController;
 
 },{"./../../models/liquidacion/cupon_prepago_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/cupon_prepago_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_lipigas_controller.js":[function(require,module,exports){
 var GuiaPropiaController = require('./guia_propia_controller.js'),
+    mixin = require('./mixins.js').guias,
     VentaLipigas = require('./../../models/liquidacion/venta_lipigas_model.js');
 
 function GuiaLipigasController($scope, service){
@@ -120,6 +121,8 @@ function GuiaLipigasController($scope, service){
 }
 
 GuiaLipigasController.mixin(GuiaPropiaController, {
+    esValido: mixin.esValido,
+
     resetearGuia: function(){
         this.idCliente = null;
         this.descripcionDescuento = 'nada';
@@ -127,6 +130,10 @@ GuiaLipigasController.mixin(GuiaPropiaController, {
     },
 
     guardar: function(){
+        if(!this.esValido()){
+            return;
+        }
+
         this.venta.tipoVenta = 'lipigas';
         this.venta.cliente.idCliente = this.idCliente;
 
@@ -138,9 +145,10 @@ GuiaLipigasController.mixin(GuiaPropiaController, {
 
 module.exports = GuiaLipigasController;
 
-},{"./../../models/liquidacion/venta_lipigas_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/venta_lipigas_model.js","./guia_propia_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_propia_controller.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_propia_controller.js":[function(require,module,exports){
+},{"./../../models/liquidacion/venta_lipigas_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/venta_lipigas_model.js","./guia_propia_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_propia_controller.js","./mixins.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/mixins.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_propia_controller.js":[function(require,module,exports){
 var Producto = require('./../../models/liquidacion/producto_model.js'),
-    VentaPropia = require('./../../models/liquidacion/venta_propia_model.js');
+    VentaPropia = require('./../../models/liquidacion/venta_propia_model.js'),
+    guias = require('./mixins.js').guias;
 
 function GuiaPropiaController($scope, service){
     this.service = service;
@@ -226,27 +234,7 @@ GuiaPropiaController.mixin({
         this.venta.removeProducto(index);
     },
 
-    esValido: function(){
-        var valido = true;
-        this.mensajes = {};
-
-        if(!this.idCliente){
-            valido = false;
-            this.mensajes.cliente = 'campo obligatorio';
-        }
-
-        if(!this.venta.numero){
-            valido = false;
-            this.mensajes.numeroVenta = 'campo obligatorio';
-        }
-
-        if(!this.venta.productos.length){
-            valido = false;
-            this.mensajes.producto = 'al menos se debe ingresar 1 producto';
-        }
-
-        return valido;
-    },
+    esValido: guias.esValido,
 
     guardar: function(){
         if(!this.esValido()){
@@ -262,7 +250,7 @@ GuiaPropiaController.mixin({
 
 module.exports = GuiaPropiaController;
 
-},{"./../../models/liquidacion/producto_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/producto_model.js","./../../models/liquidacion/venta_propia_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/venta_propia_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/liquidacion_controller.js":[function(require,module,exports){
+},{"./../../models/liquidacion/producto_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/producto_model.js","./../../models/liquidacion/venta_propia_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/venta_propia_model.js","./mixins.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/mixins.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/liquidacion_controller.js":[function(require,module,exports){
 var Monto = require('../../models/liquidacion/monto_model.js'),
     Dump = require('../../models/liquidacion/dump_model.js'),
     GuiaVenta = require('../../models/liquidacion/guia_venta_model.js');
@@ -336,13 +324,7 @@ LiquidacionController.mixin({
     addGuia: function(evt, venta){
         this.guias.addGuia(venta);
         this.renderTabla('tpl_tabla_ventas', 'tabla_ventas', this.guias);
-
-        var tmp = {
-            "propias": this.guias.propia.ventas,
-            "lipigas": this.guias.lipigas.ventas
-        };
-
-        this.guia_dump = tmp;
+        this.monto.sumarGuias(this.guias.propia.ventas, this.guias.lipigas.ventas);
     },
 
     addVouchers: function(evt, voucher){
@@ -409,7 +391,34 @@ LiquidacionController.mixin({
 
 module.exports = LiquidacionController;
 
-},{"../../models/liquidacion/dump_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/dump_model.js","../../models/liquidacion/guia_venta_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/guia_venta_model.js","../../models/liquidacion/monto_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/monto_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/otro_controller.js":[function(require,module,exports){
+},{"../../models/liquidacion/dump_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/dump_model.js","../../models/liquidacion/guia_venta_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/guia_venta_model.js","../../models/liquidacion/monto_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/monto_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/mixins.js":[function(require,module,exports){
+var guias = {
+    esValido: function(){
+        var valido = true;
+        this.mensajes = {};
+
+        if(!this.idCliente){
+            valido = false;
+            this.mensajes.cliente = 'campo obligatorio';
+        }
+
+        if(!this.venta.numero){
+            valido = false;
+            this.mensajes.numeroVenta = 'campo obligatorio';
+        }
+
+        if(!this.venta.productos.length){
+            valido = false;
+            this.mensajes.producto = 'al menos se debe ingresar 1 producto';
+        }
+
+        return valido;
+    }
+};
+
+module.exports.guias = guias;
+
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/otro_controller.js":[function(require,module,exports){
 var Otro = require('./../../models/liquidacion/otro_model.js');
 
 function OtroController($scope){
@@ -1064,6 +1073,19 @@ Monto.prototype = {
         }
 
         this.subTotal += producto.valorTotal;
+    },
+
+    sumarGuias: function(guiasPropias, guiasLipigas){
+        var _this = this;
+        this.propias = this.lipigas = 0;
+
+        guiasPropias.forEach(function(venta){
+            _this.propias += venta.total;
+        });
+
+        guiasLipigas.forEach(function(venta){
+            _this.lipigas += venta.total;
+        });
     }
 }
 

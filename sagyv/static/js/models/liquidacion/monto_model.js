@@ -32,6 +32,19 @@ Monto.prototype = {
         }
 
         this.subTotal += producto.valorTotal;
+    },
+
+    sumarGuias: function(guiasPropias, guiasLipigas){
+        var _this = this;
+        this.propias = this.lipigas = 0;
+
+        guiasPropias.forEach(function(venta){
+            _this.propias += venta.total;
+        });
+
+        guiasLipigas.forEach(function(venta){
+            _this.lipigas += venta.total;
+        });
     }
 }
 

@@ -71,13 +71,7 @@ LiquidacionController.mixin({
     addGuia: function(evt, venta){
         this.guias.addGuia(venta);
         this.renderTabla('tpl_tabla_ventas', 'tabla_ventas', this.guias);
-
-        var tmp = {
-            "propias": this.guias.propia.ventas,
-            "lipigas": this.guias.lipigas.ventas
-        };
-
-        this.guia_dump = tmp;
+        this.monto.sumarGuias(this.guias.propia.ventas, this.guias.lipigas.ventas);
     },
 
     addVouchers: function(evt, voucher){

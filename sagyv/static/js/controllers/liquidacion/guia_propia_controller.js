@@ -1,5 +1,6 @@
 var Producto = require('./../../models/liquidacion/producto_model.js'),
-    VentaPropia = require('./../../models/liquidacion/venta_propia_model.js');
+    VentaPropia = require('./../../models/liquidacion/venta_propia_model.js'),
+    guias = require('./mixins.js').guias;
 
 function GuiaPropiaController($scope, service){
     this.service = service;
@@ -85,27 +86,7 @@ GuiaPropiaController.mixin({
         this.venta.removeProducto(index);
     },
 
-    esValido: function(){
-        var valido = true;
-        this.mensajes = {};
-
-        if(!this.idCliente){
-            valido = false;
-            this.mensajes.cliente = 'campo obligatorio';
-        }
-
-        if(!this.venta.numero){
-            valido = false;
-            this.mensajes.numeroVenta = 'campo obligatorio';
-        }
-
-        if(!this.venta.productos.length){
-            valido = false;
-            this.mensajes.producto = 'al menos se debe ingresar 1 producto';
-        }
-
-        return valido;
-    },
+    esValido: guias.esValido,
 
     guardar: function(){
         if(!this.esValido()){
