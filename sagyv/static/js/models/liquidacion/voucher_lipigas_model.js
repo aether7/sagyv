@@ -3,7 +3,8 @@ var Voucher = require('./voucher_model.js');
 function VoucherLipigas(){
     Voucher.call(this, 'lipigas');
     this.descuento = 0;
-    this.numero = null;
+    this.numero = 0;
+    this.terminal = null;
 }
 
 VoucherLipigas.mixin(Voucher,{
