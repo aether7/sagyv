@@ -1,6 +1,7 @@
 Liquidacion:
     #TODO
         ~OK - No se estan sumando los cheques.
+        NOK - No se estan sumando "Otros".
 --------NOK - Falta un total de la sumatoria. #Solo como idea.
         NOK - Ingreso de voucher lipigas.
         NOK - Ingreso de voucher Transbank.
