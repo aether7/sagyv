@@ -260,6 +260,7 @@ function LiquidacionController($scope, liquidacionService){
     this.service = liquidacionService;
 
     this.kilosVendidos = 0;
+    this.kilometros = 0;
     this.dump = new Dump();
 
     this.productos = [];
@@ -270,6 +271,15 @@ function LiquidacionController($scope, liquidacionService){
     this.vouchers = { lipigas: null,transbank: null };
     this.monto = new Monto();
     this.guias = new GuiaVenta();
+
+
+    this.productos_dump
+    this.vouchers_dump
+    this.cupones_prepago
+    this.otro_dump
+    this.guia_dump
+    this.montos_dump
+    this.this_guia_dump
 
     this.suscribeEvents();
 }
@@ -368,12 +378,12 @@ LiquidacionController.mixin({
     },
 
     addCheques: function(evt, cheques){
-        var self = this;
+        var self = this, tmp = 0;
 
         cheques.forEach(function(cheque){
             self.cheques.push(cheque);
+            self.monto.calcularCheques(cheque.monto);
         });
-
         this.dump.setCheques(this.cheques);
     },
 
@@ -382,8 +392,17 @@ LiquidacionController.mixin({
     },
 
     cerrarLiquidacion: function(){
-        var url = App.urls.get('liquidacion:cerrar');
-        $("#f_cerrar_liquidacion").get(0).submit();
+        var data = this.dump.toJSON();
+
+        this.productos_dump = data.productos;
+        this.vouchers_dump = data.vouchers;
+        this.cupones_prepago = data.cuponesPrepago;
+        this.otro_dump = data.otros;
+        this.guia_dump = data.guias;
+
+        setTimeout(function(){
+            $("#f_cerrar_liquidacion").get(0).submit();
+        }, 500);
     },
 });
 
@@ -1107,6 +1126,11 @@ Monto.prototype = {
                 this.voucherTransbank += parseInt(vouchers.transbank.tarjetas[i].monto);
             }
         }
+    },
+
+    calcularCheques : function(monto){
+        this.cheques += parseInt(monto);
+        console.log(this.cheques);
     }
 }
 

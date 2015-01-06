@@ -204,34 +204,7 @@ class Cerrar(View):
 
     @transaction.atomic
     def post(self, req):
-        """
-        TODO :
-            - Añadir al Json: nuevo_km.                     NOK
-            - Añadir al Json: boleta_actual.                NOK
-            - CuponPrepagoes de prepago, añadir boleta      NOK
-
-            - Añadir al modelo el numero de guia            NOK
-
-        .- Retirar Elementos desde el vehiculo              ~OK
-        .- Obtener chofer con la guia                       ~OK
-        .- Llenar tabla Liquidacion                         ~OK
-            - Llenar datos GuiaVenta                        ~OK
-            - Llenar datos DetalleGuiaVenta                 ~OK
-            PD : Solo en caso de guia propia/lipigas
-        .- Actualizar datos
-            - vehiculo                                      ~OK :: Falta dato desde Frontend
-            - talonarios                                    ~OK :: Falta dato desde Frontend
-            - Retirar Carga del vehiculo                    NOK
-        .- Ingreso de cupones                               ~OK
-        .- Ingreso de cheques                               ~OK
-        .- Ingreso de voucher lipigas                       NOK --
-        .- Ingreso de voucher Transbank                     NOK --
-        .- Ingreso de Otros                                 ~OK
-        .- Guia Propia                                      ~OK
-            - añadir cliente                                ~OK
-        .- Guia Lipigas                                     ~OK
-            - añadir cliente                                ~OK
-        """
+        print req.POST
         json_guia = json.loads(req.POST.get('guia_despacho'))
         cupones_prepago = req.POST.get('cupones_prepago')
         otros = req.POST.get('otros')
