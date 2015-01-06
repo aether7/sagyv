@@ -130,10 +130,6 @@ LiquidacionController.mixin({
 
     cerrarLiquidacion: function(){
         var url = App.urls.get('liquidacion:cerrar');
-        // TODO
-        //this.productos_dump = JSON.stringify(this.productos);
-        //this.montos_dump = JSON.stringify(this.montos);
-
         $("#f_cerrar_liquidacion").get(0).submit();
     },
 });
