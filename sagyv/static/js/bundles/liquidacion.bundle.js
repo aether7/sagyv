@@ -334,6 +334,7 @@ LiquidacionController.mixin({
 
         this.vouchers[voucher.tipo] = voucher;
         this.dump.setVouchers(this.vouchers);
+        this.monto.calcularVouchers(this.vouchers);
 
         this.renderTabla('tpl_tabla_vouchers', 'tabla_vouchers', this.vouchers);
     },
@@ -1095,6 +1096,20 @@ Monto.prototype = {
 
         for(var i = 0; i < cupones.length; i++){
             this.cupones += cupones[i].descuento;
+        }
+    },
+
+    calcularVouchers: function(vouchers){
+        this.voucherLipigas = this.voucherTransbank = 0;
+
+        if(vouchers.lipigas){
+            this.voucherLipigas = vouchers.lipigas.total - vouchers.lipigas.descuento;
+        }
+
+        if(vouchers.transbank){
+            for(var i = 0; i < vouchers.transbank.tarjetas.length; i++){
+                this.voucherTransbank += parseInt(vouchers.transbank.tarjetas[i].monto);
+            }
         }
     }
 }

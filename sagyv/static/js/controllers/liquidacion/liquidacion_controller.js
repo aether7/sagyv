@@ -81,6 +81,7 @@ LiquidacionController.mixin({
 
         this.vouchers[voucher.tipo] = voucher;
         this.dump.setVouchers(this.vouchers);
+        this.monto.calcularVouchers(this.vouchers);
 
         this.renderTabla('tpl_tabla_vouchers', 'tabla_vouchers', this.vouchers);
     },
