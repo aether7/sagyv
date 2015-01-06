@@ -19,6 +19,15 @@ function LiquidacionController($scope, liquidacionService){
     this.monto = new Monto();
     this.guias = new GuiaVenta();
 
+
+    this.productos_dump
+    this.vouchers_dump
+    this.cupones_prepago
+    this.otro_dump
+    this.guia_dump
+    this.montos_dump
+    this.this_guia_dump
+
     this.suscribeEvents();
 }
 
@@ -130,11 +139,19 @@ LiquidacionController.mixin({
     },
 
     cerrarLiquidacion: function(){
-        var url = App.urls.get('liquidacion:cerrar');
-        // TODO
-        //this.productos_dump = JSON.stringify(this.productos);
-        //this.montos_dump = JSON.stringify(this.montos);
-
+        // var url = App.urls.get('liquidacion:cerrar');
+        // // TODO
+        // this.productos_dump = JSON.stringify(this.productos);
+        // this.montos_dump = JSON.stringify(this.montos);
+        var data = this.dump.toJSON();
+        //console.log(data);
+        this.productos_dump = data.productos;
+        this.vouchers_dump = data.vouchers;
+        this.cupones_prepago = data.cuponesPrepago;
+        this.otro_dump = data.otros;
+        this.guia_dump = data.guias;
+        //this.montos_dump = "";
+        //this.this_guia_dump = "";
         $("#f_cerrar_liquidacion").get(0).submit();
     },
 });

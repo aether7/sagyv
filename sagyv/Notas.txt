@@ -1,7 +1,7 @@
 Liquidacion:
     #TODO
         ~OK - No se estan sumando los cheques.
-        NOK - Falta un total de la sumatoria. #Solo como idea.
+--------NOK - Falta un total de la sumatoria. #Solo como idea.
         NOK - Ingreso de voucher lipigas.
         NOK - Ingreso de voucher Transbank.
 !!!!!!!!NOK - Retirar Carga del vehiculo [IMPORTANTE]
