@@ -19,15 +19,6 @@ function LiquidacionController($scope, liquidacionService){
     this.monto = new Monto();
     this.guias = new GuiaVenta();
 
-
-    this.productos_dump
-    this.vouchers_dump
-    this.cupones_prepago
-    this.otro_dump
-    this.guia_dump
-    this.montos_dump
-    this.this_guia_dump
-
     this.suscribeEvents();
 }
 
@@ -141,11 +132,14 @@ LiquidacionController.mixin({
     cerrarLiquidacion: function(){
         var data = this.dump.toJSON();
 
-        this.productos_dump = data.productos;
-        this.vouchers_dump = data.vouchers;
-        this.cupones_prepago = data.cuponesPrepago;
-        this.otro_dump = data.otros;
-        this.guia_dump = data.guias;
+        $("#vouchers_ls").val(data.vouchers);
+        $("#cheques_ls").val(data.cheques);
+        $("#cupones_prepago_ls").val(data.cuponesPrepago);
+        $("#otros_ls").val(data.otros);
+        $("#guias_ls").val(data.guias);
+        $("#montos_ls").val("");
+        $("#kilometraje_ls").val($("#kilometraje").val());
+        $("#numero_boleta_ls").val($("#numero_boleta").val());
 
         setTimeout(function(){
             $("#f_cerrar_liquidacion").get(0).submit();

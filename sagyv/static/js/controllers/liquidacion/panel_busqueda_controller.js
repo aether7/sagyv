@@ -25,11 +25,12 @@ PanelBusquedaController.prototype = {
             alert(data.boleta.mensaje);
             return;
         }
-
         this.boleta = data.boleta;
         this.guia = data.guia;
         this.guia.fecha = common.fecha.djangoToDate(this.guia.fecha);
         this.vehiculo = data.vehiculo;
+
+        $("#guia_despacho_ls").val(data.guia.id);
 
         this.scope.$emit('liquidacion:addProductos', data.productos);
     },
