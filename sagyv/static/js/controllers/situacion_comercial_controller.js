@@ -32,7 +32,7 @@ App.Controllers.SituacionComercial.prototype = {
     },
 
     cargarSituacion: function(id){
-        var url = App.urls.get("clientes:obtener_situacion_comercial").replace("0", id);
+        var url = App.urls.get("clientes:obtener_situacion_comercial") + '?id=' + id;
         this.idSituacion = id;
 
         $.get(url, function(data){

@@ -5,7 +5,7 @@ import json
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import transaction
 from django.views.generic import TemplateView,View
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 
 from clientes.models import Cliente
 from clientes.models import DescuentoCliente
@@ -220,26 +220,34 @@ class EliminarCliente(View):
 
 class ObtenerSituacionComercial(View):
 
-    def get(self, req, id_situacion):
-        sc = DescuentoCliente.objects.get(pk = int(id_situacion))
+    def get(self, request):
+        id_situacion = request.GET.get('id')
 
-        dato = {
-            'id': sc.id,
-            'monto_descuento': "",
-            'tipo_descuento': "",
-            "formato_descuento": ""
-        }
+        if id_situacion is None:
+            situaciones_comerciales = DescuentoCliente.objects.order_by('id')
+            data = []
 
-        if str(sc) != "Sin descuento":
-            dato["monto_descuento"] = sc.monto_descuento
-            dato["tipo_descuento"] = sc.tipo_descuento.id
-            dato["formato_descuento"] = sc.producto.id
+            for sc in situaciones_comerciales:
+                data.append(self._get_situacion_comercial(sc))
         else:
-            dato["monto_descuento"] = 0
-            dato["tipo_descuento"] = None
-            dato["formato_descuento"] = None
+            sc = DescuentoCliente.objects.get(pk = int(id_situacion))
+            data = self._get_situacion_comercial(sc)
 
-        return HttpResponse(json.dumps(dato),content_type="application/json")
+        return JsonResponse(data, safe = False)
+
+    def _get_situacion_comercial(self, sc):
+        data = { 'id': sc.id }
+
+        if str(sc) != 'Sin descuento':
+            data['monto_descuento'] = sc.monto_descuento
+            data['tipo_descuento'] = sc.tipo_descuento.id
+            data['formato_descuento'] = sc.producto.id
+        else:
+            data['monto_descuento'] = 0
+            data['tipo_descuento'] = None
+            data['formato_descuento'] = None
+
+        return data
 
 
 class CrearSituacionComercial(View):

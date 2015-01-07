@@ -1,0 +1,85 @@
+[
+    {
+        "model": "clientes.tipodescuento",
+        "pk": 1,
+        "fields": {
+            "tipo": "Fijo"
+        }
+    },
+    {
+        "model": "clientes.tipodescuento",
+        "pk": 2,
+        "fields": {
+            "tipo": "Porcentaje"
+        }
+    },
+    {
+        "model": "bodega.tipoproducto",
+        "pk": 1,
+        "fields": {
+            "nombre": "llenos normales"
+        }
+    },
+    {
+        "model": "bodega.tipoproducto",
+        "pk": 2,
+        "fields": {
+            "nombre": "llenos cataliticos"
+        }
+    },
+    {
+        "model": "bodega.tipoproducto",
+        "pk": 3,
+        "fields": {
+            "nombre": "garantias"
+        }
+    },
+    {
+        "model": "bodega.producto",
+        "pk": 1,
+        "fields": {
+            "codigo": 1105,
+            "nombre": "balon 5 kilos",
+            "peso": 5,
+            "tipo_producto": 1,
+            "stock": 10,
+            "nivel_critico": 10
+        }
+    },
+    {
+        "model": "bodega.producto",
+        "pk": 2,
+        "fields": {
+            "codigo": 1111,
+            "nombre": "balon 11 kilos",
+            "peso": 11,
+            "tipo_producto": 1,
+            "stock": 10,
+            "nivel_critico": 10
+        }
+    },
+    {
+        "model": "bodega.producto",
+        "pk": 3,
+        "fields": {
+            "codigo": 1215,
+            "nombre": "balon 15 kilos",
+            "peso": 15,
+            "tipo_producto": 2,
+            "stock": 10,
+            "nivel_critico": 10
+        }
+    },
+    {
+        "model": "bodega.producto",
+        "pk": 4,
+        "fields": {
+            "codigo": 1245,
+            "nombre": "balon 45 kilos",
+            "peso": 45,
+            "tipo_producto": 2,
+            "stock": 10,
+            "nivel_critico": 10
+        }
+    }
+]
