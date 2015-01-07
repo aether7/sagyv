@@ -204,7 +204,6 @@ class Cerrar(View):
 
     @transaction.atomic
     def post(self, req):
-        print req.POST
         json_guia = json.loads(req.POST.get('guia_despacho'))
         cupones_prepago = req.POST.get('cupones_prepago')
         otros = req.POST.get('otros')
@@ -228,9 +227,7 @@ class Cerrar(View):
         if json.loads(req.POST.get('guias')) != '':
             guias = json.loads(req.POST.get('guias'))
 
-            propias = guias['propias']
-            lipigas = guias['lipigas']
-
+            print guias[0]
 
 
         this_guia = GuiaDespacho.objects.get(pk = int(json_guia['id']))
