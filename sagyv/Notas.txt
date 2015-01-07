@@ -5,6 +5,7 @@ Liquidacion:
         ~OK - No se estan sumando los cheques.
         ~OK - No hay data en la respuesta.
         NOK - No se estan sumando "Otros".
+        NOK - Descarga de vehiculo.
         NOK - Ingreso de voucher lipigas.
         NOK - Ingreso de voucher Transbank.
         NOK - lo elementos adicionales en el detalle de guia salen sin el signo $.

@@ -204,41 +204,6 @@ class Cerrar(View):
 
     @transaction.atomic
     def post(self, req):
-        # json_guia = json.loads(req.POST.get('guia_despacho'))
-        # cupones_prepago = req.POST.get('cupones_prepago')
-        # otros = req.POST.get('otros')
-        # cheques = req.POST.get('cheques')
-
-
-        # guias = ''
-        # propias = ''
-        # lipigas = ''
-        # vouchers = ''
-        # voucher_transbank = ''
-        # voucher_lipigas = ''
-
-
-        # if req.POST.get('vouchers') != '':
-        #     vouchers = json.loads(req.POST.get('vouchers'))
-
-        #     voucher_transbank = vouchers['transbank']
-        #     voucher_lipigas = vouchers['lipigas']
-
-        # if propias != '' or len(propias) > 0:
-        #     self.ingreso_guias_propia(propias)
-
-        # if lipigas != '' or len(lipigas) > 0:
-        #     self.ingreso_guia_lipigas(lipigas)
-
-        # if cupones_prepago != '':
-        #     self.ingreso_cupones(json.loads(cupones_prepago))
-
-        # if otros != '':
-        #     self.ingreso_otros(json.loads(otros))
-
-        # if cheques != '':
-        #     self.ingreso_cheques(json.loads(cheques))
-
         # # if voucher_lipigas != '':
         # #     self.ingreso_vouchers(voucher_lipigas)
 
@@ -247,6 +212,9 @@ class Cerrar(View):
 
         self._procesar_liquidacion()
         self._procesar_guias()
+        self._ingreso_cupones()
+        self._ingreso_cheques()
+        self._ingreso_otros()
 
         """
         Se debe definir la respuesta del proceso.
@@ -291,10 +259,14 @@ class Cerrar(View):
         if lipigas != '' or len(lipigas) > 0:
             self.ingreso_guia_lipigas(lipigas)
 
-        print guias
-
-    def ingreso_cupones(self, cupones):
+    def _ingreso_cupones(self):
         tipo_pago = TipoPago.objects.get(pk=int(3))
+        cupones = self.request.POST.get('cupones_prepago')
+
+        if cupones == '':
+            return
+
+        cupones = json.loads(cupones)
 
         for i in cupones:
             client = Cliente.objects.get( pk = int(i['cliente']['id']) )
@@ -308,10 +280,17 @@ class Cerrar(View):
             cupon.cliente = client
             cupon.save()
 
-    def ingreso_vouchers(self, vouchers):
-        pass
+    # def ingreso_vouchers(self, vouchers):
+    #     pass
 
-    def ingreso_cheques(self, cheques):
+    def _ingreso_cheques(self):
+        cheques = self.request.POST.get('cheques')
+
+        if cheques == '':
+            return
+
+        cheques = json.loads(cheques)
+
         for c in cheques:
             bank = Banco.objects.get( pk = int(c['banco']['id']) )
             bank.cheques_recibidos = 1 + bank.cheques_recibidos
@@ -327,7 +306,14 @@ class Cerrar(View):
             cheque.cobrado = False
             cheque.save()
 
-    def ingreso_otros(self, otros):
+    def _ingreso_otros(self):
+        otros = self.request.POST.get('otros')
+
+        if otros == '':
+            return
+
+        otros = json.loads(otros)
+
         for o in otros:
             otro = Otros()
             otro.concepto = o['concepto']
@@ -337,12 +323,7 @@ class Cerrar(View):
             otro.save()
 
     def ingreso_guias_propia(self, guias):
-        print type(guias)
-        print "========="
         for guia in guias:
-            print type(guia)
-            print "**********"
-
             client = Cliente.objects.get( pk = int(guia['cliente']['id']) )
 
             this = GuiaVenta()
@@ -375,8 +356,8 @@ class Cerrar(View):
             this.guia_venta = guia
             this.save()
 
-    def ingreso_montos(self, montos):
-        pass
+    # def ingreso_montos(self, montos):
+    #     pass
 
 
 index = IndexView.as_view()
