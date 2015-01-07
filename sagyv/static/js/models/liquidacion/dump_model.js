@@ -6,6 +6,8 @@ function Dump(){
     this.vouchers = null;
     this.guia = null;
     this.montos = null;
+
+    this.guias = [];
 }
 
 Dump.prototype = {
@@ -31,8 +33,9 @@ Dump.prototype = {
         this.vouchers = JSON.stringify(vouchers);
     },
 
-    setGuia: function(){
-
+    setGuia: function(guia){
+        console.log(guia);
+        this.guias.push(guia);
     },
 
     setMontos: function(){
@@ -46,7 +49,7 @@ Dump.prototype = {
             'cuponesPrepago': this.cuponesPrepago,
             'otros': this.otros,
             'vouchers': this.vouchers,
-            'guias': this.guias
+            'guias': JSON.stringify(this.guias)
         };
     }
 };
