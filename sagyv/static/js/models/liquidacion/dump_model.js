@@ -7,7 +7,12 @@ function Dump(){
     this.guia = null;
     this.montos = null;
 
-    this.guias = [];
+    this.guias = {
+        propias : null,
+        lipigas : null
+    };
+    this.propias = [];
+    this.lipigas = [];
 }
 
 Dump.prototype = {
@@ -33,9 +38,9 @@ Dump.prototype = {
         this.vouchers = JSON.stringify(vouchers);
     },
 
-    setGuia: function(guia){
-        console.log(guia);
-        this.guias.push(guia);
+    setGuias: function(propias, lipigas){
+        this.propias = JSON.stringify(propias.ventas);
+        this.lipigas = JSON.stringify(lipigas.ventas);
     },
 
     setMontos: function(){
@@ -43,6 +48,8 @@ Dump.prototype = {
     },
 
     toJSON: function(){
+        this.guias.propias = this.propias;
+        this.guias.lipigas = this.lipigas;
         return {
             'productos': this.productos,
             'cheques': this.cheques,

@@ -7,5 +7,6 @@ Liquidacion:
         NOK - No se estan sumando "Otros".
         NOK - Ingreso de voucher lipigas.
         NOK - Ingreso de voucher Transbank.
+        NOK - lo elementos adicionales en el detalle de guia salen sin el signo $.
 --------NOK - Falta un total de la sumatoria. #Solo como idea.
-!!!!!!!!NOK - Retirar Carga del vehiculo [IMPORTANTE]
+!!!!!!!!NOK - Retirar Carga del vehiculo [IMPORTANTE] --Preguntar a andrea

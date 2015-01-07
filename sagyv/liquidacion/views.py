@@ -204,73 +204,49 @@ class Cerrar(View):
 
     @transaction.atomic
     def post(self, req):
-        json_guia = json.loads(req.POST.get('guia_despacho'))
-        cupones_prepago = req.POST.get('cupones_prepago')
-        otros = req.POST.get('otros')
-        cheques = req.POST.get('cheques')
+        # json_guia = json.loads(req.POST.get('guia_despacho'))
+        # cupones_prepago = req.POST.get('cupones_prepago')
+        # otros = req.POST.get('otros')
+        # cheques = req.POST.get('cheques')
 
 
-        guias = ''
-        propias = ''
-        lipigas = ''
-        vouchers = ''
-        voucher_transbank = ''
-        voucher_lipigas = ''
+        # guias = ''
+        # propias = ''
+        # lipigas = ''
+        # vouchers = ''
+        # voucher_transbank = ''
+        # voucher_lipigas = ''
 
 
-        if req.POST.get('vouchers') != '':
-            vouchers = json.loads(req.POST.get('vouchers'))
+        # if req.POST.get('vouchers') != '':
+        #     vouchers = json.loads(req.POST.get('vouchers'))
 
-            voucher_transbank = vouchers['transbank']
-            voucher_lipigas = vouchers['lipigas']
+        #     voucher_transbank = vouchers['transbank']
+        #     voucher_lipigas = vouchers['lipigas']
 
-        if json.loads(req.POST.get('guias')) != '':
-            guias = json.loads(req.POST.get('guias'))
+        # if propias != '' or len(propias) > 0:
+        #     self.ingreso_guias_propia(propias)
 
-            print guias[0]
+        # if lipigas != '' or len(lipigas) > 0:
+        #     self.ingreso_guia_lipigas(lipigas)
 
+        # if cupones_prepago != '':
+        #     self.ingreso_cupones(json.loads(cupones_prepago))
 
-        this_guia = GuiaDespacho.objects.get(pk = int(json_guia['id']))
-        this_guia.estado = True
-        this_guia.save()
+        # if otros != '':
+        #     self.ingreso_otros(json.loads(otros))
 
-        this_vehiculo = this_guia.movil.vehiculo
-        """
-        this_vehiculo.km = nuevo_km
-        this_vehiculo.save()
-        """
+        # if cheques != '':
+        #     self.ingreso_cheques(json.loads(cheques))
 
-        self.this_trabajador = this_vehiculo.get_ultimo_chofer()
-        talonario_boleta = BoletaTrabajador.objects.get(trabajador = self.this_trabajador)
-        """
-        talonario_boleta.actual = boleta_actual
-        talonario_boleta.save()
-        """
+        # # if voucher_lipigas != '':
+        # #     self.ingreso_vouchers(voucher_lipigas)
 
-        self.this_liquidacion = Liquidacion()
-        self.this_liquidacion.guia_despacho = this_guia
-        self.this_liquidacion.save()
+        # # if voucher_transbank != '':
+        # #     self.ingreso_vouchers(voucher_transbank)
 
-        if propias != '' or len(propias) > 0:
-            self.ingreso_guias_propia(propias)
-
-        if lipigas != '' or len(lipigas) > 0:
-            self.ingreso_guia_lipigas(lipigas)
-
-        if cupones_prepago != '':
-            self.ingreso_cupones(json.loads(cupones_prepago))
-
-        if otros != '':
-            self.ingreso_otros(json.loads(otros))
-
-        if cheques != '':
-            self.ingreso_cheques(json.loads(cheques))
-
-        # if voucher_lipigas != '':
-        #     self.ingreso_vouchers(voucher_lipigas)
-
-        # if voucher_transbank != '':
-        #     self.ingreso_vouchers(voucher_transbank)
+        self._procesar_liquidacion()
+        self._procesar_guias()
 
         """
         Se debe definir la respuesta del proceso.
@@ -278,8 +254,44 @@ class Cerrar(View):
         dato = {'mensaje': 'El PDF se encuentra en proceso disculpe las molestias'}
         dato = json.dumps(dato, cls=DjangoJSONEncoder)
 
-        return HttpResponse(dato, content_type="application/json")
+        # return HttpResponse(dato, content_type="application/json")
 
+    def _procesar_liquidacion(self):
+        id_guia = self.request.POST.get('guia_despacho')
+        nuevo_km = self.request.POST.get('kilometraje_ls')
+        ultima_boleta = self.request.POST.get('numero_boleta_ls')
+
+        this_guia = GuiaDespacho.objects.get(pk = int(id_guia))
+        this_guia.estado = True
+        this_guia.save()
+
+        this_vehiculo = this_guia.movil.vehiculo
+        this_vehiculo.km = int(nuevo_km)
+        this_vehiculo.save()
+
+        self.this_trabajador = this_vehiculo.get_ultimo_chofer()
+
+        talonario_boleta = BoletaTrabajador.objects.get(trabajador = self.this_trabajador)
+        talonario_boleta.actual = int(ultima_boleta)
+        talonario_boleta.save()
+
+        self.this_liquidacion = Liquidacion()
+        self.this_liquidacion.guia_despacho = this_guia
+        self.this_liquidacion.save()
+
+    def _procesar_guias(self):
+        guias = json.loads(self.request.POST.get('guias'))
+
+        propias = json.loads(guias['propias'])
+        lipigas = json.loads(guias['lipigas'])
+
+        if propias != '' or len(propias) > 0:
+            self.ingreso_guias_propia(propias)
+
+        if lipigas != '' or len(lipigas) > 0:
+            self.ingreso_guia_lipigas(lipigas)
+
+        print guias
 
     def ingreso_cupones(self, cupones):
         tipo_pago = TipoPago.objects.get(pk=int(3))
@@ -325,7 +337,12 @@ class Cerrar(View):
             otro.save()
 
     def ingreso_guias_propia(self, guias):
+        print type(guias)
+        print "========="
         for guia in guias:
+            print type(guia)
+            print "**********"
+
             client = Cliente.objects.get( pk = int(guia['cliente']['id']) )
 
             this = GuiaVenta()

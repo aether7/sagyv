@@ -325,9 +325,10 @@ LiquidacionController.mixin({
     addGuia: function(evt, venta){
         this.guias.addGuia(venta);
         this.renderTabla('tpl_tabla_ventas', 'tabla_ventas', this.guias);
+
         this.monto.sumarGuias(this.guias.propia.ventas, this.guias.lipigas.ventas);
 
-        this.dump.setGuia(this.guias);
+        this.dump.setGuias(this.guias.propia, this.guias.lipigas);
     },
 
     addVouchers: function(evt, voucher){
@@ -396,9 +397,7 @@ LiquidacionController.mixin({
         $("#kilometraje_ls").val($("#kilometraje").val());
         $("#numero_boleta_ls").val($("#numero_boleta").val());
 
-        setTimeout(function(){
-            $("#f_cerrar_liquidacion").get(0).submit();
-        }, 500);
+        $('#f_cerrar_liquidacion').get(0).submit();
     },
 });
 
@@ -964,7 +963,12 @@ function Dump(){
     this.guia = null;
     this.montos = null;
 
-    this.guias = [];
+    this.guias = {
+        propias : null,
+        lipigas : null
+    };
+    this.propias = [];
+    this.lipigas = [];
 }
 
 Dump.prototype = {
@@ -990,9 +994,9 @@ Dump.prototype = {
         this.vouchers = JSON.stringify(vouchers);
     },
 
-    setGuia: function(guia){
-        console.log(guia);
-        this.guias.push(guia);
+    setGuias: function(propias, lipigas){
+        this.propias = JSON.stringify(propias.ventas);
+        this.lipigas = JSON.stringify(lipigas.ventas);
     },
 
     setMontos: function(){
@@ -1000,6 +1004,8 @@ Dump.prototype = {
     },
 
     toJSON: function(){
+        this.guias.propias = this.propias;
+        this.guias.lipigas = this.lipigas;
         return {
             'productos': this.productos,
             'cheques': this.cheques,
