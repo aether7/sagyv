@@ -1,24 +1,24 @@
-var Producto = require('./../../models/liquidacion/producto_model.js'),
-    Garantias = require('./../../models/liquidacion/garantias_model.js');
+var Garantias = require('./../../models/liquidacion/garantias_model.js');
 
 function GarantiasController($scope, service){
-    this.service = service;
     this.scope = $scope;
+    this.service = service;
 
-    this.garantia = null;
     this.garantias = [];
+    this.garantia = null;
 
-    this.valido = true;
     this.init();
 }
 
-GarantiasController.mixin({
+GarantiasController.prototype = {
+    constructor: GarantiasController,
+
     init : function(){
-        this.service.obtenerGarantias({}, this.procesarGarantias.bind(this));
+        this.service.obtenerGarantias(this.procesarGarantias.bind(this));
     },
 
     procesarGarantias : function(data){
-        self = this;
+        var self = this;
 
         data.forEach(function(e){
             self.garantia = new Garantias();
@@ -28,27 +28,24 @@ GarantiasController.mixin({
 
             self.garantias.push(self.garantia);
         });
-
     },
 
-    resetearGarantias : function(){},
-
     guardar : function(){
-        //TODO : que haga algo(?)
-        self = this;
+        var valido = true;
+
         this.garantias.forEach(function(g){
             if(!g.esValido()){
-                self.valido = false;
+                valido = false;
             }
         });
 
-        if(!this.valido){
+        if(!valido){
             console.log('NOPE');
-            return
+            return;
         }
 
-        console.log('YEE');
+        console.log('parapapapparaparapam ...... YEE');
     }
-});
+};
 
 module.exports = GarantiasController;

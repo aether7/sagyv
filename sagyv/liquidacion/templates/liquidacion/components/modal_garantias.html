@@ -2,10 +2,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4>Guía Lipigas</h4>
+                <h4>Garantías</h4>
             </div>
 
             <div class="modal-body">
@@ -21,7 +18,13 @@
                         <tr ng-repeat="producto in gCtrl.garantias">
                             <td ng-bind="producto.codigo"></td>
                             <td ng-bind="producto.valor"></td>
-                            <td><input type="text" ng-model="producto.cantidad"/></td>
+                            <td>
+                                <input type="text" ng-model="producto.cantidad" />
+
+                                <span class="text-danger block"
+                                    ng-show="producto.mensajes.cantidad"
+                                    ng-bind="producto.mensajes.cantidad"></span>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -29,7 +32,7 @@
 
             <div class="modal-footer">
                 <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <button class="btn btn-primary" data-ng-click="gCtrl.guardar()">Guardar</button>
+                <button class="btn btn-primary" ng-click="gCtrl.guardar()">Guardar</button>
             </div>
         </div>
     </div>

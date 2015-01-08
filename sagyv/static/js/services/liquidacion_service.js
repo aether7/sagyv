@@ -19,10 +19,10 @@ function liquidacionService($http){
             get(url, data, callback);
         },
 
-        obtenerGarantias: function(data, callback){
+        obtenerGarantias: function(callback){
             var url = App.urls.get('liquidacion:obtener_garantias');
-            get(url, data, callback);
-        },
+            get(url, callback);
+        }
     };
 
     return services;
