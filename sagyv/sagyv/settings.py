@@ -24,6 +24,12 @@ SECRET_KEY = '*k#9n$x8&_5s)p=p*rd2e5o*dv*3qp=nfq&5jilgq%w9otww)o'
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
+ADMINS = (
+    ('Sebastian Real', 'sebastian.real@rlay.cl'),
+    ('Norman Glaves', 'norman.glaves@rlay.cl'),
+    ('Francisco Reyes', 'francisco.reyes@rlay.cl'),
+)
+
 ALLOWED_HOSTS = [".rlay.cl"]
 
 # Application definition
