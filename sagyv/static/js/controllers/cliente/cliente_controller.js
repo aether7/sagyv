@@ -46,7 +46,17 @@ ClienteController.prototype = {
     },
 
     eliminar: function(index){
-        console.log('eliminando ' + index);
+        if(!confirm('¿ Está seguro(a) de eliminar a este cliente ?')){
+            return;
+        }
+
+        var cliente = this.clientes[index],
+            _this = this;
+
+        this.service.remove(cliente.id, function(){
+            _this.clientes.splice(index, 1);
+            common.agregarMensaje('El cliente fue eliminado exitosamente');
+        });
     },
 
     ver: function(index){

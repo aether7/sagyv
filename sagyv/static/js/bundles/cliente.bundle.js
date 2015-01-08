@@ -31,8 +31,11 @@ app.factory('clienteService', ['$http', function($http){
 
         },
 
-        remove: function(){
+        remove: function(id, callback){
+            var url = App.urls.get('clientes:eliminar'),
+                data = { id : id };
 
+            $http.post(url, data).success(callback);
         }
     };
 
@@ -93,7 +96,17 @@ ClienteController.prototype = {
     },
 
     eliminar: function(index){
-        console.log('eliminando ' + index);
+        if(!confirm('¿ Está seguro(a) de eliminar a este cliente ?')){
+            return;
+        }
+
+        var cliente = this.clientes[index],
+            _this = this;
+
+        this.service.remove(cliente.id, function(){
+            _this.clientes.splice(index, 1);
+            common.agregarMensaje('El cliente fue eliminado exitosamente');
+        });
     },
 
     ver: function(index){

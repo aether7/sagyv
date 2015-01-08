@@ -27,7 +27,7 @@ app.controller('VoucherTransbankController', ['$scope', VoucherTransbankControll
 app.controller('ChequeController', ['$scope', ChequeController]);
 app.controller('CuponPrepagoController', ['$scope', CuponPrepagoController]);
 app.controller('OtroController', ['$scope', OtroController]);
-app.controller('GarantiasController', ['$scope'], GarantiasController);
+app.controller('GarantiasController', ['$scope', GarantiasController]);
 
 })();
 

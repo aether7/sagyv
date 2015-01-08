@@ -30,8 +30,11 @@ app.factory('clienteService', ['$http', function($http){
 
         },
 
-        remove: function(){
+        remove: function(id, callback){
+            var url = App.urls.get('clientes:eliminar'),
+                data = { id : id };
 
+            $http.post(url, data).success(callback);
         }
     };
 
