@@ -2,97 +2,112 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button class="close" data-dismiss="modal" aria-hidden="true">
-                    <span aria-hidden="true">&times;</span>
-                    <span class="sr-only">Close</span>
-                </button>
                 <h4 class="modal-title">Editar Cliente</h4>
             </div>
             <div class="modal-body">
-                <form id="f_editar_cliente" action="{% url 'clientes:modificar' %}" method="post">
-                    {% csrf_token %}
+                <div class="form-group">
+                    <label for="nombre_update" class="control-label">Nombre</label>
+                    <input id="nombre_update" type="text" class="form-control" ng-model="clienteCtrl.cliente.nombre" />
 
-                    <div class="form-group">
-                        <label for="nombre_update" class="control-label">Nombre</label>
-                        <input id="nombre_update" type="text" class="form-control" value="" />
-                        <span class="help-block"></span>
-                    </div>
+                    <span class="text-danger"
+                        ng-show="clienteCtrl.cliente.mensajes.nombre"
+                        ng-bind="clienteCtrl.cliente.mensajes.nombre"></span>
+                </div>
 
-                    <div class="form-group">
-                        <label for="giro_update" class="control-label">Giro</label>
-                        <input id="giro_update" class="form-control" type="text" value="" />
-                        <span class="help-block"></span>
-                    </div>
+                <div class="form-group">
+                    <label for="giro_update" class="control-label">Giro</label>
+                    <input id="giro_update" class="form-control" type="text" ng-model="clienteCtrl.cliente.giro" />
 
-                    <div class="form-group">
-                        <label for="direccion_update" class="control-label">Dirección</label>
-                        <input id="direccion_update" type="text" class="form-control" value="" />
-                        <span class="help-block"></span>
-                    </div>
+                    <span class="text-danger"
+                        ng-show="clienteCtrl.cliente.mensajes.giro"
+                        ng-bind="clienteCtrl.cliente.mensajes.giro"></span>
+                </div>
 
-                    <div class="form-group">
-                        <label for="telefono_update" class="control-label">Teléfono</label>
-                        <input id="telefono_update" type="text" class="form-control" value="" />
-                        <span class="help-block"></span>
-                    </div>
+                <div class="form-group">
+                    <label for="direccion_update" class="control-label">Dirección</label>
+                    <input id="direccion_update" type="text" class="form-control"
+                        ng-model="clienteCtrl.cliente.direccion" />
 
-                    <div class="form-group">
-                        <label for="rut_update" class="control-label">Rut</label>
-                        <input id="rut_update" type="text" class="form-control" value="" />
-                        <span class="help-block"></span>
-                    </div>
+                    <span class="text-danger"
+                        ng-show="clienteCtrl.cliente.mensajes.direccion"
+                        ng-bind="clienteCtrl.cliente.mensajes.direccion"></span>
+                </div>
 
-                    <div class="form-group">
-                        <label for="sit_comercial_update" class="control-label">Situación comercial</label>
-                        <select name="sit_comercial_update" id="sit_comercial_update" class="form-control">
-                            {% for situacion in situaciones_comerciales_select %}
-                            <option value="{{ situacion.id }}" data-id="{{ situacion.id }}">
-                                {{ situacion }}
-                            </option>
-                            {% endfor%}
-                        </select>
-                        <span class="help-block"></span>
-                    </div>
+                <div class="form-group">
+                    <label for="telefono_update" class="control-label">Teléfono</label>
+                    <input id="telefono_update" type="text" class="form-control" ng-model="clienteCtrl.cliente.telefono" />
 
-                    <div class="checkbox">
-                        <label for="credito_update">
-                            <input id="credito_update" type="checkbox" value="1" />
-                            <span>Crédito</span>
-                        </label>
-                    </div>
+                    <span class="text-danger"
+                        ng-show="clienteCtrl.cliente.mensajes.telefono"
+                        ng-bind="clienteCtrl.cliente.mensajes.telefono"></span>
+                </div>
 
-                    <div class="checkbox">
-                        <label for="es_lipigas_update">
-                            <input id="es_lipigas_update" type="checkbox" value="1" />
-                            <span>Es Lipigas</span>
-                        </label>
-                    </div>
+                <div class="form-group">
+                    <label for="rut_update" class="control-label">Rut</label>
+                    <input id="rut_update" type="text" class="form-control" ng-model="clienteCtrl.cliente.rut" />
 
-                    <div class="checkbox">
-                        <label for="dispensador_update">
-                            <input id="dispensador_update" type="checkbox" value="1" />
-                            <span>Dispensador</span>
-                        </label>
-                    </div>
+                    <span class="text-danger"
+                        ng-show="clienteCtrl.cliente.mensajes.rut"
+                        ng-bind="clienteCtrl.cliente.mensajes.rut"></span>
+                </div>
 
-                    <div class="checkbox">
-                        <label for="es_propio_update">
-                            <input id="es_propio_update" type="checkbox" value="1" />
-                            <span>Propio</span>
-                        </label>
-                    </div>
+                <div class="form-group">
+                    <label for="sit_comercial_update" class="control-label">Situación comercial</label>
+                    <select id="sit_comercial_update" class="form-control" ng-model="clienteCtrl.cliente.situacionComercialObj">
+                        <option value="">Sin descuento</option>
+                        {% verbatim %}
+                        <option ng-repeat="sc in situacionesComerciales" value="{{ sc }}">
+                            {{ sc.getTipoDescuento() }}
+                        </option>
+                        {% endverbatim %}
+                    </select>
 
-                    <div class="form-group">
-                        <label for="obs_update" class="control-label">Observaciones</label>
-                        <textarea id="obs_update" class="form-control">
-                        </textarea>
-                        <span class="help-block"></span>
-                    </div>
-                </form>
+                    <span class="text-danger"
+                        ng-show="clienteCtrl.cliente.mensajes.situacionComercial"
+                        ng-bind="clienteCtrl.cliente.mensajes.situacionComercial"></span>
+                </div>
+
+                <div class="checkbox">
+                    <label for="credito_update">
+                        <input id="credito_update" type="checkbox" ng-model="clienteCtrl.cliente.credito" />
+                        <span>Crédito</span>
+                    </label>
+                </div>
+
+                <div class="checkbox">
+                    <label for="lipigas_update">
+                        <input id="lipigas_update" type="checkbox" ng-model="clienteCtrl.cliente.lipigas" />
+                        <span>Lipigas</span>
+                    </label>
+                </div>
+
+                <div class="checkbox">
+                    <label for="dispensador_update">
+                        <input id="dispensador_update" type="checkbox" ng-model="clienteCtrl.cliente.dispensador" />
+                        <span>Dispensador</span>
+                    </label>
+                </div>
+
+                <div class="checkbox">
+                    <label for="propio_update">
+                        <input id="propio_update" type="checkbox" ng-model="clienteCtrl.cliente.propio" />
+                        <span>Propio</span>
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label for="obs_update" class="control-label">Observaciones</label>
+                    <textarea id="obs_update" class="form-control" ng-model="clienteCtrl.cliente.observacion"></textarea>
+
+                    <span class="text-danger"
+                        ng-show="clienteCtrl.cliente.mensajes.observacion"
+                        ng-bind="clienteCtrl.cliente.mensajes.observacion"></span>
+                </div>
             </div>
+
             <div class="modal-footer">
                 <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <button id="btn_guardar_update" class="btn btn-primary">Guardar</button>
+                <button id="btn_guardar_update" class="btn btn-primary" ng-click="clienteCtrl.actualizar()">Guardar</button>
             </div>
         </div>
     </div>

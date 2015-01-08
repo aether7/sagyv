@@ -76,20 +76,6 @@ class ObtenerCliente(View, ClienteMixin):
         return JsonResponse(data, safe = False)
 
 
-class CrearEditarCliente(View):
-    def obtener_situacion_comercial(self, texto_situacion):
-        if texto_situacion == "otro":
-            cantidad = self.request.POST.get("cantidad")
-            tipo = self.request.POST.get("tipo")
-            producto_id = self.request.POST.get("producto")
-
-            sc = crear_nueva_situacion(cantidad, tipo, producto_id)
-        else:
-            sc = DescuentoCliente.objects.get(pk = int(texto_situacion))
-
-        return sc
-
-
 class CrearCliente(View, ClienteMixin):
     @transaction.atomic
     def post(self, request):
@@ -117,7 +103,7 @@ class CrearCliente(View, ClienteMixin):
         cliente.propio = propio
         cliente.observacion = observacion
 
-        if sit_comercial_id is not None:
+        if sit_comercial_id is not None and sit_comercial_id != 'null':
             cliente.situacion_comercial = DescuentoCliente.objects.get(pk = int(sit_comercial_id))
 
         cliente.save()
@@ -126,71 +112,52 @@ class CrearCliente(View, ClienteMixin):
         return JsonResponse(data, safe = False)
 
 
-class ModificarCliente(CrearEditarCliente):
-
+class ModificarCliente(View, ClienteMixin):
     @transaction.atomic
-    def post(self,req):
-        situacion_comercial = req.POST.get('situacion_comercial')
-        sc = self.obtener_situacion_comercial(situacion_comercial)
-        cliente = self.modificar_cliente(sc)
+    def post(self,request):
+        nombre = request.POST.get('nombre')
+        giro = request.POST.get('giro')
+        rut = request.POST.get('rut')
+        telefono = request.POST.get('telefono')
+        direccion = request.POST.get('direccion')
+        credito = request.POST.get('credito')
+        dispensador = request.POST.get('dispensador')
+        lipigas = request.POST.get('lipigas')
+        propio = request.POST.get('propio')
+        observacion = request.POST.get('observacion')
+        sit_comercial_id = request.POST.get('situacionComercialId')
+        id = request.POST.get('id')
 
-        dato = {
-            "status": "ok",
-            "nombre" : cliente.nombre,
-            "giro": cliente.giro,
-            "telefono": cliente.telefono,
-            "direccion" : cliente.direccion,
-            "id" : cliente.id,
-            "situacion_comercial" : cliente.situacion_comercial.__unicode__()
-        }
-
-        return HttpResponse(json.dumps(dato), content_type="application/json")
-
-    def modificar_cliente(self, situacion_comercial):
-        id_cliente = self.request.POST.get('id_cliente')
-        nombre = self.request.POST.get('nombre')
-        giro = self.request.POST.get('giro')
-        direccion = self.request.POST.get('direccion')
-        telefono = self.request.POST.get('telefono')
-        credito = self.request.POST.get('credito')
-        dispensador = self.request.POST.get('dispensador')
-        es_lipigas = self.request.POST.get('es_lipigas')
-        es_propio = self.request.POST.get('es_propio')
-        obs = self.request.POST.get('obs')
-
-        cliente = Cliente.objects.get(pk = id_cliente)
+        cliente = Cliente.objects.get(pk = int(id))
         cliente.nombre = nombre
         cliente.giro = giro
-        cliente.direccion = direccion
+        cliente.rut = rut
         cliente.telefono = telefono
-        cliente.observacion = obs
-        cliente.situacion_comercial = situacion_comercial
+        cliente.direccion = direccion
+        cliente.credito = credito
+        cliente.dispensador = dispensador
+        cliente.lipigas = lipigas
+        cliente.propio = propio
+        cliente.observacion = observacion
 
-        cliente.es_lipigas = (es_lipigas != "false") and True or False
-        cliente.credito = (credito != "false") and True or False
-        cliente.dispensador = (dispensador != "false") and True or False
-        cliente.es_propio = (es_propio != 'false') and True or False
+        if sit_comercial_id is not None and sit_comercial_id != 'null':
+            cliente.situacion_comercial = DescuentoCliente.objects.get(pk = int(sit_comercial_id))
 
         cliente.save()
 
-        return cliente
+        data = self._get_cliente(cliente)
+        return JsonResponse(data, safe = False)
 
 
 class EliminarCliente(View):
-
     @transaction.atomic
-    def post(self,req):
-        id_cliente = req.POST.get('id_cliente')
-        cliente = Cliente.objects.get(pk = id_cliente)
-        rut = cliente.rut
+    def post(self,request):
+        id_cliente = request.POST.get('id')
+        cliente = Cliente.objects.get(pk = int(id_cliente))
         cliente.delete()
 
-        dato = {
-            "status": "ok",
-            "id": id_cliente,
-            "rut":  rut
-        }
-        return HttpResponse(json.dumps(dato), content_type="application/json")
+        dato = { 'status': 'ok' }
+        return JsonResponse(dato, safe = False)
 
 
 class BuscarCliente(View):
@@ -216,23 +183,9 @@ class BuscarCliente(View):
         return HttpResponse(json.dumps(data), content_type="application/json")
 
 
-class BuscarProducto(View):
-    def get(self, req):
-        producto_id = int(req.GET.get("producto_id"))
-        producto = Producto.objects.get(pk = producto_id)
-
-        data = json.dumps({
-            "id": producto.id,
-            "nombre": producto.nombre,
-            "tipo": producto.tipo_producto.nombre
-        })
-
-        return HttpResponse(data, content_type="application/json")
-
 index = Index.as_view()
 obtener_cliente = ObtenerCliente.as_view()
 crear_cliente = CrearCliente.as_view()
 modificar_cliente = ModificarCliente.as_view()
 eliminar_cliente = EliminarCliente.as_view()
 buscar_cliente = BuscarCliente.as_view()
-buscar_producto = BuscarProducto.as_view()

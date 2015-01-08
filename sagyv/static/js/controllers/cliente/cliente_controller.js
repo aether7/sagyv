@@ -29,7 +29,7 @@ ClienteController.prototype = {
                 cliente.lipigas = c.lipigas;
                 cliente.dispensador = c.dispensador;
                 cliente.credito = c.credito;
-                cliente.observacion = c.obs;
+                cliente.observacion = c.observacion;
 
                 return cliente;
             });
@@ -42,7 +42,9 @@ ClienteController.prototype = {
     },
 
     editar: function(index){
-        console.log('editando ' + index);
+        this.index = index;
+        this.cliente = this.clientes[index];
+        $('#modal_editar').modal('show');
     },
 
     eliminar: function(index){
@@ -60,7 +62,8 @@ ClienteController.prototype = {
     },
 
     ver: function(index){
-        console.log('viendo detalle de ' + index);
+        this.cliente = this.clientes[index];
+        $('#modal_ver').modal('show');
     },
 
     crear: function(){
@@ -80,7 +83,18 @@ ClienteController.prototype = {
     },
 
     actualizar: function(){
+        if(!this.cliente.esValido()){
+            return;
+        }
 
+        this.service.update(this.cliente.toJSON(), this.procesarActualizar.bind(this));
+    },
+
+    procesarActualizar: function(data){
+        this.clientes[this.index] = this.cliente;
+
+        $('#modal_editar').modal('hide');
+        common.agregarMensaje('El cliente ha sido actualizado exitosamente');
     }
 };
 

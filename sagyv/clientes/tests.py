@@ -80,6 +80,15 @@ class ClienteTestCase(TestCase):
     fixtures = ['descuentocliente.json']
 
     def setUp(self):
+        tipo1 = TipoDescuento.objects.get(pk = 1)
+        producto1 = Producto.objects.get(pk = 1)
+
+        DescuentoCliente.objects.create(
+            monto_descuento = 5000,
+            tipo_descuento = tipo1,
+            producto = producto1
+        )
+
         Cliente.objects.create(
             nombre = 'Juanito',
             giro = 'Juanito Corp',
@@ -122,10 +131,57 @@ class ClienteTestCase(TestCase):
         self.assertEqual(cliente['nombre'], 'Juanito')
 
     def test_crear(self):
-        pass
+        data = {
+            'nombre': 'Sebastian Real Arce',
+            'giro': 'RLAY ltda',
+            'rut': '1-9',
+            'telefono': '2797752',
+            'direccion': 'mercedes # 414',
+            'credito': True,
+            'lipigas': True,
+            'propio': False,
+            'dispensador': False,
+            'observacion': 'nose que colocar como observacion',
+            'situacionComercialId': 1,
+        }
+
+        response = self.client.post(reverse('clientes:crear'), data)
+        self.assertEqual(response.status_code, 200)
+
+        data['rut'] = '16104879-8'
+        data['situacionComercialId'] = 'null'
+
+        response = self.client.post(reverse('clientes:crear'), data)
+        self.assertEqual(response.status_code, 200)
+
+        cantidad = Cliente.objects.count()
+        self.assertEqual(cantidad, 4)
 
     def test_actualizar(self):
-        pass
+        data = {
+            'id': 1,
+            'nombre': 'Sebastian Real Arce',
+            'giro': 'RLAY ltda',
+            'rut': '1-9',
+            'telefono': '2797752',
+            'direccion': 'mercedes # 414',
+            'credito': True,
+            'lipigas': True,
+            'propio': False,
+            'dispensador': False,
+            'observacion': 'nose que colocar como observacion',
+            'situacionComercialId': 1,
+        }
+
+        response = self.client.post(reverse('clientes:modificar'), data)
+        self.assertEqual(response.status_code, 200)
+
+        cliente = Cliente.objects.get(pk = 1)
+        self.assertEqual(cliente.nombre, 'Sebastian Real Arce')
 
     def test_eliminar(self):
-        pass
+        data = { 'id' : 1 }
+        response = self.client.post(reverse('clientes:eliminar'), data)
+        self.assertEqual(response.status_code, 200)
+        cantidad = Cliente.objects.count()
+        self.assertEqual(cantidad, 1)

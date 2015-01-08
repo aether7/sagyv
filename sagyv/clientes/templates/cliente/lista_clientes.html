@@ -16,7 +16,7 @@
         <tr ng-repeat="cliente in clienteCtrl.clientes">
             <td ng-bind="cliente.nombre"></td>
             <td ng-bind="cliente.giro"></td>
-            <td ng-bind="cliente.rut"></td>
+            <td ng-bind="cliente.rut | formatoRut"></td>
             <td ng-bind="cliente.telefono"></td>
             <td ng-bind="cliente.direccion"></td>
             <td ng-bind="cliente.getSituacionComercial()"></td>

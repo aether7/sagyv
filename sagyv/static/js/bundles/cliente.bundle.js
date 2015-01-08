@@ -2,52 +2,23 @@
 (function(){
 'use strict';
 var app = angular.module('clienteApp', []),
+    formatoRut = require('../filters/string_filters.js').formatoRut,
     situacionComercialService = require('../services/cliente/situacion_comercial_service.js'),
+    clienteService = require('../services/cliente/cliente_service.js'),
     SituacionComercialController = require('../controllers/cliente/situacion_comercial_controller.js'),
     ClienteController = require('../controllers/cliente/cliente_controller.js');
 
 app.factory('situacionComercialService', ['$http', situacionComercialService]);
+app.factory('clienteService', ['$http', clienteService]);
 
-app.factory('clienteService', ['$http', function($http){
-    $http.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-
-    var services = {
-        all: function(callback){
-            var url = App.urls.get('clientes:obtener');
-            $http.get(url).success(callback);
-        },
-
-        find: function(){
-
-        },
-
-        create: function(data, callback){
-            var url = App.urls.get('clientes:crear');
-            data = $.param(data);
-            $http.post(url, data).success(callback);
-        },
-
-        update: function(){
-
-        },
-
-        remove: function(id, callback){
-            var url = App.urls.get('clientes:eliminar'),
-                data = { id : id };
-
-            $http.post(url, data).success(callback);
-        }
-    };
-
-    return services;
-}]);
+app.filter('formatoRut', formatoRut);
 
 app.controller('ClienteController', ['clienteService','$rootScope', ClienteController]);
 app.controller('SituacionComercialController', ['situacionComercialService','$rootScope', SituacionComercialController]);
 
 })();
 
-},{"../controllers/cliente/cliente_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/cliente/cliente_controller.js","../controllers/cliente/situacion_comercial_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/cliente/situacion_comercial_controller.js","../services/cliente/situacion_comercial_service.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/cliente/situacion_comercial_service.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/cliente/cliente_controller.js":[function(require,module,exports){
+},{"../controllers/cliente/cliente_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/cliente/cliente_controller.js","../controllers/cliente/situacion_comercial_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/cliente/situacion_comercial_controller.js","../filters/string_filters.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/filters/string_filters.js","../services/cliente/cliente_service.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/cliente/cliente_service.js","../services/cliente/situacion_comercial_service.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/cliente/situacion_comercial_service.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/cliente/cliente_controller.js":[function(require,module,exports){
 var Cliente = require('../../models/cliente/cliente_model.js');
 
 function ClienteController(service, rootScope){
@@ -79,7 +50,7 @@ ClienteController.prototype = {
                 cliente.lipigas = c.lipigas;
                 cliente.dispensador = c.dispensador;
                 cliente.credito = c.credito;
-                cliente.observacion = c.obs;
+                cliente.observacion = c.observacion;
 
                 return cliente;
             });
@@ -92,7 +63,9 @@ ClienteController.prototype = {
     },
 
     editar: function(index){
-        console.log('editando ' + index);
+        this.index = index;
+        this.cliente = this.clientes[index];
+        $('#modal_editar').modal('show');
     },
 
     eliminar: function(index){
@@ -110,7 +83,8 @@ ClienteController.prototype = {
     },
 
     ver: function(index){
-        console.log('viendo detalle de ' + index);
+        this.cliente = this.clientes[index];
+        $('#modal_ver').modal('show');
     },
 
     crear: function(){
@@ -130,7 +104,18 @@ ClienteController.prototype = {
     },
 
     actualizar: function(){
+        if(!this.cliente.esValido()){
+            return;
+        }
 
+        this.service.update(this.cliente.toJSON(), this.procesarActualizar.bind(this));
+    },
+
+    procesarActualizar: function(data){
+        this.clientes[this.index] = this.cliente;
+
+        $('#modal_editar').modal('hide');
+        common.agregarMensaje('El cliente ha sido actualizado exitosamente');
     }
 };
 
@@ -221,7 +206,33 @@ SituacionComercialController.prototype = {
 
 module.exports = SituacionComercialController;
 
-},{"../../models/cliente/situacion_comercial_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/cliente/situacion_comercial_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/cliente/cliente_model.js":[function(require,module,exports){
+},{"../../models/cliente/situacion_comercial_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/cliente/situacion_comercial_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/filters/string_filters.js":[function(require,module,exports){
+function formatoRut(){
+    return function(input){
+        var rut, dv, str, i;
+
+        rut = input.split('-');
+        dv = rut[1];
+        rut = rut[0];
+        str = '';
+        rut = rut.split('').reverse();
+
+        for(i = 0; i < rut.length; i++){
+            if(i !== 0 && i % 3 === 0){
+                str += '.';
+            }
+
+            str += rut[i];
+        }
+
+        str = str.split('').reverse().join('') + '-' + dv;
+        return str;
+    };
+}
+
+module.exports.formatoRut = formatoRut;
+
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/cliente/cliente_model.js":[function(require,module,exports){
 var SituacionComercial = require('./situacion_comercial_model.js');
 
 function Cliente(){
@@ -453,6 +464,46 @@ SituacionComercial.prototype = {
 };
 
 module.exports = SituacionComercial;
+
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/cliente/cliente_service.js":[function(require,module,exports){
+function service($http){
+    $http.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+
+    var services = {
+        all: function(callback){
+            var url = App.urls.get('clientes:obtener');
+            $http.get(url).success(callback);
+        },
+
+        find: function(id, callback){
+            var url = App.urls.get('clientes:obtener') + '?id=' + id;
+            $http.get(url).success(callback);
+        },
+
+        create: function(data, callback){
+            var url = App.urls.get('clientes:crear');
+            data = $.param(data);
+            $http.post(url, data).success(callback);
+        },
+
+        update: function(data, callback){
+            var url = App.urls.get('clientes:update');
+            data = $.param(data);
+            $http.post(url, data).success(callback);
+        },
+
+        remove: function(id, callback){
+            var url = App.urls.get('clientes:eliminar'),
+                data = $.param({ id : id });
+
+            $http.post(url, data).success(callback);
+        }
+    };
+
+    return services;
+}
+
+module.exports = service;
 
 },{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/cliente/situacion_comercial_service.js":[function(require,module,exports){
 function service($http){
