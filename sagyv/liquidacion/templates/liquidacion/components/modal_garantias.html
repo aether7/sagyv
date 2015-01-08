@@ -9,7 +9,22 @@
             </div>
 
             <div class="modal-body">
-                asdf
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Codigo</th>
+                            <th>precio</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="producto in gCtrl.garantias">
+                            <td ng-bind="producto.codigo"></td>
+                            <td ng-bind="producto.valor"></td>
+                            <td><input type="text" ng-model="producto.cantidad"/></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
 
             <div class="modal-footer">

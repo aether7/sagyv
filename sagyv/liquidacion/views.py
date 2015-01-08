@@ -14,6 +14,7 @@ from main.helpers.fecha import convierte_texto_fecha, convierte_fecha_texto
 from trabajador.models import BoletaTrabajador
 from trabajador.models import Trabajador
 from bodega.models import Producto
+from bodega.models import TipoProducto
 from bodega.models import GuiaDespacho
 from bodega.models import HistorialStock
 from clientes.models import Cliente
@@ -357,8 +358,30 @@ class Cerrar(View):
             this.save()
 
 
+class ObtenerGarantias(View):
+
+    def get(self, req):
+        tipo = TipoProducto.objects.get( pk = TipoProducto.GARANTIA)
+
+        garantias = Producto.objects.filter( tipo_producto = tipo).exclude(codigo = 3215).exclude(codigo = 3315)
+        data = []
+
+        for garantia in garantias:
+            item = {
+                'id' : garantia.id,
+                'codigo' : garantia.codigo,
+                'precio' : garantia.get_precio_producto()
+            }
+
+            data.append(item)
+
+        data = json.dumps(data, cls=DjangoJSONEncoder)
+        return HttpResponse(data, content_type="application/json")
+
+
 index = IndexView.as_view()
 obtener_guia = ObtenerGuiaDespacho.as_view()
+obtener_garantias = ObtenerGarantias.as_view()
 balance_liquidacion = BalanceLiquidacionView.as_view()
 buscar_cliente = BuscarCliente.as_view()
 cerrar = Cerrar.as_view()

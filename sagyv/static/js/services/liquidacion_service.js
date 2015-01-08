@@ -17,7 +17,12 @@ function liquidacionService($http){
         buscarCliente: function(data, callback){
             var url = App.urls.get('liquidacion:buscar_cliente');
             get(url, data, callback);
-        }
+        },
+
+        obtenerGarantias: function(data, callback){
+            var url = App.urls.get('liquidacion:obtener_garantias');
+            get(url, data, callback);
+        },
     };
 
     return services;
