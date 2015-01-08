@@ -61,4 +61,13 @@
 
         {% include "liquidacion/components/modal_cheques.html" %}
     </div>
+
+    <div class="box" data-ng-controller="GarantiasController as gCtrl">
+        <button type="button" class="btn btn-default"
+        data-action="abre-modal"
+        data-modal="garantias"
+        data-ng-click="gCtrl.resetearGarantias()">Garantias</button>
+
+        {% include "liquidacion/components/modal_garantias.html" %}
+    </div>
 </div>

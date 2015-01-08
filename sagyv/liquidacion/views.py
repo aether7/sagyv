@@ -247,6 +247,9 @@ class Cerrar(View):
         self.this_liquidacion.guia_despacho = this_guia
         self.this_liquidacion.save()
 
+    def _descargar_vehiculo(self):
+        pass
+
     def _procesar_guias(self):
         guias = json.loads(self.request.POST.get('guias'))
 
@@ -279,9 +282,6 @@ class Cerrar(View):
             cupon.formato = format
             cupon.cliente = client
             cupon.save()
-
-    # def ingreso_vouchers(self, vouchers):
-    #     pass
 
     def _ingreso_cheques(self):
         cheques = self.request.POST.get('cheques')
@@ -355,9 +355,6 @@ class Cerrar(View):
             this.producto = producto
             this.guia_venta = guia
             this.save()
-
-    # def ingreso_montos(self, montos):
-    #     pass
 
 
 index = IndexView.as_view()

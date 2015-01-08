@@ -12,6 +12,7 @@ var app = angular.module('liquidacionApp',[]),
     ChequeController = require('../controllers/liquidacion/cheque_controller.js'),
     CuponPrepagoController = require('../controllers/liquidacion/cupon_prepago_controller.js'),
     OtroController = require('../controllers/liquidacion/otro_controller.js'),
+    GarantiasController = require('../controllers/liquidacion/garantias_controller.js'),
     liquidacionService = require('../services/liquidacion_service.js');
 
 app.factory('liquidacionService', liquidacionService);
@@ -26,6 +27,7 @@ app.controller('VoucherTransbankController', ['$scope', VoucherTransbankControll
 app.controller('ChequeController', ['$scope', ChequeController]);
 app.controller('CuponPrepagoController', ['$scope', CuponPrepagoController]);
 app.controller('OtroController', ['$scope', OtroController]);
+app.controller('GarantiasController', ['$scope'], GarantiasController);
 
 })();
 

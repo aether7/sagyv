@@ -13,6 +13,7 @@ var app = angular.module('liquidacionApp',[]),
     ChequeController = require('../controllers/liquidacion/cheque_controller.js'),
     CuponPrepagoController = require('../controllers/liquidacion/cupon_prepago_controller.js'),
     OtroController = require('../controllers/liquidacion/otro_controller.js'),
+    GarantiasController = require('../controllers/liquidacion/garantias_controller.js'),
     liquidacionService = require('../services/liquidacion_service.js');
 
 app.factory('liquidacionService', liquidacionService);
@@ -27,6 +28,7 @@ app.controller('VoucherTransbankController', ['$scope', VoucherTransbankControll
 app.controller('ChequeController', ['$scope', ChequeController]);
 app.controller('CuponPrepagoController', ['$scope', CuponPrepagoController]);
 app.controller('OtroController', ['$scope', OtroController]);
+app.controller('GarantiasController', ['$scope'], GarantiasController);
 
 })();
 
@@ -34,7 +36,7 @@ $('button[data-accion=abre_modal]').on('click', function(evt){
     $('#modal_' + $(this).data('modal')).modal('show');
 });
 
-},{"../controllers/liquidacion/cheque_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/cheque_controller.js","../controllers/liquidacion/cupon_prepago_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/cupon_prepago_controller.js","../controllers/liquidacion/guia_lipigas_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_lipigas_controller.js","../controllers/liquidacion/guia_propia_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_propia_controller.js","../controllers/liquidacion/liquidacion_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/liquidacion_controller.js","../controllers/liquidacion/otro_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/otro_controller.js","../controllers/liquidacion/panel_busqueda_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/panel_busqueda_controller.js","../controllers/liquidacion/producto_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/producto_controller.js","../controllers/liquidacion/voucher_lipigas_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/voucher_lipigas_controller.js","../controllers/liquidacion/voucher_transbank_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/voucher_transbank_controller.js","../services/liquidacion_service.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/services/liquidacion_service.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/cheque_controller.js":[function(require,module,exports){
+},{"../controllers/liquidacion/cheque_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/cheque_controller.js","../controllers/liquidacion/cupon_prepago_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/cupon_prepago_controller.js","../controllers/liquidacion/garantias_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/garantias_controller.js","../controllers/liquidacion/guia_lipigas_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_lipigas_controller.js","../controllers/liquidacion/guia_propia_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_propia_controller.js","../controllers/liquidacion/liquidacion_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/liquidacion_controller.js","../controllers/liquidacion/otro_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/otro_controller.js","../controllers/liquidacion/panel_busqueda_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/panel_busqueda_controller.js","../controllers/liquidacion/producto_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/producto_controller.js","../controllers/liquidacion/voucher_lipigas_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/voucher_lipigas_controller.js","../controllers/liquidacion/voucher_transbank_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/voucher_transbank_controller.js","../services/liquidacion_service.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/services/liquidacion_service.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/cheque_controller.js":[function(require,module,exports){
 var Cheque = require('./../../models/liquidacion/cheque_model.js');
 
 function ChequeController($scope){
@@ -111,7 +113,30 @@ CuponPrepagoController.mixin({
 
 module.exports = CuponPrepagoController;
 
-},{"./../../models/liquidacion/cupon_prepago_model.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/models/liquidacion/cupon_prepago_model.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_lipigas_controller.js":[function(require,module,exports){
+},{"./../../models/liquidacion/cupon_prepago_model.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/models/liquidacion/cupon_prepago_model.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/garantias_controller.js":[function(require,module,exports){
+var Producto = require('./../../models/liquidacion/producto_model.js'),
+    VentaPropia = require('./../../models/liquidacion/garantias_model.js');
+    //guias = require('./mixins.js').guias;
+
+function GarantiasController($scope, service){
+    this.service = service;
+    this.scope = $scope;
+    //some Vars this
+}
+
+GarantiasController.mixin({
+    resetearGarantias : function(){
+        alert('alive');
+    },
+
+    guardar : function(){
+        alert('some');
+    }
+});
+
+module.exports = GarantiasController;
+
+},{"./../../models/liquidacion/garantias_model.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/models/liquidacion/garantias_model.js","./../../models/liquidacion/producto_model.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/models/liquidacion/producto_model.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_lipigas_controller.js":[function(require,module,exports){
 var GuiaPropiaController = require('./guia_propia_controller.js'),
     mixin = require('./mixins.js').guias,
     VentaLipigas = require('./../../models/liquidacion/venta_lipigas_model.js');
@@ -1018,6 +1043,17 @@ Dump.prototype = {
 };
 
 module.exports = Dump;
+
+},{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/models/liquidacion/garantias_model.js":[function(require,module,exports){
+var Garantias = function(){
+    //declaracion de this
+};
+
+Garantias.mixin({
+    // Metodos de validacion.
+});
+
+module.exports = Garantias;
 
 },{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/models/liquidacion/guia_venta_model.js":[function(require,module,exports){
 function GuiaVenta(){
