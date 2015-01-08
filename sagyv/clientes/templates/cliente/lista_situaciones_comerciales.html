@@ -10,23 +10,15 @@
         </tr>
     </thead>
     <tbody>
-        {% for cs in situaciones_comerciales %}
-        <tr data-id="{{ cs.id }}">
-            <td data-columna="tipo_descuento">{{ cs.tipo_descuento.tipo }}</td>
-            <td data-columna="descuento">{{ cs.monto_descuento }}</td>
-            <td data-columna="producto">
-                {% if cs.id != 1 %}
-                ( {{ cs.producto.codigo }} ) {{ cs.producto.get_nombre_tipo }}
-                {% endif %}
-            </td>
+        <tr ng-repeat="sitComercial in situacionesComerciales">
+            <td ng-bind="sitComercial.tipoDescuento.tipo"></td>
+            <td ng-bind="sitComercial.monto"></td>
+            <td ng-bind="sitComercial.producto.codigo"></td>
             {% if es_admin %}
             <td>
-                {% if cs.id != 1 %}
-                <a href="#" title="editar" class="icon-pencil" data-accion="editar" data-id="{{ cs.id }}"></a>
-                {% endif %}
+                <a href title="editar" class="icon-pencil" ng-click="sitComercialCtrl.editar($index)"></a>
             </td>
             {% endif %}
         </tr>
-        {% endfor %}
     </tbody>
 </table>

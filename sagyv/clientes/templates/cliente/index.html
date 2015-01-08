@@ -26,11 +26,11 @@
     </li>
 </ul>
 
-<div class="tab-content">
-    <div class="tab-pane active" id="clientes">
+<div class="tab-content" ng-app="clienteApp">
+    <div class="tab-pane active" id="clientes" ng-controller="ClienteController as clienteCtrl">
         {% if es_admin %}
         <div class="col-xs-6">
-            <button id="btn_agregar" class="btn btn-primary">Nuevo</button>
+            <button class="btn btn-primary" ng-click="clienteCtrl.nuevo()">Nuevo</button>
         </div>
         {% endif %}
 
@@ -48,71 +48,38 @@
         </form>
 
         {% include "cliente/lista_clientes.html" %}
+        {% include "cliente/components/modal_nuevo_cliente.html" %}
+        {% include "cliente/components/modal_editar_cliente.html" %}
+        {% include "cliente/components/modal_ver_cliente.html" %}
     </div>
 
-    <div class="tab-pane" id="scomerciales">
+    <div class="tab-pane" id="scomerciales" ng-controller="SituacionComercialController as sitComercialCtrl">
         {% if es_admin %}
-        <button id="btn_agregar_situacion" class="btn btn-primary">Nueva</button>
+        <button ng-click="sitComercialCtrl.nueva()" class="btn btn-primary">Nueva</button>
         {% endif %}
 
         {% include "cliente/lista_situaciones_comerciales.html" %}
+        {% include "cliente/components/modal_nueva_situacion_comercial.html"%}
+        {% include "cliente/components/modal_editar_situacion_comercial.html"%}
     </div>
 </div>
-
-{% include "cliente/components/modal_nuevo_cliente.html" %}
-{% include "cliente/components/modal_editar_cliente.html" %}
-{% include "cliente/components/modal_nueva_situacion_comercial.html"%}
-{% include "cliente/components/modal_editar_situacion_comercial.html"%}
-{% include "cliente/components/modal_ver_cliente.html" %}
 
 {% endblock %}
 
 {% block js %}
-<script src="{% static 'js/vendor/handlebars.min.js' %}"></script>
 <script src="{% static 'js/plugins/jquery.rut.min.js' %}"></script>
-<script src="{% static 'js/plugins/jquery.tablesorter.min.js' %}"></script>
 <script src="{% static 'js/common_functions.js' %}"></script>
-
-<script src="{% static 'js/models/cliente_model.js' %}"></script>
-<script src="{% static 'js/models/situacion_comercial_model.js' %}"></script>
-
-<script src="{% static 'js/controllers/cliente_controller.js' %}"></script>
-<script src="{% static 'js/controllers/situacion_comercial_controller.js' %}"></script>
-
-<script src="{% static 'js/views/cliente_view.js' %}"></script>
-<script src="{% static 'js/views/situacion_comercial_view.js' %}"></script>
-
-<script id="tpl_nuevo_cliente" type="text/x-template">
-    {% include "cliente/components/tpl_nuevo_cliente.html" %}
-</script>
-
-<script id="tpl_nueva_situacion" type="text/x-template">
-    {% include "cliente/components/tpl_nueva_situacion_comercial.html" %}
-</script>
+<script src="{% static 'js/vendor/angular.min.js' %}"></script>
+<script src="{% static 'js/bundles/cliente.bundle.js' %}"></script>
 
 <script>
     App.urls.set("clientes:update","{% url 'clientes:modificar' %}");
     App.urls.set("clientes:crear","{% url 'clientes:crear' %}");
-    App.urls.set("clientes:obtener","{% url 'clientes:obtener' 0 %}");
+    App.urls.set("clientes:obtener","{% url 'clientes:obtener' %}");
     App.urls.set("clientes:eliminar","{% url 'clientes:eliminar' %}");
     App.urls.set("clientes:obtener_situacion_comercial","{% url 'clientes:obtener_situacion_comercial' %}");
     App.urls.set("clientes:crear_situacion_comercial", "{% url 'clientes:crear_situacion_comercial' %}");
     App.urls.set("clientes:modificar_situacion_comercial", "{% url 'clientes:modificar_situacion_comercial' %}");
     App.urls.set("clientes:buscar_producto", "{% url 'clientes:buscar_producto' %}");
-
-    App.clienteView = new App.Views.Cliente();
-    App.clienteView.init();
-
-    {% for cliente in clientes %}
-    App.clienteView.addClienteRut("{{ cliente.rut }}");
-    {% endfor %}
-
-    App.situacionView = new App.Views.SituacionComercial();
-    App.situacionView.init();
-
-    {% for sc in situaciones_comerciales %}
-    App.situacionView.addSituacionComercial({{ sc.tipo_descuento.id }},
-        {{ sc.monto_descuento }}, {{ sc.producto.id }});
-    {% endfor %}
 </script>
 {% endblock %}

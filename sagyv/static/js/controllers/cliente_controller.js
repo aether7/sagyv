@@ -8,7 +8,7 @@ App.Controllers.Cliente.prototype = {
     constructor: App.Controllers.Cliente,
 
     verCliente: function(id){
-        var url = App.urls.get("clientes:obtener").replace("0", id),
+        var url = App.urls.get("clientes:obtener") + '?id=' + id,
             urlSitComercial = App.urls.get("clientes:obtener_situacion_comercial"),
             urlProducto = App.urls.get("clientes:buscar_producto");
 
@@ -19,7 +19,8 @@ App.Controllers.Cliente.prototype = {
         }
 
         $.get(url, function(data){
-            urlSitComercial = urlSitComercial.replace("0", data.situacion_comercial);
+            urlSitComercial = urlSitComercial + '?id=' + data.situacion_comercial;
+
             $.get(urlSitComercial, function(dataB){
                 if(dataB.id === 1){
                     callback(data, dataB, null);

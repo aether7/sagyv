@@ -2,45 +2,52 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button class="close" data-dismiss="modal" aria-hidden="true">
-                    <span aria-hidden="true">&times;</span>
-                    <span class="sr-only">Close</span>
-                </button>
                 <h4 class="modal-title">Editar Situacion Comercial</h4>
             </div>
+
             <div class="modal-body">
-                <form id="f_modificar_situacion" action="{% url 'clientes:modificar_situacion_comercial' %}" method="post">
-                    {% csrf_token %}
+                <div class="form-group">
+                    <label for="descuento_edit" class="control-label">Monto Descuento</label>
+                    <input id="descuento_edit" class="form-control" type="text"
+                        ng-model="sitComercialCtrl.situacionComercial.monto" />
 
-                    <div class="form-group">
-                        <label for="descuento_edit" class="control-label">Monto Descuento</label>
-                        <input id="descuento_edit" class="form-control" type="text" value="" />
-                        <span class="help-block"></spam>
-                    </div>
+                    <span class="text-danger"
+                        ng-show="sitComercialCtrl.situacionComercial.mensajes.monto"
+                        ng-bind="sitComercialCtrl.situacionComercial.mensajes.monto"></spam>
+                </div>
 
-                    <div class="form-group">
-                        <label for="sit_tipo_edit" class="control-label">Tipo Descuento</label>
-                        <select name="sit_tipo_edit" id="sit_tipo_edit" class="form-control">
-                            <option value="">---</option>
-                            <option value="1">Descuento Fijo</option>
-                            <option value="2">Descuento Porcentual</option>
-                        </select>
-                        <span class="help-block"></spam>
-                    </div>
+                <div class="form-group">
+                    <label for="sit_tipo_edit" class="control-label">Tipo Descuento</label>
+                    <select id="sit_tipo_edit" class="form-control"
+                        ng-model="sitComercialCtrl.situacionComercial.tipoDescuento.id">
+                        {% for tipo_descuento in tipos_descuento %}
+                        <option value="{{ tipo_descuento.id }}">{{ tipo_descuento.tipo }}</option>
+                        {% endfor %}
+                    </select>
 
-                    <div class="form-group">
-                        <label for="producto_edit">Producto Descuento</label>
-                        <select name="producto_edit" id="producto_edit" class="form-control">
-                            {% for producto in productos %}
-                            <option value="{{ producto.id }}">{{ producto.get_nombre_tipo }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </form>
+                    <span class="text-danger"
+                        ng-show="sitComercialCtrl.situacionComercial.mensajes.tipoDescuento"
+                        ng-bind="sitComercialCtrl.situacionComercial.mensajes.tipoDescuento"></spam>
+                </div>
+
+                <div class="form-group">
+                    <label for="producto_edit">Producto Descuento</label>
+                    <select name="producto_edit" id="producto_edit" class="form-control"
+                        ng-model="sitComercialCtrl.situacionComercial.producto.id">
+                        {% for producto in productos %}
+                        <option value="{{ producto.id }}">{{ producto.get_nombre_tipo }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <span class="text-danger"
+                        ng-show="sitComercialCtrl.situacionComercial.mensajes.producto"
+                        ng-bind="sitComercialCtrl.situacionComercial.mensajes.producto"></span>
+                </div>
             </div>
+
             <div class="modal-footer">
                 <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <button id="btn_update_situacion" class="btn btn-primary">Guardar</button>
+                <button class="btn btn-primary" ng-click="sitComercialCtrl.actualizar()">Guardar</button>
             </div>
         </div>
     </div>

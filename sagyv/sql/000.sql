@@ -3,11 +3,6 @@ INSERT INTO bodega_tipoproducto(id, nombre) VALUES(1, 'llenos normales');
 INSERT INTO bodega_tipoproducto(id, nombre) VALUES(2, 'llenos catalíticos');
 INSERT INTO bodega_tipoproducto(id, nombre) VALUES(3, 'garantías');
 
--- tipos de cambio en stock
--- INSERT INTO main_tipocambiostock(id, nombre) VALUES(1, 'Compra');
--- INSERT INTO main_tipocambiostock(id, nombre) VALUES(2, 'Venta');
--- INSERT INTO main_tipocambiostock(id, nombre) VALUES(3, 'Carta Canje');
-
 -- productos
 INSERT INTO bodega_producto(id, codigo, nombre, peso, tipo_producto_id, stock,orden) VALUES(1, 1105, '5 kilos', 5, 1, 0, 1);
 INSERT INTO bodega_producto(id, codigo, nombre, peso, tipo_producto_id, stock,orden) VALUES(2, 1111, '11 kilos', 11, 1, 0, 1);
@@ -61,9 +56,6 @@ INSERT INTO liquidacion_tarjetacredito(id, nombre, codigo, tipo_tarjeta_id) VALU
 -- Descuento
 INSERT INTO clientes_tipodescuento(id, tipo) VALUES(1, 'Fijo');
 INSERT INTO clientes_tipodescuento(id, tipo) VALUES(2, 'Porcentaje');
-
--- Situaciones comerciales
-INSERT INTO clientes_descuentocliente(monto_descuento, tipo_descuento_id) VALUES(0, 1);
 
 -- AFPS
 INSERT INTO trabajador_afp(id, nombre) VALUES(1, 'Bansander');

@@ -19,3 +19,6 @@ class ClienteManager(models.Manager):
 
     def obtener_lipigas(self):
         return self.filter(es_lipigas = True).order_by('id')
+
+    def esta_duplicado(self, rut):
+        return self.filter(rut = rut).exists()

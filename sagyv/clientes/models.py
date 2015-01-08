@@ -65,7 +65,7 @@ class Cliente(models.Model):
     direccion = models.TextField()
     telefono = models.CharField(max_length=140, null=True)
     rut = models.CharField(max_length=140)
-    situacion_comercial = models.ForeignKey(DescuentoCliente)
+    situacion_comercial = models.ForeignKey(DescuentoCliente, null = True)
     credito = models.NullBooleanField()
     dispensador = models.NullBooleanField()
     es_lipigas = models.NullBooleanField()
