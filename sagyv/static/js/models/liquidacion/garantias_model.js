@@ -34,6 +34,15 @@ Garantia.prototype = {
         valido = this._esCantidadValido() && valido;
 
         return valido;
+    },
+
+    getJSON : function(){
+        var json = {
+            'id' : this.id,
+            'cantidad' : this.cantidad
+        };
+
+        return json;
     }
 };
 

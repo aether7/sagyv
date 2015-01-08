@@ -31,20 +31,22 @@ GarantiasController.prototype = {
     },
 
     guardar : function(){
-        var valido = true;
+        var valido = true, output = [];
 
         this.garantias.forEach(function(g){
             if(!g.esValido()){
                 valido = false;
             }
+
+            output.push(g.getJSON());
         });
 
         if(!valido){
-            console.log('NOPE');
             return;
         }
 
-        console.log('parapapapparaparapam ...... YEE');
+        $('#modal_garantias').modal('hide');
+        $("#venta_garantias_ls").val(JSON.stringify(output));
     }
 };
 
