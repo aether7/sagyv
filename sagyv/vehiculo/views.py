@@ -13,6 +13,7 @@ from trabajador.models import Trabajador
 from bodega.models import Movil
 from bodega.models import Vehiculo
 from bodega.models import TrabajadorVehiculo
+from utils.views import LoginRequiredMixin
 
 @transaction.atomic
 def actualizar_estado_vehiculos(vehiculo, chofer):
@@ -53,19 +54,8 @@ def llenar_vehiculo_json(vehiculo):
 
     return data
 
-# def anexar_movil(trabajador, vehiculo, numero):
-#     if Movil.objects.filter(trabajador = trabajador).exists():
-#         movil = Movil.objects.get(trabajador = trabajador)
-#     else:
-#         movil = Movil()
 
-#     movil.vehiculo = vehiculo
-#     movil.trabajador = trabajador
-#     movil.numero = int(numero)
-#     movil.save()
-
-
-class VehiculoList(ListView):
+class VehiculoList(LoginRequiredMixin, ListView):
     context_object_name = "vehiculos"
     model = Vehiculo
     template_name = "vehiculos/index.html"
@@ -78,7 +68,7 @@ class VehiculoList(ListView):
         return context_data
 
 
-class ObtenerVehiculosView(View):
+class ObtenerVehiculosView(LoginRequiredMixin, View):
     def get(self, request):
         vehiculo_id = request.GET.get('id')
 
@@ -108,7 +98,7 @@ class ObtenerVehiculosView(View):
         return data
 
 
-class AgregarNuevoVehiculoView(View):
+class AgregarNuevoVehiculoView(LoginRequiredMixin, View):
     def post(self, request):
         fecha = request.POST.get('fechaRevisionTecnica')
 
@@ -189,7 +179,7 @@ class AgregarNuevoVehiculoView(View):
         movil.save()
 
 
-class AnexarVehiculoView(View):
+class AnexarVehiculoView(LoginRequiredMixin, View):
 
     @transaction.atomic
     def post(self, req):
@@ -231,7 +221,7 @@ class AnexarVehiculoView(View):
         return HttpResponse(data, content_type="application/json")
 
 
-class ModificarView(View):
+class ModificarView(LoginRequiredMixin, View):
 
     @transaction.atomic
     def post(self, req):

@@ -16,8 +16,10 @@ from bodega.models import Vehiculo
 from bodega.models import GuiaDespacho
 from bodega.models import Factura
 
+from utils.views import LoginRequiredMixin
 
-class IndexView(TemplateView):
+
+class IndexView(LoginRequiredMixin, TemplateView):
     template_name = "bodega/index.html"
 
     def get_context_data(self, *args, **kwargs):
@@ -28,7 +30,7 @@ class IndexView(TemplateView):
         return context
 
 
-class GuardarFactura(View):
+class GuardarFactura(LoginRequiredMixin, View):
 
     @transaction.atomic
     def post(self, req):
@@ -114,7 +116,7 @@ class GuardarFactura(View):
         historico.save()
 
 
-class ObtenerVehiculosPorProductoView(View):
+class ObtenerVehiculosPorProductoView(LoginRequiredMixin, View):
 
     def get(self, req):
         producto_id = int(req.GET.get("producto_id"))
@@ -138,7 +140,7 @@ class ObtenerVehiculosPorProductoView(View):
         return HttpResponse(json.dumps(resultados), content_type="application/json")
 
 
-class FiltrarGuias(View):
+class FiltrarGuias(LoginRequiredMixin, View):
     def get(self, req):
         fecha = req.GET.get("fecha")
 
@@ -167,7 +169,7 @@ class FiltrarGuias(View):
         return HttpResponse(res, content_type="application/json")
 
 
-class ObtenerProductos(View):
+class ObtenerProductos(LoginRequiredMixin, View):
     def get(self, req):
         productos =  Producto.objects.exclude(orden = -1).order_by('orden')
         response = []
@@ -189,7 +191,7 @@ class ObtenerProductos(View):
         return HttpResponse(response, content_type="application/json")
 
 
-class ObtenerProductosTransito(View):
+class ObtenerProductosTransito(LoginRequiredMixin, View):
     def get(self, req):
         productos = StockVehiculo.objects.get_stock_transito()
         response = []
@@ -206,7 +208,7 @@ class ObtenerProductosTransito(View):
         return HttpResponse(response, content_type="application/json")
 
 
-class ObtenerConsolidados(View):
+class ObtenerConsolidados(LoginRequiredMixin, View):
     def get(self, req):
         consolidados = StockVehiculo.objects.get_stock_consolidado()
         res = []
@@ -222,7 +224,7 @@ class ObtenerConsolidados(View):
         return HttpResponse(res, content_type="application/json")
 
 
-class ObtenerVehiculosSeleccionables(View):
+class ObtenerVehiculosSeleccionables(LoginRequiredMixin, View):
     def get(self, req):
         vehiculos = Vehiculo.objects.get_vehiculos_con_chofer()
         response = []
@@ -239,7 +241,7 @@ class ObtenerVehiculosSeleccionables(View):
         return HttpResponse(response, content_type="application/json")
 
 
-class ObtenerDetalleConsolidado(View):
+class ObtenerDetalleConsolidado(LoginRequiredMixin, View):
     def get(self, req):
         producto_id = int(req.GET.get('producto_id'))
         producto = Producto.objects.get(pk = producto_id)

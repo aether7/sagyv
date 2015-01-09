@@ -16,8 +16,9 @@ from trabajador.models import EstadoCivil
 from trabajador.models import EstadoVacacion
 from trabajador.models import Vacacion
 from trabajador.models import BoletaTrabajador
+from utils.views import LoginRequiredMixin
 
-class IndexList(ListView):
+class IndexList(LoginRequiredMixin, ListView):
     model = Trabajador
     queryset = Trabajador.objects.order_by("id")
     context_object_name = "trabajadores"
@@ -34,7 +35,7 @@ class IndexList(ListView):
         return data
 
 
-class CrearTrabajadorView(View):
+class CrearTrabajadorView(LoginRequiredMixin, View):
 
     @transaction.atomic
     def post(self, req):
@@ -96,7 +97,7 @@ class CrearTrabajadorView(View):
         return vacacion
 
 
-class ModificarTrabajadorView(View):
+class ModificarTrabajadorView(LoginRequiredMixin, View):
 
     @transaction.atomic
     def post(self, req):
@@ -145,7 +146,7 @@ class ModificarTrabajadorView(View):
         return trabajador
 
 
-class ObtenerTrabajadorView(View):
+class ObtenerTrabajadorView(LoginRequiredMixin, View):
 
     def get(self, req):
         id_trabajador = req.GET.get("id")
@@ -209,7 +210,7 @@ class ObtenerTrabajadorView(View):
         return json_boleta
 
 
-class EliminarTrabajadorView(View):
+class EliminarTrabajadorView(LoginRequiredMixin, View):
 
     def post(self, req):
         id_trabajador = req.POST.get("id")
@@ -221,7 +222,7 @@ class EliminarTrabajadorView(View):
         return HttpResponse(json.dumps(dato), content_type="application/json")
 
 
-class BuscarBoleta(View):
+class BuscarBoleta(LoginRequiredMixin, View):
 
     def get(self, req):
         trabajador_id = int(req.GET.get("id"))
@@ -237,7 +238,7 @@ class BuscarBoleta(View):
         return HttpResponse(json.dumps(data), content_type="application/json")
 
 
-class GuardarBoleta(View):
+class GuardarBoleta(LoginRequiredMixin, View):
 
     @transaction.atomic
     def post(self, req):
@@ -268,7 +269,7 @@ class GuardarBoleta(View):
         return HttpResponse(json.dumps(data), content_type="application/json")
 
 
-class Todos(View):
+class Todos(LoginRequiredMixin, View):
     def get(self, req):
         trabajadores = Trabajador.objects.order_by('id')
         result = []

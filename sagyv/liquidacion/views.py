@@ -1,15 +1,13 @@
 # -*- coding: utf-8 -*-
 import json
 
-from django.core.serializers.json import DjangoJSONEncoder
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from django.views.generic import TemplateView, View
 from django.db import transaction
-
-from reportlab.pdfgen import canvas
-from reportlab.lib.units import inch
+from django.shortcuts import get_object_or_404
 
 from main.helpers.fecha import convierte_texto_fecha, convierte_fecha_texto
+from utils.views import LoginRequiredMixin
 
 from trabajador.models import BoletaTrabajador
 from trabajador.models import Trabajador
@@ -30,7 +28,7 @@ from liquidacion.models import GuiaVenta
 from liquidacion.models import DetalleGuiaVenta
 from liquidacion.models import EstadoTerminal
 
-class IndexView(TemplateView):
+class IndexView(LoginRequiredMixin, TemplateView):
     template_name = "liquidacion/index.html"
 
     def get_context_data(self, **kwargs):
@@ -49,10 +47,10 @@ class IndexView(TemplateView):
         return context
 
 
-class ObtenerGuiaDespacho(View):
+class ObtenerGuiaDespacho(LoginRequiredMixin, View):
     def get(self, req):
         id_guia_despacho = int(req.GET.get("id_guia_despacho"))
-        guia = GuiaDespacho.objects.get(pk = id_guia_despacho)
+        guia = get_object_or_404(GuiaDespacho,pk = id_guia_despacho)
         vehiculo = guia.movil.vehiculo
         boleta = BoletaTrabajador.objects.obtener_por_trabajador(vehiculo.get_ultimo_chofer())
 
@@ -115,7 +113,7 @@ class ObtenerGuiaDespacho(View):
         return data
 
 
-class BuscarCliente(View):
+class BuscarCliente(LoginRequiredMixin, View):
     def get(self, req):
         id_cliente = int(req.GET.get("id_cliente"))
         cliente = Cliente.objects.get(pk=id_cliente)
@@ -140,9 +138,7 @@ class BuscarCliente(View):
         data["situacion_comercial"]["monto"] = opciones["monto"]
         data["situacion_comercial"]["codigo"] = opciones["codigo"]
 
-        data = json.dumps(data,cls=DjangoJSONEncoder)
-        return HttpResponse(data, content_type="application/json")
-
+        return JsonResponse(data, safe = False)
 
     def get_situacion_comercial(self, cliente):
         opciones = {}
@@ -181,7 +177,7 @@ class BuscarCliente(View):
         return opciones
 
 
-class BalanceLiquidacionView(View):
+class BalanceLiquidacionView(LoginRequiredMixin, View):
     def post(self, req):
         guia_despacho = req.POST.get('guia_despacho')
         id_trabajador = req.POST.get('id_trabajador')
@@ -196,12 +192,11 @@ class BalanceLiquidacionView(View):
             valor_total += valor_tmp
 
         dato = {'valor': valor_total}
-        dato = json.dumps(dato, cls=DjangoJSONEncoder)
 
-        return HttpResponse(dato, content_type="application/json")
+        return JsonResponse(dato, safe = False)
 
 
-class Cerrar(View):
+class Cerrar(LoginRequiredMixin, View):
 
     @transaction.atomic
     def post(self, req):
@@ -358,12 +353,10 @@ class Cerrar(View):
             this.save()
 
 
-class ObtenerGarantias(View):
-
+class ObtenerGarantias(LoginRequiredMixin, View):
     def get(self, req):
         tipo = TipoProducto.objects.get( pk = TipoProducto.GARANTIA)
-
-        garantias = Producto.objects.filter( tipo_producto = tipo).exclude(codigo = 3215).exclude(codigo = 3315)
+        garantias = Producto.objects.get_garantias_filtradas()
         data = []
 
         for garantia in garantias:
@@ -375,8 +368,7 @@ class ObtenerGarantias(View):
 
             data.append(item)
 
-        data = json.dumps(data, cls=DjangoJSONEncoder)
-        return HttpResponse(data, content_type="application/json")
+        return JsonResponse(data, safe = False)
 
 
 index = IndexView.as_view()

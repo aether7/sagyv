@@ -13,9 +13,9 @@ from bodega.models import StockVehiculo
 from bodega.models import AbonoGuia
 from bodega.models import Vehiculo
 from bodega.models import Movil
+from utils.views import LoginRequiredMixin
 
-
-class ObtenerGuiaDespacho(View):
+class ObtenerGuiaDespacho(LoginRequiredMixin, View):
 
     def get(self, req):
         guia_id = int(req.GET.get("guia_id"))
@@ -42,11 +42,10 @@ class ObtenerGuiaDespacho(View):
         return HttpResponse(json.dumps(data), content_type="application/json")
 
 
-class CrearGuiaDespachoView(View):
+class CrearGuiaDespachoView(LoginRequiredMixin, View):
 
     @transaction.atomic
     def post(self,req):
-        print req.POST
         self.productosActualizados = []
 
         self.numero_guia = req.POST.get("numero")
@@ -130,7 +129,7 @@ class CrearGuiaDespachoView(View):
         stock_vehiculo.save()
 
 
-class RecargaGuia(View):
+class RecargaGuia(LoginRequiredMixin, View):
 
     def post(self, req):
         self.productosActualizados = []
@@ -189,7 +188,7 @@ class RecargaGuia(View):
             stock_vehiculo.save()
 
 
-class ObtenerIdGuia(View):
+class ObtenerIdGuia(LoginRequiredMixin, View):
 
     def get(self, req):
         guia = GuiaDespacho.objects.get_ultimo_despacho_id()

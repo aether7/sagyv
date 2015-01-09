@@ -6,6 +6,7 @@ from django.views.generic import View
 from clientes.models import DescuentoCliente
 from clientes.models import TipoDescuento
 from bodega.models import Producto
+from utils.views import LoginRequiredMixin
 
 class SituacionComercialMixin(object):
     def _get_situacion_comercial(self, sc):
@@ -28,7 +29,7 @@ class SituacionComercialMixin(object):
         return data
 
 
-class ObtenerSituacionComercial(View, SituacionComercialMixin):
+class ObtenerSituacionComercial(LoginRequiredMixin, View, SituacionComercialMixin):
     def get(self, request):
         id_situacion = request.GET.get('id')
 
@@ -45,7 +46,7 @@ class ObtenerSituacionComercial(View, SituacionComercialMixin):
         return JsonResponse(data, safe = False)
 
 
-class CrearSituacionComercial(View, SituacionComercialMixin):
+class CrearSituacionComercial(LoginRequiredMixin, View, SituacionComercialMixin):
     @transaction.atomic
     def post(self, request):
         monto = int(request.POST.get('monto'))
@@ -65,7 +66,7 @@ class CrearSituacionComercial(View, SituacionComercialMixin):
         return JsonResponse(data, safe = False)
 
 
-class ModificarSituacionComercialView(View, SituacionComercialMixin):
+class ModificarSituacionComercialView(LoginRequiredMixin, View, SituacionComercialMixin):
     @transaction.atomic
     def post(self, request):
         id = int(request.POST.get('id'))

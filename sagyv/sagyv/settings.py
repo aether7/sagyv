@@ -119,6 +119,10 @@ TEMPLATE_CONTEXT_PROCESSORS += (
 
 LOGIN_URL = '/'
 
+FIXTURE_DIRS = (
+    os.path.join(BASE_DIR, 'fixtures/'),
+)
+
 try:
     from .local_settings import *
 except ImportError:

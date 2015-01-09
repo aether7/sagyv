@@ -10,8 +10,9 @@ from clientes.models import Cliente
 from clientes.models import DescuentoCliente
 from clientes.models import TipoDescuento
 from bodega.models import Producto
+from utils.views import LoginRequiredMixin
 
-class Index(TemplateView):
+class Index(LoginRequiredMixin, TemplateView):
     template_name = "cliente/index.html"
 
     def get_context_data(self, *args, **kwargs):
@@ -60,7 +61,7 @@ class ClienteMixin(object):
         return dato
 
 
-class ObtenerCliente(View, ClienteMixin):
+class ObtenerCliente(LoginRequiredMixin, View, ClienteMixin):
     def get(self, request):
         id_cliente = request.GET.get('id')
 
@@ -76,7 +77,7 @@ class ObtenerCliente(View, ClienteMixin):
         return JsonResponse(data, safe = False)
 
 
-class CrearCliente(View, ClienteMixin):
+class CrearCliente(LoginRequiredMixin, View, ClienteMixin):
     @transaction.atomic
     def post(self, request):
         nombre = request.POST.get('nombre')
@@ -112,7 +113,7 @@ class CrearCliente(View, ClienteMixin):
         return JsonResponse(data, safe = False)
 
 
-class ModificarCliente(View, ClienteMixin):
+class ModificarCliente(LoginRequiredMixin, View, ClienteMixin):
     @transaction.atomic
     def post(self,request):
         nombre = request.POST.get('nombre')
@@ -149,7 +150,7 @@ class ModificarCliente(View, ClienteMixin):
         return JsonResponse(data, safe = False)
 
 
-class EliminarCliente(View):
+class EliminarCliente(LoginRequiredMixin, View):
     @transaction.atomic
     def post(self,request):
         id_cliente = request.POST.get('id')
@@ -160,7 +161,7 @@ class EliminarCliente(View):
         return JsonResponse(dato, safe = False)
 
 
-class BuscarCliente(View):
+class BuscarCliente(LoginRequiredMixin, View):
 
     def get(self, request):
         busqueda = request.GET.get("busqueda")

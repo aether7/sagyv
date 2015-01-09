@@ -21,6 +21,10 @@ class ProductoManager(models.Manager):
         garantias = self.filter(tipo_producto_id = ProductoManager.GARANTIAS).order_by('id')
         return garantias
 
+    def get_garantias_filtradas(self):
+        queryset = self.filter(tipo_producto_id = 3).exclude(codigo = 3215).exclude(codigo = 3315)
+        return queryset
+
 
 class HistorialStockManager(models.Manager):
     def get_productos_guia_recarga(self, guia):
