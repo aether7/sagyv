@@ -130,22 +130,40 @@ class CuponPrepago(models.Model):
         return self.numero_cupon
 
 
-class Voucher(models.Model):
-    tipo_tarjeta = models.ForeignKey(TipoTarjeta, null = True)
-    tipo_cuotas = models.CharField(max_length = 140, null = True)
+class TransbankVoucher(models.Model):
+    liquidacion = models.ForeignKey(Liquidacion)
+    tipo_tarjeta = models.ForeignKey(TipoTarjeta)
     terminal = models.ForeignKey(Terminal)
+    numero_operacion = models.IntegerField()
+    monto = models.IntegerField()
+
+    numero_cuotas = models.IntegerField(null = True)
     numero_tarjeta = models.IntegerField(null = True)
     numero_operacion = models.IntegerField(null = True)
     codigo_autorizacion = models.IntegerField(null = True)
-    numero_cuotas = models.IntegerField(default = 1)
+    def __unicode__(self):
+        return str(self.numero_operacion)
+
+
+class LipigasVoucher(models.Model):
     liquidacion = models.ForeignKey(Liquidacion)
+    tipo_tarjeta = models.ForeignKey(TipoTarjeta)
+    terminal = models.ForeignKey(Terminal)
+    numero_cierre = models.IntegerField()
+    monto = models.IntegerField()
+
+    numero_cuotas = models.IntegerField(null = True)
+    numero_tarjeta = models.IntegerField(null = True)
+    numero_operacion = models.IntegerField(null = True)
+    codigo_autorizacion = models.IntegerField(null = True)
 
     def __unicode__(self):
-        return self.monto
+        return str(self.numero_cierre)
 
 
 class CuotaVoucher(models.Model):
-    voucher = models.ForeignKey(Voucher)
+    lipigas = models.ForeignKey(LipigasVoucher, null = True)
+    transbank = models.ForeignKey(TransbankVoucher, null = True)
     monto = models.IntegerField()
     pagado = models.NullBooleanField()
     fecha = models.DateField(auto_now_add=True)
