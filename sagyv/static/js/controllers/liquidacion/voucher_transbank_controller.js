@@ -6,7 +6,7 @@ function VoucherTransbankController($scope){
 
     this.idTarjeta = null;
     this.monto = 0;
-    this.cuotas = 1;
+    this.num_operacion = null;
 
     this.mensajes = {};
 }
@@ -21,14 +21,14 @@ VoucherTransbankController.mixin({
             id: this.idTarjeta,
             nombre: $('#tarjeta_comercial_transbank option:selected').text(),
             monto: this.monto,
-            cuotas: this.cuotas
+            num_operacion: this.num_operacion
         };
 
         this.voucher.addTarjeta(tarjeta);
 
         this.idTarjeta = null;
         this.monto = 0;
-        this.cuotas = 1;
+        this.num_operacion = null;
     },
 
     removeTarjeta: function(index){
@@ -41,6 +41,8 @@ VoucherTransbankController.mixin({
         }
 
         this.scope.$emit('guia:agregarVoucher', this.voucher);
+
+        console.log(this.voucher);
 
         $('#modal_voucher_transbank').modal('hide');
         common.agregarMensaje('Los vouchers han sido guardados exitosamente');
@@ -70,14 +72,14 @@ VoucherTransbankController.mixin({
             this.mensajes.monto = 'el monto a ingresar debe ser mayor a 0';
         }
 
-        if(!this.cuotas){
-            this.mensajes.cuotas = 'campo obligatorio';
+        if(!this.num_operacion){
+            this.mensajes.num_operacion = 'campo obligatorio';
             valido = false;
-        }else if(isNaN(this.cuotas)){
-            this.mensajes.cuotas = 'valor inválido';
+        }else if(isNaN(this.num_operacion)){
+            this.mensajes.num_operacion = 'valor inválido';
             valido = false;
-        }else if(parseInt(this.cuotas) < 1){
-            this.mensajes.cuotas = 'el monto a ingresar debe ser mayor a 0';
+        }else if(parseInt(this.num_operacion) < 1){
+            this.mensajes.num_operacion = 'el numero de operacion a ingresar debe ser mayor a 0';
             valido = false;
         }
 
