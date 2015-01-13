@@ -25,6 +25,7 @@ PanelBusquedaController.prototype = {
             alert(data.boleta.mensaje);
             return;
         }
+
         this.boleta = data.boleta;
         this.guia = data.guia;
         this.guia.fecha = common.fecha.djangoToDate(this.guia.fecha);

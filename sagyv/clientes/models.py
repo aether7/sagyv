@@ -74,5 +74,11 @@ class Cliente(models.Model):
 
     objects = ClienteManager()
 
+    def get_situacion_comercial_json(self):
+        if self.situacion_comercial is None:
+            return None
+
+        self.situacion_comercial
+
     def __unicode__(self):
         return self.nombre + " " + self.telefono

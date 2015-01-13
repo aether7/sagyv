@@ -70,6 +70,7 @@ GuiaPropiaController.mixin({
         }
 
         obj = JSON.parse(this.producto.tipo);
+        console.log(this.scope.productosRestantes);
 
         if(!this.producto.cantidad || parseInt(this.producto.cantidad) < 1){
             this.mensajes.producto = 'Se debe ingresar una cantidad de producto';

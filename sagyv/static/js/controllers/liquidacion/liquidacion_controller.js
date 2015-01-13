@@ -67,6 +67,13 @@ LiquidacionController.mixin({
 
     addProductos: function(evt, productos){
         this.productos = this.scope.productos = productos;
+
+        this.scope.productosRestantes = productos.map(function(p){
+            return {
+                codigo: p.codigo,
+                cantidad: parseInt(p.llenos)
+            };
+        });
     },
 
     addGuia: function(evt, venta){

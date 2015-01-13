@@ -127,7 +127,7 @@ class BuscarCliente(LoginRequiredMixin, View):
             "direccion": cliente.direccion,
             "rut": cliente.rut,
             "situacion_comercial": {
-                "texto": cliente.situacion_comercial.get_json_string(),
+                "texto": "",
                 "con_credito": cliente.credito,
                 "descripcion_descuento": None,
                 "simbolo": None,
@@ -148,13 +148,15 @@ class BuscarCliente(LoginRequiredMixin, View):
         opciones = {}
         params = None
         simbolo = None
-        monto = str(cliente.situacion_comercial.monto_descuento)
         texto = ""
 
-        if cliente.situacion_comercial.id == 1:
+        if cliente.situacion_comercial is None:
             texto = "Sin descuento"
             opciones["codigo"] = "Sin codigo"
+            monto = None
         else:
+            monto = str(cliente.situacion_comercial.monto_descuento)
+
             if cliente.situacion_comercial.tipo_descuento_id == 1:
                 simbolo = "$"
                 params = [simbolo, monto]
