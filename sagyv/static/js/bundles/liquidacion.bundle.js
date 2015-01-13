@@ -745,8 +745,6 @@ VoucherTransbankController.mixin({
 
         this.scope.$emit('guia:agregarVoucher', this.voucher);
 
-        console.log(this.voucher);
-
         $('#modal_voucher_transbank').modal('hide');
         common.agregarMensaje('Los vouchers han sido guardados exitosamente');
     },

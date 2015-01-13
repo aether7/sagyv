@@ -132,8 +132,8 @@ class CuponPrepago(models.Model):
 
 class TransbankVoucher(models.Model):
     liquidacion = models.ForeignKey(Liquidacion)
-    tipo_tarjeta = models.ForeignKey(TipoTarjeta)
-    terminal = models.ForeignKey(Terminal)
+    tipo_tarjeta = models.ForeignKey(TarjetaCredito)
+    terminal = models.ForeignKey(Terminal, null = True)
     numero_operacion = models.IntegerField()
     monto = models.IntegerField()
 
@@ -147,7 +147,7 @@ class TransbankVoucher(models.Model):
 
 class LipigasVoucher(models.Model):
     liquidacion = models.ForeignKey(Liquidacion)
-    tipo_tarjeta = models.ForeignKey(TipoTarjeta)
+    tipo_tarjeta = models.ForeignKey(TarjetaCredito)
     terminal = models.ForeignKey(Terminal)
     numero_cierre = models.IntegerField()
     monto = models.IntegerField()

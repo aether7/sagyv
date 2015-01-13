@@ -28,6 +28,10 @@ from liquidacion.models import GuiaVenta
 from liquidacion.models import DetalleGuiaVenta
 from liquidacion.models import EstadoTerminal
 
+from liquidacion.models import TransbankVoucher
+from liquidacion.models import LipigasVoucher
+from liquidacion.models import TarjetaCredito
+
 class IndexView(LoginRequiredMixin, TemplateView):
     template_name = "liquidacion/index.html"
 
@@ -200,14 +204,9 @@ class Cerrar(LoginRequiredMixin, View):
 
     @transaction.atomic
     def post(self, req):
-        # # if voucher_lipigas != '':
-        # #     self.ingreso_vouchers(voucher_lipigas)
-
-        # # if voucher_transbank != '':
-        # #     self.ingreso_vouchers(voucher_transbank)
-
         self._procesar_liquidacion()
         self._procesar_guias()
+        self._procesar_vouchers()
         self._ingreso_cupones()
         self._ingreso_cheques()
         self._ingreso_otros()
@@ -243,20 +242,58 @@ class Cerrar(LoginRequiredMixin, View):
         self.this_liquidacion.guia_despacho = this_guia
         self.this_liquidacion.save()
 
+    def _procesar_vouchers(self):
+        vouchers = json.loads(self.request.POST.get('vouchers'))
+
+        if len(vouchers['lipigas']):
+            v_lipigas = vouchers['lipigas']
+            self._ingreso_vouchers_lipigas(v_lipigas)
+
+        if len(vouchers['transbank']):
+            v_transbank = vouchers['transbank']
+            self._ingreso_vouchers_transbank(v_transbank['tarjetas'])
+
+    def _ingreso_vouchers_transbank(self, vouchers):
+        for voucher in vouchers:
+            tarjeta = TarjetaCredito.objects.get( pk = int(voucher['id']))
+
+            transbank = TransbankVoucher()
+            transbank.liquidacion = self.this_liquidacion
+            transbank.tipo_tarjeta = tarjeta
+            transbank.numero_operacion = int(voucher['num_operacion'])
+            transbank.monto = int(voucher['monto'])
+            transbank.save()
+
+    def _ingreso_vouchers_lipigas(self, vouchers):
+        terminal = Terminal.objects.get(pk = int(vouchers['terminal']))
+        numero_cierre = int(vouchers['numero'])
+
+        for voucher in vouchers['tarjetas']:
+            tarjeta = TarjetaCredito.objects.get(pk = int(voucher['id']))
+
+            lipigas = LipigasVoucher()
+            lipigas.liquidacion = self.this_liquidacion
+            lipigas.tipo_tarjeta = tarjeta
+            lipigas.terminal = terminal
+            lipigas.numero_cierre = numero_cierre
+            lipigas.monto = int(voucher['monto'])
+            lipigas.save()
+
+            print lipigas
+
     def _descargar_vehiculo(self):
         pass
 
     def _procesar_guias(self):
         guias = json.loads(self.request.POST.get('guias'))
 
-        propias = json.loads(guias['propias'])
-        lipigas = json.loads(guias['lipigas'])
+        if len(guias['propias']) > 0:
+            propias = json.loads(guias['propias'])
+            self._ingreso_guias_propia(propias)
 
-        if propias != '' or len(propias) > 0:
-            self.ingreso_guias_propia(propias)
-
-        if lipigas != '' or len(lipigas) > 0:
-            self.ingreso_guia_lipigas(lipigas)
+        if len(guias['lipigas']) > 0:
+            lipigas = json.loads(guias['lipigas'])
+            self._ingreso_guia_lipigas(lipigas)
 
     def _ingreso_cupones(self):
         tipo_pago = TipoPago.objects.get(pk=int(3))
@@ -318,7 +355,7 @@ class Cerrar(LoginRequiredMixin, View):
             otro.liquidacion = self.this_liquidacion
             otro.save()
 
-    def ingreso_guias_propia(self, guias):
+    def _ingreso_guias_propia(self, guias):
         for guia in guias:
             client = Cliente.objects.get( pk = int(guia['cliente']['id']) )
 
@@ -328,9 +365,9 @@ class Cerrar(LoginRequiredMixin, View):
             this.liquidacion = self.this_liquidacion
             this.save()
 
-            self.ingresar_productos_guia(guia['productos'], this)
+            self._ingresar_productos_guia(guia['productos'], this)
 
-    def ingreso_guia_lipigas(self, guias):
+    def _ingreso_guia_lipigas(self, guias):
         for guia in guias:
             client = Cliente.objects.get( pk = int(guia['cliente']['idCliente']) )
 
@@ -340,9 +377,9 @@ class Cerrar(LoginRequiredMixin, View):
             this.liquidacion = self.this_liquidacion
             this.save()
 
-            self.ingresar_productos_guia(guia['productos'], this)
+            self._ingresar_productos_guia(guia['productos'], this)
 
-    def ingresar_productos_guia(self, productos, guia):
+    def _ingresar_productos_guia(self, productos, guia):
         for prod in productos:
             producto = Producto.objects.get( codigo = int(prod['codigo']) )
 
