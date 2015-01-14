@@ -18,30 +18,39 @@ var app = angular.module('liquidacionApp',[]),
 
 app.factory('liquidacionService', liquidacionService);
 app.factory('mantieneRestanteFactory',function(){
-    var hash = {};
+    var hash = {}, calculaRestantes;
 
-    console.log('sadsa');
-    console.log(hash);
-
-    function calculaRestantes(p, index){
-        if(typeof p.restantes === 'undefined'){
-            p.restantes = parseInt(p.llenos);
+    calculaRestantes = function(p, index){
+        if(typeof p.disponibles === 'undefined'){
+            p.disponibles = parseInt(p.vacios);
         }
 
-        hash[p.codigo] = { index: index, restantes: p.restantes };
+        hash[p.codigo] = { index: index, disponibles: p.disponibles };
         return p;
-    }
+    };
 
     return {
+        getHash: function(){
+            return hash;
+        },
+
         calculaRestantes: function(arr){
-            console.log(arr);
             arr.map(calculaRestantes);
             return arr;
         },
 
-        restar: function(arr){
-            console.log(arr);
-            return arr;
+        restar: function(productos, arr){
+            arr.forEach(function(a){
+                hash[a.codigo].disponibles -= parseInt(a.cantidad);
+            });
+
+            productos.map(function(p){
+                var disponibles = parseInt(hash[p.codigo].disponibles);
+                p.disponibles = disponibles;
+                return p;
+            });
+
+            return productos;
         }
     };
 });
@@ -233,17 +242,7 @@ module.exports = GuiaLipigasController;
 },{"./../../models/liquidacion/venta_lipigas_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/venta_lipigas_model.js","./guia_propia_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_propia_controller.js","./mixins.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/mixins.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_propia_controller.js":[function(require,module,exports){
 var Producto = require('./../../models/liquidacion/producto_model.js'),
     VentaPropia = require('./../../models/liquidacion/venta_propia_model.js'),
-    guias = require('./mixins.js').guias,
-    hash = {};
-
-function calculaRestantes(p, index){
-    if(typeof p.restantes === 'undefined'){
-        p.restantes = parseInt(p.vacios);
-    }
-
-    hash[p.codigo] = { index: index, restantes: p.restantes };
-    return p;
-}
+    guias = require('./mixins.js').guias;
 
 function GuiaPropiaController($scope, service, factory){
     this.service = service;
@@ -314,13 +313,13 @@ GuiaPropiaController.mixin({
             return false;
         }
 
-        this.scope.productos.map(calculaRestantes);
+        this.scope.productos = this.factory.calculaRestantes(this.scope.productos);
         obj = JSON.parse(this.producto.tipo);
 
         if(!this.producto.cantidad || parseInt(this.producto.cantidad) < 1){
             this.mensajes.producto = 'Se debe ingresar una cantidad de producto';
             return false;
-        }else if(hash[obj.codigo].restantes < parseInt(this.producto.cantidad)){
+        }else if(this.factory.getHash()[obj.codigo].restantes < parseInt(this.producto.cantidad)){
             this.mensajes.producto = 'No se puede elegir una mayor a la disponible';
             return false;
         }
@@ -340,18 +339,8 @@ GuiaPropiaController.mixin({
         }
 
         this.scope.productos = this.factory.calculaRestantes(this.scope.productos);
-        //this.scope.productos.map(calculaRestantes);
-
-        this.venta.productos.forEach(function(p){
-            hash[p.codigo].restantes -= parseInt(p.cantidad);
-        });
-
-        this.factory.calculaRestantes(this.scope.productos);
-
-        this.scope.productos.map(function(p){
-            p.restantes = hash[p.codigo].restantes;
-            return p
-        });
+        this.scope.productos = this.factory.restar(this.scope.productos, this.venta.productos);
+        console.log(this.scope.productos);
 
         this.venta.cliente.id = this.idCliente;
         this.scope.$emit('guia:agregarVenta', this.venta);

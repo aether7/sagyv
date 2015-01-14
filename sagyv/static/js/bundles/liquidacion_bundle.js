@@ -17,30 +17,39 @@ var app = angular.module('liquidacionApp',[]),
 
 app.factory('liquidacionService', liquidacionService);
 app.factory('mantieneRestanteFactory',function(){
-    var hash = {};
+    var hash = {}, calculaRestantes;
 
-    console.log('sadsa');
-    console.log(hash);
-
-    function calculaRestantes(p, index){
-        if(typeof p.restantes === 'undefined'){
-            p.restantes = parseInt(p.llenos);
+    calculaRestantes = function(p, index){
+        if(typeof p.disponibles === 'undefined'){
+            p.disponibles = parseInt(p.vacios);
         }
 
-        hash[p.codigo] = { index: index, restantes: p.restantes };
+        hash[p.codigo] = { index: index, disponibles: p.disponibles };
         return p;
-    }
+    };
 
     return {
+        getHash: function(){
+            return hash;
+        },
+
         calculaRestantes: function(arr){
-            console.log(arr);
             arr.map(calculaRestantes);
             return arr;
         },
 
-        restar: function(arr){
-            console.log(arr);
-            return arr;
+        restar: function(productos, arr){
+            arr.forEach(function(a){
+                hash[a.codigo].disponibles -= parseInt(a.cantidad);
+            });
+
+            productos.map(function(p){
+                var disponibles = parseInt(hash[p.codigo].disponibles);
+                p.disponibles = disponibles;
+                return p;
+            });
+
+            return productos;
         }
     };
 });
