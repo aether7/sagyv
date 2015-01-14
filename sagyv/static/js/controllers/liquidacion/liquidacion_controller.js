@@ -54,6 +54,7 @@ LiquidacionController.mixin({
 
             _this.kilosVendidos += vacios * peso;
         });
+
         this.productos_dump = JSON.stringify(this.productos);
     },
 
@@ -67,13 +68,6 @@ LiquidacionController.mixin({
 
     addProductos: function(evt, productos){
         this.productos = this.scope.productos = productos;
-
-        this.scope.productosRestantes = productos.map(function(p){
-            return {
-                codigo: p.codigo,
-                cantidad: parseInt(p.llenos)
-            };
-        });
     },
 
     addGuia: function(evt, venta){
@@ -81,7 +75,6 @@ LiquidacionController.mixin({
         this.renderTabla('tpl_tabla_ventas', 'tabla_ventas', this.guias);
 
         this.monto.sumarGuias(this.guias.propia.ventas, this.guias.lipigas.ventas);
-
         this.dump.setGuias(this.guias.propia, this.guias.lipigas);
     },
 

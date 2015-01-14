@@ -25,11 +25,11 @@
 
                 <div class="form-group">
                     <label for="guia_cliente_guia_propia" class="control-label">Guía cliente</label>
-                    <input type="text" class="form-control" data-ng-model="guiaPropia.venta.numero" />
+                    <input type="text" class="form-control" ng-model="guiaPropia.venta.numero" />
 
                     <span class="text-danger"
-                        data-ng-show="guiaPropia.mensajes.numeroVenta"
-                        data-ng-bind="guiaPropia.mensajes.numeroVenta"></span>
+                        ng-show="guiaPropia.mensajes.numeroVenta"
+                        ng-bind="guiaPropia.mensajes.numeroVenta"></span>
                 </div>
 
                 <div class="form-group">
@@ -39,8 +39,8 @@
                             ng-model="guiaPropia.producto.tipo">
                             {% verbatim %}
                             <option value="{{ producto }}"
-                                data-ng-repeat="producto in productos"
-                                data-ng-bind="{{ producto.codigo }}"></option>
+                                ng-repeat="producto in productos"
+                                ng-bind="{{ producto.codigo }}"></option>
                             {% endverbatim %}
                         </select>
                     </div>
@@ -69,14 +69,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr data-ng-repeat="producto in guiaPropia.venta.productos">
-                            <td data-ng-bind="producto.codigo"></td>
-                            <td data-ng-bind="producto.cantidad"></td>
-                            <td data-ng-bind="producto.precio | currency"></td>
-                            <td data-ng-bind="producto.montoDescuento | currency"></td>
-                            <td data-ng-bind="producto.total | currency"></td>
+                        <tr ng-repeat="producto in guiaPropia.venta.productos">
+                            <td ng-bind="producto.codigo"></td>
+                            <td ng-bind="producto.cantidad"></td>
+                            <td ng-bind="producto.precio | currency"></td>
+                            <td ng-bind="producto.montoDescuento | currency"></td>
+                            <td ng-bind="producto.total | currency"></td>
                             <td>
-                                <a href data-ng-click="guiaPropia.removeProducto($index)">Eliminar</a>
+                                <a href ng-click="guiaPropia.removeProducto($index)">Eliminar</a>
                             </td>
                         </tr>
                     </tbody>
@@ -101,7 +101,7 @@
 
             <div class="modal-footer">
                 <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <button class="btn btn-primary" data-ng-click="guiaPropia.guardar()">Guardar</button>
+                <button class="btn btn-primary" ng-click="guiaPropia.guardar()">Guardar</button>
             </div>
         </div>
     </div>

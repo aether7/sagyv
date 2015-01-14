@@ -17,12 +17,40 @@ var app = angular.module('liquidacionApp',[]),
     liquidacionService = require('../services/liquidacion_service.js');
 
 app.factory('liquidacionService', liquidacionService);
+app.factory('mantieneRestanteFactory',function(){
+    var hash = {};
+
+    console.log('sadsa');
+    console.log(hash);
+
+    function calculaRestantes(p, index){
+        if(typeof p.restantes === 'undefined'){
+            p.restantes = parseInt(p.llenos);
+        }
+
+        hash[p.codigo] = { index: index, restantes: p.restantes };
+        return p;
+    }
+
+    return {
+        calculaRestantes: function(arr){
+            console.log(arr);
+            arr.map(calculaRestantes);
+            return arr;
+        },
+
+        restar: function(arr){
+            console.log(arr);
+            return arr;
+        }
+    };
+});
 
 app.controller('PanelBusquedaController', ['$scope', 'liquidacionService', PanelBusquedaController]);
 app.controller('LiquidacionController', ['$scope', 'liquidacionService', LiquidacionController]);
 app.controller('ProductoController', ['$scope', ProductoController]);
-app.controller('GuiaPropiaController', ['$scope', 'liquidacionService', GuiaPropiaController]);
-app.controller('GuiaLipigasController', ['$scope', 'liquidacionService', GuiaLipigasController]);
+app.controller('GuiaPropiaController', ['$scope', 'liquidacionService','mantieneRestanteFactory', GuiaPropiaController]);
+app.controller('GuiaLipigasController', ['$scope', 'liquidacionService','mantieneRestanteFactory', GuiaLipigasController]);
 app.controller('VoucherLipigasController', ['$scope', VoucherLipigasController]);
 app.controller('VoucherTransbankController', ['$scope', VoucherTransbankController]);
 app.controller('ChequeController', ['$scope', ChequeController]);
@@ -173,8 +201,8 @@ var GuiaPropiaController = require('./guia_propia_controller.js'),
     mixin = require('./mixins.js').guias,
     VentaLipigas = require('./../../models/liquidacion/venta_lipigas_model.js');
 
-function GuiaLipigasController($scope, service){
-    GuiaPropiaController.call(this, $scope, service);
+function GuiaLipigasController($scope, service, factory){
+    GuiaPropiaController.call(this, $scope, service, factory);
 }
 
 GuiaLipigasController.mixin(GuiaPropiaController, {
@@ -205,11 +233,22 @@ module.exports = GuiaLipigasController;
 },{"./../../models/liquidacion/venta_lipigas_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/venta_lipigas_model.js","./guia_propia_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_propia_controller.js","./mixins.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/mixins.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/guia_propia_controller.js":[function(require,module,exports){
 var Producto = require('./../../models/liquidacion/producto_model.js'),
     VentaPropia = require('./../../models/liquidacion/venta_propia_model.js'),
-    guias = require('./mixins.js').guias;
+    guias = require('./mixins.js').guias,
+    hash = {};
 
-function GuiaPropiaController($scope, service){
+function calculaRestantes(p, index){
+    if(typeof p.restantes === 'undefined'){
+        p.restantes = parseInt(p.vacios);
+    }
+
+    hash[p.codigo] = { index: index, restantes: p.restantes };
+    return p;
+}
+
+function GuiaPropiaController($scope, service, factory){
     this.service = service;
     this.scope = $scope;
+    this.factory = factory;
 
     this.totalGuia = 0;
     this.idCliente = null;
@@ -267,6 +306,7 @@ GuiaPropiaController.mixin({
     },
 
     esValidoProducto: function(){
+        var obj;
         this.mensajes = {};
 
         if(!this.producto.tipo){
@@ -274,13 +314,13 @@ GuiaPropiaController.mixin({
             return false;
         }
 
+        this.scope.productos.map(calculaRestantes);
         obj = JSON.parse(this.producto.tipo);
-        console.log(this.scope.productosRestantes);
 
         if(!this.producto.cantidad || parseInt(this.producto.cantidad) < 1){
             this.mensajes.producto = 'Se debe ingresar una cantidad de producto';
             return false;
-        }else if(obj.cantidad < parseInt(this.producto.cantidad)){
+        }else if(hash[obj.codigo].restantes < parseInt(this.producto.cantidad)){
             this.mensajes.producto = 'No se puede elegir una mayor a la disponible';
             return false;
         }
@@ -299,8 +339,22 @@ GuiaPropiaController.mixin({
             return;
         }
 
+        this.scope.productos = this.factory.calculaRestantes(this.scope.productos);
+        //this.scope.productos.map(calculaRestantes);
+
+        this.venta.productos.forEach(function(p){
+            hash[p.codigo].restantes -= parseInt(p.cantidad);
+        });
+
+        this.factory.calculaRestantes(this.scope.productos);
+
+        this.scope.productos.map(function(p){
+            p.restantes = hash[p.codigo].restantes;
+            return p
+        });
+
         this.venta.cliente.id = this.idCliente;
-        this.scope.$emit("guia:agregarVenta", this.venta);
+        this.scope.$emit('guia:agregarVenta', this.venta);
         common.agregarMensaje('Se ha guardado guía propia exitosamente');
         $('#modal_guia_propia').modal('hide');
     }
@@ -365,6 +419,7 @@ LiquidacionController.mixin({
 
             _this.kilosVendidos += vacios * peso;
         });
+
         this.productos_dump = JSON.stringify(this.productos);
     },
 
@@ -378,13 +433,6 @@ LiquidacionController.mixin({
 
     addProductos: function(evt, productos){
         this.productos = this.scope.productos = productos;
-
-        this.scope.productosRestantes = productos.map(function(p){
-            return {
-                codigo: p.codigo,
-                cantidad: parseInt(p.llenos)
-            };
-        });
     },
 
     addGuia: function(evt, venta){
@@ -392,7 +440,6 @@ LiquidacionController.mixin({
         this.renderTabla('tpl_tabla_ventas', 'tabla_ventas', this.guias);
 
         this.monto.sumarGuias(this.guias.propia.ventas, this.guias.lipigas.ventas);
-
         this.dump.setGuias(this.guias.propia, this.guias.lipigas);
     },
 

@@ -1,10 +1,21 @@
 var Producto = require('./../../models/liquidacion/producto_model.js'),
     VentaPropia = require('./../../models/liquidacion/venta_propia_model.js'),
-    guias = require('./mixins.js').guias;
+    guias = require('./mixins.js').guias,
+    hash = {};
 
-function GuiaPropiaController($scope, service){
+function calculaRestantes(p, index){
+    if(typeof p.restantes === 'undefined'){
+        p.restantes = parseInt(p.vacios);
+    }
+
+    hash[p.codigo] = { index: index, restantes: p.restantes };
+    return p;
+}
+
+function GuiaPropiaController($scope, service, factory){
     this.service = service;
     this.scope = $scope;
+    this.factory = factory;
 
     this.totalGuia = 0;
     this.idCliente = null;
@@ -62,6 +73,7 @@ GuiaPropiaController.mixin({
     },
 
     esValidoProducto: function(){
+        var obj;
         this.mensajes = {};
 
         if(!this.producto.tipo){
@@ -69,13 +81,13 @@ GuiaPropiaController.mixin({
             return false;
         }
 
+        this.scope.productos.map(calculaRestantes);
         obj = JSON.parse(this.producto.tipo);
-        console.log(this.scope.productosRestantes);
 
         if(!this.producto.cantidad || parseInt(this.producto.cantidad) < 1){
             this.mensajes.producto = 'Se debe ingresar una cantidad de producto';
             return false;
-        }else if(obj.cantidad < parseInt(this.producto.cantidad)){
+        }else if(hash[obj.codigo].restantes < parseInt(this.producto.cantidad)){
             this.mensajes.producto = 'No se puede elegir una mayor a la disponible';
             return false;
         }
@@ -94,8 +106,22 @@ GuiaPropiaController.mixin({
             return;
         }
 
+        this.scope.productos = this.factory.calculaRestantes(this.scope.productos);
+        //this.scope.productos.map(calculaRestantes);
+
+        this.venta.productos.forEach(function(p){
+            hash[p.codigo].restantes -= parseInt(p.cantidad);
+        });
+
+        this.factory.calculaRestantes(this.scope.productos);
+
+        this.scope.productos.map(function(p){
+            p.restantes = hash[p.codigo].restantes;
+            return p
+        });
+
         this.venta.cliente.id = this.idCliente;
-        this.scope.$emit("guia:agregarVenta", this.venta);
+        this.scope.$emit('guia:agregarVenta', this.venta);
         common.agregarMensaje('Se ha guardado guía propia exitosamente');
         $('#modal_guia_propia').modal('hide');
     }

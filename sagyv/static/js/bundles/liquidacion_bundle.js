@@ -16,12 +16,40 @@ var app = angular.module('liquidacionApp',[]),
     liquidacionService = require('../services/liquidacion_service.js');
 
 app.factory('liquidacionService', liquidacionService);
+app.factory('mantieneRestanteFactory',function(){
+    var hash = {};
+
+    console.log('sadsa');
+    console.log(hash);
+
+    function calculaRestantes(p, index){
+        if(typeof p.restantes === 'undefined'){
+            p.restantes = parseInt(p.llenos);
+        }
+
+        hash[p.codigo] = { index: index, restantes: p.restantes };
+        return p;
+    }
+
+    return {
+        calculaRestantes: function(arr){
+            console.log(arr);
+            arr.map(calculaRestantes);
+            return arr;
+        },
+
+        restar: function(arr){
+            console.log(arr);
+            return arr;
+        }
+    };
+});
 
 app.controller('PanelBusquedaController', ['$scope', 'liquidacionService', PanelBusquedaController]);
 app.controller('LiquidacionController', ['$scope', 'liquidacionService', LiquidacionController]);
 app.controller('ProductoController', ['$scope', ProductoController]);
-app.controller('GuiaPropiaController', ['$scope', 'liquidacionService', GuiaPropiaController]);
-app.controller('GuiaLipigasController', ['$scope', 'liquidacionService', GuiaLipigasController]);
+app.controller('GuiaPropiaController', ['$scope', 'liquidacionService','mantieneRestanteFactory', GuiaPropiaController]);
+app.controller('GuiaLipigasController', ['$scope', 'liquidacionService','mantieneRestanteFactory', GuiaLipigasController]);
 app.controller('VoucherLipigasController', ['$scope', VoucherLipigasController]);
 app.controller('VoucherTransbankController', ['$scope', VoucherTransbankController]);
 app.controller('ChequeController', ['$scope', ChequeController]);

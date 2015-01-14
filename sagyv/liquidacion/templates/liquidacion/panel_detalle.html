@@ -12,19 +12,17 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-ng-repeat="producto in liqCtrl.productos"
-                data-ng-controller="ProductoController as productoCtrl" class="ng-cloak">
+            <tr ng-repeat="producto in liqCtrl.productos"
+                ng-controller="ProductoController as productoCtrl" class="ng-cloak">
 
-                <td data-ng-bind="producto.codigo"></td>
-                <td data-ng-bind="producto.cantidad"></td>
+                <td ng-bind="producto.codigo"></td>
+                <td ng-bind="producto.cantidad"></td>
                 <td>
-                    <input type="text" value=""
-                        data-ng-model="producto.llenos"
-                        data-ng-keyup="productoCtrl.calcularRestante(producto)">
+                    <input type="text" ng-model="producto.llenos" ng-keyup="productoCtrl.calcularRestante(producto)">
                 </td>
-                <td data-ng-bind="producto.vacios"></td>
-                <td data-ng-bind-template="{{ producto.precio | currency }}"></td>
-                <td style="text-align:right" data-ng-bind-template="{{ producto.valorTotal | currency }}"></td>
+                <td ng-bind="producto.vacios"></td>
+                <td ng-bind-template="{{ producto.precio | currency }}"></td>
+                <td style="text-align:right" ng-bind-template="{{ producto.valorTotal | currency }}"></td>
             </tr>
         </tbody>
     </table>
