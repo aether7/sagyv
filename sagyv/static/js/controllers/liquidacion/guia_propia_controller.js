@@ -74,10 +74,12 @@ GuiaPropiaController.mixin({
         this.scope.productos = this.factory.calculaRestantes(this.scope.productos);
         obj = JSON.parse(this.producto.tipo);
 
+        console.log(this.factory.getHash());
+
         if(!this.producto.cantidad || parseInt(this.producto.cantidad) < 1){
             this.mensajes.producto = 'Se debe ingresar una cantidad de producto';
             return false;
-        }else if(this.factory.getHash()[obj.codigo].disponible < parseInt(this.producto.cantidad)){
+        }else if(this.factory.getHash()[obj.codigo].disponibles < parseInt(this.producto.cantidad)){
             this.mensajes.producto = 'No se puede elegir una mayor a la disponible';
             return false;
         }
