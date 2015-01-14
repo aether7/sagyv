@@ -319,7 +319,7 @@ GuiaPropiaController.mixin({
         if(!this.producto.cantidad || parseInt(this.producto.cantidad) < 1){
             this.mensajes.producto = 'Se debe ingresar una cantidad de producto';
             return false;
-        }else if(this.factory.getHash()[obj.codigo].restantes < parseInt(this.producto.cantidad)){
+        }else if(this.factory.getHash()[obj.codigo].disponible < parseInt(this.producto.cantidad)){
             this.mensajes.producto = 'No se puede elegir una mayor a la disponible';
             return false;
         }
@@ -340,7 +340,6 @@ GuiaPropiaController.mixin({
 
         this.scope.productos = this.factory.calculaRestantes(this.scope.productos);
         this.scope.productos = this.factory.restar(this.scope.productos, this.venta.productos);
-        console.log(this.scope.productos);
 
         this.venta.cliente.id = this.idCliente;
         this.scope.$emit('guia:agregarVenta', this.venta);
