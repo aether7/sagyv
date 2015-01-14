@@ -17,7 +17,7 @@ var app = angular.module('liquidacionApp',[]),
     liquidacionService = require('../services/liquidacion_service.js');
 
 app.factory('liquidacionService', liquidacionService);
-app.factory('mantieneRestanteFactory',function(){
+app.factory('mantieneRestanteService',function(){
     var hash = {}, calculaRestantes;
 
     calculaRestantes = function(p, index){
@@ -30,10 +30,6 @@ app.factory('mantieneRestanteFactory',function(){
     };
 
     return {
-        getHash: function(){
-            return hash;
-        },
-
         calculaRestantes: function(arr){
             arr.map(calculaRestantes);
             return arr;
@@ -51,6 +47,11 @@ app.factory('mantieneRestanteFactory',function(){
             });
 
             return productos;
+        },
+
+        tieneStockDisponible: function(codigo, cantidad){
+            var obj = hash[codigo];
+            return parseInt(obj.disponibles) >= parseInt(cantidad);
         }
     };
 });
@@ -58,8 +59,8 @@ app.factory('mantieneRestanteFactory',function(){
 app.controller('PanelBusquedaController', ['$scope', 'liquidacionService', PanelBusquedaController]);
 app.controller('LiquidacionController', ['$scope', 'liquidacionService', LiquidacionController]);
 app.controller('ProductoController', ['$scope', ProductoController]);
-app.controller('GuiaPropiaController', ['$scope', 'liquidacionService','mantieneRestanteFactory', GuiaPropiaController]);
-app.controller('GuiaLipigasController', ['$scope', 'liquidacionService','mantieneRestanteFactory', GuiaLipigasController]);
+app.controller('GuiaPropiaController', ['$scope', 'liquidacionService','mantieneRestanteService', GuiaPropiaController]);
+app.controller('GuiaLipigasController', ['$scope', 'liquidacionService','mantieneRestanteService', GuiaLipigasController]);
 app.controller('VoucherLipigasController', ['$scope', VoucherLipigasController]);
 app.controller('VoucherTransbankController', ['$scope', VoucherTransbankController]);
 app.controller('ChequeController', ['$scope', ChequeController]);
@@ -244,10 +245,10 @@ var Producto = require('./../../models/liquidacion/producto_model.js'),
     VentaPropia = require('./../../models/liquidacion/venta_propia_model.js'),
     guias = require('./mixins.js').guias;
 
-function GuiaPropiaController($scope, service, factory){
+function GuiaPropiaController($scope, service, calcularRestanteService){
     this.service = service;
     this.scope = $scope;
-    this.factory = factory;
+    this.calcularRestanteService = calcularRestanteService;
 
     this.totalGuia = 0;
     this.idCliente = null;
@@ -313,15 +314,13 @@ GuiaPropiaController.mixin({
             return false;
         }
 
-        this.scope.productos = this.factory.calculaRestantes(this.scope.productos);
+        this.scope.productos = this.calcularRestanteService.calculaRestantes(this.scope.productos);
         obj = JSON.parse(this.producto.tipo);
-
-        console.log(this.factory.getHash());
 
         if(!this.producto.cantidad || parseInt(this.producto.cantidad) < 1){
             this.mensajes.producto = 'Se debe ingresar una cantidad de producto';
             return false;
-        }else if(this.factory.getHash()[obj.codigo].disponibles < parseInt(this.producto.cantidad)){
+        }else if(!this.calcularRestanteService.tieneStockDisponible(obj.codigo, this.producto.cantidad)){
             this.mensajes.producto = 'No se puede elegir una mayor a la disponible';
             return false;
         }
@@ -340,8 +339,8 @@ GuiaPropiaController.mixin({
             return;
         }
 
-        this.scope.productos = this.factory.calculaRestantes(this.scope.productos);
-        this.scope.productos = this.factory.restar(this.scope.productos, this.venta.productos);
+        this.scope.productos = this.calcularRestanteService.calculaRestantes(this.scope.productos);
+        this.scope.productos = this.calcularRestanteService.restar(this.scope.productos, this.venta.productos);
 
         this.venta.cliente.id = this.idCliente;
         this.scope.$emit('guia:agregarVenta', this.venta);

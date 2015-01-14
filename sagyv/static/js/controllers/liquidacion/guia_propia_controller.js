@@ -2,10 +2,10 @@ var Producto = require('./../../models/liquidacion/producto_model.js'),
     VentaPropia = require('./../../models/liquidacion/venta_propia_model.js'),
     guias = require('./mixins.js').guias;
 
-function GuiaPropiaController($scope, service, factory){
+function GuiaPropiaController($scope, service, calcularRestanteService){
     this.service = service;
     this.scope = $scope;
-    this.factory = factory;
+    this.calcularRestanteService = calcularRestanteService;
 
     this.totalGuia = 0;
     this.idCliente = null;
@@ -71,15 +71,13 @@ GuiaPropiaController.mixin({
             return false;
         }
 
-        this.scope.productos = this.factory.calculaRestantes(this.scope.productos);
+        this.scope.productos = this.calcularRestanteService.calculaRestantes(this.scope.productos);
         obj = JSON.parse(this.producto.tipo);
-
-        console.log(this.factory.getHash());
 
         if(!this.producto.cantidad || parseInt(this.producto.cantidad) < 1){
             this.mensajes.producto = 'Se debe ingresar una cantidad de producto';
             return false;
-        }else if(this.factory.getHash()[obj.codigo].disponibles < parseInt(this.producto.cantidad)){
+        }else if(!this.calcularRestanteService.tieneStockDisponible(obj.codigo, this.producto.cantidad)){
             this.mensajes.producto = 'No se puede elegir una mayor a la disponible';
             return false;
         }
@@ -98,8 +96,8 @@ GuiaPropiaController.mixin({
             return;
         }
 
-        this.scope.productos = this.factory.calculaRestantes(this.scope.productos);
-        this.scope.productos = this.factory.restar(this.scope.productos, this.venta.productos);
+        this.scope.productos = this.calcularRestanteService.calculaRestantes(this.scope.productos);
+        this.scope.productos = this.calcularRestanteService.restar(this.scope.productos, this.venta.productos);
 
         this.venta.cliente.id = this.idCliente;
         this.scope.$emit('guia:agregarVenta', this.venta);
