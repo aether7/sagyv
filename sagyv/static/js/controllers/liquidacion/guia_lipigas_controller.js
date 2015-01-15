@@ -2,8 +2,8 @@ var GuiaPropiaController = require('./guia_propia_controller.js'),
     mixin = require('./mixins.js').guias,
     VentaLipigas = require('./../../models/liquidacion/venta_lipigas_model.js');
 
-function GuiaLipigasController($scope, service, factory){
-    GuiaPropiaController.call(this, $scope, service, factory);
+function GuiaLipigasController($scope, service, calcularRestanteService){
+    GuiaPropiaController.call(this, $scope, service, calcularRestanteService);
 }
 
 GuiaLipigasController.mixin(GuiaPropiaController, {

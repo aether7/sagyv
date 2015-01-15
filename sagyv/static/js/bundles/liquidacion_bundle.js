@@ -63,7 +63,7 @@ app.controller('GuiaLipigasController', ['$scope', 'liquidacionService','mantien
 app.controller('VoucherLipigasController', ['$scope', VoucherLipigasController]);
 app.controller('VoucherTransbankController', ['$scope', VoucherTransbankController]);
 app.controller('ChequeController', ['$scope', ChequeController]);
-app.controller('CuponPrepagoController', ['$scope', CuponPrepagoController]);
+app.controller('CuponPrepagoController', ['$scope', 'mantieneRestanteService', CuponPrepagoController]);
 app.controller('OtroController', ['$scope', OtroController]);
 app.controller('GarantiasController', ['$scope', 'liquidacionService', GarantiasController]);
 
