@@ -56,6 +56,20 @@ app.factory('mantieneRestanteService',function(){
     };
 });
 
+app.factory('ExistenciasGarantiasService', function(){
+    var existencias = {}, somefunction;
+
+    somefunction = function(){
+        console.log('hola');
+    };
+
+    return {
+        some : function(){
+            console.log('inreturn');
+        }
+    }
+});
+
 app.controller('PanelBusquedaController', ['$scope', 'liquidacionService', PanelBusquedaController]);
 app.controller('LiquidacionController', ['$scope', 'liquidacionService', LiquidacionController]);
 app.controller('ProductoController', ['$scope', ProductoController]);
@@ -145,7 +159,6 @@ CuponPrepagoController.mixin({
         this.cuponPrepago.clienteNombre = clientePrepago.text();
         this.cuponPrepago.formatoNombre = formatoPrepago.text();
 
-        console.log(this.scope.productos);
         this.scope.productos = this.calcularRestanteService.calculaRestantes(this.scope.productos);
 
         if(!this.calcularRestanteService.tieneStockDisponible(this.cuponPrepago.formatoNombre, 1)){
@@ -194,6 +207,33 @@ GarantiasController.prototype = {
 
             self.garantias.push(self.garantia);
         });
+    },
+
+    abrir : function(){
+        var prods = this.scope.productos,
+            self = this;
+
+        if(prods == undefined){
+            return
+        }
+
+        prods.forEach(function(p){
+            cod = p.codigo;
+            if((cod == 1105) ||(cod == 1405)){
+                self.garantias[0].max += p.vacios
+
+            }else if((cod == 1111) ||(cod == 1411)){
+                self.garantias[1].max += p.vacios
+
+            }else if((cod == 1115) ||(cod == 1415)){
+                self.garantias[2].max += p.vacios
+
+            }else if((cod == 1145) ||(cod == 1445)){
+                self.garantias[3].max += p.vacios
+
+            }
+        });
+
     },
 
     guardar : function(){
@@ -352,7 +392,6 @@ GuiaPropiaController.mixin({
         }
 
         this.scope.productos = this.calcularRestanteService.calculaRestantes(this.scope.productos);
-        console.log(this.venta.productos);
         this.scope.productos = this.calcularRestanteService.restar(this.scope.productos, this.venta.productos);
 
         this.venta.cliente.id = this.idCliente;
@@ -1140,6 +1179,7 @@ function Garantia(){
     this.codigo = null;
     this.valor = 0;
     this.cantidad = 0;
+    this.max = 0;
     this.mensajes = {};
 }
 
@@ -1154,6 +1194,9 @@ Garantia.prototype = {
             return false;
         }else if(parseInt(this[campo]) < -1){
             this.mensajes[campo] = "el valor debe ser positivo";
+            return false;
+        }else if(parseInt(this[campo]) > this.max ){
+            this.mensajes[campo] = "el valor debe igual o inferior a los existentes";
             return false;
         }
 

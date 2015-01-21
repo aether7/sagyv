@@ -65,7 +65,8 @@
     <div class="box" data-ng-controller="GarantiasController as gCtrl">
         <button type="button" class="btn btn-default"
         data-accion="abre_modal"
-        data-modal="garantias">Garantias</button>
+        data-modal="garantias"
+        data-ng-click="gCtrl.abrir()">Garantias</button>
 
         {% include "liquidacion/components/modal_garantias.html" %}
     </div>

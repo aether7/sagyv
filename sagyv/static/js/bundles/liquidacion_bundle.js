@@ -55,6 +55,20 @@ app.factory('mantieneRestanteService',function(){
     };
 });
 
+app.factory('ExistenciasGarantiasService', function(){
+    var existencias = {}, somefunction;
+
+    somefunction = function(){
+        console.log('hola');
+    };
+
+    return {
+        some : function(){
+            console.log('inreturn');
+        }
+    }
+});
+
 app.controller('PanelBusquedaController', ['$scope', 'liquidacionService', PanelBusquedaController]);
 app.controller('LiquidacionController', ['$scope', 'liquidacionService', LiquidacionController]);
 app.controller('ProductoController', ['$scope', ProductoController]);

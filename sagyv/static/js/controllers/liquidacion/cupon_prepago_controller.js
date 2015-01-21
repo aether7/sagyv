@@ -23,7 +23,6 @@ CuponPrepagoController.mixin({
         this.cuponPrepago.clienteNombre = clientePrepago.text();
         this.cuponPrepago.formatoNombre = formatoPrepago.text();
 
-        console.log(this.scope.productos);
         this.scope.productos = this.calcularRestanteService.calculaRestantes(this.scope.productos);
 
         if(!this.calcularRestanteService.tieneStockDisponible(this.cuponPrepago.formatoNombre, 1)){

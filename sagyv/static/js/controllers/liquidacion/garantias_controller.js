@@ -30,6 +30,33 @@ GarantiasController.prototype = {
         });
     },
 
+    abrir : function(){
+        var prods = this.scope.productos,
+            self = this;
+
+        if(prods == undefined){
+            return
+        }
+
+        prods.forEach(function(p){
+            cod = p.codigo;
+            if((cod == 1105) ||(cod == 1405)){
+                self.garantias[0].max += p.vacios
+
+            }else if((cod == 1111) ||(cod == 1411)){
+                self.garantias[1].max += p.vacios
+
+            }else if((cod == 1115) ||(cod == 1415)){
+                self.garantias[2].max += p.vacios
+
+            }else if((cod == 1145) ||(cod == 1445)){
+                self.garantias[3].max += p.vacios
+
+            }
+        });
+
+    },
+
     guardar : function(){
         var valido = true, output = [];
 

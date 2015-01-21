@@ -3,6 +3,7 @@ function Garantia(){
     this.codigo = null;
     this.valor = 0;
     this.cantidad = 0;
+    this.max = 0;
     this.mensajes = {};
 }
 
@@ -17,6 +18,9 @@ Garantia.prototype = {
             return false;
         }else if(parseInt(this[campo]) < -1){
             this.mensajes[campo] = "el valor debe ser positivo";
+            return false;
+        }else if(parseInt(this[campo]) > this.max ){
+            this.mensajes[campo] = "el valor debe igual o inferior a los existentes";
             return false;
         }
 
