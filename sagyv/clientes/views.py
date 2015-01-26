@@ -1,10 +1,9 @@
 #-*- coding: utf-8 -*-
 import json
 
-from django.core.serializers.json import DjangoJSONEncoder
 from django.db import transaction
 from django.views.generic import TemplateView,View
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 
 from clientes.models import Cliente
 from clientes.models import DescuentoCliente
@@ -181,7 +180,7 @@ class BuscarCliente(LoginRequiredMixin, View):
                 "situacion_comercial" : cliente.situacion_comercial.__unicode__()
             })
 
-        return HttpResponse(json.dumps(data), content_type="application/json")
+        return JsonResponse(data, safe = False)
 
 class ValidarRutCliente(LoginRequiredMixin, View):
 
