@@ -7,6 +7,7 @@ urlpatterns = patterns('clientes.views',
     url(r'^modificar/$', 'modificar_cliente', name = 'modificar'),
     url(r'^eliminar/$', 'eliminar_cliente', name = 'eliminar'),
     url(r'^buscar/$','buscar_cliente', name = 'buscar_cliente'),
+    url(r'^validar\-cliente/$', 'validar_cliente', name='validar_cliente'),
 )
 
 urlpatterns += patterns('clientes.situacion_comercial_views',

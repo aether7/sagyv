@@ -67,10 +67,17 @@ ClienteController.prototype = {
     },
 
     crear: function(){
+        this.cliente.mensajes.rut = null;
         if(!this.cliente.esValido()){
             return;
         }
 
+        if(!this.validarRut()){
+            this.cliente.mensajes.rut = "Ya existe otro cliente con ese Rut";
+            return;
+        }
+
+        return;
         this.service.create(this.cliente.toJSON(), this.procesarCrear.bind(this));
     },
 
@@ -95,6 +102,15 @@ ClienteController.prototype = {
 
         $('#modal_editar').modal('hide');
         common.agregarMensaje('El cliente ha sido actualizado exitosamente');
+    },
+
+    validarRut: function(){
+        this.service.validateClient(this.cliente.rut, this.procesarValidarRut.bind(this));
+    },
+
+    procesarValidarRut: function(data){
+        console.log(data.status);
+        return data.status;
     }
 };
 

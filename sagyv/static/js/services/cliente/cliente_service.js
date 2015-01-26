@@ -29,6 +29,11 @@ function service($http){
                 data = $.param({ id : id });
 
             $http.post(url, data).success(callback);
+        },
+
+        validateClient: function(rut, callback){
+            var url=App.urls.get('clientes:validar') + '?rut=' + rut;
+            $http.get(url).success(callback);
         }
     };
 
