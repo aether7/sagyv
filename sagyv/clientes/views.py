@@ -104,7 +104,7 @@ class CrearCliente(LoginRequiredMixin, View, ClienteMixin):
         cliente.propio = propio
         cliente.observacion = observacion
 
-        if sit_comercial_id is not None and sit_comercial_id != 'null':
+        if sit_comercial_id is not None and sit_comercial_id != 'null' and len(sit_comercial_id) != 0:
             cliente.situacion_comercial = DescuentoCliente.objects.get(pk = int(sit_comercial_id))
 
         cliente.save()
