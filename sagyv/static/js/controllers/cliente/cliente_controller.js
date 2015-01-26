@@ -68,21 +68,27 @@ ClienteController.prototype = {
 
     crear: function(){
         this.cliente.mensajes.rut = null;
+
         if(!this.cliente.esValido()){
             return;
         }
 
-        if(!this.validarRut()){
-            this.cliente.mensajes.rut = "Ya existe otro cliente con ese Rut";
-            return;
-        }
+        var _this = this, ok, fallo;
 
-        return;
-        this.service.create(this.cliente.toJSON(), this.procesarCrear.bind(this));
+        ok = function(){
+            _this.service.create(_this.cliente.toJSON(), _this.procesarCrear.bind(_this));
+        };
+
+        fallo = function(){
+            _this.cliente.mensajes.rut = "Ya existe otro cliente con ese Rut";
+        };
+
+        this.validarRut().ok(ok).fallo(fallo).doRequest();
     },
 
     procesarCrear: function(data){
         this.cliente.id = data.id;
+        this.cliente.setSituacionComercial(data.situacionComercial);
         this.clientes.push(this.cliente);
 
         $('#modal_agregar').modal('hide');
@@ -105,12 +111,24 @@ ClienteController.prototype = {
     },
 
     validarRut: function(){
-        this.service.validateClient(this.cliente.rut, this.procesarValidarRut.bind(this));
-    },
+        var okResponse = null,
+            falloResponse = null,
+            _this = this;
 
-    procesarValidarRut: function(data){
-        console.log(data.status);
-        return data.status;
+        return {
+            ok: function(func){
+                okResponse = func;
+                return this;
+            },
+            fallo: function(func){
+                falloResponse = func;
+                return this;
+            },
+            doRequest: function(){
+                _this.service.validateClient(_this.cliente.rut, okResponse, falloResponse);
+                return this;
+            }
+        };
     }
 };
 

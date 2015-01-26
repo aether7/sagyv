@@ -92,8 +92,6 @@ class CrearCliente(LoginRequiredMixin, View, ClienteMixin):
         observacion = request.POST.get('observacion')
         sit_comercial_id = request.POST.get('situacionComercialId')
 
-        print rut
-
         cliente = Cliente()
         cliente.nombre = nombre
         cliente.giro = giro
@@ -189,22 +187,11 @@ class ValidarRutCliente(LoginRequiredMixin, View):
 
     def get(self, request):
         rut = request.GET.get('rut')
-        status = False
+        cantidad = Cliente.objects.filter(rut = rut).count()
+        status = cantidad == 0 and True or False
 
-        clientes = Cliente.objects.filter(rut = rut)
-        print rut
-        print len(clientes)
-
-        if len(clientes) == 0:
-            status = True
-
-        data = {
-            'status': status
-        }
-
-        print data
-
-        return HttpResponse(json.dumps(data), content_type="application/json")
+        data = { 'status': status }
+        return JsonResponse(data, safe = False)
 
 
 index = Index.as_view()

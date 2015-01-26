@@ -1,4 +1,4 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/home/worker8/proyectos/sagyv/sagyv/static/js/bundles/cliente_bundle.js":[function(require,module,exports){
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/Aether/Proyectos/sagyv/sagyv/static/js/bundles/cliente_bundle.js":[function(require,module,exports){
 (function(){
 'use strict';
 var app = angular.module('clienteApp', []),
@@ -18,7 +18,7 @@ app.controller('SituacionComercialController', ['situacionComercialService','$ro
 
 })();
 
-},{"../controllers/cliente/cliente_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/cliente/cliente_controller.js","../controllers/cliente/situacion_comercial_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/cliente/situacion_comercial_controller.js","../filters/string_filters.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/filters/string_filters.js","../services/cliente/cliente_service.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/services/cliente/cliente_service.js","../services/cliente/situacion_comercial_service.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/services/cliente/situacion_comercial_service.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/cliente/cliente_controller.js":[function(require,module,exports){
+},{"../controllers/cliente/cliente_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/cliente/cliente_controller.js","../controllers/cliente/situacion_comercial_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/cliente/situacion_comercial_controller.js","../filters/string_filters.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/filters/string_filters.js","../services/cliente/cliente_service.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/cliente/cliente_service.js","../services/cliente/situacion_comercial_service.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/cliente/situacion_comercial_service.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/cliente/cliente_controller.js":[function(require,module,exports){
 var Cliente = require('../../models/cliente/cliente_model.js');
 
 function ClienteController(service, rootScope){
@@ -89,21 +89,27 @@ ClienteController.prototype = {
 
     crear: function(){
         this.cliente.mensajes.rut = null;
+
         if(!this.cliente.esValido()){
             return;
         }
 
-        if(!this.validarRut()){
-            this.cliente.mensajes.rut = "Ya existe otro cliente con ese Rut";
-            return;
-        }
+        var _this = this, ok, fallo;
 
-        return;
-        this.service.create(this.cliente.toJSON(), this.procesarCrear.bind(this));
+        ok = function(){
+            _this.service.create(_this.cliente.toJSON(), _this.procesarCrear.bind(_this));
+        };
+
+        fallo = function(){
+            _this.cliente.mensajes.rut = "Ya existe otro cliente con ese Rut";
+        };
+
+        this.validarRut().ok(ok).fallo(fallo).doRequest();
     },
 
     procesarCrear: function(data){
         this.cliente.id = data.id;
+        this.cliente.setSituacionComercial(data.situacionComercial);
         this.clientes.push(this.cliente);
 
         $('#modal_agregar').modal('hide');
@@ -126,18 +132,30 @@ ClienteController.prototype = {
     },
 
     validarRut: function(){
-        this.service.validateClient(this.cliente.rut, this.procesarValidarRut.bind(this));
-    },
+        var okResponse = null,
+            falloResponse = null,
+            _this = this;
 
-    procesarValidarRut: function(data){
-        console.log(data.status);
-        return data.status;
+        return {
+            ok: function(func){
+                okResponse = func;
+                return this;
+            },
+            fallo: function(func){
+                falloResponse = func;
+                return this;
+            },
+            doRequest: function(){
+                _this.service.validateClient(_this.cliente.rut, okResponse, falloResponse);
+                return this;
+            }
+        };
     }
 };
 
 module.exports = ClienteController;
 
-},{"../../models/cliente/cliente_model.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/models/cliente/cliente_model.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/cliente/situacion_comercial_controller.js":[function(require,module,exports){
+},{"../../models/cliente/cliente_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/cliente/cliente_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/cliente/situacion_comercial_controller.js":[function(require,module,exports){
 var SituacionComercial = require('../../models/cliente/situacion_comercial_model.js');
 
 function SituacionComercialController(service, rootScope){
@@ -222,7 +240,7 @@ SituacionComercialController.prototype = {
 
 module.exports = SituacionComercialController;
 
-},{"../../models/cliente/situacion_comercial_model.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/models/cliente/situacion_comercial_model.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/filters/string_filters.js":[function(require,module,exports){
+},{"../../models/cliente/situacion_comercial_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/cliente/situacion_comercial_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/filters/string_filters.js":[function(require,module,exports){
 function formatoRut(){
     return function(input){
         var rut, dv, str, i;
@@ -248,7 +266,7 @@ function formatoRut(){
 
 module.exports.formatoRut = formatoRut;
 
-},{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/models/cliente/cliente_model.js":[function(require,module,exports){
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/cliente/cliente_model.js":[function(require,module,exports){
 var SituacionComercial = require('./situacion_comercial_model.js');
 
 function Cliente(){
@@ -395,7 +413,7 @@ Cliente.prototype = {
 
 module.exports = Cliente;
 
-},{"./situacion_comercial_model.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/models/cliente/situacion_comercial_model.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/models/cliente/situacion_comercial_model.js":[function(require,module,exports){
+},{"./situacion_comercial_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/cliente/situacion_comercial_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/cliente/situacion_comercial_model.js":[function(require,module,exports){
 function SituacionComercial(){
     this.id = null;
     this.monto = null;
@@ -481,7 +499,7 @@ SituacionComercial.prototype = {
 
 module.exports = SituacionComercial;
 
-},{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/services/cliente/cliente_service.js":[function(require,module,exports){
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/cliente/cliente_service.js":[function(require,module,exports){
 function service($http){
     $http.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
@@ -515,9 +533,16 @@ function service($http){
             $http.post(url, data).success(callback);
         },
 
-        validateClient: function(rut, callback){
-            var url=App.urls.get('clientes:validar') + '?rut=' + rut;
-            $http.get(url).success(callback);
+        validateClient: function(rut, ok, fail){
+            var url = App.urls.get('clientes:validar') + '?rut=' + rut;
+
+            $http.get(url).success(function(data){
+                if(data.status){
+                    ok();
+                }else{
+                    fail();
+                }
+            });
         }
     };
 
@@ -526,7 +551,7 @@ function service($http){
 
 module.exports = service;
 
-},{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/services/cliente/situacion_comercial_service.js":[function(require,module,exports){
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/cliente/situacion_comercial_service.js":[function(require,module,exports){
 function service($http){
     $http.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
@@ -561,4 +586,4 @@ function service($http){
 
 module.exports = service;
 
-},{}]},{},["/home/worker8/proyectos/sagyv/sagyv/static/js/bundles/cliente_bundle.js"]);
+},{}]},{},["/Users/Aether/Proyectos/sagyv/sagyv/static/js/bundles/cliente_bundle.js"]);

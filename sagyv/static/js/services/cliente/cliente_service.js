@@ -31,9 +31,16 @@ function service($http){
             $http.post(url, data).success(callback);
         },
 
-        validateClient: function(rut, callback){
-            var url=App.urls.get('clientes:validar') + '?rut=' + rut;
-            $http.get(url).success(callback);
+        validateClient: function(rut, ok, fail){
+            var url = App.urls.get('clientes:validar') + '?rut=' + rut;
+
+            $http.get(url).success(function(data){
+                if(data.status){
+                    ok();
+                }else{
+                    fail();
+                }
+            });
         }
     };
 
