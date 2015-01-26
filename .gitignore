@@ -4,3 +4,5 @@
 local_settings.py
 sagyv/db.sqlite3
 sagyv/node_modules/*
+
+*.sqlite3
