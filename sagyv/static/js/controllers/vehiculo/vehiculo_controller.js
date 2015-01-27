@@ -46,6 +46,7 @@ VehiculoController.mixin({
 
     crearVehiculo: function(){
         if(!this.validarNumeroPatente()){
+            console.log('NOP');
             return;
         }
 
@@ -69,7 +70,7 @@ VehiculoController.mixin({
         this.vehiculo.mensaje.numero = null;
         this.vehiculo.mensaje.patente = null;
 
-        preexistencia = this.vehiculos.forEach(function(v){
+        this.vehiculos.forEach(function(v){
             if(v.chofer.id == self.vehiculo.chofer.id){
                 v.chofer.id = null;
                 v.chofer.nombre = "No anexado";
@@ -77,10 +78,10 @@ VehiculoController.mixin({
 
             if(v.numero == self.vehiculo.numero){
                 self.vehiculo.mensaje.numero = "La numeración ya existe";
-                return false;
+                preexistencia = false;
             }else if(v.patente.toUpperCase() == self.vehiculo.patente.toUpperCase()){
                 self.vehiculo.mensaje.patente = "La patente ya existe";
-                return false;
+                preexistencia = false;
             }
         });
 
