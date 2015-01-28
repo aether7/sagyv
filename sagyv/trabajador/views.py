@@ -183,22 +183,37 @@ class ObtenerTrabajadorView(LoginRequiredMixin, View):
             "sistema_salud" : self.get_sistema_salud(worker),
             "estado_civil" : self.get_estado_civil(worker),
             "estado_vacacion" : self.get_estado_vacacion(worker),
-            "boleta": self.get_boleta(worker)
+            "boleta": self.get_boleta(worker),
+            "tipo": worker.tipo_trabajador.id
         }
 
         return HttpResponse(json.dumps(dato),content_type="application/json")
 
     def get_afp(self, worker):
-        return {
-            "id" : worker.afp.id,
-            "nombre" : worker.afp.nombre,
-        }
+
+        if worker.tipo_trabajador.id == 1:
+            return {
+                "id" : worker.afp.id,
+                "nombre" : worker.afp.nombre,
+            }
+        else:
+            return {
+                "id" : None,
+                "nombre" : "No Tiene",
+            }
 
     def get_sistema_salud(self, worker):
-        return {
-            "id" : worker.sistema_salud.id,
-            "nombre" : worker.sistema_salud.nombre
-        }
+        if worker.tipo_trabajador.id == 1:
+            return {
+                "id" : worker.sistema_salud.id,
+                "nombre" : worker.sistema_salud.nombre
+            }
+        else:
+            return {
+                "id" : None,
+                "nombre" : "No Tiene",
+            }
+
 
     def get_estado_civil(self, worker):
         return {

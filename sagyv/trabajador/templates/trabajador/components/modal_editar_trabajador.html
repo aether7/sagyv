@@ -11,6 +11,22 @@
             </div>
 
             <div class="modal-body">
+
+                <div class="form-group">
+                    <label for="tipo_add" class="control-label">Tipo trabajador</label>
+
+                    <select name="tipo" id="tipo_add"
+                        class="form-control" data-ng-model="tc.trabajador.tipo">
+                        {% for tipo in tipo_trabajador %}
+                        <option value="{{ tipo.id }}">{{ tipo.nombre }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <span class="text-danger"
+                        data-ng-show="tc.trabajador.mensajes.afp"
+                        data-ng-bind="tc.trabajador.mensajes.afp"></span>
+                </div>
+
                 <div class="form-group">
                     <label for="nombre_edit" class="control-label">Nombre</label>
                     <input id="nombre_edit" name="nombre" type="text"
@@ -89,7 +105,7 @@
                         data-ng-bind="tc.trabajador.mensajes.vigenciaLicencia"></span>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" data-ng-show="tc.trabajador.tipo == 1">
                     <label for="afp_edit" class="control-label">AFP</label>
                     <select name="afp" id="afp_edit" class="form-control"
                         data-ng-model="tc.trabajador.afp">
@@ -103,7 +119,7 @@
                         data-ng-bind="tc.trabajador.mensajes.afp"></span>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" data-ng-show="tc.trabajador.tipo == 1">
                     <label for="sistema_salud_edit" class="control-label">Sistema salud</label>
                     <select name="sistema_salud" id="sistema_salud_edit" class="form-control"
                         data-ng-model="tc.trabajador.sistemaSalud">
