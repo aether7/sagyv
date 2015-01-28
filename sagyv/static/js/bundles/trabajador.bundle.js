@@ -43,6 +43,7 @@ TrabajadorController.mixin({
                 trabajador.sistemaSalud = obj.sistemaSalud;
                 trabajador.estadoCivil = obj.estadoCivil;
                 trabajador.estadoVacacion = obj.estadoVacacion;
+                trabajador.tipo = obj.tipo;
 
                 return trabajador;
             });
@@ -109,6 +110,7 @@ TrabajadorController.mixin({
 
             _this.procesarTrabajador(data, 'id');
             _this.trabajador.id = id;
+
         });
     },
 
@@ -168,6 +170,7 @@ TrabajadorController.mixin({
         this.trabajador.boleta.boletaInicial = data.boleta.boleta_inicial;
         this.trabajador.boleta.boletaFinal = data.boleta.boleta_final;
         this.trabajador.boleta.boletaActual = data.boleta.boleta_actual;
+        this.trabajador.tipo = data.tipo;
     },
 
     anexarBoleta: function(index){
