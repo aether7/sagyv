@@ -93,6 +93,7 @@ TrabajadorController.mixin({
         this.trabajador = new Trabajador();
 
         this.service.obtener(id, function(data){
+
             common.mostrarModal('editar');
             _this.procesarTrabajador(data, 'id');
             _this.trabajador.id = id;
@@ -136,6 +137,7 @@ TrabajadorController.mixin({
 
     procesarTrabajador: function(data, campo){
         campo = campo || 'nombre';
+        console.log(data);
 
         var fechaNac = new Date(common.fecha.agregarCeros(data.nacimiento) + ' 00:00:00'),
             fechaInicio = new Date(common.fecha.agregarCeros(data.fecha_inicio_contrato) + ' 00:00:00'),

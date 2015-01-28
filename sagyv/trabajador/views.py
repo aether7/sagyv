@@ -203,8 +203,13 @@ class ModificarTrabajadorView(LoginRequiredMixin, View, TrabajadorMixin):
         return JsonResponse(dato, safe = False)
 
     def _edit_trabajador(self, id_trabajador):
-        afp = Afp.objects.get(pk = self.afp_id)
-        sistema_salud = SistemaSalud.objects.get(pk = self.sistema_salud_id)
+        if self.tipo_trabajador == 1:
+            afp = Afp.objects.get(pk = self.afp_id)
+            sistema_salud = SistemaSalud.objects.get(pk = self.sistema_salud_id)
+        else:
+            afp = None
+            sistema_salud = None
+
         estado_civil = EstadoCivil.objects.get(pk = self.estado_civil_id)
 
         trabajador = Trabajador.objects.get(pk = id_trabajador)
@@ -239,22 +244,23 @@ class ObtenerTrabajadorView(LoginRequiredMixin, View):
             "sistema_salud" : self.get_sistema_salud(worker),
             "estado_civil" : self.get_estado_civil(worker),
             "estado_vacacion" : self.get_estado_vacacion(worker),
-            "boleta": self.get_boleta(worker)
+            "boleta": self.get_boleta(worker),
+            "tipo": worker.tipo_trabajador.id
         }
 
         return HttpResponse(json.dumps(dato),content_type="application/json")
 
     def get_afp(self, worker):
-        return {
-            "id" : worker.afp.id,
-            "nombre" : worker.afp.nombre,
-        }
+        if worker.tipo_trabajador.id == 1:
+            return { "id" : worker.afp.id, "nombre" : worker.afp.nombre }
+        else:
+            return { "id" : None, "nombre" : "No dispone" }
 
     def get_sistema_salud(self, worker):
-        return {
-            "id" : worker.sistema_salud.id,
-            "nombre" : worker.sistema_salud.nombre
-        }
+        if worker.tipo_trabajador.id == 1:
+            return { "id" : worker.sistema_salud.id, "nombre" : worker.sistema_salud.nombre }
+        else:
+            return { "id" : None, "nombre" : "No dispone" }
 
     def get_estado_civil(self, worker):
         return {
@@ -350,7 +356,15 @@ class Todos(LoginRequiredMixin, View):
         trabajadores = Trabajador.objects.order_by('id')
         result = []
 
+
+
         for trabajador in trabajadores:
+            if trabajador.tipo_trabajador.id == 1:
+                afp = { "id": trabajador.afp.id, "nombre": trabajador.afp.nombre }
+                salud = { "id": trabajador.sistema_salud.id, "nombre": trabajador.sistema_salud.nombre }
+            else:
+                afp = { "id": None, "nombre": "No dispone" }
+                salud = { "id": None, "nombre": "No dispone" }
             result.append({
                 "id": trabajador.id,
                 "nombre": trabajador.nombre,
@@ -360,18 +374,13 @@ class Todos(LoginRequiredMixin, View):
                 "nacimiento": trabajador.nacimiento,
                 "inicioContrato": trabajador.fecha_inicio_contrato,
                 "vigenciaLicencia": trabajador.vigencia_licencia,
-                "afp": {
-                    "id": trabajador.afp.id,
-                    "nombre": trabajador.afp.nombre
-                },
+                "tipo": trabajador.tipo_trabajador.id,
+                "afp": afp,
                 "estadoCivil": {
                     "id": trabajador.estado_civil.id,
                     "nombre": trabajador.estado_civil.nombre
                 },
-                "sistemaSalud": {
-                    "id": trabajador.sistema_salud.id,
-                    "nombre": trabajador.sistema_salud.nombre
-                },
+                "sistemaSalud": salud,
                 "estadoVacacion": {
                     "id": trabajador.get_id_vacacion(),
                     "nombre": trabajador.get_vacacion()
