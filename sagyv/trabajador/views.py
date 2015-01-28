@@ -54,6 +54,9 @@ class CrearTrabajadorView(LoginRequiredMixin, View):
         self.estado_civil_id = req.POST.get("estado_civil")
         self.estado_vacacion_id = req.POST.get("estado_vacacion")
 
+        tipo = req.POST.get("tipo_trabajador")
+        self.tipo_trabajador = TipoTrabajador.objects.get(pk = int(tipo))
+
         estado_vacaciones = EstadoVacacion.objects.get(pk = self.estado_vacacion_id)
 
         trabajador = self.crear_trabajador()
@@ -87,6 +90,7 @@ class CrearTrabajadorView(LoginRequiredMixin, View):
         trabajador.afp = afp
         trabajador.sistema_salud = sistema_salud
         trabajador.estado_civil = estado_civil
+        trabajador.tipo_trabajador = self.tipo_trabajador
         trabajador.save()
 
         return trabajador

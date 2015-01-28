@@ -130,7 +130,8 @@ Trabajador.prototype = {
             afp: this.afp,
             sistema_salud: this.sistemaSalud,
             estado_civil: this.estadoCivil,
-            estado_vacacion: this.estadoVacacion
+            estado_vacacion: this.estadoVacacion,
+            tipo_trabajador: this.tipo
         };
 
         if(this.id){
