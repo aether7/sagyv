@@ -99,9 +99,9 @@ Trabajador.prototype = {
         valido = this.esFechaNacimientoValida() && valido;
         valido = this.esInicioContratoValido() && valido;
         valido = this.esVigenciaLicenciaValida() && valido;
-        valido = this.esTipoValido() && valido;
-
         valido = this.esEstadoVacacionValido() && valido;
+        valido = this.esEstadoCivilValido() && valido;
+        valido = this.esTipoValido() && valido;
 
         if(this.tipo == 2){
             return valido;
@@ -109,7 +109,6 @@ Trabajador.prototype = {
 
         valido = this.esAfpValida() && valido;
         valido = this.esSistemaSaludValido() && valido;
-        valido = this.esEstadoCivilValido() && valido;
 
         return valido;
     },
