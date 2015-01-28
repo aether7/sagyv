@@ -2,10 +2,10 @@
     <thead>
         <tr>
             <th>Nombre</th>
-            <th>Giro</th>
-            <th>Rut</th>
-            <th>Teléfono</th>
+            <th width="10%">Rut</th>
             <th>Dirección</th>
+            <th>Giro</th>
+            <th>Teléfono</th>
             <th>Situación Comercial</th>
             {% if es_admin %}
             <th>Acciones</th>
@@ -15,10 +15,10 @@
     <tbody>
         <tr ng-repeat="cliente in clienteCtrl.clientes">
             <td ng-bind="cliente.nombre"></td>
-            <td ng-bind="cliente.giro"></td>
             <td ng-bind="cliente.rut | formatoRut"></td>
-            <td ng-bind="cliente.telefono"></td>
             <td ng-bind="cliente.direccion"></td>
+            <td ng-bind="cliente.giro"></td>
+            <td ng-bind="cliente.telefono"></td>
             <td ng-bind="cliente.getSituacionComercial()"></td>
             {% if es_admin %}
             <td>
