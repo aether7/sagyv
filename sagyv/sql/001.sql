@@ -1,0 +1,11 @@
+UPDATE bodega_producto SET orden = -1;
+UPDATE bodega_producto set orden = 1 where codigo = 1105;
+UPDATE bodega_producto set orden = 2 where codigo = 1111;
+UPDATE bodega_producto set orden = 3 where codigo = 1115;
+UPDATE bodega_producto set orden = 4 where codigo = 1145;
+UPDATE bodega_producto set orden = 5 where codigo = 1405;
+UPDATE bodega_producto set orden = 6 where codigo = 1411;
+UPDATE bodega_producto set orden = 7 where codigo = 1415;
+UPDATE bodega_producto set orden = 8 where codigo = 1445;
+UPDATE bodega_producto set orden = 9 where codigo = 1215;
+UPDATE bodega_producto set orden = 10 where codigo = 1315;

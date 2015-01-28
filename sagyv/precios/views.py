@@ -1,7 +1,6 @@
 import json
 
-from django.core.serializers.json import DjangoJSONEncoder
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.db import transaction
 from django.views.generic import View, TemplateView, ListView
 from main.helpers.auth import permiso_admin
@@ -39,7 +38,7 @@ class UpdatePrecioProductoView(View):
             precio_producto.save()
 
         dato = { 'status': 'ok' }
-        return HttpResponse(json.dumps(dato), content_type='application/json')
+        return JsonResponse(dato, safe = False)
 
 
 class UpdateStock(View):
@@ -55,7 +54,7 @@ class UpdateStock(View):
             producto.save()
 
         dato = { 'status': 'ok' }
-        return HttpResponse(json.dumps(dato), content_type='application/json')
+        return JsonResponse(dato, safe = False)
 
 
 class ObtenerProductos(View):
@@ -70,8 +69,7 @@ class ObtenerProductos(View):
                 'codigo': producto.codigo
             })
 
-        res = json.dumps(res, cls = DjangoJSONEncoder)
-        return HttpResponse(res, content_type='application/json')
+        return JsonResponse(res, safe = False)
 
 
 class ObtenerGarantias(View):
@@ -86,8 +84,7 @@ class ObtenerGarantias(View):
                 'codigo': producto.codigo
             })
 
-        res = json.dumps(res, cls = DjangoJSONEncoder)
-        return HttpResponse(res, content_type='application/json')
+        return JsonResponse(res, safe = False)
 
 
 class ObtenerStocks(View):
@@ -104,8 +101,7 @@ class ObtenerStocks(View):
                 'codigo': producto.codigo
             })
 
-        res = json.dumps(res, cls = DjangoJSONEncoder)
-        return HttpResponse(res, content_type='application/json')
+        return JsonResponse(res, safe = False)
 
 
 index = permiso_admin(IndexView.as_view())
