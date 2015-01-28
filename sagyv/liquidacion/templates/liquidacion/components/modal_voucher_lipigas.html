@@ -68,8 +68,8 @@
                         <tbody>
                             <tr data-ng-repeat="tarjeta in vlCtrl.voucher.tarjetas">
                                 <td data-ng-bind="tarjeta.nombre"></td>
-                                <td data-ng-bind="tarjeta.monto | currency"></td>
-                                <td data-ng-bind="tarjeta.descuento | currency"></td>
+                                <td data-ng-bind="tarjeta.monto | formatoPeso"></td>
+                                <td data-ng-bind="tarjeta.descuento | formatoPeso"></td>
                                 <td>
                                     <a href data-ng-click="vlCtrl.removeTarjeta($index)">eliminar</a>
                                 </td>
@@ -91,7 +91,7 @@
 
                 <div class="form-group">
                     <label for="" class="control-label">Total</label>
-                    <span class="form-control-static" data-ng-bind="vlCtrl.voucher.total | currency"></span>
+                    <span class="form-control-static" data-ng-bind="vlCtrl.voucher.total | formatoPeso"></span>
                 </div>
             </div>
 

@@ -1,39 +1,39 @@
 <div class="totales">
     <span>Subtotal:</span>
-    <span ng-bind="liqCtrl.monto.subTotal | currency"></span>
+    <span ng-bind="liqCtrl.monto.subTotal | formatoPeso"></span>
 </div>
 
 <div class="totales">
     <span>Guías propias:</span>
-    <span ng-bind="liqCtrl.monto.propias | currency"></span>
+    <span ng-bind="liqCtrl.monto.propias | formatoPeso"></span>
 </div>
 
 <div class="totales">
     <span>Guías lipigas:</span>
-    <span ng-bind="liqCtrl.monto.lipigas | currency"></span>
+    <span ng-bind="liqCtrl.monto.lipigas | formatoPeso"></span>
 </div>
 
 <div class="totales">
     <span>Vouchers lipigas:</span>
-    <span ng-bind="liqCtrl.monto.voucherLipigas | currency"></span>
+    <span ng-bind="liqCtrl.monto.voucherLipigas | formatoPeso"></span>
 </div>
 
 <div class="totales">
     <span>Vouchers transbank:</span>
-    <span ng-bind="liqCtrl.monto.voucherTransbank | currency"></span>
+    <span ng-bind="liqCtrl.monto.voucherTransbank | formatoPeso"></span>
 </div>
 
 <div class="totales">
     <span>Cheques:</span>
-    <span ng-bind="liqCtrl.monto.cheques | currency"></span>
+    <span ng-bind="liqCtrl.monto.cheques | formatoPeso"></span>
 </div>
 
 <div class="totales">
     <span>Cupones descuento:</span>
-    <span ng-bind="liqCtrl.monto.cupones | currency"></span>
+    <span ng-bind="liqCtrl.monto.cupones | formatoPeso"></span>
 </div>
 
 <div class="totales">
     <span>Otros:</span>
-    <span ng-bind="liqCtrl.monto.otros | currency"></span>
+    <span ng-bind="liqCtrl.monto.otros | formatoPeso"></span>
 </div>

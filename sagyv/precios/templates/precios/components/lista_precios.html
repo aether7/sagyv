@@ -10,7 +10,7 @@
         <tbody>
             <tr ng-repeat="producto in precio.productos">
                 <td ng-bind="producto.codigo"></td>
-                <td ng-bind="producto.precio | currency"></td>
+                <td ng-bind="producto.precio | formatoPeso"></td>
                 <td>
                     {% verbatim %}
                     <input type="text" data-columna-normal="{{ $index }}" ng-model="producto.valor" />

@@ -72,9 +72,9 @@
                         <tr data-ng-repeat="producto in glCtrl.venta.productos">
                             <td data-ng-bind="producto.codigo"></td>
                             <td data-ng-bind="producto.cantidad"></td>
-                            <td data-ng-bind="producto.precio | currency"></td>
-                            <td data-ng-bind="producto.montoDescuento | currency"></td>
-                            <td data-ng-bind="producto.total | currency"></td>
+                            <td data-ng-bind="producto.precio | formatoPeso"></td>
+                            <td data-ng-bind="producto.montoDescuento | formatoPeso"></td>
+                            <td data-ng-bind="producto.total | formatoPeso"></td>
                             <td>
                                 <a href data-ng-click="glCtrl.removeProducto($index)">Eliminar</a>
                             </td>
@@ -94,7 +94,7 @@
 
                 {% verbatim %}
                 <div>
-                    TOTAL guía propia: {{ glCtrl.venta.total | currency }}
+                    TOTAL guía propia: {{ glCtrl.venta.total | formatoPeso }}
                 </div>
                 {% endverbatim %}
             </div>

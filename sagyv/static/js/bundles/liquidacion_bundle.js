@@ -13,8 +13,10 @@ var app = angular.module('liquidacionApp',[]),
     CuponPrepagoController = require('../controllers/liquidacion/cupon_prepago_controller.js'),
     OtroController = require('../controllers/liquidacion/otro_controller.js'),
     GarantiasController = require('../controllers/liquidacion/garantias_controller.js'),
-    liquidacionService = require('../services/liquidacion_service.js');
+    liquidacionService = require('../services/liquidacion_service.js'),
+    formatoPeso = require('../filters/string_filters.js').formatoPeso;
 
+app.filter('formatoPeso', formatoPeso);
 app.factory('liquidacionService', liquidacionService);
 app.factory('mantieneRestanteService',function(){
     var hash = {}, calculaRestantes;

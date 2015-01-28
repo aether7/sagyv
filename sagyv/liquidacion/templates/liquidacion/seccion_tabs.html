@@ -48,7 +48,7 @@
                     <td data-ng-bind="chk.banco.nombre"></td>
                     <td data-ng-bind="chk.numero"></td>
                     <td data-ng-bind="chk.fecha | date:'yyyy-MM-d'"></td>
-                    <td data-ng-bind="chk.monto | currency"></td>
+                    <td data-ng-bind="chk.monto | formatoPeso"></td>
                 </tr>
             </tbody>
         </table>
@@ -68,7 +68,7 @@
                     <td data-ng-bind="cp.numero"></td>
                     <td data-ng-bind="cp.cliente.nombre"></td>
                     <td data-ng-bind="cp.formato.nombre"></td>
-                    <td data-ng-bind="cp.descuento | currency"></td>
+                    <td data-ng-bind="cp.descuento | formatoPeso"></td>
                 </tr>
             </tbody>
         </table>
@@ -84,7 +84,7 @@
             <tbody>
                 <tr data-ng-repeat="o in liqCtrl.otro">
                     <td data-ng-bind="o.concepto"></td>
-                    <td data-ng-bind="o.monto | currency"></td>
+                    <td data-ng-bind="o.monto | formatoPeso"></td>
                 </tr>
             </tbody>
         </table>

@@ -21,4 +21,26 @@ function formatoRut(){
     };
 }
 
+function formatoPeso(){
+    return function(input){
+        if(!input){
+            return '$0';
+        }
+
+        var aux = input.split('').reverse(),
+            str = [], i;
+
+        for(i = 0; i < aux.length; i++){
+            if(i !== 0 && i % 3 === 0){
+                str.push('.');
+            }
+
+            str.push(aux[i]);
+        }
+
+        return '$' + str.reverse().join('');
+    };
+}
+
 module.exports.formatoRut = formatoRut;
+module.exports.formatoPeso = formatoPeso;

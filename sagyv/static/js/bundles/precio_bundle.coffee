@@ -131,8 +131,10 @@ class StockController
 
         return stocks
 
+formatoPeso = require('../filters/string_filters.js').formatoPeso
 
 app.factory 'precioService', ['$http', precioService]
+app.filter 'formatoPeso', formatoPeso
 
 app.controller 'PrecioController', ['precioService', PrecioController]
 app.controller 'GarantiaController', ['precioService', GarantiaController]

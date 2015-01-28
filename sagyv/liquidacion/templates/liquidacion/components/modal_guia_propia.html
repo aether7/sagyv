@@ -72,9 +72,9 @@
                         <tr ng-repeat="producto in guiaPropia.venta.productos">
                             <td ng-bind="producto.codigo"></td>
                             <td ng-bind="producto.cantidad"></td>
-                            <td ng-bind="producto.precio | currency"></td>
-                            <td ng-bind="producto.montoDescuento | currency"></td>
-                            <td ng-bind="producto.total | currency"></td>
+                            <td ng-bind="producto.precio | formatoPeso"></td>
+                            <td ng-bind="producto.montoDescuento | formatoPeso"></td>
+                            <td ng-bind="producto.total | formatoPeso"></td>
                             <td>
                                 <a href ng-click="guiaPropia.removeProducto($index)">Eliminar</a>
                             </td>
@@ -94,7 +94,7 @@
 
                 {% verbatim %}
                 <div>
-                    TOTAL guía propia: {{ guiaPropia.venta.total | currency }}
+                    TOTAL guía propia: {{ guiaPropia.venta.total | formatoPeso }}
                 </div>
                 {% endverbatim %}
             </div>

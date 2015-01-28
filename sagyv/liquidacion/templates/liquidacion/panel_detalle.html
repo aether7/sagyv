@@ -21,8 +21,8 @@
                     <input type="text" ng-model="producto.llenos" ng-keyup="productoCtrl.calcularRestante(producto)">
                 </td>
                 <td ng-bind="producto.vacios"></td>
-                <td ng-bind-template="{{ producto.precio | currency }}"></td>
-                <td style="text-align:right" ng-bind-template="{{ producto.valorTotal | currency }}"></td>
+                <td ng-bind-template="{{ producto.precio | formatoPeso }}"></td>
+                <td style="text-align:right" ng-bind-template="{{ producto.valorTotal | formatoPeso }}"></td>
             </tr>
         </tbody>
     </table>
