@@ -12,85 +12,85 @@
                 <div class="form-group">
                     <label for="nombre_ver" class="control-label">Nombre</label>
                     <span id="nombre_ver" class="form-control-static"
-                        data-ng-bind="tc.trabajador.nombre"></span>
+                        ng-bind="tc.trabajador.nombre"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="apellido_ver" class="control-label">Apellido</label>
                     <span id="apellido_ver" class="form-control-static"
-                        data-ng-bind="tc.trabajador.apellido"></span>
+                        ng-bind="tc.trabajador.apellido"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="rut_ver" class="control-label">Rut</label>
                     <span id="rut_ver" class="form-control-static"
-                        data-ng-bind="tc.trabajador.rut"></span>
+                        ng-bind="tc.trabajador.rut"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="domicilio_ver" class="control-label">Domicilio</label>
                     <span id="domicilio_ver" class="form-control-static"
-                        data-ng-bind="tc.trabajador.domicilio"></span>
+                        ng-bind="tc.trabajador.domicilio"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="fecha_nacimiento_ver" class="control-label">Fecha nacimiento</label>
                     <span id="fecha_nacimiento_ver" class="form-control-static"
-                        data-ng-bind-template="{{ tc.trabajador.fechaNacimiento | date:'yyyy-MM-dd' }}"></span>
+                        ng-bind-template="{{ tc.trabajador.fechaNacimiento | date:'yyyy-MM-dd' }}"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="inicio_contrato_ver" class="control-label">Inicio contrato</label>
                     <span id="inicio_contrato_ver" class="form-control-static"
-                        data-ng-bind-template="{{ tc.trabajador.inicioContrato | date:'yyyy-MM-dd' }}"></span>
+                        ng-bind-template="{{ tc.trabajador.inicioContrato | date:'yyyy-MM-dd' }}"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="vigencia_licencia_ver" class="control-label">Vencimiento licencia</label>
                     <span id="vigencia_licencia_ver" class="form-control-static"
-                        data-ng-bind-template="{{ tc.trabajador.vigenciaLicencia | date:'yyyy-MM-dd' }}"></span>
+                        ng-bind-template="{{ tc.trabajador.vigenciaLicencia | date:'yyyy-MM-dd' }}"></span>
                 </div>
 
-                <div class="form-group" data-ng-show="tc.trabajador.tipo == 1">
+                <div class="form-group" ng-show="tc.trabajador.tipo == 1">
                     <label for="afp_ver" class="control-label">AFP</label>
                     <span id="afp_ver" class="form-control-static"
-                        data-ng-bind="tc.trabajador.afp.nombre"></span>
+                        ng-bind="tc.trabajador.afp.nombre"></span>
                 </div>
 
-                <div class="form-group" data-ng-show="tc.trabajador.tipo == 1">
+                <div class="form-group" ng-show="tc.trabajador.tipo == 1">
                     <label for="sistema_salud_ver" class="control-label">Sistema salud</label>
                     <span id="sistema_salud_ver" class="form-control-static"
-                        data-ng-bind="tc.trabajador.sistemaSalud.nombre"></span>
+                        ng-bind="tc.trabajador.sistemaSalud.nombre"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="estado_civil_ver" class="control-label">Estado civil</label>
                     <span id="estado_civil_ver" class="form-control-static"
-                        data-ng-bind="tc.trabajador.estadoCivil.nombre"></span>
+                        ng-bind="tc.trabajador.estadoCivil.nombre"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="estado_vacacion_ver" class="control-label">Estado vacaciones</label>
                     <span id="estado_vacacion_ver" class="form-control-static"
-                        data-ng-bind="tc.trabajador.estadoVacacion.nombre"></span>
+                        ng-bind="tc.trabajador.estadoVacacion.nombre"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="boleta_inicial_ver" class="control-label">Boleta inicial</label>
                     <span id="boleta_inicial_ver" class="form-control-static"
-                        data-ng-bind="tc.trabajador.boleta.boletaInicial"></span>
+                        ng-bind="tc.trabajador.boleta.boletaInicial"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="boleta_actual_ver" class="control-label">Boleta actual</label>
                     <span id="boleta_actual_ver" class="form-control-static"
-                        data-ng-bind="tc.trabajador.boleta.boletaActual"></span>
+                        ng-bind="tc.trabajador.boleta.boletaActual"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="boleta_final_ver" class="control-label">Boleta final</label>
                     <span id="boleta_final_ver" class="form-control-static"
-                        data-ng-bind="tc.trabajador.boleta.boletaFinal"></span>
+                        ng-bind="tc.trabajador.boleta.boletaFinal"></span>
                 </div>
             </div>
             {% endverbatim %}

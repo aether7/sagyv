@@ -51,6 +51,8 @@ class TrabajadorMixin(object):
         self.sistema_salud_id = self.request.POST.get("sistema_salud")
         self.estado_civil_id = self.request.POST.get("estado_civil")
         self.estado_vacacion_id = self.request.POST.get("estado_vacacion")
+
+        tipo = self.request.POST.get('tipo_trabajador')
         self.tipo_trabajador = TipoTrabajador.objects.get(pk = int(tipo))
 
     def get_trabajador_json(self, worker):
@@ -183,8 +185,11 @@ class ModificarTrabajadorView(LoginRequiredMixin, View, TrabajadorMixin):
 
     @transaction.atomic
     def post(self, req):
+        print "capturando lso datos de editar trabajador"
         self.request_data()
+        print "entramos a capturar trabajador"
         trabajador = self._edit_trabajador(self.id_trabajador)
+        print "listo"
 
         dato = {
             "status" : "ok",
@@ -234,37 +239,22 @@ class ObtenerTrabajadorView(LoginRequiredMixin, View):
             "sistema_salud" : self.get_sistema_salud(worker),
             "estado_civil" : self.get_estado_civil(worker),
             "estado_vacacion" : self.get_estado_vacacion(worker),
-            "boleta": self.get_boleta(worker),
-            "tipo": worker.tipo_trabajador.id
+            "boleta": self.get_boleta(worker)
         }
 
         return HttpResponse(json.dumps(dato),content_type="application/json")
 
     def get_afp(self, worker):
-
-        if worker.tipo_trabajador.id == 1:
-            return {
-                "id" : worker.afp.id,
-                "nombre" : worker.afp.nombre,
-            }
-        else:
-            return {
-                "id" : None,
-                "nombre" : "No Tiene",
-            }
+        return {
+            "id" : worker.afp.id,
+            "nombre" : worker.afp.nombre,
+        }
 
     def get_sistema_salud(self, worker):
-        if worker.tipo_trabajador.id == 1:
-            return {
-                "id" : worker.sistema_salud.id,
-                "nombre" : worker.sistema_salud.nombre
-            }
-        else:
-            return {
-                "id" : None,
-                "nombre" : "No Tiene",
-            }
-
+        return {
+            "id" : worker.sistema_salud.id,
+            "nombre" : worker.sistema_salud.nombre
+        }
 
     def get_estado_civil(self, worker):
         return {
@@ -361,28 +351,6 @@ class Todos(LoginRequiredMixin, View):
         result = []
 
         for trabajador in trabajadores:
-            if trabajador.tipo_trabajador.id == 1:
-                afp = {
-                    "id": trabajador.afp.id,
-                    "nombre": trabajador.afp.nombre
-                }
-
-                sistemaSalud = {
-                    "id": trabajador.sistema_salud.id,
-                    "nombre": trabajador.sistema_salud.nombre
-                }
-            else:
-                afp = {
-                    "id": None,
-                    "nombre": "No tiene"
-                }
-
-                sistemaSalud = {
-                    "id": None,
-                    "nombre": "No tiene"
-                }
-
-
             result.append({
                 "id": trabajador.id,
                 "nombre": trabajador.nombre,
@@ -392,20 +360,25 @@ class Todos(LoginRequiredMixin, View):
                 "nacimiento": trabajador.nacimiento,
                 "inicioContrato": trabajador.fecha_inicio_contrato,
                 "vigenciaLicencia": trabajador.vigencia_licencia,
+                "afp": {
+                    "id": trabajador.afp.id,
+                    "nombre": trabajador.afp.nombre
+                },
                 "estadoCivil": {
                     "id": trabajador.estado_civil.id,
                     "nombre": trabajador.estado_civil.nombre
                 },
+                "sistemaSalud": {
+                    "id": trabajador.sistema_salud.id,
+                    "nombre": trabajador.sistema_salud.nombre
+                },
                 "estadoVacacion": {
                     "id": trabajador.get_id_vacacion(),
                     "nombre": trabajador.get_vacacion()
-                },
-                "sistemaSalud": sistemaSalud,
-                "afp": afp
+                }
             })
 
-        result = json.dumps(result, cls=DjangoJSONEncoder)
-        return HttpResponse(result, content_type="application/json")
+        return JsonResponse(result, safe = False)
 
 
 index = IndexList.as_view()

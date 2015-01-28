@@ -107,10 +107,8 @@ TrabajadorController.mixin({
 
         this.service.obtener(id, function(data){
             common.mostrarModal('editar');
-
             _this.procesarTrabajador(data, 'id');
             _this.trabajador.id = id;
-
         });
     },
 
