@@ -7,6 +7,7 @@ var Trabajador = function(){
     this.fechaNacimiento = null;
     this.inicioContrato = null;
     this.vigenciaLicencia = null;
+    this.tipo = 1;
     this.afp = null;
     this.sistemaSalud = null;
     this.estadoCivil = null;
@@ -84,6 +85,10 @@ Trabajador.prototype = {
         return this._esSeleccionValida("estadoVacacion");
     },
 
+    esTipoValido: function(){
+        return this._esSeleccionValida("tipo");
+    },
+
     esValido: function(){
         var valido = true;
 
@@ -94,10 +99,17 @@ Trabajador.prototype = {
         valido = this.esFechaNacimientoValida() && valido;
         valido = this.esInicioContratoValido() && valido;
         valido = this.esVigenciaLicenciaValida() && valido;
+        valido = this.esTipoValido() && valido;
+
+        valido = this.esEstadoVacacionValido() && valido;
+
+        if(this.tipo == 2){
+            return valido;
+        }
+
         valido = this.esAfpValida() && valido;
         valido = this.esSistemaSaludValido() && valido;
         valido = this.esEstadoCivilValido() && valido;
-        valido = this.esEstadoVacacionValido() && valido;
 
         return valido;
     },

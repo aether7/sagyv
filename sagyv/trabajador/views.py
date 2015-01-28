@@ -16,6 +16,8 @@ from trabajador.models import EstadoCivil
 from trabajador.models import EstadoVacacion
 from trabajador.models import Vacacion
 from trabajador.models import BoletaTrabajador
+from trabajador.models import TipoTrabajador
+
 from utils.views import LoginRequiredMixin
 
 class IndexList(LoginRequiredMixin, ListView):
@@ -28,6 +30,7 @@ class IndexList(LoginRequiredMixin, ListView):
         data = super(IndexList, self).get_context_data(*args, **kwargs)
 
         data["lista_afps"] = Afp.objects.order_by("id")
+        data["tipo_trabajador"] = TipoTrabajador.objects.order_by("id")
         data["lista_sistema_salud"] = SistemaSalud.objects.order_by("id")
         data["estados_civiles"] = EstadoCivil.objects.order_by("id")
         data["estados_vacacion"] = EstadoVacacion.objects.order_by("id")

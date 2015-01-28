@@ -36,6 +36,13 @@ class EstadoCivil(models.Model):
         return self.nombre
 
 
+class TipoTrabajador(models.Model):
+    nombre = models.CharField(max_length=140)
+
+    def __unicode__(self):
+        return self.nombre
+
+
 class EstadoVacacion(models.Model):
     nombre = models.CharField(max_length=140)
 
@@ -54,9 +61,11 @@ class Trabajador(models.Model):
     nacimiento = models.DateField(null = True, blank = True)
     fecha_inicio_contrato = models.DateField(null = True, blank = True)
     vigencia_licencia = models.DateField(null = True, blank = True)
-    afp = models.ForeignKey(Afp,null = True,blank = True)
-    sistema_salud = models.ForeignKey(SistemaSalud,null = True, default = 1)
-    estado_civil = models.ForeignKey(EstadoCivil,null = True, default = 1)
+
+    tipo_trabajador = models.ForeignKey(TipoTrabajador)
+    afp = models.ForeignKey(Afp, null = True,blank = True)
+    sistema_salud = models.ForeignKey(SistemaSalud, null = True, blank = True)
+    estado_civil = models.ForeignKey(EstadoCivil, null = True, blank = True)
 
     def get_nombre_completo(self):
         return self.nombre + " " + self.apellido
