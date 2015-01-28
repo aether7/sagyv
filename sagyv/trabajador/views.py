@@ -3,7 +3,7 @@ import json
 from datetime import datetime, date
 
 from django.core.serializers.json import DjangoJSONEncoder
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.db import transaction
 from django.views.generic import View, TemplateView, ListView
 
@@ -37,26 +37,88 @@ class IndexList(LoginRequiredMixin, ListView):
 
         return data
 
+class TrabajadorMixin(object):
+    def request_data(self):
+        self.id_trabajador = self.request.POST.get("id")
+        self.nombre = self.request.POST.get("nombre")
+        self.apellido = self.request.POST.get("apellido")
+        self.rut = self.request.POST.get("rut")
+        self.domicilio = self.request.POST.get("domicilio")
+        self.nacimiento = self.request.POST.get("fecha_nacimiento")
+        self.fecha_inicio_contrato = self.request.POST.get("inicio_contrato")
+        self.vigencia_licencia = self.request.POST.get("vigencia_licencia")
+        self.afp_id = self.request.POST.get("afp")
+        self.sistema_salud_id = self.request.POST.get("sistema_salud")
+        self.estado_civil_id = self.request.POST.get("estado_civil")
+        self.estado_vacacion_id = self.request.POST.get("estado_vacacion")
+        self.tipo_trabajador = TipoTrabajador.objects.get(pk = int(tipo))
 
-class CrearTrabajadorView(LoginRequiredMixin, View):
+    def get_trabajador_json(self, worker):
+        dato = {
+            "nombre" : worker.nombre,
+            "apellido" : worker.apellido,
+            "rut" : worker.rut,
+            "domicilio" : worker.domicilio,
+            "nacimiento" : convierte_fecha_texto(worker.nacimiento),
+            "fecha_inicio_contrato" : convierte_fecha_texto(worker.fecha_inicio_contrato),
+            "vigencia_licencia" : convierte_fecha_texto(worker.vigencia_licencia),
+            "afp" : self.get_afp(worker),
+            "sistema_salud" : self.get_sistema_salud(worker),
+            "estado_civil" : self.get_estado_civil(worker),
+            "estado_vacacion" : self.get_estado_vacacion(worker),
+            "boleta": self.get_boleta(worker)
+        }
+
+        return dato
+
+    def get_afp(self, worker):
+        return {
+            "id" : worker.afp.id,
+            "nombre" : worker.afp.nombre,
+        }
+
+    def get_sistema_salud(self, worker):
+        return {
+            "id" : worker.sistema_salud.id,
+            "nombre" : worker.sistema_salud.nombre
+        }
+
+    def get_estado_civil(self, worker):
+        return {
+            "id" : worker.estado_civil.id,
+            "nombre" : worker.estado_civil.nombre
+        }
+
+    def get_estado_vacacion(self, worker):
+        return {
+            "id" : worker.get_id_vacacion(),
+            "nombre" : worker.get_vacacion()
+        }
+
+    def get_boleta(self, worker):
+        json_boleta = {
+            "boleta_inicial": None,
+            "boleta_actual": None,
+            "boleta_final": None
+        }
+
+        try:
+            boleta = worker.boletatrabajador_set.filter(activo = True).order_by('id')[0]
+            json_boleta["boleta_inicial"] = boleta.boleta_inicial
+            json_boleta["boleta_actual"] = boleta.actual
+            json_boleta["boleta_final"] = boleta.boleta_final
+        except:
+            pass
+
+        return json_boleta
+
+class CrearTrabajadorView(LoginRequiredMixin, View, TrabajadorMixin):
 
     @transaction.atomic
     def post(self, req):
-        self.nombre = req.POST.get("nombre")
-        self.apellido = req.POST.get("apellido")
-        self.rut = req.POST.get("rut")
-        self.domicilio = req.POST.get("domicilio")
-        self.nacimiento = req.POST.get("fecha_nacimiento")
-        self.fecha_inicio_contrato = req.POST.get("inicio_contrato")
-        self.vigencia_licencia = req.POST.get("vigencia_licencia")
-        self.afp_id = req.POST.get("afp")
-        self.sistema_salud_id = req.POST.get("sistema_salud")
-        self.estado_civil_id = req.POST.get("estado_civil")
-        self.estado_vacacion_id = req.POST.get("estado_vacacion")
-
+        self.request_data()
         tipo = req.POST.get("tipo_trabajador")
         self.tipo_trabajador = TipoTrabajador.objects.get(pk = int(tipo))
-
 
         trabajador = self.crear_trabajador()
 
@@ -73,7 +135,7 @@ class CrearTrabajadorView(LoginRequiredMixin, View):
             "estado_vacaciones" : trabajador.get_vacacion()
         }
 
-        return HttpResponse(json.dumps(dato), content_type="application/json")
+        return JsonResponse(dato, safe = False)
 
     def crear_trabajador(self):
 
@@ -117,23 +179,12 @@ class CrearTrabajadorView(LoginRequiredMixin, View):
         return vacacion
 
 
-class ModificarTrabajadorView(LoginRequiredMixin, View):
+class ModificarTrabajadorView(LoginRequiredMixin, View, TrabajadorMixin):
 
     @transaction.atomic
     def post(self, req):
-        self.id_trabajador = req.POST.get("id")
-        self.nombre = req.POST.get("nombre")
-        self.apellido = req.POST.get("apellido")
-        self.rut = req.POST.get("rut")
-        self.domicilio = req.POST.get("domicilio")
-        self.nacimiento = req.POST.get("fecha_nacimiento")
-        self.fecha_inicio_contrato = req.POST.get("inicio_contrato")
-        self.vigencia_licencia = req.POST.get("vigencia_licencia")
-        self.afp_id = req.POST.get("afp")
-        self.sistema_salud_id = req.POST.get("sistema_salud")
-        self.estado_civil_id = req.POST.get("estado_civil")
-
-        trabajador = self.edit_trabajador(self.id_trabajador)
+        self.request_data()
+        trabajador = self._edit_trabajador(self.id_trabajador)
 
         dato = {
             "status" : "ok",
@@ -144,9 +195,9 @@ class ModificarTrabajadorView(LoginRequiredMixin, View):
             "estado_vacaciones" : trabajador.get_vacacion()
         }
 
-        return HttpResponse(json.dumps(dato), content_type="application/json")
+        return JsonResponse(dato, safe = False)
 
-    def edit_trabajador(self, id_trabajador):
+    def _edit_trabajador(self, id_trabajador):
         afp = Afp.objects.get(pk = self.afp_id)
         sistema_salud = SistemaSalud.objects.get(pk = self.sistema_salud_id)
         estado_civil = EstadoCivil.objects.get(pk = self.estado_civil_id)
