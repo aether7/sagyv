@@ -16,12 +16,12 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="giro_add" class="control-label">Giro</label>
-                    <input id="giro_add" class="form-control" type="text" ng-model="clienteCtrl.cliente.giro" />
+                    <label for="rut_add" class="control-label">Rut</label>
+                    <input id="rut_add" type="text" class="form-control" ng-model="clienteCtrl.cliente.rut" />
 
                     <span class="text-danger"
-                        ng-show="clienteCtrl.cliente.mensajes.giro"
-                        ng-bind="clienteCtrl.cliente.mensajes.giro"></span>
+                        ng-show="clienteCtrl.cliente.mensajes.rut"
+                        ng-bind="clienteCtrl.cliente.mensajes.rut"></span>
                 </div>
 
                 <div class="form-group">
@@ -34,6 +34,15 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="giro_add" class="control-label">Giro</label>
+                    <input id="giro_add" class="form-control" type="text" ng-model="clienteCtrl.cliente.giro" />
+
+                    <span class="text-danger"
+                        ng-show="clienteCtrl.cliente.mensajes.giro"
+                        ng-bind="clienteCtrl.cliente.mensajes.giro"></span>
+                </div>
+
+                <div class="form-group">
                     <label for="telefono_add" class="control-label">Teléfono</label>
                     <input id="telefono_add" type="text" class="form-control" ng-model="clienteCtrl.cliente.telefono" />
 
@@ -42,14 +51,7 @@
                         ng-bind="clienteCtrl.cliente.mensajes.telefono"></span>
                 </div>
 
-                <div class="form-group">
-                    <label for="rut_add" class="control-label">Rut</label>
-                    <input id="rut_add" type="text" class="form-control" ng-model="clienteCtrl.cliente.rut" />
 
-                    <span class="text-danger"
-                        ng-show="clienteCtrl.cliente.mensajes.rut"
-                        ng-bind="clienteCtrl.cliente.mensajes.rut"></span>
-                </div>
 
                 <div class="form-group">
                     <label for="sit_comercial_add" class="control-label">Situación comercial</label>
