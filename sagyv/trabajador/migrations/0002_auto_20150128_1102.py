@@ -24,7 +24,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='trabajador',
             name='tipo_trabajador',
-            field=models.ForeignKey(default=260120141102, to='trabajador.TipoTrabajador'),
+            field=models.ForeignKey(default=1, to='trabajador.TipoTrabajador'),
             preserve_default=False,
         ),
         migrations.AlterField(

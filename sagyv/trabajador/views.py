@@ -356,15 +356,14 @@ class Todos(LoginRequiredMixin, View):
         trabajadores = Trabajador.objects.order_by('id')
         result = []
 
-
-
         for trabajador in trabajadores:
-            if trabajador.tipo_trabajador.id == 1:
-                afp = { "id": trabajador.afp.id, "nombre": trabajador.afp.nombre }
-                salud = { "id": trabajador.sistema_salud.id, "nombre": trabajador.sistema_salud.nombre }
-            else:
+            if trabajador.tipo_trabajador is None or trabajador.tipo_trabajador.id != 1:
                 afp = { "id": None, "nombre": "No dispone" }
                 salud = { "id": None, "nombre": "No dispone" }
+            else:
+                afp = { "id": trabajador.afp.id, "nombre": trabajador.afp.nombre }
+                salud = { "id": trabajador.sistema_salud.id, "nombre": trabajador.sistema_salud.nombre }
+
             result.append({
                 "id": trabajador.id,
                 "nombre": trabajador.nombre,
