@@ -26,5 +26,12 @@
         "fields":{
             "nombre": "al dia"
         }
+    },
+    {
+        "model": "trabajador.tipotrabajador",
+        "pk": 1,
+        "fields":{
+            "nombre":"chofer"
+        }
     }
 ]

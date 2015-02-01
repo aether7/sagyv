@@ -5,11 +5,11 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase, Client
 from bodega.models import Vehiculo
 
-from main.models import Afp
-from main.models import SistemaSalud
-from main.models import EstadoCivil
-from main.models import Trabajador
-from main.models import Movil
+from trabajador.models import Afp
+from trabajador.models import SistemaSalud
+from trabajador.models import EstadoCivil
+from trabajador.models import Trabajador
+from bodega.models import Movil
 
 class VehiculoTestCase(TestCase):
 

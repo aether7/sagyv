@@ -185,11 +185,8 @@ class ModificarTrabajadorView(LoginRequiredMixin, View, TrabajadorMixin):
 
     @transaction.atomic
     def post(self, req):
-        print "capturando lso datos de editar trabajador"
         self.request_data()
-        print "entramos a capturar trabajador"
         trabajador = self._edit_trabajador(self.id_trabajador)
-        print "listo"
 
         dato = {
             "status" : "ok",
@@ -248,7 +245,7 @@ class ObtenerTrabajadorView(LoginRequiredMixin, View):
             "tipo": worker.tipo_trabajador.id
         }
 
-        return HttpResponse(json.dumps(dato),content_type="application/json")
+        return JsonResponse(dato, safe = False)
 
     def get_afp(self, worker):
         if worker.tipo_trabajador.id == 1:
@@ -300,8 +297,7 @@ class EliminarTrabajadorView(LoginRequiredMixin, View):
         worker.delete()
 
         dato = { "status" : "ok" }
-
-        return HttpResponse(json.dumps(dato), content_type="application/json")
+        return JsonResponse(dato, safe = False)
 
 
 class BuscarBoleta(LoginRequiredMixin, View):
@@ -317,7 +313,7 @@ class BuscarBoleta(LoginRequiredMixin, View):
             data["boleta_inicial"] = boleta.boleta_inicial
             data["boleta_final"] = boleta.boleta_final
 
-        return HttpResponse(json.dumps(data), content_type="application/json")
+        return JsonResponse(data, safe = False)
 
 
 class GuardarBoleta(LoginRequiredMixin, View):
@@ -348,7 +344,7 @@ class GuardarBoleta(LoginRequiredMixin, View):
             "mensaje": ""
         }
 
-        return HttpResponse(json.dumps(data), content_type="application/json")
+        return JsonResponse(data, safe = False)
 
 
 class Todos(LoginRequiredMixin, View):

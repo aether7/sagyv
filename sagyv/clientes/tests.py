@@ -1,6 +1,7 @@
 #-*- coding: utf-8 -*-
 import json
 from django.test import TestCase
+from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse, reverse_lazy
 from bodega.models import Producto
 from clientes.models import TipoDescuento
@@ -11,6 +12,8 @@ class SituacionComercialTestCase(TestCase):
     fixtures = ['descuentocliente.json']
 
     def setUp(self):
+        User.objects.create_user(username = 'juanito', password = 'juanelo', email = 'juanelo@mailinator.com')
+
         tipo1 = TipoDescuento.objects.get(pk = 1)
         tipo2 = TipoDescuento.objects.get(pk = 2)
         producto1 = Producto.objects.get(pk = 1)
@@ -31,6 +34,7 @@ class SituacionComercialTestCase(TestCase):
         )
 
     def test_get_situaciones_comerciales(self):
+        self.client.login(username='juanito', password='juanelo')
         response = self.client.get(reverse('clientes:obtener_situacion_comercial'))
         self.assertEqual(response.status_code, 200)
 
@@ -39,6 +43,8 @@ class SituacionComercialTestCase(TestCase):
 
     def test_get_situacion_comercial(self):
         url = reverse('clientes:obtener_situacion_comercial') + '?id=1'
+
+        self.client.login(username='juanito', password='juanelo')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
@@ -52,6 +58,7 @@ class SituacionComercialTestCase(TestCase):
             'producto': '{"id": 1, "codigo": 1105, "nombre": "5 kilos"}'
         }
 
+        self.client.login(username='juanito', password='juanelo')
         response = self.client.post(reverse('clientes:crear_situacion_comercial'), data)
         self.assertEqual(response.status_code, 200)
 
@@ -66,6 +73,7 @@ class SituacionComercialTestCase(TestCase):
             'producto': '{"id": 1, "codigo": 1105, "nombre": "5 kilos"}'
         }
 
+        self.client.login(username='juanito', password='juanelo')
         response = self.client.post(reverse('clientes:modificar_situacion_comercial'), data)
         self.assertEqual(response.status_code, 200)
 
@@ -80,6 +88,7 @@ class ClienteTestCase(TestCase):
     fixtures = ['descuentocliente.json']
 
     def setUp(self):
+        User.objects.create_user(username = 'juanito', password = 'juanelo', email = 'juanelo@mailinator.com')
         tipo1 = TipoDescuento.objects.get(pk = 1)
         producto1 = Producto.objects.get(pk = 1)
 
@@ -116,6 +125,7 @@ class ClienteTestCase(TestCase):
         )
 
     def test_get_clientes(self):
+        self.client.login(username='juanito', password='juanelo')
         response = self.client.get(reverse('clientes:obtener'))
         self.assertEqual(response.status_code, 200)
 
@@ -123,6 +133,7 @@ class ClienteTestCase(TestCase):
         self.assertEqual(len(clientes), 2)
 
     def test_get_cliente(self):
+        self.client.login(username='juanito', password='juanelo')
         url = reverse('clientes:obtener') + '?id=1'
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
@@ -145,6 +156,7 @@ class ClienteTestCase(TestCase):
             'situacionComercialId': 1,
         }
 
+        self.client.login(username='juanito', password='juanelo')
         response = self.client.post(reverse('clientes:crear'), data)
         self.assertEqual(response.status_code, 200)
 
@@ -173,6 +185,7 @@ class ClienteTestCase(TestCase):
             'situacionComercialId': 1,
         }
 
+        self.client.login(username='juanito', password='juanelo')
         response = self.client.post(reverse('clientes:modificar'), data)
         self.assertEqual(response.status_code, 200)
 
@@ -181,6 +194,8 @@ class ClienteTestCase(TestCase):
 
     def test_eliminar(self):
         data = { 'id' : 1 }
+
+        self.client.login(username='juanito', password='juanelo')
         response = self.client.post(reverse('clientes:eliminar'), data)
         self.assertEqual(response.status_code, 200)
         cantidad = Cliente.objects.count()
