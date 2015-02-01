@@ -1,6 +1,6 @@
 [
     {
-        "model": "main.vehiculo",
+        "model": "bodega.vehiculo",
         "pk": 1,
         "fields": {
             "patente": "rene13",
@@ -9,7 +9,7 @@
         }
     },
     {
-        "model": "main.vehiculo",
+        "model": "bodega.vehiculo",
         "pk": 2,
         "fields": {
             "patente": "wwgp13",
@@ -18,7 +18,7 @@
         }
     },
     {
-        "model": "main.movil",
+        "model": "bodega.movil",
         "pk": 1,
         "fields": {
             "numero": 1,
@@ -27,7 +27,7 @@
         }
     },
     {
-        "model": "main.movil",
+        "model": "bodega.movil",
         "pk": 2,
         "fields": {
             "numero": 2,
@@ -36,28 +36,28 @@
         }
     },
     {
-        "model": "main.estadoterminal",
+        "model": "liquidacion.estadoterminal",
         "pk": 1,
         "fields": {
             "nombre": "Activo"
         }
     },
     {
-        "model": "main.estadoterminal",
+        "model": "liquidacion.estadoterminal",
         "pk": 2,
         "fields": {
             "nombre": "Mantencion"
         }
     },
     {
-        "model": "main.estadoterminal",
+        "model": "liquidacion.estadoterminal",
         "pk": 3,
         "fields": {
             "nombre": "Retirado"
         }
     },
     {
-        "model": "main.terminal",
+        "model": "liquidacion.terminal",
         "pk": 1,
         "fields": {
             "codigo": "eaea1313",

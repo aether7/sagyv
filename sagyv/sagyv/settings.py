@@ -49,6 +49,7 @@ INSTALLED_APPS = (
     'liquidacion',
     'reportes',
     'precios',
+    'guias',
 )
 
 MIDDLEWARE_CLASSES = (

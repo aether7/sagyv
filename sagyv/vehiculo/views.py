@@ -1,12 +1,12 @@
+#-*- coding: utf-8 -*-
 import json
 from datetime import date
 
 from django.db import transaction
 from django.core import serializers
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.db.models import Q
 from django.views.generic import View, TemplateView, ListView
-from django.core.serializers.json import DjangoJSONEncoder
 from main.helpers.fecha import convierte_texto_fecha, convierte_fecha_texto
 
 from trabajador.models import Trabajador
@@ -33,8 +33,6 @@ def llenar_vehiculo_json(vehiculo):
 
     if vehiculo.estado_pago:
         estado_pago = 1
-
-    print vehiculo.get_ultimo_chofer_id()
 
     data = {
         "id": vehiculo.id,
@@ -77,9 +75,7 @@ class ObtenerVehiculosView(LoginRequiredMixin, View):
         else:
             data = self.obtener_vehiculos()
 
-        data = json.dumps(data, cls=DjangoJSONEncoder)
-
-        return HttpResponse(data, content_type="application/json")
+        return JsonResponse(data, safe = False)
 
     def obtener_vehiculo(self, id):
         vehiculo = Vehiculo.objects.get(pk = int(id))
@@ -99,6 +95,7 @@ class ObtenerVehiculosView(LoginRequiredMixin, View):
 
 
 class AgregarNuevoVehiculoView(LoginRequiredMixin, View):
+    @transaction.atomic
     def post(self, request):
         fecha = request.POST.get('fechaRevisionTecnica')
 
@@ -114,11 +111,8 @@ class AgregarNuevoVehiculoView(LoginRequiredMixin, View):
         vehiculo = self.__crear_nuevo_vehiculo()
 
         data = llenar_vehiculo_json(vehiculo)
-        data = json.dumps(data, cls=DjangoJSONEncoder)
+        return JsonResponse(data, safe = False)
 
-        return HttpResponse(data, content_type="application/json")
-
-    @transaction.atomic
     def __crear_nuevo_vehiculo(self):
         vehiculo = Vehiculo()
         vehiculo.patente = self.patente
@@ -140,9 +134,7 @@ class AgregarNuevoVehiculoView(LoginRequiredMixin, View):
         if int(self.chofer.get('id')) != 0:
             self.anexar_vehiculo_chofer(vehiculo)
         else:
-            print 'camino else'
             self.crear_movil(vehiculo, None)
-            print 'no callo'
 
         return vehiculo
 
@@ -216,9 +208,7 @@ class AnexarVehiculoView(LoginRequiredMixin, View):
             "id" : vehiculo.id
         }
 
-        data = json.dumps(data, cls=DjangoJSONEncoder)
-
-        return HttpResponse(data, content_type="application/json")
+        return JsonResponse(data, safe=False)
 
 
 class ModificarView(LoginRequiredMixin, View):
@@ -248,9 +238,8 @@ class ModificarView(LoginRequiredMixin, View):
 
         self.procesar_chofer(chofer, vehiculo)
         data = llenar_vehiculo_json(vehiculo)
-        data = json.dumps(data, cls = DjangoJSONEncoder)
 
-        return HttpResponse(data, content_type="application/json")
+        return JsonResponse(data, safe=False)
 
     def procesar_chofer(self, chofer, vehiculo):
         chofer_actual = vehiculo.get_ultimo_chofer()

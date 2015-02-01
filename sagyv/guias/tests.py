@@ -42,10 +42,8 @@ class TerminalTestCase(TestCase):
     def test_editar_terminal(self):
         post_data = {"id": 1, "codigo": "3131"}
         terms = Terminal.objects.all()
-        print terms
 
         response = self.client.post(reverse('guias:editar_terminal'), post_data)
         self.assertEqual(response.status_code, 200, "No se pudo asignar terminal")
 
         terms = Terminal.objects.all()
-        print terms

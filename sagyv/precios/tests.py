@@ -35,10 +35,10 @@ class PreciosTestCase(TestCase):
             producto1 = Producto.objects.get(pk = 1)
             producto2 = Producto.objects.get(pk = 2)
 
-            self.assertEqual(len(producto1.precioproducto_set), i)
-            self.assertEqual(len(producto2.precioproducto_set), i)
+            self.assertEqual(producto1.precioproducto_set.all().count(), i + 1)
+            self.assertEqual(producto2.precioproducto_set.all().count(), i + 1)
 
-        self.assertEqual(len(PrecioProducto.objects.all()), 8)
+        self.assertEqual(PrecioProducto.objects.all().count(), 8)
 
     def _crear_precios_productos(self):
         productos = Producto.objects.get_productos_filtrados()
