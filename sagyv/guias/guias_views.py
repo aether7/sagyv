@@ -1,7 +1,7 @@
 #-*- coding: utf-8 -*-
 import json
 
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.db import transaction
 from django.views.generic import View
 from django.core.serializers.json import DjangoJSONEncoder
@@ -50,11 +50,19 @@ def _cambio_estado_guia_existente(trabajador):
 
 
 class ObtenerGuias(View):
-
     def get(self, req):
-        data = _get_guias()
-        data = json.dumps(data, cls=DjangoJSONEncoder)
-        return HttpResponse(data, content_type='application/json')
+        id = req.GET.get('id')
+
+        if id is None:
+            rs = GuiaTrabajador.objects.order_by('-fecha_creacion').exclude(activo=False)
+            data = []
+            for guia in rs:
+                data.append(get_guias(guia))
+        else:
+            guia = GuiaTrabajador.objects.get(pk = int(id))
+            data = get_guias(guia)
+
+        return JsonResponse(data, safe=False)
 
 
 class CrearGuias(View):
@@ -71,8 +79,7 @@ class CrearGuias(View):
         self.crear_guias(inicial, final, trabajador)
 
         data = {'guias' : _get_guias()}
-        data = json.dumps(data, cls=DjangoJSONEncoder)
-        return HttpResponse(data, content_type='application/json')
+        return JsonResponse(data, safe=False)
 
     def crear_guias(self, inicial, final, trabajador):
         nueva_guia = GuiaTrabajador()
@@ -100,8 +107,7 @@ class EditarGuias(View):
         guias.save()
 
         data = {'guias' : _get_guias()}
-        data = json.dumps(data, cls=DjangoJSONEncoder)
-        return HttpResponse(data, content_type='application/json')
+        return JsonResponse(data, safe=False)
 
 
 class EliminarGuias(View):
@@ -115,8 +121,7 @@ class EliminarGuias(View):
         guias.save()
 
         data = {'guias' : _get_guias()}
-        data = json.dumps(data, cls=DjangoJSONEncoder)
-        return HttpResponse(data, content_type='application/json')
+        return JsonResponse(data, safe=False)
 
 
 class NN(View):
@@ -148,12 +153,10 @@ class NN(View):
         ]
         """
         guias_id = int(req.GET.get('id'))
-
         guias_venta = GuiaVenta.objects.obtener_guias_rango(guias_id)
 
         data = self.procesar_guia(guias_venta)
-        data = json.dumps(data, cls=DjangoJSONEncoder)
-        return HttpResponse(data, content_type='application/json')
+        return JsonResponse(data, safe=False)
 
     def procesar_guia(guias_venta):
         guias = []

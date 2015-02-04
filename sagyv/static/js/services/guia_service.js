@@ -28,8 +28,13 @@ function guiaService($http){
         },
 
         detalleTalonario: function(id, callback){
-            callback();
             console.warn('WIP');
+            callback();
+        },
+
+        detalleGuia: function(id, callback){
+            var url = App.urls.get('guias:obtener_guias');
+            get(url, { id : id }, callback);
         }
     };
 
