@@ -14,8 +14,8 @@ class ComunaAdmin(admin.ModelAdmin):
     ordering = ("id",)
 
 class ClienteAdmin(admin.ModelAdmin):
-    list_display = ("id", "giro", "direccion","telefono", "rut",)
-    list_editable = ("giro", "direccion", "telefono", "rut", )
+    list_display = ("id", "giro", "direccion","telefono", "rut","es_lipigas", "es_propio")
+    list_editable = ("giro", "telefono", "rut", "es_lipigas", "es_propio")
     ordering = ("id",)
 
 class DescuentoClienteAdmin(admin.ModelAdmin):

@@ -27,7 +27,7 @@ function formatoPeso(){
             return '$0';
         }
 
-        var aux = input.split('').reverse(),
+        var aux = input.toString().split('').reverse(),
             str = [], i;
 
         for(i = 0; i < aux.length; i++){
