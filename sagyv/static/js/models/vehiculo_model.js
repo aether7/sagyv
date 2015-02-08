@@ -29,6 +29,12 @@ App.Models.Vehiculo.prototype = {
                 campo: "numero",
                 mensaje: "Ingrese un número válido"
             });
+        }else if(!this.numero){
+            valido = false;
+            this.errorList.push({
+                campo: "numero",
+                mensaje: "Campo obligatorio"
+            });
         }
 
         if(!regex.formato1.test(this.patente) && !regex.formato2.test(this.patente)){

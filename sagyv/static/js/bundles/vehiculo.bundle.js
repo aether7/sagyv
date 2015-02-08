@@ -61,12 +61,12 @@ VehiculoController.mixin({
     },
 
     crearVehiculo: function(){
-        if(!this.validarNumeroPatente()){
-            console.log('NOP');
+        if(!this.vehiculo.esValido()){
             return;
         }
 
-        if(!this.vehiculo.esValido()){
+        if(!this.validarNumeroPatente()){
+            console.log('NOP');
             return;
         }
 
