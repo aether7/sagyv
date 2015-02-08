@@ -4,8 +4,8 @@ App.Models.Vehiculo = function(){
     this.patente = null;
     this.revisionTecnica = null;
     this.kilometraje = null;
-    this.estadoSec = null;
-    this.estadoPago = null;
+    this.estadoSec = 0;
+    this.estadoPago = 0;
     this.chofer = null;
 
     this.errorList = [];

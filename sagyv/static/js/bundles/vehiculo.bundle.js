@@ -42,6 +42,8 @@ VehiculoController.mixin({
     mostrarNuevo: function(){
         $('#modal_nuevo_vehiculo').modal('show');
         this.vehiculo = new Vehiculo();
+        this.vehiculo.estadoSec = 0;
+        this.vehiculo.estadoPago = 0;
     },
 
     mostrarAnexar: function(index){
