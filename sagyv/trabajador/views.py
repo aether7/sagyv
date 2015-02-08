@@ -44,15 +44,15 @@ class TrabajadorMixin(object):
         self.apellido = self.request.POST.get("apellido")
         self.rut = self.request.POST.get("rut")
         self.domicilio = self.request.POST.get("domicilio")
-        self.nacimiento = self.request.POST.get("fecha_nacimiento")
-        self.fecha_inicio_contrato = self.request.POST.get("inicio_contrato")
-        self.vigencia_licencia = self.request.POST.get("vigencia_licencia")
+        self.nacimiento = self.request.POST.get("fechaNacimiento")
+        self.fecha_inicio_contrato = self.request.POST.get("inicioContrato")
+        self.vigencia_licencia = self.request.POST.get("vigenciaLicencia")
         self.afp_id = self.request.POST.get("afp")
-        self.sistema_salud_id = self.request.POST.get("sistema_salud")
-        self.estado_civil_id = self.request.POST.get("estado_civil")
-        self.estado_vacacion_id = self.request.POST.get("estado_vacacion")
+        self.sistema_salud_id = self.request.POST.get("sistemaSalud")
+        self.estado_civil_id = self.request.POST.get("estadoCivil")
+        self.estado_vacacion_id = self.request.POST.get("estadoVacacion")
 
-        tipo = self.request.POST.get('tipo_trabajador')
+        tipo = self.request.POST.get('tipoTrabajador')
         self.tipo_trabajador = TipoTrabajador.objects.get(pk = int(tipo))
 
     def get_trabajador_json(self, worker):
@@ -200,7 +200,7 @@ class ModificarTrabajadorView(LoginRequiredMixin, View, TrabajadorMixin):
         return JsonResponse(dato, safe = False)
 
     def _edit_trabajador(self, id_trabajador):
-        if self.tipo_trabajador == 1:
+        if self.tipo_trabajador.id == TipoTrabajador.CHOFER:
             afp = Afp.objects.get(pk = self.afp_id)
             sistema_salud = SistemaSalud.objects.get(pk = self.sistema_salud_id)
         else:
@@ -245,7 +245,7 @@ class ObtenerTrabajadorView(LoginRequiredMixin, View):
             "tipo": worker.tipo_trabajador.id
         }
 
-        return JsonResponse(dato, safe = False)
+        return JsonResponse(dato, safe=False)
 
     def get_afp(self, worker):
         if worker.tipo_trabajador.id == 1:

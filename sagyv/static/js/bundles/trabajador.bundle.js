@@ -402,14 +402,14 @@ Trabajador.prototype = {
             apellido: this.apellido,
             rut: rut,
             domicilio: this.domicilio,
-            fecha_nacimiento: common.fecha.fechaToJSON(this.fechaNacimiento),
-            inicio_contrato: common.fecha.fechaToJSON(this.inicioContrato),
-            vigencia_licencia: common.fecha.fechaToJSON(this.vigenciaLicencia),
+            fechaNacimiento: common.fecha.fechaToJSON(this.fechaNacimiento),
+            inicioContrato: common.fecha.fechaToJSON(this.inicioContrato),
+            vigenciaLicencia: common.fecha.fechaToJSON(this.vigenciaLicencia),
             afp: this.afp,
-            sistema_salud: this.sistemaSalud,
-            estado_civil: this.estadoCivil,
-            estado_vacacion: this.estadoVacacion,
-            tipo_trabajador: this.tipo
+            sistemaSalud: this.sistemaSalud,
+            estadoCivil: this.estadoCivil,
+            estadoVacacion: this.estadoVacacion,
+            tipoTrabajador: this.tipo
         };
 
         if(this.id){
