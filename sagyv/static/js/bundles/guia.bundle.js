@@ -329,6 +329,9 @@ TerminalController.mixin({
     agregar: function(){
         if(!this.terminal.esValido()){
             return;
+        }else if(this._estaDuplicadaTerminal(this.terminal)){
+            this.terminal.mensajes.codigo = 'El código de la terminal está duplicado';
+            return;
         }
 
         var json = this.terminal.toJSON();
@@ -395,6 +398,14 @@ TerminalController.mixin({
 
     returnMaintenance:function(index){
     },
+
+    _estaDuplicadaTerminal: function(terminal){
+        var duplicadas = this.terminales.filter(function(t){
+            return t.codigo === terminal.codigo;
+        });
+
+        return duplicadas.length;
+    }
 });
 
 module.exports = TerminalController;
@@ -599,8 +610,13 @@ Terminal.mixin({
     },
 
     esCodigoValido: function(){
+        var regexCodigo = /^[a-z]*\d+[a-z]*\d*$/i;
+
         if(!this.codigo){
             this.mensajes.codigo = 'Campo obligatorio';
+            return false;
+        }else if(!regexCodigo.test(this.codigo)){
+            this.mensajes.codigo = 'Código de terminal inválido';
             return false;
         }
 

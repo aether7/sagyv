@@ -60,6 +60,9 @@ TerminalController.mixin({
     agregar: function(){
         if(!this.terminal.esValido()){
             return;
+        }else if(this._estaDuplicadaTerminal(this.terminal)){
+            this.terminal.mensajes.codigo = 'El código de la terminal está duplicado';
+            return;
         }
 
         var json = this.terminal.toJSON();
@@ -126,6 +129,14 @@ TerminalController.mixin({
 
     returnMaintenance:function(index){
     },
+
+    _estaDuplicadaTerminal: function(terminal){
+        var duplicadas = this.terminales.filter(function(t){
+            return t.codigo === terminal.codigo;
+        });
+
+        return duplicadas.length;
+    }
 });
 
 module.exports = TerminalController;

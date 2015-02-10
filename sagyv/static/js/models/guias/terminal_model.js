@@ -26,8 +26,13 @@ Terminal.mixin({
     },
 
     esCodigoValido: function(){
+        var regexCodigo = /^[a-z]*\d+[a-z]*\d*$/i;
+
         if(!this.codigo){
             this.mensajes.codigo = 'Campo obligatorio';
+            return false;
+        }else if(!regexCodigo.test(this.codigo)){
+            this.mensajes.codigo = 'Código de terminal inválido';
             return false;
         }
 
