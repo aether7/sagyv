@@ -24,6 +24,21 @@ class ReporteController{
     }
 }
 
+class ReporteConsumo extends ReporteController{
+    constructor(){
+        super();
+        console.log('eaea');
+    }
+
+    ruben(){
+        console.log('ruben contra ruben');
+    }
+
+    saludar(){
+        console.log('hola');
+    }
+}
+
 var reporteController = new ReporteController();
 reporteController.filtar();
 reporteController.exportar();
