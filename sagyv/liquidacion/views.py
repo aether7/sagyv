@@ -217,9 +217,7 @@ class Cerrar(LoginRequiredMixin, View):
         Se debe definir la respuesta del proceso.
         """
         dato = {'mensaje': 'El PDF se encuentra en proceso disculpe las molestias'}
-        dato = json.dumps(dato, cls=DjangoJSONEncoder)
-
-        # return HttpResponse(dato, content_type="application/json")
+        return JsonResponse(dato, safe=False)
 
     def _procesar_liquidacion(self):
         id_guia = self.request.POST.get('guia_despacho')
@@ -236,7 +234,7 @@ class Cerrar(LoginRequiredMixin, View):
 
         self.this_trabajador = this_vehiculo.get_ultimo_chofer()
 
-        talonario_boleta = BoletaTrabajador.objects.get(trabajador = self.this_trabajador)
+        talonario_boleta = BoletaTrabajador.objects.get(trabajador = self.this_trabajador, activo=True)
         talonario_boleta.actual = int(ultima_boleta)
         talonario_boleta.save()
 

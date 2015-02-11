@@ -1,12 +1,29 @@
-(function(){
-'use strict';
+// (function(){
+// 'use strict';
 
-var app = angular.module('consumoClienteApp', [], App.httpProvider),
-    ConsumoClienteController = require('../../controllers/reportes/consumo_cliente_controller.js'),
-    consumoService = require('../../services/reportes/consumo_service.js');
+// var app = angular.module('consumoClienteApp', [], App.httpProvider),
+//     ConsumoClienteController = require('../../controllers/reportes/consumo_cliente_controller.js'),
+//     consumoService = require('../../services/reportes/consumo_service.js');
 
-app.factory('consumoClienteService', consumoService);
+// app.factory('consumoClienteService', consumoService);
 
-app.controller('ConsumoClienteController', ['consumoClienteService', ConsumoClienteController]);
+// app.controller('ConsumoClienteController', ['consumoClienteService', ConsumoClienteController]);
 
-})();
+// })();
+class ReporteController{
+    constructor(){
+        console.log('sadsa');
+    }
+
+    filtrar(){
+        console.log('filtrando');
+    }
+
+    exportar(){
+        console.log('exportando');
+    }
+}
+
+var reporteController = new ReporteController();
+reporteController.filtar();
+reporteController.exportar();
