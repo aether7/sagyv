@@ -1,10 +1,10 @@
+#-*- coding: utf-8 -*-
 import json
 
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.template import RequestContext
 from django.views.generic import TemplateView, View
 from django.shortcuts import render
-from django.core.serializers.json import DjangoJSONEncoder
 
 from reportes.managers import ReportesManager
 
@@ -12,26 +12,13 @@ class ConsumoClientes(View):
     def get(self, req):
         fecha_inicio = req.GET.get('fechaInicio')
         fecha_termino = req.GET.get('fechaTermino')
-        consumos = ReportesManager().get_consumos_cliente_producto(fecha_inicio, fecha_termino)
+        consumos = ReportesManager().get_consumos_cliente_producto(fecha_inicio=fecha_inicio, fecha_termino=fecha_termino)
         data = []
 
         for consumo in consumos:
-            data.append({
-                "cliente": {
-                    "id": consumo.id_cliente,
-                    "nombre": consumo.nombre_cliente,
-                    "tipo": consumo.get_tipo_cliente()
-                },
-                "producto": {
-                    "id": consumo.id_producto,
-                    "codigo": consumo.codigo_producto,
-                    "cantidad": consumo.cantidad_producto,
-                    "suma": consumo.suma_monto
-                }
-            })
+            data.append(consumo)
 
-        data = json.dumps(data, cls = DjangoJSONEncoder)
-        return HttpResponse(data, content_type = "application/json")
+        return JsonResponse(data, safe=False)
 
 
 class ComprasGas(View):

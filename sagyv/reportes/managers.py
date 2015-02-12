@@ -85,61 +85,35 @@ class ReportesManager(models.Manager):
 
         consulta_sql = """
             SELECT
-                c.id as cliente_id,
-                c.rut as cliente_rut,
-                c.nombre as cliente_nombre,
-                c.es_lipigas as cliente_lipigas,
-                c.es_propio as cliente_propio,
-                c.credito as cliente_credito,
-                (
-                    SELECT
-                        p.id as id_producto
-                    FROM main_guiaventa gv
-                    INNER JOIN main_detalleguiaventa dgv ON(dgv.guia_venta_id = gv.id)
-                    INNER JOIN main_producto p ON(dgv.producto_id = p.id)
-                    WHERE gv.cliente_id = c.id
-                    GROUP BY dgv.producto_id
-                    ORDER BY SUM(dgv.cantidad) DESC
-                    LIMIT 1
-                ) as producto_id,
-                (
-                    SELECT
-                        SUM(dgv.cantidad) as producto_cantidad
-                    FROM main_guiaventa gv
-                    INNER JOIN main_detalleguiaventa dgv ON(dgv.guia_venta_id = gv.id)
-                    WHERE gv.cliente_id = c.id
-                    GROUP BY dgv.producto_id
-                    ORDER BY cantidad DESC
-                    LIMIT 1
-                ) as producto_cantidad,
-                (
-                    SELECT
-                        p.codigo as producto_codigo
-                    FROM main_guiaventa gv
-                    INNER JOIN main_detalleguiaventa dgv ON(dgv.guia_venta_id = gv.id)
-                    INNER JOIN main_producto p ON(dgv.producto_id = p.id)
-                    WHERE gv.cliente_id = c.id
-                    GROUP BY dgv.producto_id
-                    ORDER BY SUM(dgv.cantidad) DESC
-                    LIMIT 1
-                ) as producto_codigo
-            FROM main_cliente c
+                cliente.nombre AS cliente_nombre,
+                producto.id AS producto_id,
+                producto.codigo AS producto_codigo,
+                SUM(detalle.cantidad) AS producto_cantidad,
+                liquidacion.fecha AS liquidacion_fecha
+            FROM clientes_cliente cliente
+            INNER JOIN liquidacion_guiaventa guia ON(cliente.id = guia.cliente_id)
+            INNER JOIN liquidacion_detalleguiaventa detalle ON(guia.id = detalle.guia_venta_id)
+            INNER JOIN liquidacion_liquidacion liquidacion ON(guia.liquidacion_id = liquidacion.id)
+            INNER JOIN bodega_producto producto ON(detalle.producto_id = producto.id)
+            WHERE :condiciones
+            GROUP BY producto.id
+            ORDER BY producto_cantidad DESC
         """
 
-        condiciones = []
+        condiciones = ["1 = 1"]
 
         if cliente is not None:
-            condiciones.append( "c.id = %s" % cliente.id )
+            condiciones.append("cliente.id = %s" % cliente.id)
 
         if fecha_inicio is not None and fecha_termino is not None:
-            condiciones.append( "l.fecha BETWEEN '%s' AND '%s'" % (fecha_inicio, fecha_termino) )
+            condiciones.append("liquidacion.fecha BETWEEN '%s' AND '%s'" %(fecha_inicio, fecha_termino))
         elif fecha_inicio is not None:
-            condiciones.append("l.fecha >= '%s' " % (fecha_inicio))
+            condiciones.append("liquidacion.fecha >= '%s'" % fecha_inicio)
         elif fecha_termino is not None:
-            condiciones.append("l.fecha <= '%s'" % (fecha_termino))
+            condiciones.append("liquidacion.fecha <= '%s'" % fecha_termino)
 
         if len(condiciones) > 0:
-            consulta_sql += "WHERE " + " AND ".join(condiciones)
+            consulta_sql = consulta_sql.replace(':condiciones', ' AND '.join(condiciones))
 
         cursor = connections['default'].cursor()
         cursor.execute(consulta_sql)
@@ -148,19 +122,19 @@ class ReportesManager(models.Manager):
         resultado = []
 
         for row in data:
-            fila = ConsumoCliente()
-
-            fila.id_cliente = row['cliente_id']
-            fila.nombre_cliente = row['cliente_nombre']
-            fila.rut_cliente = row['cliente_rut']
-            fila.es_propio = row['cliente_propio']
-            fila.es_lipigas = row['cliente_lipigas']
-            fila.credito = row['cliente_credito']
-            fila.id_producto = row['producto_id']
-            fila.codigo_producto = row['producto_codigo']
-            fila.cantidad_producto = row['producto_cantidad']
-
-            resultado.append(fila)
+            resultado.append({
+                'cliente': {
+                    'nombre': row['cliente_nombre']
+                },
+                'producto': {
+                    'id': row['producto_id'],
+                    'codigo': row['producto_codigo'],
+                    'cantidad': row['producto_cantidad']
+                },
+                'liquidacion':{
+                    'fecha': row['liquidacion_fecha']
+                }
+            })
 
         return resultado
 

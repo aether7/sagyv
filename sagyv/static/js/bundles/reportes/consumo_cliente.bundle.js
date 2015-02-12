@@ -1,4 +1,4 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/Aether/Proyectos/sagyv/sagyv/static/js/bundles/reportes/consumo_cliente_bundle.js":[function(require,module,exports){
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"G:\\sagyv\\sagyv\\static\\js\\bundles\\reportes\\consumo_cliente_bundle.js":[function(require,module,exports){
 "use strict";
 
 (function () {
@@ -10,10 +10,12 @@
     app.controller("ConsumoClienteController", ["consumoClienteService", ConsumoClienteController]);
 })();
 
-},{"../../controllers/reportes/consumo_cliente_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/reportes/consumo_cliente_controller.js","../../services/reportes/consumo_service.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/reportes/consumo_service.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/reportes/consumo_cliente_controller.js":[function(require,module,exports){
+},{"../../controllers/reportes/consumo_cliente_controller.js":"G:\\sagyv\\sagyv\\static\\js\\controllers\\reportes\\consumo_cliente_controller.js","../../services/reportes/consumo_service.js":"G:\\sagyv\\sagyv\\static\\js\\services\\reportes\\consumo_service.js"}],"G:\\sagyv\\sagyv\\static\\js\\controllers\\reportes\\consumo_cliente_controller.js":[function(require,module,exports){
 "use strict";
 
 var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
+
+var _get = function get(object, property, receiver) { var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc && desc.writable) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
 var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
 
@@ -81,17 +83,26 @@ var _classCallCheck = function (instance, Constructor) { if (!(instance instance
 var ReporteController = require("./reporte_controller.js");
 
 var ConsumoClienteController = (function (ReporteController) {
-    function ConsumoClienteController() {
+    function ConsumoClienteController(service) {
         _classCallCheck(this, ConsumoClienteController);
 
-        if (ReporteController != null) {
-            ReporteController.apply(this, arguments);
-        }
+        _get(Object.getPrototypeOf(ConsumoClienteController.prototype), "constructor", this).call(this, service);
+        this.consumos = null;
+        this.service.findAll(this.cargaConsumos.bind(this));
     }
 
     _inherits(ConsumoClienteController, ReporteController);
 
     _prototypeProperties(ConsumoClienteController, null, {
+        cargaConsumos: {
+            value: function cargaConsumos(data) {
+                console.log("data");
+                console.log(data);
+                this.consumos = data;
+            },
+            writable: true,
+            configurable: true
+        },
         filtrar: {
             value: function filtrar() {
                 console.log(this.desde);
@@ -122,7 +133,7 @@ var ConsumoClienteController = (function (ReporteController) {
 
 module.exports = ConsumoClienteController;
 
-},{"./reporte_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/reportes/reporte_controller.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/reportes/reporte_controller.js":[function(require,module,exports){
+},{"./reporte_controller.js":"G:\\sagyv\\sagyv\\static\\js\\controllers\\reportes\\reporte_controller.js"}],"G:\\sagyv\\sagyv\\static\\js\\controllers\\reportes\\reporte_controller.js":[function(require,module,exports){
 "use strict";
 
 var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
@@ -167,7 +178,7 @@ var ReporteController = (function () {
 
 module.exports = ReporteController;
 
-},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/reportes/consumo_service.js":[function(require,module,exports){
+},{}],"G:\\sagyv\\sagyv\\static\\js\\services\\reportes\\consumo_service.js":[function(require,module,exports){
 "use strict";
 
 var serviceUtil = require("../service_util.js");
@@ -197,7 +208,7 @@ function consumoService($http) {
 
 module.exports = consumoService;
 
-},{"../service_util.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/service_util.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/service_util.js":[function(require,module,exports){
+},{"../service_util.js":"G:\\sagyv\\sagyv\\static\\js\\services\\service_util.js"}],"G:\\sagyv\\sagyv\\static\\js\\services\\service_util.js":[function(require,module,exports){
 "use strict";
 
 function noop() {}
@@ -261,4 +272,4 @@ exports.postMaker = function ($http) {
     };
 };
 
-},{}]},{},["/Users/Aether/Proyectos/sagyv/sagyv/static/js/bundles/reportes/consumo_cliente_bundle.js"]);
+},{}]},{},["G:\\sagyv\\sagyv\\static\\js\\bundles\\reportes\\consumo_cliente_bundle.js"]);

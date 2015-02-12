@@ -60,6 +60,18 @@
 var ReporteController = require('./reporte_controller.js');
 
 class ConsumoClienteController extends ReporteController{
+    constructor(service){
+        super(service);
+        this.consumos = null;
+        this.service.findAll(this.cargaConsumos.bind(this));
+    }
+
+    cargaConsumos(data){
+        console.log('data');
+        console.log(data);
+        this.consumos = data;
+    }
+
     filtrar(){
         console.log(this.desde);
         console.log(this.hasta);
