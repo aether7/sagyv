@@ -1,27 +1,21 @@
-// function ReporteController(service){
-//     this.desde = null;
-//     this.hasta = null;
-//     this.service = service;
-// }
+class ReporteController{
+    constructor(service){
+        this.service = service;
+        this.desde = null;
+        this.hasta = null;
+    }
 
-// ReporteController.mixin({
-//     filtrar: function(){
-//         console.log('filtrando');
-//         console.log('desde %s', this.desde);
-//         console.log('hasta %s', this.hasta);
-//     },
+    filtrar(){
+        throw new Error('método no implementado');
+    }
 
-//     exportar: function(){
-//         console.log('exportando');
-//         console.log('desde %s', this.desde);
-//         console.log('hasta %s', this.hasta);
-//     },
+    exportar(){
+        throw new Error('método no implementado');
+    }
 
-//     graficar: function(){
-//         console.log('graficando');
-//         console.log('desde %s', this.desde);
-//         console.log('hasta %s', this.hasta);
-//     }
-// });
+    graficar(){
+        throw new Error('método no implementado');
+    }
+}
 
-// module.exports = ReporteController;
+module.exports = ReporteController;

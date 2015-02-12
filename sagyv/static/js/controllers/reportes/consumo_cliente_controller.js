@@ -57,20 +57,22 @@
 // });
 
 // module.exports = ConsumoClienteController;
-class ReporteController{
-    constructor(){
-        console.log('sadsa');
-    }
+var ReporteController = require('./reporte_controller.js');
 
+class ConsumoClienteController extends ReporteController{
     filtrar(){
+        console.log(this.desde);
+        console.log(this.hasta);
         console.log('filtrando');
     }
 
     exportar(){
         console.log('exportando');
     }
+
+    graficar(){
+        console.log('graficando');
+    }
 }
 
-var reporteController = new ReporteController();
-reporteController.filtar();
-reporteController.exportar();
+module.exports = ConsumoClienteController;
