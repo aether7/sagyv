@@ -86,6 +86,8 @@ class ReportesManager(models.Manager):
         consulta_sql = """
             SELECT
                 cliente.nombre AS cliente_nombre,
+                cliente.es_lipigas AS cliente_es_lipigas,
+                cliente.es_propio AS cliente_es_propio,
                 producto.id AS producto_id,
                 producto.codigo AS producto_codigo,
                 SUM(detalle.cantidad) AS producto_cantidad,
@@ -122,7 +124,7 @@ class ReportesManager(models.Manager):
         resultado = []
 
         for row in data:
-            resultado.append({
+            rs = {
                 'cliente': {
                     'nombre': row['cliente_nombre']
                 },
@@ -134,7 +136,16 @@ class ReportesManager(models.Manager):
                 'liquidacion':{
                     'fecha': row['liquidacion_fecha']
                 }
-            })
+            }
+
+            if row['cliente_es_lipigas'] and row['cliente_es_propio']:
+                rs['cliente']['tipo'] = 'lipigas y propio'
+            elif row['cliente_es_lipigas']:
+                rs['cliente']['tipo'] = 'lipigas'
+            elif row['cliente_es_propio']:
+                rs['cliente']['tipo'] = 'propio'
+
+            resultado.append(rs)
 
         return resultado
 

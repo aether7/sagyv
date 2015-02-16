@@ -21,66 +21,8 @@ var _inherits = function (subClass, superClass) { if (typeof superClass !== "fun
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
-// var ReporteController = require('./reporte_controller.js'),
-//     graphData = require('../../utils/reporte_graph_data.js');
-
-// function ConsumoClienteController(service){
-//     ReporteController.call(this, service);
-//     this.consumos = [];
-//     this.init();
-// }
-
-// ConsumoClienteController.mixin(ReporteController, {
-//     init: function(){
-//         this.service.findAll(this.cargaConsumos.bind(this));
-//     },
-
-//     cargaConsumos: function(data){
-//         this.consumos = data;
-//     },
-
-//     filtrar: function(){
-//         var fechaInicio, fechaTermino;
-
-//         if(this.desde){
-//             fechaInicio = common.fecha.fechaToJSON(this.desde);
-//         }
-
-//         if(this.hasta){
-//             fechaTermino = common.fecha.fechaToJSON(this.hasta);
-//         }
-
-//         console.log('fecha inicio: %s', fechaInicio);
-//         console.log('fecha termino: %s', fechaTermino);
-
-//         this.service.filtrar(fechaInicio, fechaTermino, this.cargaConsumos.bind(this));
-//         $('#tabDetalle').tab('show');
-//     },
-
-//     graficar: function(){
-//         $('#tabGrafico').tab('show');
-
-//         var data = graphData;
-
-//         data.title.text = 'Consumo de clientes';
-//         data.yAxis.title.text = 'Cantidad ( cu )';
-//         data.series = [
-//             {
-//                 name: 'cod 1105',
-//                 data: [7.0, 6.9, 9.5, 14.5, 18.4, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
-//             },
-//             {
-//                 name: 'cod 1145',
-//                 data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
-//             }
-//         ];
-
-//         $('#canvas_grafico').highcharts(data);
-//     }
-// });
-
-// module.exports = ConsumoClienteController;
 var ReporteController = require("./reporte_controller.js");
+var graphData = require("../../utils/reporte_graph_data.js");
 
 var ConsumoClienteController = (function (ReporteController) {
     function ConsumoClienteController(service) {
@@ -96,8 +38,6 @@ var ConsumoClienteController = (function (ReporteController) {
     _prototypeProperties(ConsumoClienteController, null, {
         cargaConsumos: {
             value: function cargaConsumos(data) {
-                console.log("data");
-                console.log(data);
                 this.consumos = data;
             },
             writable: true,
@@ -105,9 +45,11 @@ var ConsumoClienteController = (function (ReporteController) {
         },
         filtrar: {
             value: function filtrar() {
-                console.log(this.desde);
-                console.log(this.hasta);
-                console.log("filtrando");
+                var _this = this;
+                this.service.filtrar(this.desde, this.hasta, function () {
+                    _this.cargaConsumos.bind(_this);
+                    $("#tabDetalle").tab("show");
+                });
             },
             writable: true,
             configurable: true
@@ -121,7 +63,20 @@ var ConsumoClienteController = (function (ReporteController) {
         },
         graficar: {
             value: function graficar() {
-                console.log("graficando");
+                $("#tabGrafico").tab("show");
+                var data = graphData;
+
+                data.title.text = "Consumo de clientes";
+                data.yAxis.title.text = "Cantidad ( cu )";
+                data.series = [{
+                    name: "cod 1105",
+                    data: [7, 6.9, 9.5, 14.5, 18.4, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
+                }, {
+                    name: "cod 1145",
+                    data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17, 16.6, 14.2, 10.3, 6.6, 4.8]
+                }];
+
+                $("#canvas_grafico").highcharts(data);
             },
             writable: true,
             configurable: true
@@ -133,7 +88,7 @@ var ConsumoClienteController = (function (ReporteController) {
 
 module.exports = ConsumoClienteController;
 
-},{"./reporte_controller.js":"G:\\sagyv\\sagyv\\static\\js\\controllers\\reportes\\reporte_controller.js"}],"G:\\sagyv\\sagyv\\static\\js\\controllers\\reportes\\reporte_controller.js":[function(require,module,exports){
+},{"../../utils/reporte_graph_data.js":"G:\\sagyv\\sagyv\\static\\js\\utils\\reporte_graph_data.js","./reporte_controller.js":"G:\\sagyv\\sagyv\\static\\js\\controllers\\reportes\\reporte_controller.js"}],"G:\\sagyv\\sagyv\\static\\js\\controllers\\reportes\\reporte_controller.js":[function(require,module,exports){
 "use strict";
 
 var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
@@ -271,5 +226,39 @@ exports.postMaker = function ($http) {
         $http.post(url, params).success(callback || noop).error(standardError);
     };
 };
+
+},{}],"G:\\sagyv\\sagyv\\static\\js\\utils\\reporte_graph_data.js":[function(require,module,exports){
+"use strict";
+
+var data = {
+    chart: {
+        type: "line"
+    },
+    title: {
+        text: "Consumo de clientes"
+    },
+    subtitle: {
+        text: ""
+    },
+    xAxis: {
+        categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    },
+    yAxis: {
+        title: {
+            text: "Cantidad( cu )"
+        }
+    },
+    plotOptions: {
+        line: {
+            dataLabels: {
+                enabled: true
+            },
+            enableMouseTracking: false
+        }
+    },
+    series: []
+};
+
+module.exports = data;
 
 },{}]},{},["G:\\sagyv\\sagyv\\static\\js\\bundles\\reportes\\consumo_cliente_bundle.js"]);
