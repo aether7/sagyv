@@ -6,6 +6,7 @@ function TrabajadorController(service){
     this.trabajadores = [];
     this.trabajador = new Trabajador();
     this.boleta = new Boleta();
+    this.index = null;
 
     this.init();
 }
@@ -24,7 +25,7 @@ TrabajadorController.mixin({
                 trabajador.rut = obj.rut;
                 trabajador.domicilio = obj.domicilio;
                 trabajador.fechaNacimiento = common.fecha.jsonToDate(obj.nacimiento);
-                trabajador.inicioContrato = common.fecha.jsonToDate(obj.inicioContrato);
+                trabajador.inicioContrato = common.fecha.jsonToDate(obj.fechaInicioContrato);
                 trabajador.vigenciaLicencia = common.fecha.jsonToDate(obj.vigenciaLicencia);
                 trabajador.afp = obj.afp;
                 trabajador.sistemaSalud = obj.sistemaSalud;
@@ -66,7 +67,11 @@ TrabajadorController.mixin({
 
     renderNuevoTrabajador: function(data){
         this.trabajador.id = data.id;
-        this.trabajador.estadoVacacion = { nombre: data.estado_vacaciones };
+        this.trabajador.estadoVacacion = data.estadoVacacion;
+        this.trabajador.estadoCivil = data.estadoCivil;
+        this.trabajador.afp = data.afp;
+        this.trabajador.sistemaSalud = data.sistemaSalud;
+
         this.trabajadores.push(this.trabajador);
 
         $('#modal_nuevo').modal('hide');
@@ -78,26 +83,20 @@ TrabajadorController.mixin({
         this.trabajador = this.trabajadores[index];
 
         this.service.obtener(this.trabajador.id, function(data){
-            _this.trabajador.boleta.boletaInicial = data.boleta.boleta_inicial
-            _this.trabajador.boleta.boletaActual = data.boleta.boleta_actual
-            _this.trabajador.boleta.boletaFinal = data.boleta.boleta_final
+            _this.trabajador.boleta.boletaInicial = data.boleta.boletaInicial
+            _this.trabajador.boleta.boletaActual = data.boleta.boletaActual
+            _this.trabajador.boleta.boletaFinal = data.boleta.boletaFinal
             common.mostrarModal('ver');
         });
     },
 
     editarTrabajador: function(index){
         var _this = this,
-            trabajador = this.trabajadores[index],
-            id = trabajador.id;
+            trabajador = this.trabajadores[index];
 
-        this.trabajador = new Trabajador();
-
-        this.service.obtener(id, function(data){
-
-            common.mostrarModal('editar');
-            _this.procesarTrabajador(data, 'id');
-            _this.trabajador.id = id;
-        });
+        this.index = index;
+        this.trabajador = trabajador;
+        common.mostrarModal('editar');
     },
 
     actualizarTrabajador: function(){
@@ -105,17 +104,10 @@ TrabajadorController.mixin({
             return;
         }
 
-        this.service.actualizar(this.trabajador.getJSON(), this.renderActualizarTrabajador);
+        this.service.actualizar(this.trabajador.getJSON(), this.renderActualizarTrabajador.bind(this));
     },
 
     renderActualizarTrabajador: function(data){
-        var tr = $('#lista_trabajadores tr[data-id={0}]'.format(data.id));
-
-        tr.find('td[data-campo=nombre]').text(data.nombre);
-        tr.find('td[data-campo=apellido]').text(data.apellido);
-        tr.find('td[data-campo=rut]').text(data.rut);
-        tr.find('td[data-campo=estado_vacaciones]').text(data.estado_vacaciones);
-
         $('#modal_editar').modal('hide');
         common.agregarMensaje('El trabajador ha sido editado exitosamente');
     },
@@ -135,31 +127,6 @@ TrabajadorController.mixin({
         });
     },
 
-    procesarTrabajador: function(data, campo){
-        campo = campo || 'nombre';
-        console.log(data);
-
-        var fechaNac = new Date(common.fecha.agregarCeros(data.nacimiento) + ' 00:00:00'),
-            fechaInicio = new Date(common.fecha.agregarCeros(data.fecha_inicio_contrato) + ' 00:00:00'),
-            fechaVigencia = new Date(common.fecha.agregarCeros(data.vigencia_licencia) + ' 00:00:00');
-
-        this.trabajador.nombre = data.nombre;
-        this.trabajador.apellido = data.apellido;
-        this.trabajador.rut = data.rut;
-        this.trabajador.domicilio = data.domicilio;
-        this.trabajador.fechaNacimiento = fechaNac;
-        this.trabajador.inicioContrato = fechaInicio;
-        this.trabajador.vigenciaLicencia = fechaVigencia;
-        this.trabajador.afp = data.afp[campo];
-        this.trabajador.sistemaSalud = data.sistema_salud[campo];
-        this.trabajador.estadoCivil = data.estado_civil[campo];
-        this.trabajador.estadoVacacion = data.estado_vacacion[campo];
-        this.trabajador.boleta.boletaInicial = data.boleta.boleta_inicial;
-        this.trabajador.boleta.boletaFinal = data.boleta.boleta_final;
-        this.trabajador.boleta.boletaActual = data.boleta.boleta_actual;
-        this.trabajador.tipo = data.tipo;
-    },
-
     anexarBoleta: function(index){
         var _this = this,
             trabajador = this.trabajadores[index],
@@ -168,9 +135,9 @@ TrabajadorController.mixin({
         this.boleta = new Boleta();
 
         this.service.buscarBoleta(id, function(data){
-            _this.boleta.numeroAnterior = data.boleta_actual;
-            _this.boleta.boletaInicial = data.boleta_final + 1;
-            _this.boleta.boletaFinal = data.boleta_final + 2;
+            _this.boleta.numeroAnterior = data.boletaActual;
+            _this.boleta.boletaInicial = data.boletaFinal + 1;
+            _this.boleta.boletaFinal = data.boletaFinal + 2;
             _this.boleta.id = id;
 
             $('#modal_anexar_boleta').modal('show');

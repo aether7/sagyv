@@ -1,3 +1,8 @@
+var constantes = {
+    CHOFER: 1,
+    FLETERO : 2
+};
+
 var Trabajador = function(){
     this.id = null;
     this.nombre = null;
@@ -7,18 +12,22 @@ var Trabajador = function(){
     this.fechaNacimiento = null;
     this.inicioContrato = null;
     this.vigenciaLicencia = null;
-    this.tipo = 1;
-    this.afp = null;
-    this.sistemaSalud = null;
-    this.estadoCivil = null;
-    this.estadoVacacion = null;
-
+    this.tipo = { id: 1, nombre: 'Chofer' };
+    this.afp = {id: null, nombre: null};
+    this.sistemaSalud = {id: null, nombre: null};
+    this.estadoCivil = {id: null, nombre: null};
+    this.estadoVacacion = {id: null, nombre: null};
     this.boleta = {};
+
     this.mensajes = {};
 };
 
 Trabajador.prototype = {
-    constructor: App.Models.Trabajador,
+    constructor: Trabajador,
+
+    esChofer: function(){
+        return this.tipo.id === constantes.CHOFER;
+    },
 
     esNombreValido: function(){
         return this._esTextoValido("nombre", "El nombre no es válido");
@@ -103,7 +112,7 @@ Trabajador.prototype = {
         valido = this.esEstadoCivilValido() && valido;
         valido = this.esTipoValido() && valido;
 
-        if(this.tipo == 2){
+        if(this.tipo.id === constantes.FLETERO){
             return valido;
         }
 
@@ -127,10 +136,10 @@ Trabajador.prototype = {
             inicioContrato: common.fecha.fechaToJSON(this.inicioContrato),
             vigenciaLicencia: common.fecha.fechaToJSON(this.vigenciaLicencia),
             afp: this.afp,
-            sistemaSalud: this.sistemaSalud,
-            estadoCivil: this.estadoCivil,
-            estadoVacacion: this.estadoVacacion,
-            tipoTrabajador: this.tipo
+            sistemaSalud: this.sistemaSalud.id,
+            estadoCivil: this.estadoCivil.id,
+            estadoVacacion: this.estadoVacacion.id,
+            tipoTrabajador: this.tipo.id
         };
 
         if(this.id){

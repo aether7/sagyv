@@ -56,8 +56,8 @@ Boleta.mixin({
 
     getJSON: function(){
         var json = {
-            boleta_inicial: this.boletaInicial,
-            boleta_final: this.boletaFinal,
+            boletaInicial: this.boletaInicial,
+            boletaFinal: this.boletaFinal,
             id: this.id
         };
 

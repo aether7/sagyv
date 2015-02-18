@@ -1,4 +1,4 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/Aether/Proyectos/sagyv/sagyv/static/js/bundles/trabajador_bundle.js":[function(require,module,exports){
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"G:\\sagyv\\sagyv\\static\\js\\bundles\\trabajador_bundle.js":[function(require,module,exports){
 (function(){
 'use strict';
 var app = angular.module('trabajadorApp', [], App.httpProvider),
@@ -10,7 +10,7 @@ app.controller('TrabajadorController',['trabajadorService', TrabajadorController
 
 })();
 
-},{"../controllers/trabajador_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/trabajador_controller.js","../services/trabajador_service.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/trabajador_service.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/trabajador_controller.js":[function(require,module,exports){
+},{"../controllers/trabajador_controller.js":"G:\\sagyv\\sagyv\\static\\js\\controllers\\trabajador_controller.js","../services/trabajador_service.js":"G:\\sagyv\\sagyv\\static\\js\\services\\trabajador_service.js"}],"G:\\sagyv\\sagyv\\static\\js\\controllers\\trabajador_controller.js":[function(require,module,exports){
 var Trabajador = require('../models/trabajador/trabajador_model.js'),
     Boleta = require('../models/trabajador/boleta_model.js');
 
@@ -19,6 +19,7 @@ function TrabajadorController(service){
     this.trabajadores = [];
     this.trabajador = new Trabajador();
     this.boleta = new Boleta();
+    this.index = null;
 
     this.init();
 }
@@ -37,7 +38,7 @@ TrabajadorController.mixin({
                 trabajador.rut = obj.rut;
                 trabajador.domicilio = obj.domicilio;
                 trabajador.fechaNacimiento = common.fecha.jsonToDate(obj.nacimiento);
-                trabajador.inicioContrato = common.fecha.jsonToDate(obj.inicioContrato);
+                trabajador.inicioContrato = common.fecha.jsonToDate(obj.fechaInicioContrato);
                 trabajador.vigenciaLicencia = common.fecha.jsonToDate(obj.vigenciaLicencia);
                 trabajador.afp = obj.afp;
                 trabajador.sistemaSalud = obj.sistemaSalud;
@@ -79,7 +80,11 @@ TrabajadorController.mixin({
 
     renderNuevoTrabajador: function(data){
         this.trabajador.id = data.id;
-        this.trabajador.estadoVacacion = { nombre: data.estado_vacaciones };
+        this.trabajador.estadoVacacion = data.estadoVacacion;
+        this.trabajador.estadoCivil = data.estadoCivil;
+        this.trabajador.afp = data.afp;
+        this.trabajador.sistemaSalud = data.sistemaSalud;
+
         this.trabajadores.push(this.trabajador);
 
         $('#modal_nuevo').modal('hide');
@@ -91,26 +96,20 @@ TrabajadorController.mixin({
         this.trabajador = this.trabajadores[index];
 
         this.service.obtener(this.trabajador.id, function(data){
-            _this.trabajador.boleta.boletaInicial = data.boleta.boleta_inicial
-            _this.trabajador.boleta.boletaActual = data.boleta.boleta_actual
-            _this.trabajador.boleta.boletaFinal = data.boleta.boleta_final
+            _this.trabajador.boleta.boletaInicial = data.boleta.boletaInicial
+            _this.trabajador.boleta.boletaActual = data.boleta.boletaActual
+            _this.trabajador.boleta.boletaFinal = data.boleta.boletaFinal
             common.mostrarModal('ver');
         });
     },
 
     editarTrabajador: function(index){
         var _this = this,
-            trabajador = this.trabajadores[index],
-            id = trabajador.id;
+            trabajador = this.trabajadores[index];
 
-        this.trabajador = new Trabajador();
-
-        this.service.obtener(id, function(data){
-
-            common.mostrarModal('editar');
-            _this.procesarTrabajador(data, 'id');
-            _this.trabajador.id = id;
-        });
+        this.index = index;
+        this.trabajador = trabajador;
+        common.mostrarModal('editar');
     },
 
     actualizarTrabajador: function(){
@@ -118,17 +117,10 @@ TrabajadorController.mixin({
             return;
         }
 
-        this.service.actualizar(this.trabajador.getJSON(), this.renderActualizarTrabajador);
+        this.service.actualizar(this.trabajador.getJSON(), this.renderActualizarTrabajador.bind(this));
     },
 
     renderActualizarTrabajador: function(data){
-        var tr = $('#lista_trabajadores tr[data-id={0}]'.format(data.id));
-
-        tr.find('td[data-campo=nombre]').text(data.nombre);
-        tr.find('td[data-campo=apellido]').text(data.apellido);
-        tr.find('td[data-campo=rut]').text(data.rut);
-        tr.find('td[data-campo=estado_vacaciones]').text(data.estado_vacaciones);
-
         $('#modal_editar').modal('hide');
         common.agregarMensaje('El trabajador ha sido editado exitosamente');
     },
@@ -148,31 +140,6 @@ TrabajadorController.mixin({
         });
     },
 
-    procesarTrabajador: function(data, campo){
-        campo = campo || 'nombre';
-        console.log(data);
-
-        var fechaNac = new Date(common.fecha.agregarCeros(data.nacimiento) + ' 00:00:00'),
-            fechaInicio = new Date(common.fecha.agregarCeros(data.fecha_inicio_contrato) + ' 00:00:00'),
-            fechaVigencia = new Date(common.fecha.agregarCeros(data.vigencia_licencia) + ' 00:00:00');
-
-        this.trabajador.nombre = data.nombre;
-        this.trabajador.apellido = data.apellido;
-        this.trabajador.rut = data.rut;
-        this.trabajador.domicilio = data.domicilio;
-        this.trabajador.fechaNacimiento = fechaNac;
-        this.trabajador.inicioContrato = fechaInicio;
-        this.trabajador.vigenciaLicencia = fechaVigencia;
-        this.trabajador.afp = data.afp[campo];
-        this.trabajador.sistemaSalud = data.sistema_salud[campo];
-        this.trabajador.estadoCivil = data.estado_civil[campo];
-        this.trabajador.estadoVacacion = data.estado_vacacion[campo];
-        this.trabajador.boleta.boletaInicial = data.boleta.boleta_inicial;
-        this.trabajador.boleta.boletaFinal = data.boleta.boleta_final;
-        this.trabajador.boleta.boletaActual = data.boleta.boleta_actual;
-        this.trabajador.tipo = data.tipo;
-    },
-
     anexarBoleta: function(index){
         var _this = this,
             trabajador = this.trabajadores[index],
@@ -181,9 +148,9 @@ TrabajadorController.mixin({
         this.boleta = new Boleta();
 
         this.service.buscarBoleta(id, function(data){
-            _this.boleta.numeroAnterior = data.boleta_actual;
-            _this.boleta.boletaInicial = data.boleta_final + 1;
-            _this.boleta.boletaFinal = data.boleta_final + 2;
+            _this.boleta.numeroAnterior = data.boletaActual;
+            _this.boleta.boletaInicial = data.boletaFinal + 1;
+            _this.boleta.boletaFinal = data.boletaFinal + 2;
             _this.boleta.id = id;
 
             $('#modal_anexar_boleta').modal('show');
@@ -206,7 +173,7 @@ TrabajadorController.mixin({
 
 module.exports = TrabajadorController;
 
-},{"../models/trabajador/boleta_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/trabajador/boleta_model.js","../models/trabajador/trabajador_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/trabajador/trabajador_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/trabajador/boleta_model.js":[function(require,module,exports){
+},{"../models/trabajador/boleta_model.js":"G:\\sagyv\\sagyv\\static\\js\\models\\trabajador\\boleta_model.js","../models/trabajador/trabajador_model.js":"G:\\sagyv\\sagyv\\static\\js\\models\\trabajador\\trabajador_model.js"}],"G:\\sagyv\\sagyv\\static\\js\\models\\trabajador\\boleta_model.js":[function(require,module,exports){
 function Boleta(){
     this.numeroAnterior = 0;
     this.boletaInicial = 1;
@@ -265,8 +232,8 @@ Boleta.mixin({
 
     getJSON: function(){
         var json = {
-            boleta_inicial: this.boletaInicial,
-            boleta_final: this.boletaFinal,
+            boletaInicial: this.boletaInicial,
+            boletaFinal: this.boletaFinal,
             id: this.id
         };
 
@@ -276,7 +243,12 @@ Boleta.mixin({
 
 module.exports = Boleta;
 
-},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/trabajador/trabajador_model.js":[function(require,module,exports){
+},{}],"G:\\sagyv\\sagyv\\static\\js\\models\\trabajador\\trabajador_model.js":[function(require,module,exports){
+var constantes = {
+    CHOFER: 1,
+    FLETERO : 2
+};
+
 var Trabajador = function(){
     this.id = null;
     this.nombre = null;
@@ -286,18 +258,22 @@ var Trabajador = function(){
     this.fechaNacimiento = null;
     this.inicioContrato = null;
     this.vigenciaLicencia = null;
-    this.tipo = 1;
-    this.afp = null;
-    this.sistemaSalud = null;
-    this.estadoCivil = null;
-    this.estadoVacacion = null;
-
+    this.tipo = { id: 1, nombre: 'Chofer' };
+    this.afp = {id: null, nombre: null};
+    this.sistemaSalud = {id: null, nombre: null};
+    this.estadoCivil = {id: null, nombre: null};
+    this.estadoVacacion = {id: null, nombre: null};
     this.boleta = {};
+
     this.mensajes = {};
 };
 
 Trabajador.prototype = {
-    constructor: App.Models.Trabajador,
+    constructor: Trabajador,
+
+    esChofer: function(){
+        return this.tipo.id === constantes.CHOFER;
+    },
 
     esNombreValido: function(){
         return this._esTextoValido("nombre", "El nombre no es válido");
@@ -382,7 +358,7 @@ Trabajador.prototype = {
         valido = this.esEstadoCivilValido() && valido;
         valido = this.esTipoValido() && valido;
 
-        if(this.tipo == 2){
+        if(this.tipo.id === constantes.FLETERO){
             return valido;
         }
 
@@ -406,10 +382,10 @@ Trabajador.prototype = {
             inicioContrato: common.fecha.fechaToJSON(this.inicioContrato),
             vigenciaLicencia: common.fecha.fechaToJSON(this.vigenciaLicencia),
             afp: this.afp,
-            sistemaSalud: this.sistemaSalud,
-            estadoCivil: this.estadoCivil,
-            estadoVacacion: this.estadoVacacion,
-            tipoTrabajador: this.tipo
+            sistemaSalud: this.sistemaSalud.id,
+            estadoCivil: this.estadoCivil.id,
+            estadoVacacion: this.estadoVacacion.id,
+            tipoTrabajador: this.tipo.id
         };
 
         if(this.id){
@@ -468,7 +444,7 @@ Trabajador.prototype = {
 
 module.exports = Trabajador;
 
-},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/service_util.js":[function(require,module,exports){
+},{}],"G:\\sagyv\\sagyv\\static\\js\\services\\service_util.js":[function(require,module,exports){
 function noop(){}
 
 function standardError(data){
@@ -530,7 +506,7 @@ exports.postMaker = function($http){
     };
 };
 
-},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/trabajador_service.js":[function(require,module,exports){
+},{}],"G:\\sagyv\\sagyv\\static\\js\\services\\trabajador_service.js":[function(require,module,exports){
 var serviceUtil = require('./service_util.js');
 
 function service($http){
@@ -581,4 +557,4 @@ function service($http){
 
 module.exports = service;
 
-},{"./service_util.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/service_util.js"}]},{},["/Users/Aether/Proyectos/sagyv/sagyv/static/js/bundles/trabajador_bundle.js"]);
+},{"./service_util.js":"G:\\sagyv\\sagyv\\static\\js\\services\\service_util.js"}]},{},["G:\\sagyv\\sagyv\\static\\js\\bundles\\trabajador_bundle.js"]);
