@@ -208,6 +208,7 @@ class Cerrar(LoginRequiredMixin, View):
     @transaction.atomic
     def post(self, req):
         print req.POST
+
         self._procesar_liquidacion()
         self._procesar_guias()
         self._procesar_vouchers()
@@ -245,6 +246,10 @@ class Cerrar(LoginRequiredMixin, View):
         self.this_liquidacion.save()
 
     def _procesar_vouchers(self):
+        print len(self.request.POST.get('vouchers'))
+        if len(self.request.POST.get('vouchers')) == 0:
+            return
+
         vouchers = json.loads(self.request.POST.get('vouchers'))
 
         if len(vouchers['lipigas']):
