@@ -207,8 +207,7 @@ class Cerrar(LoginRequiredMixin, View):
 
     @transaction.atomic
     def post(self, req):
-        print req.POST
-
+        self._descargar_vehiculo()
         self._procesar_liquidacion()
         self._procesar_guias()
         self._procesar_vouchers()
@@ -246,7 +245,7 @@ class Cerrar(LoginRequiredMixin, View):
         self.this_liquidacion.save()
 
     def _procesar_vouchers(self):
-        print len(self.request.POST.get('vouchers'))
+
         if len(self.request.POST.get('vouchers')) == 0:
             return
 
@@ -303,9 +302,23 @@ class Cerrar(LoginRequiredMixin, View):
 
         for producto in productos:
             row = Producto.objects.get(pk = producto['id'])
-            row.stock = row.stock + producto['llenos']
+            print row.stock
+            print producto['llenos']
+            row.stock = row.stock + int(producto['llenos'])
             row.save()
+            print "===="
+            print row.stock
+            print "****"
+            cod_garantia = '31'+str(row.codigo)[2:]
+            garantia = Producto.objects.get(codigo = cod_garantia)
+            print garantia.stock
+            print garantia.stock + int(producto['vacios'])
 
+
+            garantia.stock = garantia.stock + int(producto['vacios'])
+            garantia.save()
+            print "===="
+            print garantia.stock
             #Se anexa a las garantias
 
 
