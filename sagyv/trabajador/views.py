@@ -79,8 +79,8 @@ class TrabajadorMixin(object):
         data = { 'id': None, 'nombre': 'No dispone' }
 
         if worker.tipo_trabajador.id == TipoTrabajador.CHOFER:
-            data['id'] = worker.tipo_trabajador.id
-            data['nombre'] = worker.tipo_trabajador.nombre
+            data['id'] = worker.afp.id
+            data['nombre'] = worker.afp.nombre
 
         return data
 

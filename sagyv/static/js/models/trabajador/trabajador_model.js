@@ -135,7 +135,7 @@ Trabajador.prototype = {
             fechaNacimiento: common.fecha.fechaToJSON(this.fechaNacimiento),
             inicioContrato: common.fecha.fechaToJSON(this.inicioContrato),
             vigenciaLicencia: common.fecha.fechaToJSON(this.vigenciaLicencia),
-            afp: this.afp,
+            afp: this.afp.id,
             sistemaSalud: this.sistemaSalud.id,
             estadoCivil: this.estadoCivil.id,
             estadoVacacion: this.estadoVacacion.id,
