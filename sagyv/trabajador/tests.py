@@ -54,14 +54,14 @@ class TrabajadorTestCase(TestCase):
             "apellido": "Alvarez",
             "rut": "1-9",
             "domicilio": "una calle cualquiera",
-            "fecha_nacimiento": "1990-06-05",
-            "inicio_contrato": "2010-10-10",
-            "vigencia_licencia": "2014-01-10",
+            "fechaNacimiento": "1990-06-05",
+            "inicioContrato": "2010-10-10",
+            "vigenciaLicencia": "2014-01-10",
             "afp": afp.id,
-            "sistema_salud": salud.id,
-            "estado_civil": civil.id,
-            "estado_vacacion": estado.id,
-            "tipo_trabajador": 1
+            "sistemaSalud": salud.id,
+            "estadoCivil": civil.id,
+            "estadoVacacion": estado.id,
+            "tipoTrabajador": 1
         }
 
         self.client.login(username='juanito', password='juanelo')
@@ -88,14 +88,14 @@ class TrabajadorTestCase(TestCase):
             "apellido": "Alvarezeae",
             "rut": "1-9",
             "domicilio": "una calle cualquiera123",
-            "fecha_nacimiento": "1990-06-05",
-            "inicio_contrato": "2010-10-10",
-            "vigencia_licencia": "2014-01-10",
+            "fechaNacimiento": "1990-06-05",
+            "inicioContrato": "2010-10-10",
+            "vigenciaLicencia": "2014-01-10",
             "afp": afp.id,
-            "sistema_salud": salud.id,
-            "estado_civil": civil.id,
-            "estado_vacacion": estado.id,
-            "tipo_trabajador": 1
+            "sistemaSalud": salud.id,
+            "estadoCivil": civil.id,
+            "estadoVacacion": estado.id,
+            "tipoTrabajador": 1
         }
 
         self.client.login(username='juanito', password='juanelo')
@@ -130,8 +130,8 @@ class TrabajadorTestCase(TestCase):
 
     def test_anexar_boleta(self):
         data = {
-            "boleta_inicial": 1,
-            "boleta_final": 50,
+            "boletaInicial": 1,
+            "boletaFinal": 50,
             "id": 1
         }
 

@@ -12,10 +12,10 @@
 
                 <div class="form-group">
                     <label for="tipo_add" class="control-label">Tipo trabajador</label>
-                    <select name="tipo" id="tipo_add"
-                        class="form-control" ng-model="tc.trabajador.tipo">
+                    <select name="tipo" id="tipo_edit"
+                        class="form-control" ng-model="tc.trabajador.tipo.id">
                         {% for tipo in tipo_trabajador %}
-                        <option value="{{ tipo.id }}">{{ tipo.nombre }}</option>
+                        <option value="{{ tipo.id }}" data-id="{{ tipo.id }}">{{ tipo.nombre }}</option>
                         {% endfor %}
                     </select>
 
@@ -102,10 +102,10 @@
                         ng-bind="tc.trabajador.mensajes.vigenciaLicencia"></span>
                 </div>
 
-                <div class="form-group" ng-show="tc.trabajador.tipo == 1">
+                <div class="form-group" ng-show="tc.trabajador.esChofer()">
                     <label for="afp_edit" class="control-label">AFP</label>
                     <select name="afp" id="afp_edit" class="form-control"
-                        ng-model="tc.trabajador.afp">
+                        ng-model="tc.trabajador.afp.id">
                         {% for afp in lista_afps %}
                         <option value="{{ afp.id }}">{{ afp.nombre }}</option>
                         {% endfor %}
@@ -116,10 +116,10 @@
                         ng-bind="tc.trabajador.mensajes.afp"></span>
                 </div>
 
-                <div class="form-group" ng-show="tc.trabajador.tipo == 1">
+                <div class="form-group" ng-show="tc.trabajador.esChofer()">
                     <label for="sistema_salud_edit" class="control-label">Sistema salud</label>
                     <select name="sistema_salud" id="sistema_salud_edit" class="form-control"
-                        ng-model="tc.trabajador.sistemaSalud">
+                        ng-model="tc.trabajador.sistemaSalud.id">
                         {% for sistema_salud in lista_sistema_salud %}
                         <option value="{{ sistema_salud.id }}">{{ sistema_salud.nombre }}</option>
                         {% endfor %}
@@ -133,7 +133,7 @@
                 <div class="form-group">
                     <label for="estado_civil_edit" class="control-label">Estado civil</label>
                     <select name="estado_civil" id="estado_civil_edit" class="form-control"
-                        ng-model="tc.trabajador.estadoCivil">
+                        ng-model="tc.trabajador.estadoCivil.id">
                         {% for estado_civil in estados_civiles %}
                         <option value="{{ estado_civil.id }}">{{ estado_civil.nombre }}</option>
                         {% endfor %}
@@ -147,7 +147,7 @@
                 <div class="form-group">
                     <label for="estado_vacacion_edit" class="control-label">Estado vacaciones</label>
                     <select id="estado_vacacion_edit" name="estado_vacacion" class="form-control"
-                        ng-model="tc.trabajador.estadoVacacion">
+                        ng-model="tc.trabajador.estadoVacacion.id">
                         {% for estado_vacacion in estados_vacacion %}
                         <option value="{{ estado_vacacion.id }}">{{ estado_vacacion.nombre }}</option>
                         {% endfor %}
