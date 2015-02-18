@@ -14,48 +14,12 @@ var app = angular.module('liquidacionApp',[]),
     OtroController = require('../controllers/liquidacion/otro_controller.js'),
     GarantiasController = require('../controllers/liquidacion/garantias_controller.js'),
     liquidacionService = require('../services/liquidacion_service.js'),
-    formatoPeso = require('../filters/string_filters.js').formatoPeso;
+    formatoPeso = require('../filters/string_filters.js').formatoPeso,
+    mantieneRestanteService = require('../services/mantiene_restante_service.js');
 
 app.filter('formatoPeso', formatoPeso);
 app.factory('liquidacionService', liquidacionService);
-app.factory('mantieneRestanteService',function(){
-    var hash = {}, calculaRestantes;
-
-    calculaRestantes = function(p, index){
-        if(typeof p.disponibles === 'undefined'){
-            p.disponibles = parseInt(p.vacios);
-        }
-
-        hash[p.codigo] = { index: index, disponibles: p.disponibles };
-        return p;
-    };
-
-    return {
-        calculaRestantes: function(arr){
-            arr.map(calculaRestantes);
-            return arr;
-        },
-
-        restar: function(productos, arr){
-            arr.forEach(function(a){
-                hash[a.codigo].disponibles -= parseInt(a.cantidad);
-            });
-
-            productos.map(function(p){
-                var disponibles = parseInt(hash[p.codigo].disponibles);
-                p.disponibles = disponibles;
-                return p;
-            });
-
-            return productos;
-        },
-
-        tieneStockDisponible: function(codigo, cantidad){
-            var obj = hash[codigo];
-            return parseInt(obj.disponibles) >= parseInt(cantidad);
-        }
-    };
-});
+app.factory('mantieneRestanteService', mantieneRestanteService);
 
 app.controller('PanelBusquedaController', ['$scope', 'liquidacionService', PanelBusquedaController]);
 app.controller('LiquidacionController', ['$scope', 'liquidacionService', LiquidacionController]);

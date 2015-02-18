@@ -17,8 +17,10 @@ from utils.views import LoginRequiredMixin
 
 @transaction.atomic
 def actualizar_estado_vehiculos(vehiculo, chofer):
-    vehiculos_antiguos = TrabajadorVehiculo.objects.filter(Q(vehiculo = vehiculo, activo = True) |
-        Q(trabajador = chofer, activo = True))
+    vehiculos_antiguos = TrabajadorVehiculo.objects.filter(
+        Q(vehiculo = vehiculo, activo = True) |
+        Q(trabajador = chofer, activo = True)
+    )
 
     for vehiculo_antiguo in vehiculos_antiguos:
         vehiculo_antiguo.activo = False

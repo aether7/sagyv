@@ -114,6 +114,11 @@ class TrabajadorMixin(object):
 
         return json_boleta
 
+    def get_tipo(self, worker):
+        return {
+            'id': worker.tipo.id,
+        }
+
 class CrearTrabajadorView(LoginRequiredMixin, View, TrabajadorMixin):
 
     @transaction.atomic
@@ -197,7 +202,7 @@ class ModificarTrabajadorView(LoginRequiredMixin, View, TrabajadorMixin):
             "estado_vacaciones" : trabajador.get_vacacion()
         }
 
-        return JsonResponse(dato, safe = False)
+        return JsonResponse(dato, safe=False)
 
     def _edit_trabajador(self, id_trabajador):
         if self.tipo_trabajador.id == TipoTrabajador.CHOFER:
