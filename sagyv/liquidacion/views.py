@@ -15,6 +15,7 @@ from bodega.models import Producto
 from bodega.models import TipoProducto
 from bodega.models import GuiaDespacho
 from bodega.models import HistorialStock
+from bodega.models import StockVehiculo
 from clientes.models import Cliente
 from liquidacion.models import Banco
 from liquidacion.models import TarjetaCredito
@@ -206,6 +207,7 @@ class Cerrar(LoginRequiredMixin, View):
 
     @transaction.atomic
     def post(self, req):
+        print req.POST
         self._procesar_liquidacion()
         self._procesar_guias()
         self._procesar_vouchers()
@@ -217,7 +219,7 @@ class Cerrar(LoginRequiredMixin, View):
         Se debe definir la respuesta del proceso.
         """
         dato = {'mensaje': 'El PDF se encuentra en proceso disculpe las molestias'}
-        return JsonResponse(dato, safe=False)
+        #return JsonResponse(dato, safe=False)
 
     def _procesar_liquidacion(self):
         id_guia = self.request.POST.get('guia_despacho')
@@ -282,7 +284,26 @@ class Cerrar(LoginRequiredMixin, View):
             print lipigas
 
     def _descargar_vehiculo(self):
-        pass
+        id_guia = self.request.POST.get('guia_despacho')
+
+        this_guia = GuiaDespacho.objects.get(pk = int(id_guia))
+        stock_vehiculo = StockVehiculo.objects.filter(vehiculo = this_guia.movil.vehiculo)
+
+        #se limpia el vehiculo.
+        for sv in stock_vehiculo:
+            sv.delete()
+
+        #se extrae el json
+        productos = json.loads(self.request.POST.get('productos'))
+
+        for producto in productos:
+            row = Producto.objects.get(pk = producto['id'])
+            row.stock = row.stock + producto['llenos']
+            row.save()
+
+            #Se anexa a las garantias
+
+
 
     def _procesar_guias(self):
         guias = json.loads(self.request.POST.get('guias'))
