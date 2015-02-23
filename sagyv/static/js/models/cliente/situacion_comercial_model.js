@@ -78,6 +78,22 @@ SituacionComercial.prototype = {
         }
 
         return json;
+    },
+
+    equals: function(sc){
+        var eq = true;
+
+        if(!(sc instanceof SituacionComercial)){
+            eq = false;
+        }else if(parseInt(sc.monto) !== parseInt(this.monto)){
+            eq = false;
+        }else if(parseInt(sc.tipoDescuento.id) !== parseInt(this.tipoDescuento.id)){
+            eq = false;
+        }else if(parseInt(sc.producto.id) !== parseInt(this.producto.id)){
+            eq = false;
+        }
+
+        return eq;
     }
 };
 

@@ -46,6 +46,9 @@ SituacionComercialController.prototype = {
     crear: function(){
         if(!this.situacionComercial.esValido()){
             return;
+        }else if(this._estaDuplicado(this.situacionComercial)){
+            alert('la situación comercial que se está intentando crear ya existe, por favor intente con otros valores');
+            return;
         }
 
         var optProducto = $('#sit_producto_add option:selected'),
@@ -77,6 +80,14 @@ SituacionComercialController.prototype = {
         this.scope.situacionesComerciales[this.index] = this.situacionComercial;
         $('#modal_editar_situacion').modal('hide');
         common.agregarMensaje('La situación comercial fue editada exitosamente');
+    },
+
+    _estaDuplicado: function(situacionComercial){
+        var duplicados = this.scope.situacionesComerciales.filter(function(sc){
+            return sc.equals(situacionComercial);
+        });
+
+        return duplicados.length;
     }
 };
 

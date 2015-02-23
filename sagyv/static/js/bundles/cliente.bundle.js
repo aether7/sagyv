@@ -1,4 +1,4 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/Aether/Proyectos/sagyv/sagyv/static/js/bundles/cliente_bundle.js":[function(require,module,exports){
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"G:\\sagyv\\sagyv\\static\\js\\bundles\\cliente_bundle.js":[function(require,module,exports){
 (function(){
 'use strict';
 var app = angular.module('clienteApp', []),
@@ -18,7 +18,7 @@ app.controller('SituacionComercialController', ['situacionComercialService','$ro
 
 })();
 
-},{"../controllers/cliente/cliente_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/cliente/cliente_controller.js","../controllers/cliente/situacion_comercial_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/cliente/situacion_comercial_controller.js","../filters/string_filters.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/filters/string_filters.js","../services/cliente/cliente_service.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/cliente/cliente_service.js","../services/cliente/situacion_comercial_service.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/cliente/situacion_comercial_service.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/cliente/cliente_controller.js":[function(require,module,exports){
+},{"../controllers/cliente/cliente_controller.js":"G:\\sagyv\\sagyv\\static\\js\\controllers\\cliente\\cliente_controller.js","../controllers/cliente/situacion_comercial_controller.js":"G:\\sagyv\\sagyv\\static\\js\\controllers\\cliente\\situacion_comercial_controller.js","../filters/string_filters.js":"G:\\sagyv\\sagyv\\static\\js\\filters\\string_filters.js","../services/cliente/cliente_service.js":"G:\\sagyv\\sagyv\\static\\js\\services\\cliente\\cliente_service.js","../services/cliente/situacion_comercial_service.js":"G:\\sagyv\\sagyv\\static\\js\\services\\cliente\\situacion_comercial_service.js"}],"G:\\sagyv\\sagyv\\static\\js\\controllers\\cliente\\cliente_controller.js":[function(require,module,exports){
 var Cliente = require('../../models/cliente/cliente_model.js');
 
 function ClienteController(service, rootScope){
@@ -155,7 +155,7 @@ ClienteController.prototype = {
 
 module.exports = ClienteController;
 
-},{"../../models/cliente/cliente_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/cliente/cliente_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/cliente/situacion_comercial_controller.js":[function(require,module,exports){
+},{"../../models/cliente/cliente_model.js":"G:\\sagyv\\sagyv\\static\\js\\models\\cliente\\cliente_model.js"}],"G:\\sagyv\\sagyv\\static\\js\\controllers\\cliente\\situacion_comercial_controller.js":[function(require,module,exports){
 var SituacionComercial = require('../../models/cliente/situacion_comercial_model.js');
 
 function SituacionComercialController(service, rootScope){
@@ -204,6 +204,9 @@ SituacionComercialController.prototype = {
     crear: function(){
         if(!this.situacionComercial.esValido()){
             return;
+        }else if(this._estaDuplicado(this.situacionComercial)){
+            alert('la situación comercial que se está intentando crear ya existe, por favor intente con otros valores');
+            return;
         }
 
         var optProducto = $('#sit_producto_add option:selected'),
@@ -235,12 +238,20 @@ SituacionComercialController.prototype = {
         this.scope.situacionesComerciales[this.index] = this.situacionComercial;
         $('#modal_editar_situacion').modal('hide');
         common.agregarMensaje('La situación comercial fue editada exitosamente');
+    },
+
+    _estaDuplicado: function(situacionComercial){
+        var duplicados = this.scope.situacionesComerciales.filter(function(sc){
+            return sc.equals(situacionComercial);
+        });
+
+        return duplicados.length;
     }
 };
 
 module.exports = SituacionComercialController;
 
-},{"../../models/cliente/situacion_comercial_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/cliente/situacion_comercial_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/filters/string_filters.js":[function(require,module,exports){
+},{"../../models/cliente/situacion_comercial_model.js":"G:\\sagyv\\sagyv\\static\\js\\models\\cliente\\situacion_comercial_model.js"}],"G:\\sagyv\\sagyv\\static\\js\\filters\\string_filters.js":[function(require,module,exports){
 function formatoRut(){
     return function(input){
         var rut, dv, str, i;
@@ -264,9 +275,31 @@ function formatoRut(){
     };
 }
 
-module.exports.formatoRut = formatoRut;
+function formatoPeso(){
+    return function(input){
+        if(!input){
+            return '$0';
+        }
 
-},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/cliente/cliente_model.js":[function(require,module,exports){
+        var aux = input.toString().split('').reverse(),
+            str = [], i;
+
+        for(i = 0; i < aux.length; i++){
+            if(i !== 0 && i % 3 === 0){
+                str.push('.');
+            }
+
+            str.push(aux[i]);
+        }
+
+        return '$' + str.reverse().join('');
+    };
+}
+
+module.exports.formatoRut = formatoRut;
+module.exports.formatoPeso = formatoPeso;
+
+},{}],"G:\\sagyv\\sagyv\\static\\js\\models\\cliente\\cliente_model.js":[function(require,module,exports){
 var SituacionComercial = require('./situacion_comercial_model.js');
 
 function Cliente(){
@@ -413,7 +446,7 @@ Cliente.prototype = {
 
 module.exports = Cliente;
 
-},{"./situacion_comercial_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/cliente/situacion_comercial_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/cliente/situacion_comercial_model.js":[function(require,module,exports){
+},{"./situacion_comercial_model.js":"G:\\sagyv\\sagyv\\static\\js\\models\\cliente\\situacion_comercial_model.js"}],"G:\\sagyv\\sagyv\\static\\js\\models\\cliente\\situacion_comercial_model.js":[function(require,module,exports){
 function SituacionComercial(){
     this.id = null;
     this.monto = null;
@@ -494,12 +527,28 @@ SituacionComercial.prototype = {
         }
 
         return json;
+    },
+
+    equals: function(sc){
+        var eq = true;
+
+        if(!(sc instanceof SituacionComercial)){
+            eq = false;
+        }else if(parseInt(sc.monto) !== parseInt(this.monto)){
+            eq = false;
+        }else if(parseInt(sc.tipoDescuento.id) !== parseInt(this.tipoDescuento.id)){
+            eq = false;
+        }else if(parseInt(sc.producto.id) !== parseInt(this.producto.id)){
+            eq = false;
+        }
+
+        return eq;
     }
 };
 
 module.exports = SituacionComercial;
 
-},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/cliente/cliente_service.js":[function(require,module,exports){
+},{}],"G:\\sagyv\\sagyv\\static\\js\\services\\cliente\\cliente_service.js":[function(require,module,exports){
 function service($http){
     $http.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
@@ -551,7 +600,7 @@ function service($http){
 
 module.exports = service;
 
-},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/cliente/situacion_comercial_service.js":[function(require,module,exports){
+},{}],"G:\\sagyv\\sagyv\\static\\js\\services\\cliente\\situacion_comercial_service.js":[function(require,module,exports){
 function service($http){
     $http.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
@@ -586,4 +635,4 @@ function service($http){
 
 module.exports = service;
 
-},{}]},{},["/Users/Aether/Proyectos/sagyv/sagyv/static/js/bundles/cliente_bundle.js"]);
+},{}]},{},["G:\\sagyv\\sagyv\\static\\js\\bundles\\cliente_bundle.js"]);

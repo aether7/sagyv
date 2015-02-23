@@ -50,37 +50,6 @@ class Stock(object):
         self.cantidad = 0
 
 
-class ConsumoCliente(object):
-
-    def __init__(self):
-        self.id_cliente = 0
-        self.nombre_cliente = None
-        self.rut_cliente = None
-        self.es_lipigas = False
-        self.es_propio = False
-        self.credito = False
-        self.monto_descuento = False
-        self.tipo_descuento = None
-
-        self.id_producto = 0
-        self.nombre_producto = None
-        self.codigo_producto = None
-        self.cantidad_producto = None
-        self.suma_monto = 0
-
-    def get_tipo_cliente(self):
-        texto = 'Cliente '
-
-        if self.es_lipigas and self.es_propio:
-            texto += 'Lipigas y Propio'
-        elif self.es_lipigas:
-            texto += 'Lipigas'
-        elif self.es_propio:
-            texto += 'Propio'
-
-        return texto
-
-
 class StockManager(models.Manager):
 
     def get_stock_transito(self):
