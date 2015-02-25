@@ -1,13 +1,13 @@
-#-*- coding: utf-8 -*-
-import json
+# -*- coding: utf-8 -*-
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import JsonResponse
 from django.views.generic import TemplateView, View
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as log_in
 from django.contrib.auth import logout as log_out
 from django.core.urlresolvers import reverse
+
 
 class IndexView(TemplateView):
     template_name = "index.html"
@@ -26,9 +26,9 @@ class LoginView(View):
 
         user = authenticate(username=usuario, password=clave)
         respuesta = {
-            "status" : "ok",
-            "message" : None,
-            "redirect" : None
+            "status": "ok",
+            "message": None,
+            "redirect": None
         }
 
         if user is not None:
@@ -39,7 +39,7 @@ class LoginView(View):
             respuesta["status"] = "error"
             respuesta["message"] = "usuario y/o clave erróneos"
 
-        return HttpResponse(json.dumps(respuesta),content_type="application/json")
+        return JsonResponse(respuesta, safe=False)
 
 
 class LogoutView(View):

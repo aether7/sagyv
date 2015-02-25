@@ -1,8 +1,9 @@
 from django.db import connections, models, connection
 from django.db.models import Q, Sum
 
+
 def dictfetchall(cursor):
-    "Returns all rows from a cursor as a dict"
+    # Returns all rows from a cursor as a dict"
     desc = cursor.description
     return [
         dict(zip([col[0] for col in desc], row))
@@ -51,8 +52,7 @@ class Stock(object):
 
 
 class ReportesManager(models.Manager):
-    def get_consumos_cliente_producto(self,cliente = None, fecha_inicio = None, fecha_termino = None):
-
+    def get_consumos_cliente_producto(self,cliente=None, fecha_inicio=None, fecha_termino=None):
         consulta_sql = """
             SELECT
                 cliente.nombre AS cliente_nombre,
@@ -103,7 +103,7 @@ class ReportesManager(models.Manager):
                     'codigo': row['producto_codigo'],
                     'cantidad': row['producto_cantidad']
                 },
-                'liquidacion':{
+                'liquidacion': {
                     'fecha': row['liquidacion_fecha']
                 }
             }
@@ -142,8 +142,7 @@ class ReportesManager(models.Manager):
 
         return resultado
 
-    def detalle_cuotas_creditos(self, fecha_inicio = None, fecha_termino = None):
-
+    def detalle_cuotas_creditos(self, fecha_inicio=None, fecha_termino=None):
         consulta_sql = ""
 
         query = connection.cursor()

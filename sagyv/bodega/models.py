@@ -1,16 +1,16 @@
 from django.db import models
-
 from trabajador.models import Trabajador
 
-from bodega.managers import GuiaDespachoManager
-from bodega.managers import HistorialStockManager
-from bodega.managers import VehiculoManager
-from bodega.managers import StockManager
-from bodega.managers import ProductoManager
+from .managers import GuiaDespachoManager
+from .managers import HistorialStockManager
+from .managers import VehiculoManager
+from .managers import StockManager
+from .managers import ProductoManager
+
 
 class TipoProducto(models.Model):
     GARANTIA = 3
-    nombre = models.CharField(max_length = 140)
+    nombre = models.CharField(max_length=140)
 
     def __unicode__(self):
         return self.nombre
@@ -18,12 +18,12 @@ class TipoProducto(models.Model):
 
 class Producto(models.Model):
     codigo = models.IntegerField()
-    nombre = models.CharField(max_length = 140)
-    peso = models.IntegerField(null = True)
+    nombre = models.CharField(max_length=140)
+    peso = models.IntegerField(null=True)
     tipo_producto = models.ForeignKey(TipoProducto)
-    stock = models.IntegerField(default = 0)
-    nivel_critico = models.IntegerField(null = True)
-    orden =  models.IntegerField(default = 0)
+    stock = models.IntegerField(default=0)
+    nivel_critico = models.IntegerField(null=True)
+    orden = models.IntegerField(default=0)
 
     objects = ProductoManager()
 
@@ -31,7 +31,7 @@ class Producto(models.Model):
         return str(self.codigo) + " " + self.nombre
 
     def get_precio_producto(self):
-        ultimo_precio = PrecioProducto.objects.filter(producto_id = self.id).order_by("-id")
+        ultimo_precio = PrecioProducto.objects.filter(producto_id=self.id).order_by("-id")
         precio = 0
 
         if len(ultimo_precio) >= 1:
@@ -92,7 +92,7 @@ class Vehiculo(models.Model):
     objects = VehiculoManager()
 
     def get_nombre_ultimo_chofer(self):
-        trabajador_vehiculo = TrabajadorVehiculo.objects.filter(vehiculo_id = self.id, activo = True)
+        trabajador_vehiculo = TrabajadorVehiculo.objects.filter(vehiculo_id=self.id, activo=True)
 
         if not trabajador_vehiculo.exists() or trabajador_vehiculo[0].trabajador is None:
             return "No anexado"
@@ -100,7 +100,7 @@ class Vehiculo(models.Model):
             return trabajador_vehiculo[0].trabajador.get_nombre_completo()
 
     def get_ultimo_chofer(self):
-        trabajador_vehiculo = TrabajadorVehiculo.objects.filter(vehiculo_id = self.id, activo = True)
+        trabajador_vehiculo = TrabajadorVehiculo.objects.filter(vehiculo_id=self.id, activo=True)
 
         if not trabajador_vehiculo.exists() or trabajador_vehiculo[0].trabajador is None:
             return None
@@ -108,7 +108,7 @@ class Vehiculo(models.Model):
             return trabajador_vehiculo[0].trabajador
 
     def get_ultimo_chofer_id(self):
-        trabajador_vehiculo = TrabajadorVehiculo.objects.filter(vehiculo_id = self.id, activo = True)
+        trabajador_vehiculo = TrabajadorVehiculo.objects.filter(vehiculo_id=self.id, activo=True)
 
         if not trabajador_vehiculo.exists() or trabajador_vehiculo[0].trabajador is None:
             return 0
@@ -116,14 +116,14 @@ class Vehiculo(models.Model):
             return trabajador_vehiculo[0].trabajador.id
 
     def get_estado_ultima_guia(self):
-        queryset = GuiaDespacho.objects.filter(vehiculo_id = self.id)
+        queryset = GuiaDespacho.objects.filter(vehiculo_id=self.id)
         ultima_guia = queryset.latest("id")
 
         return ultima_guia.estado
 
     def get_numero_movil(self):
-        if Movil.objects.filter(vehiculo = self).exists():
-            return Movil.objects.get(vehiculo = self).numero
+        if Movil.objects.filter(vehiculo=self).exists():
+            return Movil.objects.get(vehiculo=self).numero
         else:
             return None
 
@@ -134,12 +134,12 @@ class Vehiculo(models.Model):
 class StockVehiculo(models.Model):
     vehiculo = models.ForeignKey(Vehiculo)
     producto = models.ForeignKey(Producto)
-    cantidad = models.IntegerField(null = True)
+    cantidad = models.IntegerField(null=True)
 
     objects = StockManager()
 
     def get_productos_vehiculos(self):
-        stocks_vehiculos = StockVehiculo.objects.filter(producto = self.producto, vehiculo = self.vehiculo)
+        stocks_vehiculos = StockVehiculo.objects.filter(producto=self.producto, vehiculo=self.vehiculo)
         return stocks_vehiculos
 
     def __unicode__(self):
@@ -147,10 +147,10 @@ class StockVehiculo(models.Model):
 
 
 class TrabajadorVehiculo(models.Model):
-    trabajador = models.ForeignKey(Trabajador, null = True)
+    trabajador = models.ForeignKey(Trabajador, null=True)
     vehiculo = models.ForeignKey(Vehiculo)
-    fecha = models.DateTimeField(auto_now_add = True)
-    activo = models.BooleanField(default = True)
+    fecha = models.DateTimeField(auto_now_add=True)
+    activo = models.BooleanField(default=True)
 
     def __unicode__(self):
         return self.trabajador.nombre + ", " + self.vehiculo.patente
@@ -175,17 +175,17 @@ class PagoCuotaVehiculo(models.Model):
 
 
 class Movil(models.Model):
-    numero = models.IntegerField(null = True)
-    trabajador = models.ForeignKey(Trabajador, null = True)
-    vehiculo = models.ForeignKey(Vehiculo, unique = True)
-    fecha = models.DateTimeField(auto_now_add = True, auto_now = True)
+    numero = models.IntegerField(null=True)
+    trabajador = models.ForeignKey(Trabajador, null=True)
+    vehiculo = models.ForeignKey(Vehiculo, unique=True)
+    fecha = models.DateTimeField(auto_now_add=True, auto_now=True)
 
     def __unicode__(self):
         return str(self.numero) + " " + str(self.vehiculo.id)
 
 
 class GuiaDespacho(models.Model):
-    numero = models.IntegerField(null = True)
+    numero = models.IntegerField(null=True)
     movil = models.ForeignKey(Movil)
     fecha = models.DateTimeField(auto_now_add=True)
     valor_total = models.IntegerField(default=0)
@@ -208,10 +208,10 @@ class AbonoGuia(models.Model):
 
 class HistorialStock(models.Model):
     guia_despacho = models.ForeignKey(GuiaDespacho, null=True)
-    factura = models.ForeignKey(Factura, null = True)
+    factura = models.ForeignKey(Factura, null=True)
     producto = models.ForeignKey(Producto)
     cantidad = models.IntegerField()
-    fecha = models.DateField(auto_now_add = True)
+    fecha = models.DateField(auto_now_add=True)
     es_recarga = models.NullBooleanField()
 
     objects = HistorialStockManager()

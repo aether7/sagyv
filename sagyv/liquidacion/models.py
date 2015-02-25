@@ -5,8 +5,9 @@ from bodega.models import Producto
 from bodega.models import Movil
 from clientes.models import Cliente
 from trabajador.models import Trabajador
-from liquidacion.managers import TarjetaCreditoManager
-from liquidacion.managers import TerminalManager
+from .managers import TarjetaCreditoManager
+from .managers import TerminalManager
+
 
 class EstadoTerminal(models.Model):
     ACTIVO = 1
@@ -21,7 +22,7 @@ class EstadoTerminal(models.Model):
 
 class Terminal(models.Model):
     codigo = models.CharField(max_length=140)
-    movil = models.ForeignKey(Movil, null = True)
+    movil = models.ForeignKey(Movil, null=True)
     estado = models.ForeignKey(EstadoTerminal)
 
     objects = TerminalManager()
@@ -33,7 +34,7 @@ class Terminal(models.Model):
 class HistorialEstadoTerminal(models.Model):
     terminal = models.ForeignKey(Terminal)
     estado = models.ForeignKey(EstadoTerminal)
-    fecha = models.DateField(auto_now_add = True)
+    fecha = models.DateField(auto_now_add=True)
 
     def __unicode__(self):
         return self.terminal.codigo + "(" + self.estado + ") " + self.fecha
@@ -47,8 +48,8 @@ class TipoTarjeta(models.Model):
 
 
 class Banco(models.Model):
-    nombre = models.CharField(max_length = 255)
-    cheques_recibidos = models.IntegerField(default = 0)
+    nombre = models.CharField(max_length=255)
+    cheques_recibidos = models.IntegerField(default=0)
 
     def __unicode__(self):
         return self.nombre
@@ -76,13 +77,13 @@ class TipoPago(models.Model):
 
 
 class Liquidacion(models.Model):
-    fecha = models.DateTimeField(auto_now_add = True)
+    fecha = models.DateTimeField(auto_now_add=True)
     guia_despacho = models.ForeignKey(GuiaDespacho)
-    terminada = models.BooleanField(default = False)
+    terminada = models.BooleanField(default=False)
 
 
 class GuiaVenta(models.Model):
-    numero = models.IntegerField(null = True)
+    numero = models.IntegerField(null=True)
     cliente = models.ForeignKey(Cliente)
     propia = models.NullBooleanField()
     liquidacion = models.ForeignKey(Liquidacion)
@@ -96,10 +97,10 @@ class DetalleGuiaVenta(models.Model):
 
 class Cheque(models.Model):
     monto = models.IntegerField()
-    emisor = models.ForeignKey(Cliente, null = True)
+    emisor = models.ForeignKey(Cliente, null=True)
     fecha = models.DateField()
     numero = models.IntegerField()
-    cobrado = models.BooleanField(default = False)
+    cobrado = models.BooleanField(default=False)
     banco = models.ForeignKey(Banco)
     liquidacion = models.ForeignKey(Liquidacion)
 
@@ -108,9 +109,9 @@ class Cheque(models.Model):
 
 
 class Otros(models.Model):
-    concepto = models.CharField(max_length = 255)
+    concepto = models.CharField(max_length=255)
     monto = models.IntegerField()
-    fecha = models.DateField(auto_now = True)
+    fecha = models.DateField(auto_now=True)
     trabajador = models.ForeignKey(Trabajador)
     liquidacion = models.ForeignKey(Liquidacion)
 
@@ -120,7 +121,7 @@ class Otros(models.Model):
 
 class CuponPrepago(models.Model):
     numero_cupon = models.IntegerField()
-    fecha = models.DateField(auto_now_add = True)
+    fecha = models.DateField(auto_now_add=True)
     descuento = models.IntegerField()
     formato = models.ForeignKey(Producto)
     cliente = models.ForeignKey(Cliente)
@@ -134,12 +135,12 @@ class AbstractVoucher(models.Model):
     liquidacion = models.ForeignKey(Liquidacion)
     tipo_tarjeta = models.ForeignKey(TarjetaCredito)
     monto = models.IntegerField()
-    terminal = models.ForeignKey(Terminal, null = True)
+    terminal = models.ForeignKey(Terminal, null=True)
 
-    numero_cuotas = models.IntegerField(null = True)
-    numero_tarjeta = models.IntegerField(null = True)
-    numero_operacion = models.IntegerField(null = True)
-    codigo_autorizacion = models.IntegerField(null = True)
+    numero_cuotas = models.IntegerField(null=True)
+    numero_tarjeta = models.IntegerField(null=True)
+    numero_operacion = models.IntegerField(null=True)
+    codigo_autorizacion = models.IntegerField(null=True)
 
     class Meta:
         abstract = True
@@ -159,8 +160,8 @@ class LipigasVoucher(AbstractVoucher):
 
 
 class CuotaVoucher(models.Model):
-    lipigas = models.ForeignKey(LipigasVoucher, null = True)
-    transbank = models.ForeignKey(TransbankVoucher, null = True)
+    lipigas = models.ForeignKey(LipigasVoucher, null=True)
+    transbank = models.ForeignKey(TransbankVoucher, null=True)
     monto = models.IntegerField()
     pagado = models.NullBooleanField()
     fecha = models.DateField(auto_now_add=True)
@@ -194,10 +195,10 @@ class DetalleCierre(models.Model):
 
 
 class HistorialCambioVehiculo(models.Model):
-   terminal = models.ForeignKey(Terminal)
-   movil = models.ForeignKey(Movil, null = True)
-   fecha = models.DateField(auto_now_add = True)
-   estado = models.NullBooleanField()
+    terminal = models.ForeignKey(Terminal)
+    movil = models.ForeignKey(Movil, null=True)
+    fecha = models.DateField(auto_now_add=True)
+    estado = models.NullBooleanField()
 
-   def __unicode__(self):
-       return self.terminal.codigo + "(" + ") " + self.fecha
+    def __unicode__(self):
+        return self.terminal.codigo + "(" + ") " + self.fecha

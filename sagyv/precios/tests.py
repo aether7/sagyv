@@ -1,12 +1,13 @@
-#-*- coding: utf-8 -*-
-import json, random
+# -*- coding: utf-8 -*-
+import json
+import random
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 
 from bodega.models import Producto
 from bodega.models import PrecioProducto
 
-# Create your tests here.
+
 class PreciosTestCase(TestCase):
     fixtures = ['precios.json']
 
@@ -27,13 +28,13 @@ class PreciosTestCase(TestCase):
     def test_actualizar_precios_productos(self):
         for i in range(0, 4):
             precios = self._crear_precios_productos()
-            post_data = { "precios": json.dumps(precios) }
+            post_data = {"precios": json.dumps(precios)}
 
             response = self.client.post(reverse("precios:update_precios"), post_data)
             self.assertEqual(response.status_code, 200)
 
-            producto1 = Producto.objects.get(pk = 1)
-            producto2 = Producto.objects.get(pk = 2)
+            producto1 = Producto.objects.get(pk=1)
+            producto2 = Producto.objects.get(pk=2)
 
             self.assertEqual(producto1.precioproducto_set.all().count(), i + 1)
             self.assertEqual(producto2.precioproducto_set.all().count(), i + 1)
@@ -51,4 +52,3 @@ class PreciosTestCase(TestCase):
             })
 
         return precios
-

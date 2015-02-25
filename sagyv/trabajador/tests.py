@@ -11,17 +11,18 @@ from trabajador.models import Trabajador
 from trabajador.models import Vacacion
 from trabajador.models import TipoTrabajador
 
+
 class TrabajadorTestCase(TestCase):
     fixtures = ['trabajador.json']
 
     def setUp(self):
-        User.objects.create_user(username = 'juanito', password = 'juanelo', email = 'juanelo@mailinator.com')
+        User.objects.create_user(username='juanito', password='juanelo', email='juanelo@mailinator.com')
 
-        afp = Afp.objects.get(pk = 1)
-        salud = SistemaSalud.objects.get(pk = 1)
-        civil = EstadoCivil.objects.get(pk = 1)
-        estado = EstadoVacacion.objects.get(pk = 1)
-        tipo_trabajador = TipoTrabajador.objects.get(pk = 1)
+        afp = Afp.objects.get(pk=1)
+        salud = SistemaSalud.objects.get(pk=1)
+        civil = EstadoCivil.objects.get(pk=1)
+        estado = EstadoVacacion.objects.get(pk=1)
+        tipo_trabajador = TipoTrabajador.objects.get(pk=1)
 
         trabajador = Trabajador()
         trabajador.nombre = "Alberto"
@@ -44,10 +45,10 @@ class TrabajadorTestCase(TestCase):
         vacacion.save()
 
     def test_agregar_trabajador_ok(self):
-        afp = Afp.objects.get(pk = 1)
-        salud = SistemaSalud.objects.get(pk = 1)
-        civil = EstadoCivil.objects.get(pk = 1)
-        estado = EstadoVacacion.objects.get(pk = 1)
+        afp = Afp.objects.get(pk=1)
+        salud = SistemaSalud.objects.get(pk=1)
+        civil = EstadoCivil.objects.get(pk=1)
+        estado = EstadoVacacion.objects.get(pk=1)
 
         data = {
             "nombre": "Juanito",
@@ -68,7 +69,7 @@ class TrabajadorTestCase(TestCase):
         response = self.client.post(reverse("trabajador:crear"), data)
         self.assertEqual(response.status_code, 200)
 
-        trabajador = Trabajador.objects.get(pk = 2)
+        trabajador = Trabajador.objects.get(pk=2)
         vacacion = trabajador.get_vacacion()
 
         self.assertEqual(trabajador.nombre, "Juanito")
@@ -77,10 +78,10 @@ class TrabajadorTestCase(TestCase):
         self.assertEqual(vacacion, "al dia")
 
     def test_editar_trabajador_ok(self):
-        afp = Afp.objects.get(pk = 1)
-        salud = SistemaSalud.objects.get(pk = 1)
-        civil = EstadoCivil.objects.get(pk = 1)
-        estado = EstadoVacacion.objects.get(pk = 1)
+        afp = Afp.objects.get(pk=1)
+        salud = SistemaSalud.objects.get(pk=1)
+        civil = EstadoCivil.objects.get(pk=1)
+        estado = EstadoVacacion.objects.get(pk=1)
 
         data = {
             "id": 1,
@@ -102,11 +103,11 @@ class TrabajadorTestCase(TestCase):
         response = self.client.post(reverse("trabajador:modificar"), data)
         self.assertEqual(response.status_code, 200)
 
-        trabajador = Trabajador.objects.get(pk = 1)
+        trabajador = Trabajador.objects.get(pk=1)
         self.assertEqual(trabajador.domicilio, "una calle cualquiera123")
 
     def test_eliminar_trabajador(self):
-        data = { "id": 1 }
+        data = {"id": 1}
         self.client.login(username='juanito', password='juanelo')
         response = self.client.post(reverse("trabajador:eliminar"), data)
 
@@ -120,7 +121,6 @@ class TrabajadorTestCase(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(data.get("apellido"), "Jerez")
-
 
     def test_buscar_boleta(self):
         self.client.login(username='juanito', password='juanelo')
@@ -139,6 +139,6 @@ class TrabajadorTestCase(TestCase):
         response = self.client.post(reverse("trabajador:guardar_boleta"), data)
         self.assertEqual(response.status_code, 200)
 
-        worker = Trabajador.objects.get(pk = 1)
+        worker = Trabajador.objects.get(pk=1)
         boletas = worker.boletatrabajador_set.all().count()
         self.assertEqual(boletas, 1)

@@ -4,6 +4,7 @@ from trabajador.models import Trabajador
 from bodega.models import Vehiculo
 from bodega.models import Movil
 
+
 class Index(TemplateView):
     template_name = "guias/index.html"
 

@@ -1,12 +1,15 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 import json
 from django.http import JsonResponse
 from django.db import transaction
 from django.views.generic import View
-from clientes.models import DescuentoCliente
-from clientes.models import TipoDescuento
-from bodega.models import Producto
+
 from utils.views import LoginRequiredMixin
+
+from bodega.models import Producto
+from .models import DescuentoCliente
+from .models import TipoDescuento
+
 
 class SituacionComercialMixin(object):
     def _get_situacion_comercial(self, sc):
@@ -34,16 +37,16 @@ class ObtenerSituacionComercial(LoginRequiredMixin, View, SituacionComercialMixi
         id_situacion = request.GET.get('id')
 
         if id_situacion is None:
-            situaciones_comerciales = DescuentoCliente.objects.exclude(pk = 1).order_by('id')
+            situaciones_comerciales = DescuentoCliente.objects.exclude(pk=1).order_by('id')
             data = []
 
             for sc in situaciones_comerciales:
                 data.append(self._get_situacion_comercial(sc))
         else:
-            sc = DescuentoCliente.objects.get(pk = int(id_situacion))
+            sc = DescuentoCliente.objects.get(pk=int(id_situacion))
             data = self._get_situacion_comercial(sc)
 
-        return JsonResponse(data, safe = False)
+        return JsonResponse(data, safe=False)
 
 
 class CrearSituacionComercial(LoginRequiredMixin, View, SituacionComercialMixin):
@@ -53,8 +56,8 @@ class CrearSituacionComercial(LoginRequiredMixin, View, SituacionComercialMixin)
         producto_dict = json.loads(request.POST.get('producto'))
         tipo_dict = json.loads(request.POST.get('tipoDescuento'))
 
-        producto = Producto.objects.get(pk = int(producto_dict['id']))
-        tipo_descuento = TipoDescuento.objects.get(pk = int(tipo_dict['id']))
+        producto = Producto.objects.get(pk=int(producto_dict['id']))
+        tipo_descuento = TipoDescuento.objects.get(pk=int(tipo_dict['id']))
 
         descuento = DescuentoCliente()
         descuento.monto_descuento = monto
@@ -63,28 +66,28 @@ class CrearSituacionComercial(LoginRequiredMixin, View, SituacionComercialMixin)
         descuento.save()
 
         data = self._get_situacion_comercial(descuento)
-        return JsonResponse(data, safe = False)
+        return JsonResponse(data, safe=False)
 
 
 class ModificarSituacionComercialView(LoginRequiredMixin, View, SituacionComercialMixin):
     @transaction.atomic
     def post(self, request):
-        id = int(request.POST.get('id'))
+        id_situacion = int(request.POST.get('id'))
         monto = int(request.POST.get('monto'))
         producto_dict = json.loads(request.POST.get('producto'))
         tipo_dict = json.loads(request.POST.get('tipoDescuento'))
 
-        producto = Producto.objects.get(pk = int(producto_dict['id']))
-        tipo_descuento = TipoDescuento.objects.get(pk = int(tipo_dict['id']))
+        producto = Producto.objects.get(pk=int(producto_dict['id']))
+        tipo_descuento = TipoDescuento.objects.get(pk=int(tipo_dict['id']))
 
-        descuento = DescuentoCliente.objects.get(pk = id)
+        descuento = DescuentoCliente.objects.get(pk=id_situacion)
         descuento.monto_descuento = monto
         descuento.producto = producto
         descuento.tipo_descuento = tipo_descuento
         descuento.save()
 
         data = self._get_situacion_comercial(descuento)
-        return JsonResponse(data, safe = False)
+        return JsonResponse(data, safe=False)
 
 
 obtener_situacion_comercial = ObtenerSituacionComercial.as_view()

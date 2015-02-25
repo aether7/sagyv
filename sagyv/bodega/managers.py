@@ -34,7 +34,7 @@ class HistorialStockManager(models.Manager):
         return productos
 
     def get_productos_guia_total(self, guia):
-        query = """
+        consulta_sql = """
             SELECT
                 id,
                 fecha,
@@ -48,8 +48,8 @@ class HistorialStockManager(models.Manager):
             GROUP BY producto_id, id
         """
 
-        query = query.replace("#{guia_id}", str(guia.id))
-        return self.raw(query)
+        consulta_sql = consulta_sql.replace("#{guia_id}", str(guia.id))
+        return self.raw(consulta_sql)
 
 
 class GuiaDespachoManager(models.Manager):

@@ -1,6 +1,6 @@
 from django.db import models
 
-from clientes.managers import ClienteManager
+from .managers import ClienteManager
 from bodega.models import Producto
 
 class Region(models.Model):
@@ -77,8 +77,6 @@ class Cliente(models.Model):
     def get_situacion_comercial_json(self):
         if self.situacion_comercial is None:
             return None
-
-        self.situacion_comercial
 
     def __unicode__(self):
         return self.nombre + " " + self.telefono

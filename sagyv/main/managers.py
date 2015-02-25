@@ -1,16 +1,17 @@
-from django.db import connections, models, connection
+from django.db import models, connection
 from django.db.models import Q, Sum
 
+
 def dictfetchall(cursor):
-    "Returns all rows from a cursor as a dict"
+    # Returns all rows from a cursor as a dict
     desc = cursor.description
     return [
         dict(zip([col[0] for col in desc], row))
         for row in cursor.fetchall()
     ]
 
-class DetalleCredito(object):
 
+class DetalleCredito(object):
     def __init__(self):
         self.venta_id = 0
         self.numero_serie =0
@@ -122,11 +123,11 @@ class ClienteManager(models.Manager):
     def busqueda_por_campo(self, valor, opcion):
 
         if opcion == "nombre":
-            resultados = self.filter(nombre__contains = valor)
+            resultados = self.filter(nombre__contains=valor)
         elif opcion == "giro":
-            resultados = self.filter(giro__contains = valor)
+            resultados = self.filter(giro__contains=valor)
         elif opcion == "rut":
-            resultados = self.filter(rut__contains = valor)
+            resultados = self.filter(rut__contains=valor)
         else:
             resultados = self.all()
 
@@ -139,13 +140,13 @@ class TarjetaCreditoManager(models.Manager):
     TARJETA_COMERCIAL = 3
 
     def get_tarjetas_comerciales(self):
-        resultados = self.filter(tipo_tarjeta_id = self.TARJETA_COMERCIAL)
+        resultados = self.filter(tipo_tarjeta_id=self.TARJETA_COMERCIAL)
         return resultados
 
     def get_tarjetas_bancarias(self):
         resultados = self.filter(
-            Q(tipo_tarjeta_id = self.TARJETA_DEBITO) |
-            Q(tipo_tarjeta_id = self.TARJETA_CREDITO)
+            Q(tipo_tarjeta_id=self.TARJETA_DEBITO) |
+            Q(tipo_tarjeta_id=self.TARJETA_CREDITO)
         ).order_by("-tipo_tarjeta")
 
         return resultados
@@ -153,21 +154,20 @@ class TarjetaCreditoManager(models.Manager):
 
 class GuiaDespachoManager(models.Manager):
     def get_ultimo_despacho_id(self):
-        if self.exclude(numero = None).exists():
-            return self.exclude(numero = None).latest('id')
+        if self.exclude(numero=None).exists():
+            return self.exclude(numero=None).latest('id')
         else:
             return None
 
 
 class VehiculoManager(models.Manager):
     def get_vehiculos_con_chofer(self):
-        return self.filter(trabajadorvehiculo__activo = 1)
+        return self.filter(trabajadorvehiculo__activo=1)
 
 
 class BoletaTrabajadorManager(models.Manager):
     def get_talonario_activo(self, trabajador_id):
-        talonarios = self.filter(trabajador_id = trabajador_id, activo = True).order_by("-id")
-
+        talonarios = self.filter(trabajador_id=trabajador_id, activo=True).order_by("-id")
         return len(talonarios) > 0 and talonarios[0] or None
 
     def obtener_por_trabajador(self, trabajador):
@@ -181,13 +181,12 @@ class BoletaTrabajadorManager(models.Manager):
 
 class HistorialStockManager(models.Manager):
     def get_productos_guia_recarga(self, guia):
-        query = self.filter(guia_despacho = guia).values('producto_id','es_recarga','producto__codigo')
-        productos = query.annotate(cantidad_total = Sum('cantidad'))
-
+        query = self.filter(guia_despacho=guia).values('producto_id','es_recarga','producto__codigo')
+        productos = query.annotate(cantidad_total=Sum('cantidad'))
         return productos
 
     def get_productos_guia_total(self, guia):
-        query = """
+        sql = """
             SELECT
                 id,
                 fecha,
@@ -201,13 +200,13 @@ class HistorialStockManager(models.Manager):
             GROUP BY producto_id, id
         """
 
-        query = query.replace("#{guia_id}", str(guia.id))
-        return self.raw(query)
+        sql = sql.replace("#{guia_id}", str(guia.id))
+        return self.raw(sql)
 
 
 class GuiaTrabajadorManager(models.Manager):
-    def obtener_guias_rango(self, id):
-        query = """
+    def obtener_guias_rango(self, guia_trabajado_id):
+        sql = """
             SELECT
                 gv.*
             FROM main_guiatrabajador gt
@@ -215,5 +214,5 @@ class GuiaTrabajadorManager(models.Manager):
             WHERE gt.id = #{guia_id}
         """
 
-        query = query.replace("#{guia_id}", str(id))
-        return self.raw(query)
+        sql = sql.replace("#{guia_id}", str(guia_trabajado_id))
+        return self.raw(sql)

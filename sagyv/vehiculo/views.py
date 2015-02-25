@@ -1,13 +1,11 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 import json
-from datetime import date
 
 from django.db import transaction
-from django.core import serializers
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from django.db.models import Q
-from django.views.generic import View, TemplateView, ListView
-from main.helpers.fecha import convierte_texto_fecha, convierte_fecha_texto
+from django.views.generic import View, ListView
+from main.helpers.fecha import convierte_texto_fecha
 
 from trabajador.models import Trabajador
 from bodega.models import Movil
@@ -18,13 +16,14 @@ from utils.views import LoginRequiredMixin
 @transaction.atomic
 def actualizar_estado_vehiculos(vehiculo, chofer):
     vehiculos_antiguos = TrabajadorVehiculo.objects.filter(
-        Q(vehiculo = vehiculo, activo = True) |
-        Q(trabajador = chofer, activo = True)
+        Q(vehiculo=vehiculo, activo=True) |
+        Q(trabajador=chofer, activo=True)
     )
 
     for vehiculo_antiguo in vehiculos_antiguos:
         vehiculo_antiguo.activo = False
         vehiculo_antiguo.save()
+
 
 def llenar_vehiculo_json(vehiculo):
     estado_sec = 0
@@ -77,10 +76,10 @@ class ObtenerVehiculosView(LoginRequiredMixin, View):
         else:
             data = self.obtener_vehiculos()
 
-        return JsonResponse(data, safe = False)
+        return JsonResponse(data, safe=False)
 
-    def obtener_vehiculo(self, id):
-        vehiculo = Vehiculo.objects.get(pk = int(id))
+    def obtener_vehiculo(self, vehiculo_id):
+        vehiculo = Vehiculo.objects.get(pk=int(vehiculo_id))
         data = llenar_vehiculo_json(vehiculo)
 
         return data
@@ -113,7 +112,7 @@ class AgregarNuevoVehiculoView(LoginRequiredMixin, View):
         vehiculo = self.__crear_nuevo_vehiculo()
 
         data = llenar_vehiculo_json(vehiculo)
-        return JsonResponse(data, safe = False)
+        return JsonResponse(data, safe=False)
 
     def __crear_nuevo_vehiculo(self):
         vehiculo = Vehiculo()
@@ -142,7 +141,7 @@ class AgregarNuevoVehiculoView(LoginRequiredMixin, View):
 
     def anexar_vehiculo_chofer(self, vehiculo):
         chofer_id = int(self.chofer.get('id'))
-        trabajador = Trabajador.objects.get(pk = chofer_id)
+        trabajador = Trabajador.objects.get(pk=chofer_id)
 
         self.desanexar_vehiculos_chofer(trabajador)
 
@@ -151,19 +150,19 @@ class AgregarNuevoVehiculoView(LoginRequiredMixin, View):
         trabajador_vehiculo.vehiculo = vehiculo
         trabajador_vehiculo.save()
 
-        #anexar_movil(trabajador, vehiculo, self.numero)
+        # anexar_movil(trabajador, vehiculo, self.numero)
         self.crear_movil(vehiculo, trabajador)
 
     def desanexar_vehiculos_chofer(self, chofer):
-        vehiculos_antiguos = TrabajadorVehiculo.objects.filter(trabajador = chofer, activo = True)
+        vehiculos_antiguos = TrabajadorVehiculo.objects.filter(trabajador=chofer, activo=True)
 
         for vehiculo_antiguo in vehiculos_antiguos:
             vehiculo_antiguo.activo = False
             vehiculo_antiguo.save()
 
     def crear_movil(self, vehiculo, trabajador):
-        if Movil.objects.filter(trabajador = trabajador).exists() and trabajador is not None:
-            movil = Movil.objects.get(trabajador = trabajador)
+        if Movil.objects.filter(trabajador=trabajador).exists() and trabajador is not None:
+            movil = Movil.objects.get(trabajador=trabajador)
         else:
             movil = Movil()
 
@@ -179,15 +178,14 @@ class AnexarVehiculoView(LoginRequiredMixin, View):
     def post(self, req):
         id_vehiculo = int(req.POST.get("id"))
         chofer_obj = json.loads(req.POST.get("chofer"))
-        fecha = req.POST.get("fecha")
 
         chofer = None
         nombre_chofer = "No Anexado"
-        vehiculo = Vehiculo.objects.get( pk = id_vehiculo )
-        movil = Movil.objects.get( vehiculo = vehiculo )
+        vehiculo = Vehiculo.objects.get(pk=id_vehiculo)
+        movil = Movil.objects.get(vehiculo=vehiculo)
 
         if chofer_obj['id'] > 0:
-            chofer = Trabajador.objects.get( pk = int(chofer_obj['id']) )
+            chofer = Trabajador.objects.get(pk=int(chofer_obj['id']))
             nombre_chofer = chofer.get_nombre_completo()
 
         movil.trabajador = chofer
@@ -202,12 +200,12 @@ class AnexarVehiculoView(LoginRequiredMixin, View):
         trabajador_vehiculo.save()
 
         data = {
-            "status" : "ok",
-            "nombre_chofer" : nombre_chofer,
+            "status": "ok",
+            "nombre_chofer": nombre_chofer,
             "movil": {
                 "numero": vehiculo.get_numero_movil()
             },
-            "id" : vehiculo.id
+            "id": vehiculo.id
         }
 
         return JsonResponse(data, safe=False)
@@ -247,11 +245,11 @@ class ModificarView(LoginRequiredMixin, View):
         chofer_actual = vehiculo.get_ultimo_chofer()
 
         if chofer['id'] != 0:
-            if (chofer_actual is not None and chofer_actual.id != id_chofer) or chofer_actual is None:
+            if (chofer_actual is not None and chofer_actual.id != chofer['id']) or chofer_actual is None:
                 self.anexar_chofer_vehiculo(chofer['id'], vehiculo, vehiculo.fecha_revision_tecnica)
 
     def anexar_chofer_vehiculo(self, id_chofer, vehiculo, fecha_revision_tecnica):
-        chofer = Trabajador.objects.get(pk = int(id_chofer))
+        chofer = Trabajador.objects.get(pk=int(id_chofer))
 
         actualizar_estado_vehiculos(vehiculo, chofer)
 

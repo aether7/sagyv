@@ -1,10 +1,9 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 import json
 
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from django.db import transaction
 from django.views.generic import View
-from django.core.serializers.json import DjangoJSONEncoder
 
 from trabajador.models import GuiaTrabajador
 from trabajador.models import Trabajador
@@ -33,7 +32,7 @@ def get_guias(guias):
 
 def _get_guias():
     guias = []
-    rs = GuiaTrabajador.objects.order_by("-fecha_creacion").exclude(activo = False)
+    rs = GuiaTrabajador.objects.order_by("-fecha_creacion").exclude(activo=False)
 
     for guia in rs:
         data = get_guias(guia)
@@ -42,7 +41,7 @@ def _get_guias():
     return guias
 
 def _cambio_estado_guia_existente(trabajador):
-    rs = GuiaTrabajador.objects.filter(trabajador = trabajador).exclude(activo = True)
+    rs = GuiaTrabajador.objects.filter(trabajador=trabajador).exclude(activo=True)
 
     for guias in rs:
         guias.activo = False
@@ -51,15 +50,15 @@ def _cambio_estado_guia_existente(trabajador):
 
 class ObtenerGuias(View):
     def get(self, req):
-        id = req.GET.get('id')
+        guia_id = req.GET.get('id')
 
-        if id is None:
+        if guia_id is None:
             rs = GuiaTrabajador.objects.order_by('-fecha_creacion').exclude(activo=False)
             data = []
             for guia in rs:
                 data.append(get_guias(guia))
         else:
-            guia = GuiaTrabajador.objects.get(pk = int(id))
+            guia = GuiaTrabajador.objects.get(pk=int(guia_id))
             data = get_guias(guia)
 
         return JsonResponse(data, safe=False)
@@ -74,11 +73,11 @@ class CrearGuias(View):
         worker_obj = json.loads(req.POST.get('trabajador'))
         trabajador_id = int(worker_obj.get('id'))
 
-        trabajador = Trabajador.objects.get( pk = trabajador_id )
+        trabajador = Trabajador.objects.get(pk=trabajador_id)
         _cambio_estado_guia_existente(trabajador)
         self.crear_guias(inicial, final, trabajador)
 
-        data = {'guias' : _get_guias()}
+        data = {'guias': _get_guias()}
         return JsonResponse(data, safe=False)
 
     def crear_guias(self, inicial, final, trabajador):
@@ -100,13 +99,13 @@ class EditarGuias(View):
         worker_obj = json.loads(req.POST.get('trabajador'))
         trabajador_id = int(worker_obj.get('id'))
 
-        guias = GuiaTrabajador.objects.get( pk = guias_id )
-        trabajador = Trabajador.objects.get( pk = trabajador_id )
+        guias = GuiaTrabajador.objects.get(pk=guias_id )
+        trabajador = Trabajador.objects.get(pk=trabajador_id)
 
         guias.trabajador = trabajador
         guias.save()
 
-        data = {'guias' : _get_guias()}
+        data = {'guias': _get_guias()}
         return JsonResponse(data, safe=False)
 
 
@@ -116,70 +115,44 @@ class EliminarGuias(View):
     def post(self, req):
         guias_id = int(req.POST.get('id'))
 
-        guias = GuiaTrabajador.objects.get( pk = guias_id )
+        guias = GuiaTrabajador.objects.get(pk=guias_id)
         guias.activo = False
         guias.save()
 
-        data = {'guias' : _get_guias()}
+        data = {'guias': _get_guias()}
         return JsonResponse(data, safe=False)
 
 
 class NN(View):
-
     def get(self, req):
-        """
-        Respuesta del metodo:
-        data = [
-        {
-            id : ,
-            numero : ,
-            cliente :{
-                id :
-                nombre:
-            },
-            fecha : ,
-            precio_total: ,
-            productos : [
-                {
-                    id :
-                    precio :
-                    codigo :
-                    cantidad :
-                },
-                {},...
-            ]
-        }
-        ,{},...
-        ]
-        """
         guias_id = int(req.GET.get('id'))
         guias_venta = GuiaVenta.objects.obtener_guias_rango(guias_id)
 
         data = self.procesar_guia(guias_venta)
         return JsonResponse(data, safe=False)
 
-    def procesar_guia(guias_venta):
+    def procesar_guia(self, guias_venta):
         guias = []
         for gv in guias_venta:
             guia = {
-                'id' : gv.id,
-                'numero' : gv.numero,
-                'cliente' :{
-                    'id' : gv.cliente.id,
-                    'nombre' : gv.cliente.nombre
+                'id': gv.id,
+                'numero': gv.numero,
+                'cliente': {
+                    'id': gv.cliente.id,
+                    'nombre': gv.cliente.nombre
                 },
                 'fecha': gv.liquidacion.fecha,
-                'precio_total' : 'NONE~~',
-                'productos' : self.procesar_productos(gv)
+                'precio_total': 'NONE~~',
+                'productos': self.procesar_productos(gv)
             }
 
             guias.append(guia)
 
         return guias
 
-    def procesar_productos(guia):
+    def procesar_productos(self, guia):
         lista = []
-        detalle = DetalleGuiaVenta.objects.filter( guia_venta = guia )
+        detalle = DetalleGuiaVenta.objects.filter(guia_venta=guia)
 
         for some in detalle:
             item = {

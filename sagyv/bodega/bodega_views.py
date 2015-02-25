@@ -1,20 +1,18 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 import json
-import datetime
 from django.core.serializers.json import DjangoJSONEncoder
 
 from django.views.generic import TemplateView,View
 from django.db import transaction
-from django.http import HttpResponse
-from main.helpers.fecha import convierte_texto_fecha, convierte_fecha_texto
+from django.http import HttpResponse, JsonResponse
+from helpers.fecha import convierte_texto_fecha, convierte_fecha_texto
 
-from bodega.models import Producto
-from bodega.models import HistorialStock
-from bodega.models import PrecioProducto
-from bodega.models import StockVehiculo
-from bodega.models import Vehiculo
-from bodega.models import GuiaDespacho
-from bodega.models import Factura
+from .models import Producto
+from .models import HistorialStock
+from .models import StockVehiculo
+from .models import Vehiculo
+from .models import GuiaDespacho
+from .models import Factura
 
 from utils.views import LoginRequiredMixin
 
@@ -61,7 +59,7 @@ class GuardarFactura(LoginRequiredMixin, View):
             }
         }
 
-        return HttpResponse(json.dumps(data), content_type="application/json")
+        return JsonResponse(data, safe=False)
 
     def ingreso_productos(self, guia, lista):
         for item in lista:
@@ -126,18 +124,18 @@ class ObtenerVehiculosPorProductoView(LoginRequiredMixin, View):
 
         for stock_vehiculo in stocks_vehiculos:
             resultados.append({
-                "vehiculo" : {
-                    "id" : stock_vehiculo.vehiculo.id,
-                    "patente" : stock_vehiculo.vehiculo.patente,
-                    "numero" : stock_vehiculo.vehiculo.patente
+                "vehiculo": {
+                    "id": stock_vehiculo.vehiculo.id,
+                    "patente": stock_vehiculo.vehiculo.patente,
+                    "numero": stock_vehiculo.vehiculo.patente
                 },
-                "producto" : {
-                    "cantidad" : stock_vehiculo.cantidad,
-                    "codigo" : stock_vehiculo.producto.codigo
+                "producto": {
+                    "cantidad": stock_vehiculo.cantidad,
+                    "codigo": stock_vehiculo.producto.codigo
                 }
             })
 
-        return HttpResponse(json.dumps(resultados), content_type="application/json")
+        return JsonResponse(resultados, safe=False)
 
 
 class FiltrarGuias(LoginRequiredMixin, View):
@@ -171,7 +169,7 @@ class FiltrarGuias(LoginRequiredMixin, View):
 
 class ObtenerProductos(LoginRequiredMixin, View):
     def get(self, req):
-        productos =  Producto.objects.exclude(orden = -1).order_by('orden')
+        productos = Producto.objects.exclude(orden = -1).order_by('orden')
         response = []
 
         for producto in productos:
@@ -204,8 +202,7 @@ class ObtenerProductosTransito(LoginRequiredMixin, View):
                 "stock": producto.cantidad
             })
 
-        response = json.dumps(response, cls=DjangoJSONEncoder)
-        return HttpResponse(response, content_type="application/json")
+        return JsonResponse(response, safe=False)
 
 
 class ObtenerConsolidados(LoginRequiredMixin, View):
@@ -220,8 +217,7 @@ class ObtenerConsolidados(LoginRequiredMixin, View):
                 'cantidad': consolidado.cantidad
             })
 
-        res = json.dumps(res, cls=DjangoJSONEncoder)
-        return HttpResponse(res, content_type="application/json")
+        return JsonResponse(res, safe=False)
 
 
 class ObtenerVehiculosSeleccionables(LoginRequiredMixin, View):
@@ -231,21 +227,20 @@ class ObtenerVehiculosSeleccionables(LoginRequiredMixin, View):
 
         for vehiculo in vehiculos:
             response.append({
-                "id" : vehiculo.id,
-                "numero" : vehiculo.patente,
-                "patente" : vehiculo.patente,
-                "estado_ultima_guia" : vehiculo.get_estado_ultima_guia()
+                "id": vehiculo.id,
+                "numero": vehiculo.patente,
+                "patente": vehiculo.patente,
+                "estado_ultima_guia": vehiculo.get_estado_ultima_guia()
             })
 
-        response = json.dumps(response, cls=DjangoJSONEncoder)
-        return HttpResponse(response, content_type="application/json")
+        return JsonResponse(response, safe=False)
 
 
 class ObtenerDetalleConsolidado(LoginRequiredMixin, View):
     def get(self, req):
         producto_id = int(req.GET.get('producto_id'))
-        producto = Producto.objects.get(pk = producto_id)
-        items = StockVehiculo.objects.filter(producto = producto)
+        producto = Producto.objects.get(pk=producto_id)
+        items = StockVehiculo.objects.filter(producto=producto)
 
         res = {
             'bodega': producto.stock,
@@ -261,8 +256,8 @@ class ObtenerDetalleConsolidado(LoginRequiredMixin, View):
                 'cantidad': item.cantidad
             })
 
-        res = json.dumps(res, cls=DjangoJSONEncoder)
-        return HttpResponse(res, content_type="application/json")
+        return JsonResponse(res, safe=False)
+
 
 index = IndexView.as_view()
 guardar_factura = GuardarFactura.as_view()

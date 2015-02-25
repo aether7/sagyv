@@ -1,4 +1,4 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 import json
 
 from django.db import models
@@ -12,15 +12,16 @@ las columnas con valor 1 son entradas al sistema, mientras que los 0 seran repre
 como salidas del sistema
 """
 
+
 class Afp(models.Model):
-    nombre = models.CharField(max_length = 140)
+    nombre = models.CharField(max_length=140)
 
     def __unicode__(self):
         return self.nombre
 
 
 class SistemaSalud(models.Model):
-    nombre = models.CharField(max_length = 140)
+    nombre = models.CharField(max_length=140)
 
     def __unicode__(self):
         return self.nombre
@@ -56,29 +57,29 @@ class EstadoVacacion(models.Model):
 
 
 class Trabajador(models.Model):
-    nombre = models.CharField(max_length = 140)
-    apellido = models.CharField(max_length = 140)
-    rut = models.CharField(max_length = 140)
-    domicilio = models.CharField(max_length = 140, null = True, blank = True)
-    nacimiento = models.DateField(null = True, blank = True)
-    fecha_inicio_contrato = models.DateField(null = True, blank = True)
-    vigencia_licencia = models.DateField(null = True, blank = True)
+    nombre = models.CharField(max_length=140)
+    apellido = models.CharField(max_length=140)
+    rut = models.CharField(max_length=140)
+    domicilio = models.CharField(max_length=140, null=True, blank=True)
+    nacimiento = models.DateField(null=True, blank=True)
+    fecha_inicio_contrato = models.DateField(null=True, blank=True)
+    vigencia_licencia = models.DateField(null=True, blank=True)
 
     tipo_trabajador = models.ForeignKey(TipoTrabajador)
-    afp = models.ForeignKey(Afp, null = True,blank = True)
-    sistema_salud = models.ForeignKey(SistemaSalud, null = True, blank = True)
-    estado_civil = models.ForeignKey(EstadoCivil, null = True, blank = True)
+    afp = models.ForeignKey(Afp, null=True, blank=True)
+    sistema_salud = models.ForeignKey(SistemaSalud, null=True, blank=True)
+    estado_civil = models.ForeignKey(EstadoCivil, null=True, blank=True)
 
     def get_nombre_completo(self):
         return self.nombre + " " + self.apellido
 
     def get_json(self):
         data = {
-            "id" : self.id,
-            "nombre" : self.nombre,
-            "apellido" : self.apellido,
-            "rut" : self.rut,
-            "dv" : self.dv
+            "id": self.id,
+            "nombre": self.nombre,
+            "apellido": self.apellido,
+            "rut": self.rut,
+            "dv": self.dv
         }
 
         return json.dumps(data)
@@ -121,22 +122,22 @@ class CargaFamiliar(models.Model):
 
 
 class BoletaTrabajador(models.Model):
-    boleta_inicial = models.IntegerField(default = 1)
-    boleta_final = models.IntegerField(default = 2)
-    actual = models.IntegerField(default = 1)
+    boleta_inicial = models.IntegerField(default=1)
+    boleta_final = models.IntegerField(default=2)
+    actual = models.IntegerField(default=1)
     trabajador = models.ForeignKey(Trabajador)
-    fecha_creacion = models.DateTimeField(auto_now_add = True)
-    fecha_modificacion = models.DateTimeField(auto_now = True)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+    fecha_modificacion = models.DateTimeField(auto_now=True)
     activo = models.NullBooleanField()
 
     objects = BoletaTrabajadorManager()
 
 
 class GuiaTrabajador(models.Model):
-    guia_inicial = models.IntegerField(default = 1)
-    guia_final = models.IntegerField(default = 2)
-    actual = models.IntegerField(default = 1)
+    guia_inicial = models.IntegerField(default=1)
+    guia_final = models.IntegerField(default=2)
+    actual = models.IntegerField(default=1)
     trabajador = models.ForeignKey(Trabajador)
-    fecha_creacion = models.DateTimeField(auto_now_add = True)
-    fecha_modificacion = models.DateTimeField(auto_now = True)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+    fecha_modificacion = models.DateTimeField(auto_now=True)
     activo = models.NullBooleanField()

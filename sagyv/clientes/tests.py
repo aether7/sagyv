@@ -1,36 +1,37 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 import json
 from django.test import TestCase
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse, reverse_lazy
 from bodega.models import Producto
-from clientes.models import TipoDescuento
-from clientes.models import DescuentoCliente
-from clientes.models import Cliente
+from .models import TipoDescuento
+from .models import DescuentoCliente
+from .models import Cliente
+
 
 class SituacionComercialTestCase(TestCase):
     fixtures = ['descuentocliente.json']
 
     def setUp(self):
-        User.objects.create_user(username = 'juanito', password = 'juanelo', email = 'juanelo@mailinator.com')
+        User.objects.create_user(username='juanito', password='juanelo', email='juanelo@mailinator.com')
 
-        tipo1 = TipoDescuento.objects.get(pk = 1)
-        tipo2 = TipoDescuento.objects.get(pk = 2)
-        producto1 = Producto.objects.get(pk = 1)
-        producto2 = Producto.objects.get(pk = 2)
+        tipo1 = TipoDescuento.objects.get(pk=1)
+        tipo2 = TipoDescuento.objects.get(pk=2)
+        producto1 = Producto.objects.get(pk=1)
+        producto2 = Producto.objects.get(pk=2)
 
-        DescuentoCliente.objects.create(monto_descuento = 0, tipo_descuento = tipo1)
+        DescuentoCliente.objects.create(monto_descuento=0, tipo_descuento=tipo1)
 
         DescuentoCliente.objects.create(
-            monto_descuento = 5000,
-            tipo_descuento = tipo1,
-            producto = producto1
+            monto_descuento=5000,
+            tipo_descuento=tipo1,
+            producto=producto1
         )
 
         DescuentoCliente.objects.create(
-            monto_descuento = 10,
-            tipo_descuento = tipo2,
-            producto = producto2
+            monto_descuento=10,
+            tipo_descuento=tipo2,
+            producto=producto2
         )
 
     def test_get_situaciones_comerciales(self):
@@ -88,40 +89,40 @@ class ClienteTestCase(TestCase):
     fixtures = ['descuentocliente.json']
 
     def setUp(self):
-        User.objects.create_user(username = 'juanito', password = 'juanelo', email = 'juanelo@mailinator.com')
-        tipo1 = TipoDescuento.objects.get(pk = 1)
-        producto1 = Producto.objects.get(pk = 1)
+        User.objects.create_user(username='juanito', password='juanelo', email='juanelo@mailinator.com')
+        tipo1 = TipoDescuento.objects.get(pk=1)
+        producto1 = Producto.objects.get(pk=1)
 
         DescuentoCliente.objects.create(
-            monto_descuento = 5000,
-            tipo_descuento = tipo1,
-            producto = producto1
+            monto_descuento=5000,
+            tipo_descuento=tipo1,
+            producto=producto1
         )
 
         Cliente.objects.create(
-            nombre = 'Juanito',
-            giro = 'Juanito Corp',
-            direccion = 'stgo centro, en su casa #123',
-            telefono = '72314534',
-            rut = '1-9',
-            credito = False,
-            dispensador = False,
-            es_lipigas = False,
-            es_propio = True,
-            observacion = 'Una observación cualquiera oezi'
+            nombre='Juanito',
+            giro='Juanito Corp',
+            direccion='stgo centro, en su casa #123',
+            telefono='72314534',
+            rut='1-9',
+            credito=False,
+            dispensador=False,
+            es_lipigas=False,
+            es_propio=True,
+            observacion='Una observación cualquiera oezi'
         )
 
         Cliente.objects.create(
-            nombre = 'Merce',
-            giro = 'Merce ltda',
-            direccion = 'alguna calle de chile',
-            telefono = '87766554',
-            rut = '14495886-1',
-            credito = True,
-            dispensador = False,
-            es_lipigas = True,
-            es_propio = True,
-            observacion = ''
+            nombre='Merce',
+            giro='Merce ltda',
+            direccion='alguna calle de chile',
+            telefono='87766554',
+            rut='14495886-1',
+            credito=True,
+            dispensador=False,
+            es_lipigas=True,
+            es_propio=True,
+            observacion=''
         )
 
     def test_get_clientes(self):
@@ -189,11 +190,11 @@ class ClienteTestCase(TestCase):
         response = self.client.post(reverse('clientes:modificar'), data)
         self.assertEqual(response.status_code, 200)
 
-        cliente = Cliente.objects.get(pk = 1)
+        cliente = Cliente.objects.get(pk=1)
         self.assertEqual(cliente.nombre, 'Sebastian Real Arce')
 
     def test_eliminar(self):
-        data = { 'id' : 1 }
+        data = {'id': 1}
 
         self.client.login(username='juanito', password='juanelo')
         response = self.client.post(reverse('clientes:eliminar'), data)

@@ -1,10 +1,9 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 import json
 
-from django.http import HttpResponse
+from django.http import JsonResponse
 from django.db import transaction
 from django.views.generic import View
-from django.core.serializers.json import DjangoJSONEncoder
 
 from bodega.models import Movil
 from liquidacion.models import HistorialCambioVehiculo
@@ -12,10 +11,11 @@ from liquidacion.models import Terminal
 from liquidacion.models import EstadoTerminal
 from liquidacion.models import HistorialEstadoTerminal
 
+
 def _get_terminales():
     terminales = []
 
-    rs = Terminal.objects.exclude(estado_id = EstadoTerminal.RETIRADO).order_by('-movil')
+    rs = Terminal.objects.exclude(estado_id=EstadoTerminal.RETIRADO).order_by('-movil')
 
     for terminal in rs:
         if terminal.movil is None:
@@ -40,11 +40,12 @@ def _get_terminales():
             'estado': {
                 'id': terminal.estado.id,
                 'nombre': terminal.estado.nombre,
-                'show_opt' : show_opt
+                'show_opt': show_opt
             }
         })
 
     return terminales
+
 
 def anexar_vehiculo(terminal, movil, estado):
     histvehiculo = HistorialCambioVehiculo()
@@ -54,19 +55,21 @@ def anexar_vehiculo(terminal, movil, estado):
     histvehiculo.estado = estado
     histvehiculo.save()
 
+
 def cambiar_estado_terminal(terminal, estado):
-    #cambio del registro
+    # cambio del registro
     terminal.estado = estado
     terminal.movil = None
     terminal.save()
 
-    #historial terminal
+    # historial terminal
     histo = HistorialEstadoTerminal()
     histo.terminal = terminal
     histo.estado = terminal.estado
     histo.save()
 
     return terminal
+
 
 def get_terminal_json(terminal):
     data = {
@@ -86,12 +89,9 @@ def get_terminal_json(terminal):
 
 
 class ObtenerTerminales(View):
-
     def get(self, req):
-        data = { 'terminales': _get_terminales() }
-
-        data = json.dumps(data, cls=DjangoJSONEncoder)
-        return HttpResponse(data, content_type='application/json')
+        data = {'terminales': _get_terminales()}
+        return JsonResponse(data, safe=False)
 
 
 class CrearTerminal(View):
@@ -101,17 +101,14 @@ class CrearTerminal(View):
         codigo = req.POST.get('codigo')
         movil_obj = json.loads(req.POST.get('movil'))
         movil_id = int(movil_obj.get('id'))
-
         terminal = self.crear_terminal(movil_id, codigo)
 
         data = get_terminal_json(terminal)
-        data = json.dumps(data, cls=DjangoJSONEncoder)
-
-        return HttpResponse(data, content_type="application/json")
+        return JsonResponse(data, safe=False)
 
     def crear_terminal(self, movil_id, codigo):
-        estado = EstadoTerminal.objects.get(pk = EstadoTerminal.ACTIVO)
-        movil = Movil.objects.get(pk = movil_id)
+        estado = EstadoTerminal.objects.get(pk=EstadoTerminal.ACTIVO)
+        movil = Movil.objects.get(pk=movil_id)
 
         terminal = Terminal()
         terminal.codigo = codigo
@@ -123,13 +120,13 @@ class CrearTerminal(View):
 
     def crear_historico_vehiculo(self, obj_terminal):
         historico = HistorialCambioVehiculo()
-        historico_existente = HistorialCambioVehiculo.objects.filter(estado = True, vehiculo = obj_terminal.vehiculo)
+        historico_existente = HistorialCambioVehiculo.objects.filter(estado=True, vehiculo=obj_terminal.vehiculo)
 
         for h in historico_existente:
             h.estado = False
             h.save()
 
-            terminales = Terminal.objects.filter(vehiculo = h.vehiculo).exclude(pk = obj_terminal.id)
+            terminales = Terminal.objects.filter(vehiculo=h.vehiculo).exclude(pk=obj_terminal.id)
 
             for t in terminales:
                 t.vehiculo = None
@@ -157,23 +154,21 @@ class RemoverTerminal(View):
     def post(self, req):
 
         id_term = int(req.POST.get('id'))
-        state = EstadoTerminal.objects.get(pk = EstadoTerminal.RETIRADO)
+        state = EstadoTerminal.objects.get(pk=EstadoTerminal.RETIRADO)
 
-        terminal = Terminal.objects.get(pk = int(id_term))
+        terminal = Terminal.objects.get(pk=int(id_term))
         movil = terminal.movil
 
-        #Anexado a un vehiculo
+        # Anexado a un vehiculo
         if terminal.movil is not None:
             anexar_vehiculo(terminal, movil, False)
 
-        #cambio del registro
+        # cambio del registro
         terminal = cambiar_estado_terminal(terminal, state)
 
-        #data = get_terminal_json(terminal)
+        # data = get_terminal_json(terminal)
         data = {}
-        data = json.dumps(data, cls = DjangoJSONEncoder)
-
-        return HttpResponse(data, content_type='application/json')
+        return JsonResponse(data, safe=False)
 
 
 class ReasignarTerminal(View):
@@ -182,30 +177,28 @@ class ReasignarTerminal(View):
         id_term = req.POST.get('id')
         new_movil = req.POST.get('movil')
 
-        #GetTerminal
-        terminal = Terminal.objects.get( pk = id_term )
+        # GetTerminal
+        terminal = Terminal.objects.get(pk=id_term)
 
-        #GetVehiculo
-        movil = Movil.objects.get( pk = new_movil )
+        # GetVehiculo
+        movil = Movil.objects.get(pk=new_movil)
 
-        #Desvincular vehiculo existente
+        # Desvincular vehiculo existente
         if terminal.movil is not None:
             self.desvincular_vehiculo_existente(movil)
 
         terminal.movil = movil
         terminal.save()
 
-        #Incluir vehiculo
+        # Incluir vehiculo
         anexar_vehiculo(terminal, movil, True)
 
-        #OUT
+        # OUT
         data = {'terminales': _get_terminales()}
-        data = json.dumps(data, cls=DjangoJSONEncoder)
-
-        return HttpResponse(data, content_type='application/json')
+        return JsonResponse(data, safe=False)
 
     def desvincular_vehiculo_existente(self, vehiculo):
-        historico_existente = HistorialCambioVehiculo.objects.filter(estado = True, vehiculo = vehiculo)
+        historico_existente = HistorialCambioVehiculo.objects.filter(estado=True, vehiculo=vehiculo)
 
         for historico in historico_existente:
             historico.estado = False
@@ -257,9 +250,9 @@ class ReturnMaintenance(View):
 
     def post(self, req):
         id_term = req.POST.get('id')
-        state = EstadoTerminal.objects.get(pk = int(1))
+        state = EstadoTerminal.objects.get(pk=int(1))
 
-        term = Terminal.objects.get( pk = int(id_term))
+        term = Terminal.objects.get(pk=int(id_term))
         term.estado = state
         term.save()
 
@@ -278,12 +271,11 @@ class ReturnMaintenance(View):
             'estado': {
                 'id': term.estado.id,
                 'nombre': term.estado.nombre,
-                'show_opt' : True
+                'show_opt': True
             }
         }
 
-        data = json.dumps(data, cls=DjangoJSONEncoder)
-        return HttpResponse(data, content_type='application/json')
+        return JsonResponse(data, safe=False)
 
 
 class EditarTerminal(View):
@@ -293,14 +285,12 @@ class EditarTerminal(View):
         id_term = int(req.POST.get('id'))
         new_code = req.POST.get('codigo')
 
-        term = Terminal.objects.get( pk = id_term )
+        term = Terminal.objects.get(pk=id_term)
         term.codigo = new_code
         term.save()
 
         data = {}
-        data = json.dumps(data, cls = DjangoJSONEncoder)
-
-        return HttpResponse(data, content_type='application/json')
+        return JsonResponse(data, safe=False)
 
 
 obtener_terminales = ObtenerTerminales.as_view()

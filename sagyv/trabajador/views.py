@@ -1,11 +1,7 @@
-#-*- coding: utf-8 -*-
-import json
-from datetime import datetime, date
-
-from django.core.serializers.json import DjangoJSONEncoder
-from django.http import HttpResponse, JsonResponse
+# -*- coding: utf-8 -*-
+from django.http import JsonResponse
 from django.db import transaction
-from django.views.generic import View, TemplateView, ListView
+from django.views.generic import View, ListView
 
 from main.helpers.fecha import convierte_texto_fecha, convierte_fecha_texto
 
@@ -19,6 +15,7 @@ from trabajador.models import BoletaTrabajador
 from trabajador.models import TipoTrabajador
 
 from utils.views import LoginRequiredMixin
+
 
 class IndexList(LoginRequiredMixin, ListView):
     model = Trabajador
@@ -36,6 +33,7 @@ class IndexList(LoginRequiredMixin, ListView):
         data['estados_vacacion'] = EstadoVacacion.objects.order_by('id')
 
         return data
+
 
 class TrabajadorMixin(object):
     def request_data(self):
@@ -58,17 +56,17 @@ class TrabajadorMixin(object):
     def get_trabajador_json(self, worker):
         dato = {
             'id': worker.id,
-            'nombre' : worker.nombre,
-            'apellido' : worker.apellido,
-            'rut' : worker.rut,
-            'domicilio' : worker.domicilio,
-            'nacimiento' : convierte_fecha_texto(worker.nacimiento),
-            'fechaInicioContrato' : convierte_fecha_texto(worker.fecha_inicio_contrato),
-            'vigenciaLicencia' : convierte_fecha_texto(worker.vigencia_licencia),
-            'afp' : self.get_afp(worker),
-            'sistemaSalud' : self.get_sistema_salud(worker),
-            'estadoCivil' : self.get_estado_civil(worker),
-            'estadoVacacion' : self.get_estado_vacacion(worker),
+            'nombre': worker.nombre,
+            'apellido': worker.apellido,
+            'rut': worker.rut,
+            'domicilio': worker.domicilio,
+            'nacimiento': convierte_fecha_texto(worker.nacimiento),
+            'fechaInicioContrato': convierte_fecha_texto(worker.fecha_inicio_contrato),
+            'vigenciaLicencia': convierte_fecha_texto(worker.vigencia_licencia),
+            'afp': self.get_afp(worker),
+            'sistemaSalud': self.get_sistema_salud(worker),
+            'estadoCivil': self.get_estado_civil(worker),
+            'estadoVacacion': self.get_estado_vacacion(worker),
             'boleta': self.get_boleta(worker),
             'tipo': self.get_tipo(worker)
         }
@@ -76,7 +74,7 @@ class TrabajadorMixin(object):
         return dato
 
     def get_afp(self, worker):
-        data = { 'id': None, 'nombre': 'No dispone' }
+        data = {'id': None, 'nombre': 'No dispone'}
 
         if worker.tipo_trabajador.id == TipoTrabajador.CHOFER:
             data['id'] = worker.afp.id
@@ -85,7 +83,7 @@ class TrabajadorMixin(object):
         return data
 
     def get_sistema_salud(self, worker):
-        data = { 'id': None, 'nombre': 'No dispone' }
+        data = {'id': None, 'nombre': 'No dispone'}
 
         if worker.tipo_trabajador.id == TipoTrabajador.CHOFER:
             data['id'] = worker.sistema_salud.id
@@ -135,7 +133,7 @@ class CrearTrabajadorView(LoginRequiredMixin, View, TrabajadorMixin):
         trabajador = self.crear_trabajador()
 
         if self.estado_vacacion_id is not None:
-            estado_vacaciones = EstadoVacacion.objects.get(pk = self.estado_vacacion_id)
+            estado_vacaciones = EstadoVacacion.objects.get(pk=self.estado_vacacion_id)
             vacacion = self.crear_vacacion(trabajador, estado_vacaciones)
 
         dato = self.get_trabajador_json(trabajador)
@@ -143,17 +141,17 @@ class CrearTrabajadorView(LoginRequiredMixin, View, TrabajadorMixin):
 
     def crear_trabajador(self):
         if self.afp_id is not None:
-            afp = Afp.objects.get(pk = self.afp_id)
+            afp = Afp.objects.get(pk=self.afp_id)
         else:
             afp = None
 
         if self.sistema_salud_id is not None:
-            sistema_salud = SistemaSalud.objects.get(pk = self.sistema_salud_id)
+            sistema_salud = SistemaSalud.objects.get(pk=self.sistema_salud_id)
         else:
             sistema_salud = None
 
         if self.estado_civil_id is not None:
-            estado_civil = EstadoCivil.objects.get(pk = self.estado_civil_id)
+            estado_civil = EstadoCivil.objects.get(pk=self.estado_civil_id)
         else:
             estado_civil = None
 
@@ -194,14 +192,14 @@ class ModificarTrabajadorView(LoginRequiredMixin, View, TrabajadorMixin):
     def _edit_trabajador(self, id_trabajador):
         if self.tipo_trabajador.id == TipoTrabajador.CHOFER:
             afp = Afp.objects.get(pk = self.afp_id)
-            sistema_salud = SistemaSalud.objects.get(pk = self.sistema_salud_id)
+            sistema_salud = SistemaSalud.objects.get(pk=self.sistema_salud_id)
         else:
             afp = None
             sistema_salud = None
 
-        estado_civil = EstadoCivil.objects.get(pk = self.estado_civil_id)
+        estado_civil = EstadoCivil.objects.get(pk=self.estado_civil_id)
 
-        trabajador = Trabajador.objects.get(pk = id_trabajador)
+        trabajador = Trabajador.objects.get(pk=id_trabajador)
         trabajador.nombre = self.nombre
         trabajador.apellido = self.apellido
         trabajador.rut = self.rut
@@ -220,7 +218,7 @@ class ObtenerTrabajadorView(LoginRequiredMixin, View, TrabajadorMixin):
 
     def get(self, req):
         id_trabajador = req.GET.get('id')
-        worker = Trabajador.objects.get(pk = id_trabajador)
+        worker = Trabajador.objects.get(pk=id_trabajador)
 
         dato = self.get_trabajador_json(worker)
         return JsonResponse(dato, safe=False)
@@ -233,8 +231,8 @@ class EliminarTrabajadorView(LoginRequiredMixin, View):
         worker = Trabajador.objects.get(pk = id_trabajador)
         worker.delete()
 
-        dato = { 'status' : 'ok' }
-        return JsonResponse(dato, safe = False)
+        dato = {'status': 'ok'}
+        return JsonResponse(dato, safe=False)
 
 
 class BuscarBoleta(LoginRequiredMixin, View):
@@ -243,14 +241,14 @@ class BuscarBoleta(LoginRequiredMixin, View):
         trabajador_id = int(req.GET.get('id'))
         boleta = BoletaTrabajador.objects.get_talonario_activo(trabajador_id)
 
-        data = { 'boletaActual': 0, 'boletaInicial': 0, 'boletaFinal': 0 }
+        data = {'boletaActual': 0, 'boletaInicial': 0, 'boletaFinal': 0}
 
         if not(boleta is None):
             data['boletaActual'] = boleta.actual
             data['boletaInicial'] = boleta.boleta_inicial
             data['boletaFinal'] = boleta.boleta_final
 
-        return JsonResponse(data, safe = False)
+        return JsonResponse(data, safe=False)
 
 
 class GuardarBoleta(LoginRequiredMixin, View):
@@ -267,7 +265,7 @@ class GuardarBoleta(LoginRequiredMixin, View):
         else:
             boleta_trabajador = BoletaTrabajador.objects.get(activo=True, trabajador_id=trabajador_id)
 
-        trabajador = Trabajador.objects.get(pk = trabajador_id)
+        trabajador = Trabajador.objects.get(pk=trabajador_id)
 
         boleta_trabajador.boleta_inicial = boleta_inicial
         boleta_trabajador.actual = boleta_inicial
@@ -281,7 +279,7 @@ class GuardarBoleta(LoginRequiredMixin, View):
             'mensaje': ''
         }
 
-        return JsonResponse(data, safe = False)
+        return JsonResponse(data, safe=False)
 
 
 class Todos(LoginRequiredMixin, View, TrabajadorMixin):

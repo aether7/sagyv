@@ -1,14 +1,10 @@
-from django.test import TestCase
-
-# Create your tests here.
 import json
 
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 
 from liquidacion.models import Terminal
-from liquidacion.models import EstadoTerminal
-from bodega.models import Movil
+
 
 class TerminalTestCase(TestCase):
     fixtures = ['terminales.json']
@@ -30,12 +26,12 @@ class TerminalTestCase(TestCase):
         self.assertEqual(response.status_code, 200, "Error al crear terminal con movil")
 
     def test_remover_terminal(self):
-        post_data = { "id": 1 }
+        post_data = {"id": 1}
         response = self.client.post(reverse('guias:remover_terminal'), post_data)
         self.assertEqual(response.status_code, 200, "No se pudo eliminar terminal")
 
     def test_asignar_terminal(self):
-        post_data = { "id" : 1, "movil" : 2}
+        post_data = {"id": 1, "movil": 2}
         response = self.client.post(reverse('guias:reasignar_terminal'), post_data)
         self.assertEqual(response.status_code, 200, "No se pudo asignar terminal")
 

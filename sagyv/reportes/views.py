@@ -1,7 +1,5 @@
-#-*- coding: utf-8 -*-
-import json
-
-from django.http import HttpResponse, JsonResponse
+# -*- coding: utf-8 -*-
+from django.http import JsonResponse
 from django.template import RequestContext
 from django.views.generic import TemplateView, View
 from django.shortcuts import render
@@ -12,7 +10,8 @@ class ConsumoClientes(View):
     def get(self, req):
         fecha_inicio = req.GET.get('fechaInicio')
         fecha_termino = req.GET.get('fechaTermino')
-        consumos = ReportesManager().get_consumos_cliente_producto(fecha_inicio=fecha_inicio, fecha_termino=fecha_termino)
+        consumos = ReportesManager().get_consumos_cliente_producto(fecha_inicio=fecha_inicio,
+                                                                   fecha_termino=fecha_termino)
         data = []
 
         for consumo in consumos:
@@ -24,9 +23,7 @@ class ConsumoClientes(View):
 class ComprasGas(View):
     def get(self, req):
         data = []
-
-        data = json.dumps(data, cls=DjangoJSONEncoder)
-        return HttpResponse(data, content_type="application/json")
+        return JsonResponse(data, safe=False)
 
 
 class KilosVendidos(TemplateView):
@@ -35,11 +32,8 @@ class KilosVendidos(TemplateView):
     def get(self, req):
         fecha_inicio = req.GET.get('fechaInicio', None)
         fecha_termino = req.GET.get('fechaTermino', None)
-        trabajadores = ReportesManager().get_kilos_vendidos_trabajor(fecha_inicio, fecha_termino)
 
-        data = { "trabajadores": trabajadores }
-
-        return render(req, self.template_name, context_instance = RequestContext(req))
+        return render(req, self.template_name, context_instance=RequestContext(req))
 
 
 class Creditos(TemplateView):
@@ -48,11 +42,8 @@ class Creditos(TemplateView):
     def get(self, req):
         fecha_inicio = req.GET.get('fechaInicio', None)
         fecha_termino = req.GET.get('fechaTermino', None)
-        creditos = ReportesManager().detalle_cuotas_creditos(fecha_inicio, fecha_termino)
 
-        data = { "creditos": creditos }
-
-        return render(req, self.template_name, context_instance = RequestContext(req))
+        return render(req, self.template_name, context_instance=RequestContext(req))
 
 
 class VentaMasa(TemplateView):

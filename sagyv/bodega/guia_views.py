@@ -4,16 +4,16 @@ from django.db import transaction
 from django.http import HttpResponse
 from django.views.generic import View
 from django.core.serializers.json import DjangoJSONEncoder
-from main.helpers.fecha import convierte_texto_fecha, convierte_fecha_texto
-
-from bodega.models import HistorialStock
-from bodega.models import GuiaDespacho
-from bodega.models import Producto
-from bodega.models import StockVehiculo
-from bodega.models import AbonoGuia
-from bodega.models import Vehiculo
-from bodega.models import Movil
+from helpers.fecha import convierte_texto_fecha, convierte_fecha_texto
 from utils.views import LoginRequiredMixin
+
+from .models import HistorialStock
+from .models import GuiaDespacho
+from .models import Producto
+from .models import StockVehiculo
+from .models import AbonoGuia
+from .models import Vehiculo
+from .models import Movil
 
 class ObtenerGuiaDespacho(LoginRequiredMixin, View):
 

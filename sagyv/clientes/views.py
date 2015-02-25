@@ -1,15 +1,14 @@
-#-*- coding: utf-8 -*-
-import json
-
+# -*- coding: utf-8 -*-
 from django.db import transaction
 from django.views.generic import TemplateView,View
 from django.http import JsonResponse
-
-from clientes.models import Cliente
-from clientes.models import DescuentoCliente
-from clientes.models import TipoDescuento
-from bodega.models import Producto
 from utils.views import LoginRequiredMixin
+
+from .models import Cliente
+from .models import DescuentoCliente
+from .models import TipoDescuento
+from bodega.models import Producto
+
 
 class Index(LoginRequiredMixin, TemplateView):
     template_name = "cliente/index.html"
@@ -70,10 +69,10 @@ class ObtenerCliente(LoginRequiredMixin, View, ClienteMixin):
             for cliente in clientes:
                 data.append(self._get_cliente(cliente))
         else:
-            cliente = Cliente.objects.get(pk = int(id_cliente))
+            cliente = Cliente.objects.get(pk=int(id_cliente))
             data = self._get_cliente(cliente)
 
-        return JsonResponse(data, safe = False)
+        return JsonResponse(data, safe=False)
 
 
 class CrearCliente(LoginRequiredMixin, View, ClienteMixin):
@@ -104,7 +103,7 @@ class CrearCliente(LoginRequiredMixin, View, ClienteMixin):
         cliente.observacion = observacion
 
         if sit_comercial_id is not None and sit_comercial_id != 'null' and len(sit_comercial_id) != 0:
-            cliente.situacion_comercial = DescuentoCliente.objects.get(pk = int(sit_comercial_id))
+            cliente.situacion_comercial = DescuentoCliente.objects.get(pk=int(sit_comercial_id))
 
         cliente.save()
 
@@ -114,7 +113,7 @@ class CrearCliente(LoginRequiredMixin, View, ClienteMixin):
 
 class ModificarCliente(LoginRequiredMixin, View, ClienteMixin):
     @transaction.atomic
-    def post(self,request):
+    def post(self, request):
         nombre = request.POST.get('nombre')
         giro = request.POST.get('giro')
         rut = request.POST.get('rut')
@@ -126,9 +125,9 @@ class ModificarCliente(LoginRequiredMixin, View, ClienteMixin):
         propio = request.POST.get('propio')
         observacion = request.POST.get('observacion')
         sit_comercial_id = request.POST.get('situacionComercialId')
-        id = request.POST.get('id')
+        cliente_id = request.POST.get('id')
 
-        cliente = Cliente.objects.get(pk = int(id))
+        cliente = Cliente.objects.get(pk=int(cliente_id))
         cliente.nombre = nombre
         cliente.giro = giro
         cliente.rut = rut
@@ -141,23 +140,23 @@ class ModificarCliente(LoginRequiredMixin, View, ClienteMixin):
         cliente.observacion = observacion
 
         if sit_comercial_id is not None and sit_comercial_id != 'null':
-            cliente.situacion_comercial = DescuentoCliente.objects.get(pk = int(sit_comercial_id))
+            cliente.situacion_comercial = DescuentoCliente.objects.get(pk=int(sit_comercial_id))
 
         cliente.save()
 
         data = self._get_cliente(cliente)
-        return JsonResponse(data, safe = False)
+        return JsonResponse(data, safe=False)
 
 
 class EliminarCliente(LoginRequiredMixin, View):
     @transaction.atomic
-    def post(self,request):
+    def post(self, request):
         id_cliente = request.POST.get('id')
-        cliente = Cliente.objects.get(pk = int(id_cliente))
+        cliente = Cliente.objects.get(pk=int(id_cliente))
         cliente.delete()
 
-        dato = { 'status': 'ok' }
-        return JsonResponse(dato, safe = False)
+        dato = {'status': 'ok'}
+        return JsonResponse(dato, safe=False)
 
 
 class BuscarCliente(LoginRequiredMixin, View):
@@ -171,26 +170,27 @@ class BuscarCliente(LoginRequiredMixin, View):
 
         for cliente in clientes:
             data.append({
-                "id" : cliente.id,
-                "nombre" : cliente.nombre,
-                "giro" : cliente.giro,
-                "rut" : cliente.rut,
-                "telefono" : cliente.telefono,
-                "direccion" : cliente.direccion,
-                "situacion_comercial" : cliente.situacion_comercial.__unicode__()
+                "id": cliente.id,
+                "nombre": cliente.nombre,
+                "giro": cliente.giro,
+                "rut": cliente.rut,
+                "telefono": cliente.telefono,
+                "direccion": cliente.direccion,
+                "situacion_comercial": cliente.situacion_comercial.__unicode__()
             })
 
-        return JsonResponse(data, safe = False)
+        return JsonResponse(data, safe=False)
+
 
 class ValidarRutCliente(LoginRequiredMixin, View):
 
     def get(self, request):
         rut = request.GET.get('rut')
-        cantidad = Cliente.objects.filter(rut = rut).count()
+        cantidad = Cliente.objects.filter(rut=rut).count()
         status = cantidad == 0 and True or False
 
-        data = { 'status': status }
-        return JsonResponse(data, safe = False)
+        data = {'status': status}
+        return JsonResponse(data, safe=False)
 
 
 index = Index.as_view()

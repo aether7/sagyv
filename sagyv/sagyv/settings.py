@@ -33,14 +33,16 @@ ADMINS = (
 ALLOWED_HOSTS = [".rlay.cl"]
 
 # Application definition
-
-INSTALLED_APPS = (
+CORE_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+)
+
+MY_APPS = (
     'main',
     'trabajador',
     'bodega',
@@ -51,6 +53,8 @@ INSTALLED_APPS = (
     'precios',
     'guias',
 )
+
+INSTALLED_APPS = CORE_APPS + MY_APPS
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -102,6 +106,14 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static/'),
 )
 
+TEMPLATE_DIRS = (
+    os.path.join(BASE_DIR, 'templates/'),
+)
+
+FIXTURE_DIRS = (
+    os.path.join(BASE_DIR, 'fixtures/'),
+)
+
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.CachedStaticFilesStorage'
 
 #SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
@@ -118,10 +130,6 @@ TEMPLATE_CONTEXT_PROCESSORS += (
 )
 
 LOGIN_URL = '/'
-
-FIXTURE_DIRS = (
-    os.path.join(BASE_DIR, 'fixtures/'),
-)
 
 try:
     from .local_settings import *

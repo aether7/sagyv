@@ -6,32 +6,28 @@ from django.views.generic import TemplateView, View
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 
-from main.helpers.fecha import convierte_texto_fecha, convierte_fecha_texto
+from main.helpers.fecha import convierte_texto_fecha
 from utils.views import LoginRequiredMixin
 
 from trabajador.models import BoletaTrabajador
-from trabajador.models import Trabajador
 from bodega.models import Producto
-from bodega.models import TipoProducto
 from bodega.models import GuiaDespacho
 from bodega.models import HistorialStock
 from bodega.models import StockVehiculo
 from clientes.models import Cliente
-from liquidacion.models import Banco
-from liquidacion.models import TarjetaCredito
-from liquidacion.models import Terminal
-from liquidacion.models import Cheque
-from liquidacion.models import CuponPrepago
-from liquidacion.models import Otros
-from liquidacion.models import TipoPago
-from liquidacion.models import Liquidacion
-from liquidacion.models import GuiaVenta
-from liquidacion.models import DetalleGuiaVenta
-from liquidacion.models import EstadoTerminal
+from .models import Banco
+from .models import Terminal
+from .models import Cheque
+from .models import CuponPrepago
+from .models import Otros
+from .models import TipoPago
+from .models import Liquidacion
+from .models import GuiaVenta
+from .models import DetalleGuiaVenta
+from .models import TransbankVoucher
+from .models import LipigasVoucher
+from .models import TarjetaCredito
 
-from liquidacion.models import TransbankVoucher
-from liquidacion.models import LipigasVoucher
-from liquidacion.models import TarjetaCredito
 
 class IndexView(LoginRequiredMixin, TemplateView):
     template_name = "liquidacion/index.html"
@@ -46,7 +42,7 @@ class IndexView(LoginRequiredMixin, TemplateView):
         context["bancos"] = Banco.objects.order_by("-cheques_recibidos")
         context["tarjetas_bancarias"] = TarjetaCredito.objects.get_tarjetas_bancarias()
         context["productos"] = Producto.objects.get_productos_filtrados()
-        context["guias_despacho"] = GuiaDespacho.objects.filter(estado = 0).order_by("id")
+        context["guias_despacho"] = GuiaDespacho.objects.filter(estado=0).order_by("id")
         context["terminales"] = Terminal.objects.get_activos()
 
         return context
@@ -55,7 +51,7 @@ class IndexView(LoginRequiredMixin, TemplateView):
 class ObtenerGuiaDespacho(LoginRequiredMixin, View):
     def get(self, req):
         id_guia_despacho = int(req.GET.get("id_guia_despacho"))
-        guia = get_object_or_404(GuiaDespacho,pk = id_guia_despacho)
+        guia = get_object_or_404(GuiaDespacho,pk=id_guia_despacho)
         vehiculo = guia.movil.vehiculo
         boleta = BoletaTrabajador.objects.obtener_por_trabajador(vehiculo.get_ultimo_chofer())
 
@@ -199,8 +195,7 @@ class BalanceLiquidacionView(LoginRequiredMixin, View):
             valor_total += valor_tmp
 
         dato = {'valor': valor_total}
-
-        return JsonResponse(dato, safe = False)
+        return JsonResponse(dato, safe=False)
 
 
 class Cerrar(LoginRequiredMixin, View):
@@ -215,11 +210,9 @@ class Cerrar(LoginRequiredMixin, View):
         self._ingreso_cheques()
         self._ingreso_otros()
 
-        """
-        Se debe definir la respuesta del proceso.
-        """
+        # TODO se debe definir la respuesta del proceso entero
         dato = {'mensaje': 'El PDF se encuentra en proceso disculpe las molestias'}
-        #return JsonResponse(dato, safe=False)
+        return JsonResponse(dato, safe=False)
 
     def _procesar_liquidacion(self):
         id_guia = self.request.POST.get('guia_despacho')
@@ -261,7 +254,7 @@ class Cerrar(LoginRequiredMixin, View):
 
     def _ingreso_vouchers_transbank(self, vouchers):
         for voucher in vouchers:
-            tarjeta = TarjetaCredito.objects.get( pk = int(voucher['id']))
+            tarjeta = TarjetaCredito.objects.get(pk=int(voucher['id']))
 
             transbank = TransbankVoucher()
             transbank.liquidacion = self.this_liquidacion
@@ -271,11 +264,11 @@ class Cerrar(LoginRequiredMixin, View):
             transbank.save()
 
     def _ingreso_vouchers_lipigas(self, vouchers):
-        terminal = Terminal.objects.get(pk = int(vouchers['terminal']))
+        terminal = Terminal.objects.get(pk=int(vouchers['terminal']))
         numero_cierre = int(vouchers['numero'])
 
         for voucher in vouchers['tarjetas']:
-            tarjeta = TarjetaCredito.objects.get(pk = int(voucher['id']))
+            tarjeta = TarjetaCredito.objects.get(pk=int(voucher['id']))
 
             lipigas = LipigasVoucher()
             lipigas.liquidacion = self.this_liquidacion
@@ -290,21 +283,21 @@ class Cerrar(LoginRequiredMixin, View):
     def _descargar_vehiculo(self):
         id_guia = self.request.POST.get('guia_despacho')
 
-        this_guia = GuiaDespacho.objects.get(pk = int(id_guia))
-        stock_vehiculo = StockVehiculo.objects.filter(vehiculo = this_guia.movil.vehiculo)
+        this_guia = GuiaDespacho.objects.get(pk=int(id_guia))
+        stock_vehiculo = StockVehiculo.objects.filter(vehiculo=this_guia.movil.vehiculo)
 
-        #se limpia el vehiculo.
+        # se limpia el vehiculo.
         for sv in stock_vehiculo:
             sv.delete()
 
-        #se extrae el json
+        # se extrae el json
         productos = json.loads(self.request.POST.get('productos'))
 
         for producto in productos:
-            row = Producto.objects.get(pk = producto['id'])
+            row = Producto.objects.get(pk=producto['id'])
             print row.stock
             print producto['llenos']
-            row.stock = row.stock + int(producto['llenos'])
+            row.stock += int(producto['llenos'])
             row.save()
             print "===="
             print row.stock
@@ -313,15 +306,11 @@ class Cerrar(LoginRequiredMixin, View):
             garantia = Producto.objects.get(codigo = cod_garantia)
             print garantia.stock
             print garantia.stock + int(producto['vacios'])
-
-
-            garantia.stock = garantia.stock + int(producto['vacios'])
+            garantia.stock += int(producto['vacios'])
             garantia.save()
             print "===="
             print garantia.stock
-            #Se anexa a las garantias
-
-
+            # Se anexa a las garantias
 
     def _procesar_guias(self):
         guias = json.loads(self.request.POST.get('guias'))
@@ -344,14 +333,14 @@ class Cerrar(LoginRequiredMixin, View):
         cupones = json.loads(cupones)
 
         for i in cupones:
-            client = Cliente.objects.get( pk = int(i['cliente']['id']) )
-            format = Producto.objects.get( pk = int(i['formato']['id']) )
+            client = Cliente.objects.get(pk=int(i['cliente']['id']))
+            formato = Producto.objects.get(pk=int(i['formato']['id']))
 
             cupon = CuponPrepago()
             cupon.numero_cupon = i['numero']
             cupon.descuento = int(i['descuento'])
             cupon.liquidacion = self.this_liquidacion
-            cupon.formato = format
+            cupon.formato = formato
             cupon.cliente = client
             cupon.save()
 
@@ -364,8 +353,8 @@ class Cerrar(LoginRequiredMixin, View):
         cheques = json.loads(cheques)
 
         for c in cheques:
-            bank = Banco.objects.get( pk = int(c['banco']['id']) )
-            bank.cheques_recibidos = 1 + bank.cheques_recibidos
+            bank = Banco.objects.get(pk=int(c['banco']['id']) )
+            bank.cheques_recibidos += 1
             bank.save()
 
             cheque = Cheque()
@@ -396,7 +385,7 @@ class Cerrar(LoginRequiredMixin, View):
 
     def _ingreso_guias_propia(self, guias):
         for guia in guias:
-            client = Cliente.objects.get( pk = int(guia['cliente']['id']) )
+            client = Cliente.objects.get(pk=int(guia['cliente']['id']))
 
             this = GuiaVenta()
             this.cliente = client
@@ -408,7 +397,7 @@ class Cerrar(LoginRequiredMixin, View):
 
     def _ingreso_guia_lipigas(self, guias):
         for guia in guias:
-            client = Cliente.objects.get( pk = int(guia['cliente']['idCliente']) )
+            client = Cliente.objects.get(pk=int(guia['cliente']['idCliente']))
 
             this = GuiaVenta()
             this.cliente = client
@@ -420,7 +409,7 @@ class Cerrar(LoginRequiredMixin, View):
 
     def _ingresar_productos_guia(self, productos, guia):
         for prod in productos:
-            producto = Producto.objects.get( codigo = int(prod['codigo']) )
+            producto = Producto.objects.get(codigo=int(prod['codigo']))
 
             this = DetalleGuiaVenta()
             this.cantidad = int(prod['cantidad'])
@@ -431,20 +420,20 @@ class Cerrar(LoginRequiredMixin, View):
 
 class ObtenerGarantias(LoginRequiredMixin, View):
     def get(self, req):
-        tipo = TipoProducto.objects.get( pk = TipoProducto.GARANTIA)
+        # tipo = TipoProducto.objects.get(pk=TipoProducto.GARANTIA)
         garantias = Producto.objects.get_garantias_filtradas()
         data = []
 
         for garantia in garantias:
             item = {
-                'id' : garantia.id,
-                'codigo' : garantia.codigo,
-                'precio' : garantia.get_precio_producto()
+                'id': garantia.id,
+                'codigo': garantia.codigo,
+                'precio': garantia.get_precio_producto()
             }
 
             data.append(item)
 
-        return JsonResponse(data, safe = False)
+        return JsonResponse(data, safe=False)
 
 
 index = IndexView.as_view()
