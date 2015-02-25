@@ -2,10 +2,10 @@
 import json
 from django.core.serializers.json import DjangoJSONEncoder
 
-from django.views.generic import TemplateView,View
+from django.views.generic import TemplateView, View
 from django.db import transaction
 from django.http import HttpResponse, JsonResponse
-from helpers.fecha import convierte_texto_fecha, convierte_fecha_texto
+from helpers.fecha import convierte_fecha_texto
 
 from .models import Producto
 from .models import HistorialStock
@@ -23,7 +23,7 @@ class IndexView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, *args, **kwargs):
         context = super(IndexView, self).get_context_data(*args, **kwargs)
         context["vehiculos"] = Vehiculo.objects.get_vehiculos_con_chofer()
-        context["productos_guia"] = Producto.objects.exclude(tipo_producto_id = 3).order_by("id")
+        context["productos_guia"] = Producto.objects.get_productos_filtrados()
 
         return context
 
@@ -51,11 +51,11 @@ class GuardarFactura(LoginRequiredMixin, View):
         self.salida_garantias(nueva_factura, lista_garantias)
 
         data = {
-            "status" : "ok",
-            "guia" : {
-                "id" : nueva_factura.id,
-                "fecha" : convierte_fecha_texto(nueva_factura.fecha),
-                "productos" : self.productosActualizados,
+            "status": "ok",
+            "guia": {
+                "id": nueva_factura.id,
+                "fecha": convierte_fecha_texto(nueva_factura.fecha),
+                "productos": self.productosActualizados,
             }
         }
 
@@ -68,7 +68,7 @@ class GuardarFactura(LoginRequiredMixin, View):
             else:
                 cantidad = int(item["cantidad"])
 
-            producto = Producto.objects.get(pk = item["id"])
+            producto = Producto.objects.get(pk=item["id"])
 
             if producto.stock is None:
                 producto.stock = cantidad
@@ -92,7 +92,7 @@ class GuardarFactura(LoginRequiredMixin, View):
             else:
                 cantidad = int(item["cantidad"])
 
-            producto = Producto.objects.get(codigo = item["codigo"])
+            producto = Producto.objects.get(codigo=item["codigo"])
             producto.stock -= cantidad
             producto.save()
 
@@ -118,7 +118,7 @@ class ObtenerVehiculosPorProductoView(LoginRequiredMixin, View):
 
     def get(self, req):
         producto_id = int(req.GET.get("producto_id"))
-        stocks_vehiculos = StockVehiculo.objects.filter(producto_id = producto_id)
+        stocks_vehiculos = StockVehiculo.objects.filter(producto_id=producto_id)
 
         resultados = []
 
@@ -158,13 +158,11 @@ class FiltrarGuias(LoginRequiredMixin, View):
                     "numero": guia.movil.vehiculo.patente
                 },
                 "fecha": convierte_fecha_texto(guia.fecha),
-                "estado" : guia.estado
+                "estado": guia.estado
             })
 
-        res = { "guias": guias }
-        res = json.dumps(res, cls=DjangoJSONEncoder)
-
-        return HttpResponse(res, content_type="application/json")
+        res = {"guias": guias}
+        return JsonResponse(res, safe=False)
 
 
 class ObtenerProductos(LoginRequiredMixin, View):

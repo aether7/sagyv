@@ -23,3 +23,15 @@ sagyv/node_modules/*
 .idea/dictionaries/Aether.xml
 
 .idea/.name
+
+.idea/sqldialects.xml
+
+.idea/inspectionProfiles/Project_Default.xml
+
+.idea/inspectionProfiles/profiles_settings.xml
+
+.idea/dataSources.xml
+
+.idea/dataSources.local.xml
+
+.idea/dataSources.ids

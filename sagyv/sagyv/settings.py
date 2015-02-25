@@ -5,7 +5,7 @@ For more information on this file, see
 https://docs.djangoproject.com/en/1.6/topics/settings/
 
 For the full list of settings and their values, see
-https://docs.djangoproject.com/en/1.6/ref/settings/
+https://docs.djangoproject.com/en/1.7/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -115,8 +115,6 @@ FIXTURE_DIRS = (
 )
 
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.CachedStaticFilesStorage'
-
-#SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
 EMAIL_HOST = "smtp.gmail.com"
@@ -133,5 +131,5 @@ LOGIN_URL = '/'
 
 try:
     from .local_settings import *
-except ImportError:
+except ImportError as err:
     pass

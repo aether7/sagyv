@@ -420,7 +420,6 @@ class Cerrar(LoginRequiredMixin, View):
 
 class ObtenerGarantias(LoginRequiredMixin, View):
     def get(self, req):
-        # tipo = TipoProducto.objects.get(pk=TipoProducto.GARANTIA)
         garantias = Producto.objects.get_garantias_filtradas()
         data = []
 

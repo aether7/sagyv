@@ -13,56 +13,44 @@ class ProductoManager(models.Manager):
     GARANTIAS = 3
 
     def get_productos_filtrados(self):
-        queryset = self.exclude(tipo_producto_id = ProductoManager.GARANTIAS)
-        productos = queryset.exclude(codigo = 1515).order_by('orden')
+        queryset = self.exclude(tipo_producto_id=ProductoManager.GARANTIAS)
+        productos = queryset.exclude(codigo=1515).order_by('orden')
         return productos
 
     def get_garantias(self):
-        garantias = self.filter(tipo_producto_id = ProductoManager.GARANTIAS).order_by('id')
+        garantias = self.filter(tipo_producto_id=ProductoManager.GARANTIAS).order_by('id')
         return garantias
 
     def get_garantias_filtradas(self):
-        queryset = self.filter(tipo_producto_id = 3).exclude(codigo = 3215).exclude(codigo = 3315)
+        queryset = self.filter(tipo_producto_id=3).exclude(codigo=3215).exclude(codigo=3315)
         return queryset
 
 
 class HistorialStockManager(models.Manager):
     def get_productos_guia_recarga(self, guia):
-        query = self.filter(guia_despacho = guia).values('producto_id','es_recarga','producto__codigo')
-        productos = query.annotate(cantidad_total = Sum('cantidad'))
+        query = self.filter(guia_despacho=guia).values('producto_id', 'es_recarga', 'producto__codigo')
+        productos = query.annotate(cantidad_total=Sum('cantidad'))
 
         return productos
 
     def get_productos_guia_total(self, guia):
-        consulta_sql = """
-            SELECT
-                id,
-                fecha,
-                guia_despacho_id,
-                producto_id,
-                factura_id,
-                es_recarga,
-                SUM(cantidad) as cantidad
-            FROM bodega_historialstock
-            WHERE guia_despacho_id = #{guia_id}
-            GROUP BY producto_id, id
-        """
+        queryset = self.values('id', 'fecha', 'guia_despacho_id', 'producto_id', 'factura_id', 'es_recarga')
+        queryset = queryset.annotate(cantidad=Sum('cantidad')).filter(guia_despacho_id=guia.id)
 
-        consulta_sql = consulta_sql.replace("#{guia_id}", str(guia.id))
-        return self.raw(consulta_sql)
+        return queryset
 
 
 class GuiaDespachoManager(models.Manager):
     def get_ultimo_despacho_id(self):
-        if self.exclude(numero = None).exists():
-            return self.exclude(numero = None).latest('id')
+        if self.exclude(numero=None).exists():
+            return self.exclude(numero=None).latest('id')
         else:
             return None
 
 
 class VehiculoManager(models.Manager):
     def get_vehiculos_con_chofer(self):
-        return self.filter(trabajadorvehiculo__activo = 1)
+        return self.filter(trabajadorvehiculo__activo=1)
 
 
 class StockManager(models.Manager):

@@ -1,10 +1,9 @@
 import json
 
 from django.db import transaction
-from django.http import HttpResponse
+from django.http import JsonResponse
 from django.views.generic import View
-from django.core.serializers.json import DjangoJSONEncoder
-from helpers.fecha import convierte_texto_fecha, convierte_fecha_texto
+from helpers.fecha import convierte_fecha_texto
 from utils.views import LoginRequiredMixin
 
 from .models import HistorialStock
@@ -21,7 +20,7 @@ class ObtenerGuiaDespacho(LoginRequiredMixin, View):
         guia_id = int(req.GET.get("guia_id"))
         productos = []
 
-        guia = GuiaDespacho.objects.get(pk = guia_id)
+        guia = GuiaDespacho.objects.get(pk=guia_id)
         items = HistorialStock.objects.get_productos_guia_recarga(guia)
 
         for item in items:
@@ -39,7 +38,7 @@ class ObtenerGuiaDespacho(LoginRequiredMixin, View):
             'numero_guia' : guia.numero
         }
 
-        return HttpResponse(json.dumps(data), content_type="application/json")
+        return JsonResponse(data, safe=False)
 
 
 class CrearGuiaDespachoView(LoginRequiredMixin, View):
@@ -57,29 +56,28 @@ class CrearGuiaDespachoView(LoginRequiredMixin, View):
         lista = json.loads(lista_producto)
         guia = self.crear_guia_despacho()
 
-        if(self.id_vehiculo != None):
+        if self.id_vehiculo is not None:
             self.carga_datos_salida(guia, lista)
 
         data = {
-            "status" : "ok",
-            "guia" : {
-                "id" : guia.id,
-                "numero" : guia.numero,
-                "vehiculo" : guia.movil.vehiculo.patente,
-                "fecha" : guia.fecha,
-                "productos" : self.productosActualizados,
+            "status": "ok",
+            "guia": {
+                "id": guia.id,
+                "numero": guia.numero,
+                "vehiculo": guia.movil.vehiculo.patente,
+                "fecha": guia.fecha,
+                "productos": self.productosActualizados,
             }
         }
 
-        data = json.dumps(data, cls=DjangoJSONEncoder)
-        return HttpResponse(data, content_type="application/json")
+        return JsonResponse(data, safe=False)
 
     def crear_guia_despacho(self):
-        vehiculo_obj = Vehiculo.objects.get( pk = self.id_vehiculo )
+        vehiculo_obj = Vehiculo.objects.get(pk=self.id_vehiculo)
         vehiculo_obj.km = int(self.kilometraje)
         vehiculo_obj.save()
 
-        movil = Movil.objects.get( vehiculo = vehiculo_obj )
+        movil = Movil.objects.get(vehiculo=vehiculo_obj)
 
         guia_despacho = GuiaDespacho()
         guia_despacho.numero = self.numero_guia
@@ -94,13 +92,13 @@ class CrearGuiaDespachoView(LoginRequiredMixin, View):
 
         for item in lista:
             cantidad = int(item["cantidad"])
-            producto = Producto.objects.get(pk = item["id"])
+            producto = Producto.objects.get(pk=item["id"])
             producto.stock -= cantidad
             producto.save()
 
             this_prod = {
-                'id' : producto.id,
-                'cantidad' : producto.stock
+                'id': producto.id,
+                'cantidad': producto.stock
             }
 
             self.productosActualizados.append(this_prod)
@@ -118,12 +116,12 @@ class CrearGuiaDespachoView(LoginRequiredMixin, View):
 
     def modificar_stock_vehiculo(self, vehiculo, producto, cantidad):
 
-        if not StockVehiculo.objects.filter(vehiculo = vehiculo, producto = producto).exists():
+        if not StockVehiculo.objects.filter(vehiculo=vehiculo, producto=producto).exists():
             stock_vehiculo = StockVehiculo()
             stock_vehiculo.vehiculo = vehiculo
             stock_vehiculo.producto = producto
         else:
-            stock_vehiculo = StockVehiculo.objects.get(vehiculo = vehiculo, producto = producto)
+            stock_vehiculo = StockVehiculo.objects.get(vehiculo=vehiculo, producto=producto)
 
         stock_vehiculo.cantidad = cantidad
         stock_vehiculo.save()
@@ -137,12 +135,12 @@ class RecargaGuia(LoginRequiredMixin, View):
         productos = json.loads(req.POST.get("productos"))
         monto = req.POST.get("monto")
 
-        guia = GuiaDespacho.objects.get(pk = id_guia)
-        historico = self.historial(productos, guia)
+        guia = GuiaDespacho.objects.get(pk=id_guia)
+        self.historial(productos, guia)
 
         resultados = {
-            "status" : "ok",
-            "productos" : self.productosActualizados
+            "status": "ok",
+            "productos": self.productosActualizados
         }
 
         abono = AbonoGuia()
@@ -150,11 +148,11 @@ class RecargaGuia(LoginRequiredMixin, View):
         abono.monto = int(monto)
         abono.save()
 
-        return HttpResponse(json.dumps(resultados), content_type="application/json")
+        return JsonResponse(resultados, safe=False)
 
     def historial(self, productos, guia):
         for producto in productos:
-            prod = Producto.objects.get(pk = int(producto['id']))
+            prod = Producto.objects.get(pk=int(producto['id']))
             cant = int(producto['cantidad'])
 
             historico = HistorialStock()
@@ -165,19 +163,20 @@ class RecargaGuia(LoginRequiredMixin, View):
             historico.es_recarga = True
             historico.save()
 
-            prod.stock = prod.stock - cant
+            prod.stock -= cant
             prod.save()
 
             this_prod = {
                 'id': prod.id,
                 'cantidad': prod.stock
             }
+
             self.productosActualizados.append(this_prod)
             self.actualizar_stock(prod, guia.vehiculo, cant)
 
     def actualizar_stock(self, producto_obj, vehiculo_obj, cantidad):
         try:
-            stock_vehiculo = StockVehiculo.objects.get(producto = producto_obj)
+            stock_vehiculo = StockVehiculo.objects.get(producto=producto_obj)
             stock_vehiculo.cantidad = stock_vehiculo.cantidad + cantidad
             stock_vehiculo.save()
         except StockVehiculo.DoesNotExist:
@@ -195,11 +194,11 @@ class ObtenerIdGuia(LoginRequiredMixin, View):
         numero = guia is not None and guia.numero or 0
 
         result = {
-            "status" : "ok",
-            "next" : int(numero) + 1
+            "status": "ok",
+            "next": int(numero) + 1
         }
 
-        return HttpResponse(json.dumps(result), content_type="application/json")
+        return JsonResponse(result, safe=False)
 
 crea_guia = CrearGuiaDespachoView.as_view()
 obtener_guia = ObtenerGuiaDespacho.as_view()
