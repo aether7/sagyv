@@ -75,12 +75,14 @@ class ObtenerGuiaDespacho(LoginRequiredMixin, View):
         productos = []
 
         for item in lote:
+            producto = Producto.objects.get(pk = item['producto_id'])
+
             productos.append({
-                'id': item.producto.id,
-                'codigo': item.producto.codigo,
-                'cantidad': item.cantidad,
-                'precio': item.producto.get_precio_producto(),
-                'peso': item.producto.peso
+                'id': producto.id,
+                'codigo': producto.codigo,
+                'cantidad': item['cantidad'],
+                'precio': producto.get_precio_producto(),
+                'peso': producto.peso
             })
 
         return productos

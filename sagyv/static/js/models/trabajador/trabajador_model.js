@@ -184,10 +184,9 @@ Trabajador.prototype = {
 
     _esSeleccionValida: function(campo){
         var valido = true;
-
         this.mensajes[campo] = '';
 
-        if(!this[campo]){
+        if(!this[campo].id){
             valido = false;
             this.mensajes[campo] = 'campo obligatorio';
         }

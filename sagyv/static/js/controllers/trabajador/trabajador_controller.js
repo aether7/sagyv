@@ -1,5 +1,5 @@
-var Trabajador = require('../models/trabajador/trabajador_model.js'),
-    Boleta = require('../models/trabajador/boleta_model.js');
+var Trabajador = require('../../models/trabajador/trabajador_model.js'),
+    Boleta = require('../../models/trabajador/boleta_model.js');
 
 function TrabajadorController(service){
     this.service = service;
@@ -11,7 +11,9 @@ function TrabajadorController(service){
     this.init();
 }
 
-TrabajadorController.mixin({
+TrabajadorController.prototype = {
+    constructor: TrabajadorController,
+
     init: function(){
         var _this = this;
 
@@ -156,6 +158,6 @@ TrabajadorController.mixin({
             common.agregarMensaje('Se ha anexado el talonario de boletas al trabajador exitosamente');
         });
     }
-});
+};
 
 module.exports = TrabajadorController;

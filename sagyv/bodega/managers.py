@@ -56,31 +56,22 @@ class VehiculoManager(models.Manager):
 class StockManager(models.Manager):
 
     def get_stock_transito(self):
-        consulta_sql = """
-            SELECT  mp.codigo as codigo,
-                    msv.producto_id as producto_id,
-                    mtp.nombre as nombre,
-                    SUM(msv.cantidad) as cantidad
-            FROM bodega_stockvehiculo msv
-            INNER JOIN bodega_producto mp ON(msv.producto_id = mp.id)
-            INNER JOIN bodega_tipoproducto mtp ON(mp.tipo_producto_id = mtp.id)
-            GROUP BY mp.codigo, mp.peso, msv.producto_id, mtp.nombre
-        """
-        query = connection.cursor()
-        query.execute(consulta_sql)
+        resultados = self.values('producto__id',
+            'producto__codigo',
+            'producto__tipo_producto__nombre').annotate(cantidad=Sum('cantidad'))
 
-        resultado = []
+        data = []
 
-        for row in query.fetchall():
+        for res in resultados:
             p = Stock()
-            p.codigo = row[0]
-            p.producto_id = row[1]
-            p.nombre = row[2]
-            p.cantidad = row[3]
+            p.codigo = res['producto__codigo']
+            p.producto_id = res['producto__id']
+            p.nombre = res['producto__tipo_producto__nombre']
+            p.cantidad = res['cantidad']
 
-            resultado.append(p)
+            data.append(p)
 
-        return resultado
+        return data
 
     def get_stock_consolidado(self):
         consulta_sql = """
