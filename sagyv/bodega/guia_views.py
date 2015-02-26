@@ -14,6 +14,7 @@ from .models import AbonoGuia
 from .models import Vehiculo
 from .models import Movil
 
+
 class ObtenerGuiaDespacho(LoginRequiredMixin, View):
 
     def get(self, req):

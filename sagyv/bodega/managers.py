@@ -35,7 +35,7 @@ class HistorialStockManager(models.Manager):
 
     def get_productos_guia_total(self, guia):
         queryset = self.values('id', 'fecha', 'guia_despacho_id', 'producto_id', 'factura_id', 'es_recarga')
-        queryset = queryset.annotate(cantidad=Sum('cantidad')).filter(guia_despacho_id=guia.id)
+        queryset = queryset.filter(guia_despacho_id=guia.id).annotate(cantidad=Sum('cantidad'))
 
         return queryset
 

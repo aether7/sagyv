@@ -26,28 +26,28 @@ Trabajador.prototype = {
     constructor: Trabajador,
 
     esChofer: function(){
-        return this.tipo.id === constantes.CHOFER;
+        return parseInt(this.tipo.id) === constantes.CHOFER;
     },
 
     esNombreValido: function(){
-        return this._esTextoValido("nombre", "El nombre no es válido");
+        return this._esTextoValido('nombre', 'El nombre no es válido');
     },
 
     esApellidoValido: function(){
-        return this._esTextoValido("apellido", "El apellido no es válido");
+        return this._esTextoValido('apellido', 'El apellido no es válido');
     },
 
     esRutValido: function(){
         var valido = true;
 
-        this.mensajes.rut = "";
+        this.mensajes.rut = '';
 
         if(!this.rut){
             valido = false;
-            this.mensajes.rut = "campo obligatorio";
+            this.mensajes.rut = 'campo obligatorio';
         }else if(!$.Rut.validar(this.rut)){
             valido = false;
-            this.mensajes.rut = "RUT no válido";
+            this.mensajes.rut = 'RUT no válido';
         }
 
         return valido;
@@ -56,46 +56,46 @@ Trabajador.prototype = {
     esDomicilioValido: function(){
         var valido = true;
 
-        this.mensajes.domicilio = "";
+        this.mensajes.domicilio = '';
 
         if(!this.domicilio){
             valido = false;
-            this.mensajes.domicilio = "campo obligatorio";
+            this.mensajes.domicilio = 'campo obligatorio';
         }
 
         return valido;
     },
 
     esFechaNacimientoValida: function(){
-        return this._esFechaValida("fechaNacimiento");
+        return this._esFechaValida('fechaNacimiento');
     },
 
     esInicioContratoValido: function(){
-        return this._esFechaValida("inicioContrato");
+        return this._esFechaValida('inicioContrato');
     },
 
     esVigenciaLicenciaValida: function(){
-        return this._esFechaValida("vigenciaLicencia");
+        return this._esFechaValida('vigenciaLicencia');
     },
 
     esAfpValida: function(){
-        return this._esSeleccionValida("afp");
+        return this._esSeleccionValida('afp');
     },
 
     esSistemaSaludValido: function(){
-        return this._esSeleccionValida("sistemaSalud");
+        return this._esSeleccionValida('sistemaSalud');
     },
 
     esEstadoCivilValido: function(){
-        return this._esSeleccionValida("estadoCivil");
+        return this._esSeleccionValida('estadoCivil');
     },
 
     esEstadoVacacionValido: function(){
-        return this._esSeleccionValida("estadoVacacion");
+        return this._esSeleccionValida('estadoVacacion');
     },
 
     esTipoValido: function(){
-        return this._esSeleccionValida("tipo");
+        return this._esSeleccionValida('tipo');
     },
 
     esValido: function(){
@@ -112,7 +112,7 @@ Trabajador.prototype = {
         valido = this.esEstadoCivilValido() && valido;
         valido = this.esTipoValido() && valido;
 
-        if(this.tipo.id === constantes.FLETERO){
+        if(parseInt(this.tipo.id) === constantes.FLETERO){
             return valido;
         }
 
@@ -152,14 +152,14 @@ Trabajador.prototype = {
     _esFechaValida: function(campo){
         var valido = true;
 
-        this.mensajes[campo] = "";
+        this.mensajes[campo] = '';
 
         if(!this[campo]){
             valido = false;
-            this.mensajes[campo] = "campo obligatorio";
+            this.mensajes[campo] = 'campo obligatorio';
         }else if(!type.isDate(this[campo])){
             valido = false;
-            this.mensajes[campo] = "fecha inválida";
+            this.mensajes[campo] = 'fecha inválida';
         }
 
         return valido;
@@ -169,11 +169,11 @@ Trabajador.prototype = {
         var valido = true,
             regex = /^[A-Za-záéíóúñÁÉÍÓÚÑ\s]+$/i;
 
-        this.mensajes[campo] = "";
+        this.mensajes[campo] = '';
 
         if(!this[campo]){
             valido = false;
-            this.mensajes[campo] = "campo obligatorio";
+            this.mensajes[campo] = 'campo obligatorio';
         }else if(!regex.test(this[campo])){
             valido = false;
             this.mensajes[campo] = customMje;
@@ -185,11 +185,11 @@ Trabajador.prototype = {
     _esSeleccionValida: function(campo){
         var valido = true;
 
-        this.mensajes[campo] = "";
+        this.mensajes[campo] = '';
 
         if(!this[campo]){
             valido = false;
-            this.mensajes[campo] = "campo obligatorio";
+            this.mensajes[campo] = 'campo obligatorio';
         }
 
         return valido;
