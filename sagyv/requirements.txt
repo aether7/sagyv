@@ -1,5 +1,4 @@
 Django==1.7
-Pillow==2.5.3
-reportlab==3.1.8
+django-easy-pdf==git+https://github.com/chrisglass/xhtml2pdf.git
 wsgiref==0.1.2
 openpyxl==2.1.0
