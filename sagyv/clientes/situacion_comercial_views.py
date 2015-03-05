@@ -13,7 +13,7 @@ from .models import TipoDescuento
 
 class SituacionComercialMixin(object):
     def _get_situacion_comercial(self, sc):
-        data = { 'id': sc.id, 'monto': 0, 'tipoDescuento': None, 'formato': None }
+        data = {'id': sc.id, 'monto': 0, 'tipoDescuento': None, 'formato': None}
 
         if str(sc) != 'Sin descuento':
             data['monto'] = sc.monto_descuento

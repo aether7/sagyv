@@ -3,6 +3,7 @@ from django.db import models
 from .managers import ClienteManager
 from bodega.models import Producto
 
+
 class Region(models.Model):
     nombre = models.CharField(max_length=140)
     orden = models.IntegerField(null = True)

@@ -141,7 +141,7 @@ class BuscarCliente(LoginRequiredMixin, View):
         data["situacion_comercial"]["monto"] = opciones["monto"]
         data["situacion_comercial"]["codigo"] = opciones["codigo"]
 
-        return JsonResponse(data, safe = False)
+        return JsonResponse(data, safe=False)
 
     def get_situacion_comercial(self, cliente):
         opciones = {}
@@ -231,7 +231,7 @@ class Cerrar(LoginRequiredMixin, View):
 
         self.this_trabajador = this_vehiculo.get_ultimo_chofer()
 
-        talonario_boleta = BoletaTrabajador.objects.get(trabajador = self.this_trabajador, activo=True)
+        talonario_boleta = BoletaTrabajador.objects.get(trabajador=self.this_trabajador, activo=True)
         talonario_boleta.actual = int(ultima_boleta)
         talonario_boleta.save()
 
@@ -301,17 +301,13 @@ class Cerrar(LoginRequiredMixin, View):
             print producto['llenos']
             row.stock += int(producto['llenos'])
             row.save()
-            print "===="
-            print row.stock
-            print "****"
-            cod_garantia = '31'+str(row.codigo)[2:]
-            garantia = Producto.objects.get(codigo = cod_garantia)
+
+            cod_garantia = '31' + str(row.codigo)[2:]
+            garantia = Producto.objects.get(codigo=cod_garantia)
             print garantia.stock
             print garantia.stock + int(producto['vacios'])
             garantia.stock += int(producto['vacios'])
             garantia.save()
-            print "===="
-            print garantia.stock
             # Se anexa a las garantias
 
     def _procesar_guias(self):
@@ -355,7 +351,7 @@ class Cerrar(LoginRequiredMixin, View):
         cheques = json.loads(cheques)
 
         for c in cheques:
-            bank = Banco.objects.get(pk=int(c['banco']['id']) )
+            bank = Banco.objects.get(pk=int(c['banco']['id']))
             bank.cheques_recibidos += 1
             bank.save()
 

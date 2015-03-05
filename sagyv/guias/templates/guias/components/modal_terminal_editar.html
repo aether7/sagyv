@@ -17,25 +17,11 @@
                         ng-show="terminalCtrl.terminal.mensajes.codigo"
                         ng-bind="terminalCtrl.terminal.mensajes.codigo"></span>
                 </div>
-
-                <!--div class="form-group">
-                    <label for="terminal_agregar_vehiculo" class="control-label">Móvil:</label>
-
-                    <select id="terminal_agregar_vehiculo" class="form-control" ng-model="terminalCtrl.terminal.movil.id">
-                        {% for movil in moviles %}
-                        <option value="{{ movil.id }}">{{ movil.numero }}</option>
-                        {% endfor %}
-                    </select>
-
-                    <span class="text-danger"
-                        ng-show="terminalCtrl.terminal.mensajes.movil"
-                        ng-bind="terminalCtrl.terminal.mensajes.movil"></span>
-                </div-->
             </div>
 
             <div class="modal-footer">
-                <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
                 <button class="btn btn-primary" data-ng-click="terminalCtrl.editar()">Guardar</button>
+                <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
             </div>
         </div>
     </div>

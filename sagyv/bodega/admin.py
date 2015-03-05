@@ -24,8 +24,8 @@ class VehiculoAdmin(admin.ModelAdmin):
 
 
 class TrabajadorVehiculoAdmin(admin.ModelAdmin):
-    list_display = ("id", "trabajador", "vehiculo","fecha","activo")
-    list_editable = ("trabajador","vehiculo")
+    list_display = ("id", "trabajador", "vehiculo", "fecha", "activo")
+    list_editable = ("trabajador", "vehiculo")
     ordering = ("-id",)
 
 admin.site.register(TipoProducto, TipoProductoAdmin)

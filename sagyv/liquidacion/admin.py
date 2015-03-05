@@ -15,14 +15,14 @@ class TarjetaCreditoAdmin(admin.ModelAdmin):
 
 
 class TerminalAdmin(admin.ModelAdmin):
-    list_display = ("id","codigo","movil")
-    list_editable = ("codigo","movil")
+    list_display = ("id", "codigo", "movil")
+    list_editable = ("codigo", "movil")
     ordering = ("id",)
 
 
 class BancoAdmin(admin.ModelAdmin):
-    list_display = ("id", "nombre","cheques_recibidos")
-    list_editable = ("nombre","cheques_recibidos")
+    list_display = ("id", "nombre", "cheques_recibidos")
+    list_editable = ("nombre", "cheques_recibidos")
     ordering = ("id",)
 
 

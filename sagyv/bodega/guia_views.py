@@ -16,7 +16,6 @@ from .models import Movil
 
 
 class ObtenerGuiaDespacho(LoginRequiredMixin, View):
-
     def get(self, req):
         guia_id = int(req.GET.get("guia_id"))
         productos = []
@@ -33,19 +32,26 @@ class ObtenerGuiaDespacho(LoginRequiredMixin, View):
             })
 
         data = {
-            'productos' : productos,
-            'fecha' : convierte_fecha_texto(guia.fecha),
-            'movil' : guia.movil.vehiculo.patente,
-            'numero_guia' : guia.numero
+            'productos': productos,
+            'fecha': convierte_fecha_texto(guia.fecha),
+            'movil': guia.movil.vehiculo.patente,
+            'numero_guia': guia.numero
         }
 
         return JsonResponse(data, safe=False)
 
 
 class CrearGuiaDespachoView(LoginRequiredMixin, View):
+    def __init__(self, *args, **kwargs):
+        super(CrearGuiaDespachoView, self).__init__(*args, **kwargs)
+        self.productosActualizados = []
+        self.numero_guia = None
+        self.id_vehiculo = None
+        self.kilometraje = None
+        self.fecha_creacion = None
 
     @transaction.atomic
-    def post(self,req):
+    def post(self, req):
         self.productosActualizados = []
 
         self.numero_guia = req.POST.get("numero")
@@ -129,6 +135,9 @@ class CrearGuiaDespachoView(LoginRequiredMixin, View):
 
 
 class RecargaGuia(LoginRequiredMixin, View):
+    def __init__(self, *args, **kwargs):
+        super(RecargaGuia, self).__init__(*args, **kwargs)
+        self.productosActualizados = []
 
     def post(self, req):
         self.productosActualizados = []

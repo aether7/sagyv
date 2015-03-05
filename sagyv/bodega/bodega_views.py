@@ -30,10 +30,13 @@ class IndexView(LoginRequiredMixin, TemplateView):
 
 class GuardarFactura(LoginRequiredMixin, View):
 
+    def __init__(self, *args, **kwargs):
+        super(GuardarFactura, self).__init__(*args, **kwargs)
+        self.productosActualizados = []
+
     @transaction.atomic
     def post(self, req):
         self.productosActualizados = []
-
         factura = req.POST.get('factura')
         fecha = req.POST.get('fecha')
         precio = req.POST.get('valor')
@@ -167,7 +170,7 @@ class FiltrarGuias(LoginRequiredMixin, View):
 
 class ObtenerProductos(LoginRequiredMixin, View):
     def get(self, req):
-        productos = Producto.objects.exclude(orden = -1).order_by('orden')
+        productos = Producto.objects.exclude(orden=-1).order_by('orden')
         response = []
 
         for producto in productos:

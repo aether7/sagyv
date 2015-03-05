@@ -1,6 +1,7 @@
 from django.db import connections, models, connection
 from django.db.models import Sum
 
+
 class Stock(object):
     def __init__(self):
         self.codigo = 0

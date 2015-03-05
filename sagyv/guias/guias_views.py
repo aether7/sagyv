@@ -16,6 +16,7 @@ Tengo duda si definirlo como Guia o Guias.
 actualmente lo estoy definiendo como 'Guia'
 """
 
+
 def get_guias(guias):
     data = {
         'id': guias.id,
@@ -30,6 +31,7 @@ def get_guias(guias):
 
     return data
 
+
 def _get_guias():
     guias = []
     rs = GuiaTrabajador.objects.order_by("-fecha_creacion").exclude(activo=False)
@@ -39,6 +41,7 @@ def _get_guias():
         guias.append(data)
 
     return guias
+
 
 def _cambio_estado_guia_existente(trabajador):
     rs = GuiaTrabajador.objects.filter(trabajador=trabajador).exclude(activo=True)
@@ -99,7 +102,7 @@ class EditarGuias(View):
         worker_obj = json.loads(req.POST.get('trabajador'))
         trabajador_id = int(worker_obj.get('id'))
 
-        guias = GuiaTrabajador.objects.get(pk=guias_id )
+        guias = GuiaTrabajador.objects.get(pk=guias_id)
         trabajador = Trabajador.objects.get(pk=trabajador_id)
 
         guias.trabajador = trabajador
