@@ -133,16 +133,21 @@ LiquidacionController.mixin({
     },
 
     cerrarLiquidacion: function(){
+        if(isNaN($('#kilometraje').val()) || !$('#kilometraje').val()){
+            alert('antes de poder cerrar la liquidacion, se debe llenar el kilometraje del movil');
+            return;
+        }
+
         var data = this.dump.toJSON();
 
-        $("#vouchers_ls").val(data.vouchers);
-        $("#cheques_ls").val(data.cheques);
-        $("#cupones_prepago_ls").val(data.cuponesPrepago);
-        $("#otros_ls").val(data.otros);
-        $("#guias_ls").val(data.guias);
-        $("#montos_ls").val("");
-        $("#kilometraje_ls").val($("#kilometraje").val());
-        $("#numero_boleta_ls").val($("#numero_boleta").val());
+        $('#vouchers_ls').val(data.vouchers);
+        $('#cheques_ls').val(data.cheques);
+        $('#cupones_prepago_ls').val(data.cuponesPrepago);
+        $('#otros_ls').val(data.otros);
+        $('#guias_ls').val(data.guias);
+        $('#montos_ls').val('');
+        $('#kilometraje_ls').val($('#kilometraje').val());
+        $('#numero_boleta_ls').val($('#numero_boleta').val());
 
         $('#f_cerrar_liquidacion').get(0).submit();
     },
