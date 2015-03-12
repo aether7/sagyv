@@ -1,3 +1,6 @@
+const FIJO = 1;
+const PORCENTAJE = 2;
+
 var ReporteController = require('./reporte_controller.js');
 var graphData = require('../../utils/reporte_graph_data.js');
 
@@ -9,7 +12,18 @@ class ConsumoClienteController extends ReporteController{
     }
 
     cargaConsumos(data){
-        this.consumos = data;
+        this.consumos = data.map((d)=>{
+            var descripcion = 'Sin descuento';
+
+            if(d.descuento.tipo === FIJO){
+                descripcion = '$' + d.descuento.monto + ' en ( ' + d.producto.codigo + ' )';
+            }else if(d.descuento.tipo === PORCENTAJE){
+                descripcion = d.descuento.monto + '% en ( ' + d.producto.codigo + ' )';
+            }
+
+            d.descuento.descripcion = descripcion;
+            return d;
+        });
     }
 
     filtrar(){

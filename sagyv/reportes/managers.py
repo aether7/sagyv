@@ -61,8 +61,12 @@ class ReportesManager(models.Manager):
                 producto.id AS producto_id,
                 producto.codigo AS producto_codigo,
                 SUM(detalle.cantidad) AS producto_cantidad,
-                liquidacion.fecha AS liquidacion_fecha
+                liquidacion.fecha AS liquidacion_fecha,
+                descuento.monto_descuento AS situacion_monto,
+                descuento.tipo_descuento_id AS situacion_tipo,
+                descuento.producto_id AS situacion_producto
             FROM clientes_cliente cliente
+            LEFT JOIN clientes_descuentocliente descuento ON(cliente.situacion_comercial_id = descuento.id)
             INNER JOIN liquidacion_guiaventa guia ON(cliente.id = guia.cliente_id)
             INNER JOIN liquidacion_detalleguiaventa detalle ON(guia.id = detalle.guia_venta_id)
             INNER JOIN liquidacion_liquidacion liquidacion ON(guia.liquidacion_id = liquidacion.id)
@@ -87,6 +91,8 @@ class ReportesManager(models.Manager):
         if len(condiciones) > 0:
             consulta_sql = consulta_sql.replace(':condiciones', ' AND '.join(condiciones))
 
+        print consulta_sql
+
         cursor = connections['default'].cursor()
         cursor.execute(consulta_sql)
         data = dictfetchall(cursor)
@@ -102,6 +108,11 @@ class ReportesManager(models.Manager):
                     'id': row['producto_id'],
                     'codigo': row['producto_codigo'],
                     'cantidad': row['producto_cantidad']
+                },
+                'descuento': {
+                    'monto': row['situacion_monto'],
+                    'tipo': row['situacion_tipo'],
+                    'producto': row['situacion_producto']
                 },
                 'liquidacion': {
                     'fecha': row['liquidacion_fecha']

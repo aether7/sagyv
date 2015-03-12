@@ -1,4 +1,4 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"G:\\sagyv\\sagyv\\static\\js\\bundles\\reportes\\consumo_cliente_bundle.js":[function(require,module,exports){
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/Aether/Proyectos/sagyv/sagyv/static/js/bundles/reportes/consumo_cliente_bundle.js":[function(require,module,exports){
 "use strict";
 
 (function () {
@@ -10,7 +10,7 @@
     app.controller("ConsumoClienteController", ["consumoClienteService", ConsumoClienteController]);
 })();
 
-},{"../../controllers/reportes/consumo_cliente_controller.js":"G:\\sagyv\\sagyv\\static\\js\\controllers\\reportes\\consumo_cliente_controller.js","../../services/reportes/consumo_service.js":"G:\\sagyv\\sagyv\\static\\js\\services\\reportes\\consumo_service.js"}],"G:\\sagyv\\sagyv\\static\\js\\controllers\\reportes\\consumo_cliente_controller.js":[function(require,module,exports){
+},{"../../controllers/reportes/consumo_cliente_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/reportes/consumo_cliente_controller.js","../../services/reportes/consumo_service.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/reportes/consumo_service.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/reportes/consumo_cliente_controller.js":[function(require,module,exports){
 "use strict";
 
 var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
@@ -20,6 +20,9 @@ var _get = function get(object, property, receiver) { var desc = Object.getOwnPr
 var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
+
+var FIJO = 1;
+var PORCENTAJE = 2;
 
 var ReporteController = require("./reporte_controller.js");
 var graphData = require("../../utils/reporte_graph_data.js");
@@ -38,7 +41,18 @@ var ConsumoClienteController = (function (ReporteController) {
     _prototypeProperties(ConsumoClienteController, null, {
         cargaConsumos: {
             value: function cargaConsumos(data) {
-                this.consumos = data;
+                this.consumos = data.map(function (d) {
+                    var descripcion = "Sin descuento";
+
+                    if (d.descuento.tipo === FIJO) {
+                        descripcion = "$" + d.descuento.monto + " en ( " + d.producto.codigo + " )";
+                    } else if (d.descuento.tipo === PORCENTAJE) {
+                        descripcion = d.descuento.monto + "% en ( " + d.producto.codigo + " )";
+                    }
+
+                    d.descuento.descripcion = descripcion;
+                    return d;
+                });
             },
             writable: true,
             configurable: true
@@ -88,7 +102,7 @@ var ConsumoClienteController = (function (ReporteController) {
 
 module.exports = ConsumoClienteController;
 
-},{"../../utils/reporte_graph_data.js":"G:\\sagyv\\sagyv\\static\\js\\utils\\reporte_graph_data.js","./reporte_controller.js":"G:\\sagyv\\sagyv\\static\\js\\controllers\\reportes\\reporte_controller.js"}],"G:\\sagyv\\sagyv\\static\\js\\controllers\\reportes\\reporte_controller.js":[function(require,module,exports){
+},{"../../utils/reporte_graph_data.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/utils/reporte_graph_data.js","./reporte_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/reportes/reporte_controller.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/reportes/reporte_controller.js":[function(require,module,exports){
 "use strict";
 
 var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
@@ -133,7 +147,7 @@ var ReporteController = (function () {
 
 module.exports = ReporteController;
 
-},{}],"G:\\sagyv\\sagyv\\static\\js\\services\\reportes\\consumo_service.js":[function(require,module,exports){
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/reportes/consumo_service.js":[function(require,module,exports){
 "use strict";
 
 var serviceUtil = require("../service_util.js");
@@ -163,7 +177,7 @@ function consumoService($http) {
 
 module.exports = consumoService;
 
-},{"../service_util.js":"G:\\sagyv\\sagyv\\static\\js\\services\\service_util.js"}],"G:\\sagyv\\sagyv\\static\\js\\services\\service_util.js":[function(require,module,exports){
+},{"../service_util.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/service_util.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/service_util.js":[function(require,module,exports){
 "use strict";
 
 function noop() {}
@@ -227,7 +241,7 @@ exports.postMaker = function ($http) {
     };
 };
 
-},{}],"G:\\sagyv\\sagyv\\static\\js\\utils\\reporte_graph_data.js":[function(require,module,exports){
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/utils/reporte_graph_data.js":[function(require,module,exports){
 "use strict";
 
 var data = {
@@ -261,4 +275,4 @@ var data = {
 
 module.exports = data;
 
-},{}]},{},["G:\\sagyv\\sagyv\\static\\js\\bundles\\reportes\\consumo_cliente_bundle.js"]);
+},{}]},{},["/Users/Aether/Proyectos/sagyv/sagyv/static/js/bundles/reportes/consumo_cliente_bundle.js"]);
