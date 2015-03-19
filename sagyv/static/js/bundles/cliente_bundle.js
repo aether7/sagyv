@@ -10,6 +10,7 @@ var app = angular.module('clienteApp', []),
 app.factory('situacionComercialService', ['$http', situacionComercialService]);
 app.factory('clienteService', ['$http', clienteService]);
 
+//este es el filtro que se utiliza para darle formato a los ruts
 app.filter('formatoRut', formatoRut);
 
 app.controller('ClienteController', ['clienteService','$rootScope', ClienteController]);

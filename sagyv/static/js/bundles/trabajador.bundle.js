@@ -1,4 +1,4 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"G:\\sagyv\\sagyv\\static\\js\\bundles\\trabajador_bundle.js":[function(require,module,exports){
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/Aether/Proyectos/sagyv/sagyv/static/js/bundles/trabajador_bundle.js":[function(require,module,exports){
 (function(){
 'use strict';
 var app = angular.module('trabajadorApp', [], App.httpProvider),
@@ -10,7 +10,7 @@ app.controller('TrabajadorController',['trabajadorService', TrabajadorController
 
 })();
 
-},{"../controllers/trabajador/trabajador_controller.js":"G:\\sagyv\\sagyv\\static\\js\\controllers\\trabajador\\trabajador_controller.js","../services/trabajador_service.js":"G:\\sagyv\\sagyv\\static\\js\\services\\trabajador_service.js"}],"G:\\sagyv\\sagyv\\static\\js\\controllers\\trabajador\\trabajador_controller.js":[function(require,module,exports){
+},{"../controllers/trabajador/trabajador_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/trabajador/trabajador_controller.js","../services/trabajador_service.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/trabajador_service.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/trabajador/trabajador_controller.js":[function(require,module,exports){
 var Trabajador = require('../../models/trabajador/trabajador_model.js'),
     Boleta = require('../../models/trabajador/boleta_model.js');
 
@@ -175,7 +175,7 @@ TrabajadorController.prototype = {
 
 module.exports = TrabajadorController;
 
-},{"../../models/trabajador/boleta_model.js":"G:\\sagyv\\sagyv\\static\\js\\models\\trabajador\\boleta_model.js","../../models/trabajador/trabajador_model.js":"G:\\sagyv\\sagyv\\static\\js\\models\\trabajador\\trabajador_model.js"}],"G:\\sagyv\\sagyv\\static\\js\\models\\trabajador\\boleta_model.js":[function(require,module,exports){
+},{"../../models/trabajador/boleta_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/trabajador/boleta_model.js","../../models/trabajador/trabajador_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/trabajador/trabajador_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/trabajador/boleta_model.js":[function(require,module,exports){
 function Boleta(){
     this.numeroAnterior = 0;
     this.boletaInicial = 1;
@@ -245,7 +245,7 @@ Boleta.mixin({
 
 module.exports = Boleta;
 
-},{}],"G:\\sagyv\\sagyv\\static\\js\\models\\trabajador\\trabajador_model.js":[function(require,module,exports){
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/trabajador/trabajador_model.js":[function(require,module,exports){
 var constantes = {
     CHOFER: 1,
     FLETERO : 2
@@ -445,7 +445,7 @@ Trabajador.prototype = {
 
 module.exports = Trabajador;
 
-},{}],"G:\\sagyv\\sagyv\\static\\js\\services\\service_util.js":[function(require,module,exports){
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/service_util.js":[function(require,module,exports){
 function noop(){}
 
 function standardError(data){
@@ -507,7 +507,7 @@ exports.postMaker = function($http){
     };
 };
 
-},{}],"G:\\sagyv\\sagyv\\static\\js\\services\\trabajador_service.js":[function(require,module,exports){
+},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/trabajador_service.js":[function(require,module,exports){
 var serviceUtil = require('./service_util.js');
 
 function service($http){
@@ -558,4 +558,4 @@ function service($http){
 
 module.exports = service;
 
-},{"./service_util.js":"G:\\sagyv\\sagyv\\static\\js\\services\\service_util.js"}]},{},["G:\\sagyv\\sagyv\\static\\js\\bundles\\trabajador_bundle.js"]);
+},{"./service_util.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/service_util.js"}]},{},["/Users/Aether/Proyectos/sagyv/sagyv/static/js/bundles/trabajador_bundle.js"]);

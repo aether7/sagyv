@@ -13,34 +13,36 @@ function Dump(){
     };
     this.propias = [];
     this.lipigas = [];
+
+    this.mensajes = [];
 }
 
 Dump.prototype = {
     constructor: Dump,
 
     setProductos: function(productos){
-        this.productos = JSON.stringify(productos);
+        this.productos = productos;
     },
 
     setCheques: function(cheques){
-        this.cheques = JSON.stringify(cheques);
+        this.cheques = cheques;
     },
 
     setCuponesPrepago: function(cuponesPrepago){
-        this.cuponesPrepago = JSON.stringify(cuponesPrepago);
+        this.cuponesPrepago = cuponesPrepago;
     },
 
     setOtros: function(otros){
-        this.otros = JSON.stringify(otros);
+        this.otros = otros;
     },
 
     setVouchers: function(vouchers){
-        this.vouchers = JSON.stringify(vouchers);
+        this.vouchers = vouchers;
     },
 
     setGuias: function(propias, lipigas){
-        this.propias = JSON.stringify(propias.ventas);
-        this.lipigas = JSON.stringify(lipigas.ventas);
+        this.propias = propias.ventas;
+        this.lipigas = lipigas.ventas;
     },
 
     setMontos: function(){
@@ -48,14 +50,15 @@ Dump.prototype = {
     },
 
     toJSON: function(){
-        this.guias.propias = this.propias;
-        this.guias.lipigas = this.lipigas;
+        this.guias.propias = JSON.stringify(this.propias);
+        this.guias.lipigas = JSON.stringify(this.lipigas);
+
         return {
-            'productos': this.productos,
-            'cheques': this.cheques,
-            'cuponesPrepago': this.cuponesPrepago,
-            'otros': this.otros,
-            'vouchers': this.vouchers,
+            'productos': JSON.stringify(this.productos),
+            'cheques': JSON.stringify(this.cheques),
+            'cuponesPrepago': JSON.stringify(this.cuponesPrepago),
+            'otros': JSON.stringify(this.otros),
+            'vouchers': JSON.stringify(this.vouchers),
             'guias': JSON.stringify(this.guias)
         };
     }
