@@ -16,9 +16,9 @@ class ConsumoClienteController extends ReporteController{
             var descripcion = 'Sin descuento';
 
             if(d.descuento.tipo === FIJO){
-                descripcion = '$' + d.descuento.monto + ' en ( ' + d.producto.codigo + ' )';
+                descripcion = '$' + d.descuento.monto + ' en ( ' + d.descuento.producto + ' )';
             }else if(d.descuento.tipo === PORCENTAJE){
-                descripcion = d.descuento.monto + '% en ( ' + d.producto.codigo + ' )';
+                descripcion = d.descuento.monto + '% en ( ' + d.descuento.producto + ' )';
             }
 
             d.descuento.descripcion = descripcion;

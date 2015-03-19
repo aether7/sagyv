@@ -39,6 +39,7 @@
                     <th>TIPO DE CLIENTE</th>
                     <th>NOMBRE</th>
                     <th>FORMATO CONSUMIDO</th>
+                    <th>CANTIDAD</th>
                     <th>MONTO(descuento)</th>
                 </tr>
             </thead>
@@ -47,6 +48,7 @@
                     <td ng-bind="consumo.cliente.tipo"></td>
                     <td ng-bind="consumo.cliente.nombre"></td>
                     <td ng-bind="consumo.producto.codigo"></td>
+                    <td ng-bind="consumo.producto.cantidad"></td>
                     <td ng-bind="consumo.descuento.descripcion"></td>
                 </tr>
             </tbody>

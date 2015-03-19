@@ -56,24 +56,25 @@ class ReportesManager(models.Manager):
         consulta_sql = """
             SELECT
                 cliente.nombre AS cliente_nombre,
-                cliente.es_lipigas AS cliente_es_lipigas,
-                cliente.es_propio AS cliente_es_propio,
-                producto.id AS producto_id,
-                producto.codigo AS producto_codigo,
-                SUM(detalle.cantidad) AS producto_cantidad,
-                liquidacion.fecha AS liquidacion_fecha,
-                descuento.monto_descuento AS situacion_monto,
-                descuento.tipo_descuento_id AS situacion_tipo,
-                descuento.producto_id AS situacion_producto
+                cliente.es_lipigas AS cliente_lipigas,
+                cliente.es_propio AS cliente_propio,
+                descuento.monto_descuento AS descuento_monto,
+                descuento.producto_id AS descuento_producto_id,
+                descuento.tipo_descuento_id AS descuento_tipo,
+                prod_desc.codigo AS descuento_producto_codigo,
+                prod_liq.id AS producto_id,
+                prod_liq.codigo AS producto_codigo,
+                SUM(detalle.cantidad) AS detalle_cantidad,
+                liquidacion.fecha AS liquidacion_fecha
             FROM clientes_cliente cliente
             LEFT JOIN clientes_descuentocliente descuento ON(cliente.situacion_comercial_id = descuento.id)
-            INNER JOIN liquidacion_guiaventa guia ON(cliente.id = guia.cliente_id)
-            INNER JOIN liquidacion_detalleguiaventa detalle ON(guia.id = detalle.guia_venta_id)
-            INNER JOIN liquidacion_liquidacion liquidacion ON(guia.liquidacion_id = liquidacion.id)
-            INNER JOIN bodega_producto producto ON(detalle.producto_id = producto.id)
-            WHERE :condiciones
-            GROUP BY producto.id
-            ORDER BY producto_cantidad DESC
+            LEFT JOIN bodega_producto prod_desc ON(descuento.producto_id = prod_desc.id)
+            INNER JOIN liquidacion_guiaventa guiaventa ON(guiaventa.cliente_id = cliente.id)
+            INNER JOIN liquidacion_detalleguiaventa detalle ON(detalle.guia_venta_id = guiaventa.id)
+            INNER JOIN liquidacion_liquidacion liquidacion ON(guiaventa.liquidacion_id = liquidacion.id)
+            INNER JOIN bodega_producto prod_liq ON(detalle.producto_id = prod_liq.id)
+            GROUP BY prod_liq.id
+            ORDER BY cliente_nombre ASC, detalle_cantidad DESC
         """
 
         condiciones = ["1 = 1"]
@@ -91,8 +92,6 @@ class ReportesManager(models.Manager):
         if len(condiciones) > 0:
             consulta_sql = consulta_sql.replace(':condiciones', ' AND '.join(condiciones))
 
-        print consulta_sql
-
         cursor = connections['default'].cursor()
         cursor.execute(consulta_sql)
         data = dictfetchall(cursor)
@@ -102,28 +101,29 @@ class ReportesManager(models.Manager):
         for row in data:
             rs = {
                 'cliente': {
-                    'nombre': row['cliente_nombre']
+                    'nombre': row['cliente_nombre'],
+                    'tipo': None
                 },
                 'producto': {
                     'id': row['producto_id'],
                     'codigo': row['producto_codigo'],
-                    'cantidad': row['producto_cantidad']
+                    'cantidad': row['detalle_cantidad']
                 },
                 'descuento': {
-                    'monto': row['situacion_monto'],
-                    'tipo': row['situacion_tipo'],
-                    'producto': row['situacion_producto']
+                    'monto': row['descuento_monto'],
+                    'tipo': row['descuento_tipo'],
+                    'producto': row['descuento_producto_codigo']
                 },
                 'liquidacion': {
                     'fecha': row['liquidacion_fecha']
                 }
             }
 
-            if row['cliente_es_lipigas'] and row['cliente_es_propio']:
+            if row['cliente_lipigas'] and row['cliente_propio']:
                 rs['cliente']['tipo'] = 'lipigas y propio'
-            elif row['cliente_es_lipigas']:
+            elif row['cliente_lipigas']:
                 rs['cliente']['tipo'] = 'lipigas'
-            elif row['cliente_es_propio']:
+            elif row['cliente_propio']:
                 rs['cliente']['tipo'] = 'propio'
 
             resultado.append(rs)
