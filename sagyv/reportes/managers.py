@@ -73,7 +73,8 @@ class ReportesManager(models.Manager):
             INNER JOIN liquidacion_detalleguiaventa detalle ON(detalle.guia_venta_id = guiaventa.id)
             INNER JOIN liquidacion_liquidacion liquidacion ON(guiaventa.liquidacion_id = liquidacion.id)
             INNER JOIN bodega_producto prod_liq ON(detalle.producto_id = prod_liq.id)
-            GROUP BY prod_liq.id
+            WHERE :condiciones
+            GROUP BY prod_liq.id, cliente_nombre, cliente_lipigas, cliente_propio, descuento_monto, descuento_producto_id, descuento_tipo, descuento_producto_codigo, liquidacion_fecha
             ORDER BY cliente_nombre ASC, detalle_cantidad DESC
         """
 
@@ -132,7 +133,20 @@ class ReportesManager(models.Manager):
 
     def get_kilos_vendidos_trabajor(self, fecha_inicio=None, fecha_termino=None):
 
-        consulta_sql = ""
+        consulta_sql = """
+            select
+                trabajador.id as trabajador_id,
+                trabajador.apellido as trabajador_apellido,
+                trabajador.nombre as trabajador_nombre
+            from trabajador_trabajador trabajador
+            inner join bodega_movil movil on(movil.trabajador_id = trabajador.id)
+            inner join bodega_guiadespacho despacho on(despacho.movil_id = movil.id)
+            inner join liquidacion_liquidacion liquidacion on(liquidacion.guia_despacho_id = despacho.id)
+            inner join liquidacion_guiaventa guiaventa on(guiaventa.liquidacion_id = liquidacion.id)
+            inner join liquidacion_detalleguiaventa detalle on(detalle.guia_venta_id = guiaventa.id)
+            inner join bodega_producto producto on(detalle.producto_id = producto.id)
+            inner join
+        """
 
         query = connection.cursor()
         query.execute(consulta_sql)
