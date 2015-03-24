@@ -5,7 +5,6 @@ var Monto = require('../../models/liquidacion/monto_model.js'),
 function LiquidacionController($scope, liquidacionService){
     this.scope = $scope;
     this.service = liquidacionService;
-
     this.kilosVendidos = 0;
     this.kilometros = 0;
     this.dump = new Dump();
@@ -15,7 +14,7 @@ function LiquidacionController($scope, liquidacionService){
     this.cuponesPrepago = [];
     this.otro = [];
 
-    this.vouchers = { lipigas: null,transbank: null };
+    this.vouchers = {lipigas: null,transbank: null};
     this.monto = new Monto();
     this.guias = new GuiaVenta();
 
@@ -33,6 +32,29 @@ LiquidacionController.mixin({
         this.scope.$on('guia:agregarCheques', this.addCheques.bind(this));
         this.scope.$on('guia:agregarCuponesPrepago', this.addCuponesPrepago.bind(this));
         this.scope.$on('guia:agregaOtro', this.addOtro.bind(this));
+    },
+
+    esPanelVentasMostrable: function(){
+        var i = 0;
+        var l = this.productos.length;
+        var tipo = null;
+        var mostrable = true;
+
+        if(l === 0){
+            return false;
+        }
+
+        for(i = 0; i < l; i++){
+            tipo = typeof this.productos[i].llenos;
+
+            if(tipo === 'undefined' ||
+                (tipo === 'string' && this.productos[i].llenos.trim() === '')){
+                mostrable = false;
+                break;
+            }
+        }
+
+        return mostrable;
     },
 
     calcularSubTotal: function(){
@@ -148,6 +170,9 @@ LiquidacionController.mixin({
         $('#montos_ls').val('');
         $('#kilometraje_ls').val($('#kilometraje').val());
         $('#numero_boleta_ls').val($('#numero_boleta').val());
+
+        console.log(data);
+        return;
 
         $('#f_cerrar_liquidacion').get(0).submit();
     },

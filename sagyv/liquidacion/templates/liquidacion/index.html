@@ -39,7 +39,8 @@
         {% include "liquidacion/seccion_tabs.html" %}
         {% include "liquidacion/seccion_montos.html" %}
 
-        <button class="btn btn-primary" data-modal="" ng-click="liqCtrl.cerrarLiquidacion()">CERRAR LIQUIDACIÓN</button>
+        <button class="btn btn-primary" ng-show="liqCtrl.esPanelVentasMostrable()"
+        ng-click="liqCtrl.cerrarLiquidacion()">CERRAR LIQUIDACIÓN</button>
 
         <form id="f_cerrar_liquidacion" method="post" action="{% url 'liquidacion:cerrar' %}">
             {% verbatim %}

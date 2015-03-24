@@ -53,6 +53,21 @@ Dump.prototype = {
         this.guias.propias = JSON.stringify(this.propias);
         this.guias.lipigas = JSON.stringify(this.lipigas);
 
+        if(this.vouchers === null || typeof this.vouchers === 'undefined'){
+            this.vouchers = {
+                lipigas: {tipo:'lipigas', tarjetas: [], monto: 0},
+                transbank: {tipo:'transbank', tarjetas: [], monto: 0}
+            };
+        }else if(this.vouchers.lipigas === null){
+            this.vouchers.lipigas = {
+                tipo: 'lipigas', tarjetas: [], monto: 0
+            };
+        }else if(this.vouchers.transbank === null){
+            this.vouchers.transbank = {
+                tipo: 'transbank', tarjetas: [], monto: 0
+            };
+        }
+
         return {
             'productos': JSON.stringify(this.productos),
             'cheques': JSON.stringify(this.cheques),

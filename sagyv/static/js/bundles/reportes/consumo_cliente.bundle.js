@@ -1,4 +1,4 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/Aether/Proyectos/sagyv/sagyv/static/js/bundles/reportes/consumo_cliente_bundle.js":[function(require,module,exports){
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/home/sreal/Escritorio/sagyv/sagyv/static/js/bundles/reportes/consumo_cliente_bundle.js":[function(require,module,exports){
 "use strict";
 
 (function () {
@@ -10,7 +10,7 @@
     app.controller("ConsumoClienteController", ["consumoClienteService", ConsumoClienteController]);
 })();
 
-},{"../../controllers/reportes/consumo_cliente_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/reportes/consumo_cliente_controller.js","../../services/reportes/consumo_service.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/reportes/consumo_service.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/reportes/consumo_cliente_controller.js":[function(require,module,exports){
+},{"../../controllers/reportes/consumo_cliente_controller.js":"/home/sreal/Escritorio/sagyv/sagyv/static/js/controllers/reportes/consumo_cliente_controller.js","../../services/reportes/consumo_service.js":"/home/sreal/Escritorio/sagyv/sagyv/static/js/services/reportes/consumo_service.js"}],"/home/sreal/Escritorio/sagyv/sagyv/static/js/controllers/reportes/consumo_cliente_controller.js":[function(require,module,exports){
 "use strict";
 
 var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
@@ -102,7 +102,7 @@ var ConsumoClienteController = (function (ReporteController) {
 
 module.exports = ConsumoClienteController;
 
-},{"../../utils/reporte_graph_data.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/utils/reporte_graph_data.js","./reporte_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/reportes/reporte_controller.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/reportes/reporte_controller.js":[function(require,module,exports){
+},{"../../utils/reporte_graph_data.js":"/home/sreal/Escritorio/sagyv/sagyv/static/js/utils/reporte_graph_data.js","./reporte_controller.js":"/home/sreal/Escritorio/sagyv/sagyv/static/js/controllers/reportes/reporte_controller.js"}],"/home/sreal/Escritorio/sagyv/sagyv/static/js/controllers/reportes/reporte_controller.js":[function(require,module,exports){
 "use strict";
 
 var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
@@ -147,7 +147,7 @@ var ReporteController = (function () {
 
 module.exports = ReporteController;
 
-},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/reportes/consumo_service.js":[function(require,module,exports){
+},{}],"/home/sreal/Escritorio/sagyv/sagyv/static/js/services/reportes/consumo_service.js":[function(require,module,exports){
 "use strict";
 
 var serviceUtil = require("../service_util.js");
@@ -177,7 +177,7 @@ function consumoService($http) {
 
 module.exports = consumoService;
 
-},{"../service_util.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/service_util.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/service_util.js":[function(require,module,exports){
+},{"../service_util.js":"/home/sreal/Escritorio/sagyv/sagyv/static/js/services/service_util.js"}],"/home/sreal/Escritorio/sagyv/sagyv/static/js/services/service_util.js":[function(require,module,exports){
 "use strict";
 
 function noop() {}
@@ -241,7 +241,7 @@ exports.postMaker = function ($http) {
     };
 };
 
-},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/utils/reporte_graph_data.js":[function(require,module,exports){
+},{}],"/home/sreal/Escritorio/sagyv/sagyv/static/js/utils/reporte_graph_data.js":[function(require,module,exports){
 "use strict";
 
 var data = {
@@ -275,4 +275,4 @@ var data = {
 
 module.exports = data;
 
-},{}]},{},["/Users/Aether/Proyectos/sagyv/sagyv/static/js/bundles/reportes/consumo_cliente_bundle.js"]);
+},{}]},{},["/home/sreal/Escritorio/sagyv/sagyv/static/js/bundles/reportes/consumo_cliente_bundle.js"]);
