@@ -20,10 +20,27 @@ var app = angular.module('liquidacionApp',[]),
 app.filter('formatoPeso', formatoPeso);
 app.factory('liquidacionService', liquidacionService);
 app.factory('mantieneRestanteService', mantieneRestanteService);
+app.factory('calculaRestanteService', function(){
+    return {
+        calculaRestante: function(producto){
+            var aux = parseInt(producto.cantidad) - parseInt(producto.llenos);
+
+            if(isNaN(aux) || aux < 0){
+                aux = 0;
+            }
+
+            if(producto.cantidad < parseInt(producto.llenos)){
+                producto.llenos = producto.cantidad;
+            }
+
+            producto.vacios = aux;
+        }
+    };
+});
 
 app.controller('PanelBusquedaController', ['$scope', 'liquidacionService', PanelBusquedaController]);
 app.controller('LiquidacionController', ['$scope', 'liquidacionService', LiquidacionController]);
-app.controller('ProductoController', ['$scope', ProductoController]);
+app.controller('ProductoController', ['$scope', 'calculaRestanteService', ProductoController]);
 app.controller('GuiaPropiaController', ['$scope', 'liquidacionService','mantieneRestanteService', GuiaPropiaController]);
 app.controller('GuiaLipigasController', ['$scope', 'liquidacionService','mantieneRestanteService', GuiaLipigasController]);
 app.controller('VoucherLipigasController', ['$scope', VoucherLipigasController]);

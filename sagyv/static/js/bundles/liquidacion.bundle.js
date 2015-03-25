@@ -21,10 +21,27 @@ var app = angular.module('liquidacionApp',[]),
 app.filter('formatoPeso', formatoPeso);
 app.factory('liquidacionService', liquidacionService);
 app.factory('mantieneRestanteService', mantieneRestanteService);
+app.factory('calculaRestanteService', function(){
+    return {
+        calculaRestante: function(producto){
+            var aux = parseInt(producto.cantidad) - parseInt(producto.llenos);
+
+            if(isNaN(aux) || aux < 0){
+                aux = 0;
+            }
+
+            if(producto.cantidad < parseInt(producto.llenos)){
+                producto.llenos = producto.cantidad;
+            }
+
+            producto.vacios = aux;
+        }
+    };
+});
 
 app.controller('PanelBusquedaController', ['$scope', 'liquidacionService', PanelBusquedaController]);
 app.controller('LiquidacionController', ['$scope', 'liquidacionService', LiquidacionController]);
-app.controller('ProductoController', ['$scope', ProductoController]);
+app.controller('ProductoController', ['$scope', 'calculaRestanteService', ProductoController]);
 app.controller('GuiaPropiaController', ['$scope', 'liquidacionService','mantieneRestanteService', GuiaPropiaController]);
 app.controller('GuiaLipigasController', ['$scope', 'liquidacionService','mantieneRestanteService', GuiaLipigasController]);
 app.controller('VoucherLipigasController', ['$scope', VoucherLipigasController]);
@@ -635,8 +652,9 @@ PanelBusquedaController.prototype = {
 module.exports = PanelBusquedaController;
 
 },{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/liquidacion/producto_controller.js":[function(require,module,exports){
-function ProductoController($scope){
+function ProductoController($scope, service){
     this.scope = $scope;
+    this.service = service;
 }
 
 ProductoController.mixin({
@@ -652,9 +670,9 @@ ProductoController.mixin({
     },
 
     calcularRestante: function(producto){
-        producto.calcularRestante();
-
+        this.service.calculaRestante(producto);
         this.calculaValorTotal(producto);
+
         this.scope.$emit('guia:calcularSubTotal');
         this.scope.$emit('guia:calcularKilos');
     }
@@ -1452,11 +1470,13 @@ module.exports = Otro;
 
 },{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/liquidacion/producto_model.js":[function(require,module,exports){
 function Producto(){
+    this.id = null;
     this.codigo = null;
     this.cantidad = null;
     this.descuento = null;
     this.montoDescuento = 0;
     this.precio = null;
+    this.peso = null;
     this.total = null;
     this.llenos = null;
     this.vacios = null;
@@ -1468,20 +1488,6 @@ Producto.mixin({
     calcularTotal: function(){
         var subtotal = parseInt(this.precio) * parseInt(this.cantidad);
         this.total = this.calcularDescuento(subtotal);
-    },
-
-    calcularRestante: function(){
-        var aux = parseInt(this.cantidad) - parseInt(this.llenos);
-
-        if(isNaN(aux) || parseInt(aux) < 0){
-            aux = 0;
-        }
-
-        if(this.cantidad < parseInt(this.llenos)){
-            this.llenos = this.cantidad;
-        }
-
-        this.vacios = aux;
     },
 
     calcularDescuento: function(subtotal){

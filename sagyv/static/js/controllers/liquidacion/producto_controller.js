@@ -1,5 +1,6 @@
-function ProductoController($scope){
+function ProductoController($scope, service){
     this.scope = $scope;
+    this.service = service;
 }
 
 ProductoController.mixin({
@@ -15,9 +16,9 @@ ProductoController.mixin({
     },
 
     calcularRestante: function(producto){
-        producto.calcularRestante();
-
+        this.service.calculaRestante(producto);
         this.calculaValorTotal(producto);
+
         this.scope.$emit('guia:calcularSubTotal');
         this.scope.$emit('guia:calcularKilos');
     }
