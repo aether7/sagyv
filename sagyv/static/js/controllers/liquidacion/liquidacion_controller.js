@@ -14,7 +14,7 @@ function LiquidacionController($scope, liquidacionService){
     this.cuponesPrepago = [];
     this.otro = [];
 
-    this.vouchers = {lipigas: null,transbank: null};
+    this.vouchers = {lipigas: null, transbank: null};
     this.monto = new Monto();
     this.guias = new GuiaVenta();
 
@@ -170,9 +170,6 @@ LiquidacionController.mixin({
         $('#montos_ls').val('');
         $('#kilometraje_ls').val($('#kilometraje').val());
         $('#numero_boleta_ls').val($('#numero_boleta').val());
-
-        console.log(data);
-        return;
 
         $('#f_cerrar_liquidacion').get(0).submit();
     },

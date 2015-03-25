@@ -5,6 +5,8 @@ function Producto(){
     this.montoDescuento = 0;
     this.precio = null;
     this.total = null;
+    this.llenos = null;
+    this.vacios = null;
 
     this.mensajes = {};
 }
@@ -13,6 +15,20 @@ Producto.mixin({
     calcularTotal: function(){
         var subtotal = parseInt(this.precio) * parseInt(this.cantidad);
         this.total = this.calcularDescuento(subtotal);
+    },
+
+    calcularRestante: function(){
+        var aux = parseInt(this.cantidad) - parseInt(this.llenos);
+
+        if(isNaN(aux) || parseInt(aux) < 0){
+            aux = 0;
+        }
+
+        if(this.cantidad < parseInt(this.llenos)){
+            this.llenos = this.cantidad;
+        }
+
+        this.vacios = aux;
     },
 
     calcularDescuento: function(subtotal){

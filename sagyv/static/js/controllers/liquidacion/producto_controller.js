@@ -15,20 +15,11 @@ ProductoController.mixin({
     },
 
     calcularRestante: function(producto){
-        var aux = parseInt(producto.cantidad) - parseInt(producto.llenos);
+        producto.calcularRestante();
 
-        if(isNaN(aux) || aux < 0){
-            aux = 0;
-        }
-
-        if(producto.cantidad < parseInt(producto.llenos)){
-            producto.llenos = producto.cantidad;
-        }
-
-        producto.vacios = aux;
         this.calculaValorTotal(producto);
-        this.scope.$emit("guia:calcularSubTotal");
-        this.scope.$emit("guia:calcularKilos");
+        this.scope.$emit('guia:calcularSubTotal');
+        this.scope.$emit('guia:calcularKilos');
     }
 });
 
