@@ -246,11 +246,11 @@ class Cerrar(LoginRequiredMixin, View):
 
         vouchers = json.loads(self.request.POST.get('vouchers'))
 
-        if len(vouchers['lipigas']):
+        if len(vouchers['lipigas']['tarjetas']) > 0:
             v_lipigas = vouchers['lipigas']
             self._ingreso_vouchers_lipigas(v_lipigas)
 
-        if len(vouchers['transbank']):
+        if len(vouchers['transbank']['tarjetas']) > 0:
             v_transbank = vouchers['transbank']
             self._ingreso_vouchers_transbank(v_transbank['tarjetas'])
 
