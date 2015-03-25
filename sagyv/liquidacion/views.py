@@ -297,15 +297,11 @@ class Cerrar(LoginRequiredMixin, View):
 
         for producto in productos:
             row = Producto.objects.get(pk=producto['id'])
-            print row.stock
-            print producto['llenos']
             row.stock += int(producto['llenos'])
             row.save()
 
             cod_garantia = '31' + str(row.codigo)[2:]
             garantia = Producto.objects.get(codigo=cod_garantia)
-            print garantia.stock
-            print garantia.stock + int(producto['vacios'])
             garantia.stock += int(producto['vacios'])
             garantia.save()
             # Se anexa a las garantias
@@ -325,7 +321,7 @@ class Cerrar(LoginRequiredMixin, View):
         tipo_pago = TipoPago.objects.get(pk=int(3))
         cupones = self.request.POST.get('cupones_prepago')
 
-        if cupones == '':
+        if cupones == '' or cupones == 'null':
             return
 
         cupones = json.loads(cupones)
@@ -345,7 +341,7 @@ class Cerrar(LoginRequiredMixin, View):
     def _ingreso_cheques(self):
         cheques = self.request.POST.get('cheques')
 
-        if cheques == '':
+        if cheques == '' or cheques == 'null':
             return
 
         cheques = json.loads(cheques)
@@ -368,7 +364,7 @@ class Cerrar(LoginRequiredMixin, View):
     def _ingreso_otros(self):
         otros = self.request.POST.get('otros')
 
-        if otros == '':
+        if otros == '' or otros == 'null':
             return
 
         otros = json.loads(otros)
