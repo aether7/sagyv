@@ -29,19 +29,6 @@ class DetalleCredito(object):
         self.cant_cuotas_impagas = 0
 
 
-class KilosVendidos(object):
-
-    def __init__(self):
-
-        trabajador_id = 0
-        trabajador_nombre = ""
-        producto_id = 0
-        producto_nombre = ""
-        producto_codigo = ""
-        producto_peso = 0
-        suma_kilos = 0
-
-
 class Stock(object):
 
     def __init__(self):
@@ -134,36 +121,32 @@ class ReportesManager(models.Manager):
     def get_kilos_vendidos_trabajor(self, fecha_inicio=None, fecha_termino=None):
 
         consulta_sql = """
-            select
-                trabajador.id as trabajador_id,
-                trabajador.apellido as trabajador_apellido,
-                trabajador.nombre as trabajador_nombre
+            SELECT
+                trabajador.id AS trabajador_id,
+                trabajador.apellido AS trabajador_apellido,
+                trabajador.nombre AS trabajador_nombre,
+                producto.codigo AS producto_codigo,
+                SUM(detalle.cantidad) AS detalle_cantidad,
+                SUM(producto.peso) AS producto_peso
             from trabajador_trabajador trabajador
-            inner join bodega_movil movil on(movil.trabajador_id = trabajador.id)
-            inner join bodega_guiadespacho despacho on(despacho.movil_id = movil.id)
-            inner join liquidacion_liquidacion liquidacion on(liquidacion.guia_despacho_id = despacho.id)
-            inner join liquidacion_guiaventa guiaventa on(guiaventa.liquidacion_id = liquidacion.id)
-            inner join liquidacion_detalleguiaventa detalle on(detalle.guia_venta_id = guiaventa.id)
-            inner join bodega_producto producto on(detalle.producto_id = producto.id)
-            inner join
+            INNER JOIN bodega_movil movil ON(movil.trabajador_id = trabajador.id)
+            INNER JOIN bodega_guiadespacho despacho ON(despacho.movil_id = movil.id)
+            INNER JOIN liquidacion_liquidacion liquidacion ON(liquidacion.guia_despacho_id = despacho.id)
+            INNER JOIN liquidacion_guiaventa guiaventa ON(guiaventa.liquidacion_id = liquidacion.id)
+            INNER JOIN liquidacion_detalleguiaventa detalle ON(detalle.guia_venta_id = guiaventa.id)
+            INNER JOIN bodega_producto producto ON(detalle.producto_id = producto.id)
+            GROUP BY trabajador_id, producto_codigo
+            ORDER BY producto_peso DESC
         """
 
-        query = connection.cursor()
-        query.execute(consulta_sql)
+        cursor = connection.cursor()
+        cursor.execute(consulta_sql)
+        data = dictfetchall(cursor)
 
         resultado = []
 
-        for row in query.fetchall():
-            fila = KilosVendidos()
-            fila.trabajador_id = row[0]
-            fila.trabajador_nombre = row[1]
-            fila.producto_id = row[2]
-            fila.producto_nombre = row[3]
-            fila.producto_peso = row[4]
-            fila.suma_kilos = row[5]
-            fila.producto_codigo = row[6]
-
-            resultado.append(fila)
+        for res in resultado:
+            pass
 
         return resultado
 

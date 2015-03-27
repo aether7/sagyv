@@ -25,36 +25,44 @@ var Cliente = require('../../models/cliente/cliente_model.js');
 function ClienteController(service, rootScope){
     this.scope = rootScope;
     this.service = service;
+
     this.index = null;
     this.clientes = [];
     this.cliente = null;
+    this.valor = null;
+    this.tipo = null;
+
     this.init();
 }
 
 ClienteController.prototype = {
     constructor: ClienteController,
     init: function(){
-        var _this = this;
+        this.service.all(this.llenarClientes.bind(this));
+    },
 
-        this.service.all(function(data){
-            _this.clientes = data.map(function(c){
-                var cliente = new Cliente();
+    filtrar: function(){
+        this.service.searchBy(this.valor, this.tipo, this.llenarClientes.bind(this));
+    },
 
-                cliente.setSituacionComercial(c.situacionComercial);
-                cliente.id = c.id;
-                cliente.nombre = c.nombre;
-                cliente.giro = c.giro;
-                cliente.rut = c.rut;
-                cliente.direccion = c.direccion;
-                cliente.telefono = c.telefono;
-                cliente.propio = c.propio;
-                cliente.lipigas = c.lipigas;
-                cliente.dispensador = c.dispensador;
-                cliente.credito = c.credito;
-                cliente.observacion = c.observacion;
+    llenarClientes: function(data){
+        this.clientes = data.map(function(c){
+            var cliente = new Cliente();
 
-                return cliente;
-            });
+            cliente.setSituacionComercial(c.situacionComercial);
+            cliente.id = c.id;
+            cliente.nombre = c.nombre;
+            cliente.giro = c.giro;
+            cliente.rut = c.rut;
+            cliente.direccion = c.direccion;
+            cliente.telefono = c.telefono;
+            cliente.propio = c.propio;
+            cliente.lipigas = c.lipigas;
+            cliente.dispensador = c.dispensador;
+            cliente.credito = c.credito;
+            cliente.observacion = c.observacion;
+
+            return cliente;
         });
     },
 
@@ -74,8 +82,8 @@ ClienteController.prototype = {
             return;
         }
 
-        var cliente = this.clientes[index],
-            _this = this;
+        var cliente = this.clientes[index];
+        var _this = this;
 
         this.service.remove(cliente.id, function(){
             _this.clientes.splice(index, 1);
@@ -102,7 +110,7 @@ ClienteController.prototype = {
         };
 
         fallo = function(){
-            _this.cliente.mensajes.rut = "Ya existe otro cliente con ese Rut";
+            _this.cliente.mensajes.rut = 'Ya existe otro cliente con ese Rut';
         };
 
         this.validarRut().ok(ok).fallo(fallo).doRequest();
@@ -556,6 +564,12 @@ function service($http){
     var services = {
         all: function(callback){
             var url = App.urls.get('clientes:obtener');
+            $http.get(url).success(callback);
+        },
+
+        searchBy: function(value, type, callback){
+            var url = App.urls.get('clientes:buscar_cliente');
+            url += '?busqueda=' + value + '&opcion=' + type;
             $http.get(url).success(callback);
         },
 

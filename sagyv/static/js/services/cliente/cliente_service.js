@@ -7,6 +7,12 @@ function service($http){
             $http.get(url).success(callback);
         },
 
+        searchBy: function(value, type, callback){
+            var url = App.urls.get('clientes:buscar_cliente');
+            url += '?busqueda=' + value + '&opcion=' + type;
+            $http.get(url).success(callback);
+        },
+
         find: function(id, callback){
             var url = App.urls.get('clientes:obtener') + '?id=' + id;
             $http.get(url).success(callback);

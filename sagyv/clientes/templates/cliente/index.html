@@ -29,23 +29,24 @@
 <div class="tab-content" ng-app="clienteApp">
     <div class="tab-pane active" id="clientes" ng-controller="ClienteController as clienteCtrl">
         {% if es_admin %}
-        <div class="col-xs-6">
+        <div class="box">
             <button class="btn btn-primary" ng-click="clienteCtrl.nuevo()">Nuevo</button>
         </div>
         {% endif %}
 
-        <form id="f_buscar_cliente" action="{% url 'clientes:buscar_cliente' %}" method="get">
-            <div class="col-xs-6" style="text-align:right">
-                <input id="cliente_busqueda" type="text" value="" />
-                <select id="cliente_opcion">
-                    <option value="">Seleccione</option>
-                    <option value="nombre">Buscar por nombre</option>
-                    <option value="giro">Buscar por giro</option>
-                    <option value="rut">Buscar por RUT</option>
-                </select>
-                <button class="btn btn-primary">Buscar</button>
-            </div>
-        </form>
+
+        <div class="box" style="text-align:right">
+            <input id="cliente_busqueda" type="text" ng-model="clienteCtrl.valor" />
+
+            <select id="cliente_opcion" ng-model="clienteCtrl.tipo">
+                <option value="">Seleccione</option>
+                <option value="nombre">Buscar por nombre</option>
+                <option value="giro">Buscar por giro</option>
+                <option value="rut">Buscar por RUT</option>
+            </select>
+
+            <button class="btn btn-primary" ng-click="clienteCtrl.filtrar()">Buscar</button>
+        </div>
 
         {% include "cliente/lista_clientes.html" %}
         {% include "cliente/components/modal_nuevo_cliente.html" %}
@@ -77,6 +78,7 @@
     App.urls.set("clientes:crear","{% url 'clientes:crear' %}");
     App.urls.set("clientes:obtener","{% url 'clientes:obtener' %}");
     App.urls.set("clientes:eliminar","{% url 'clientes:eliminar' %}");
+    App.urls.set("clientes:buscar_cliente", "{% url 'clientes:buscar_cliente' %}");
     App.urls.set("clientes:obtener_situacion_comercial","{% url 'clientes:obtener_situacion_comercial' %}");
     App.urls.set("clientes:crear_situacion_comercial", "{% url 'clientes:crear_situacion_comercial' %}");
     App.urls.set("clientes:modificar_situacion_comercial", "{% url 'clientes:modificar_situacion_comercial' %}");

@@ -11,14 +11,14 @@ from bodega.models import Producto
 
 
 class Index(LoginRequiredMixin, TemplateView):
-    template_name = "cliente/index.html"
+    template_name = 'cliente/index.html'
 
     def get_context_data(self, *args, **kwargs):
         context = super(Index, self).get_context_data(*args, **kwargs)
-        context["tipos_descuento"] = TipoDescuento.objects.all()
-        context["situaciones_comerciales"] = DescuentoCliente.objects.order_by("id")
-        context["situaciones_comerciales_select"] = DescuentoCliente.objects.all().order_by("id")
-        context["productos"] = Producto.objects.get_productos_filtrados()
+        context['tipos_descuento'] = TipoDescuento.objects.all()
+        context['situaciones_comerciales'] = DescuentoCliente.objects.order_by('id')
+        context['situaciones_comerciales_select'] = DescuentoCliente.objects.all().order_by('id')
+        context['productos'] = Producto.objects.get_productos_filtrados()
 
         return context
 
@@ -159,25 +159,18 @@ class EliminarCliente(LoginRequiredMixin, View):
         return JsonResponse(dato, safe=False)
 
 
-class BuscarCliente(LoginRequiredMixin, View):
+class BuscarCliente(LoginRequiredMixin, View, ClienteMixin):
 
     def get(self, request):
-        busqueda = request.GET.get("busqueda")
-        opcion = request.GET.get("opcion")
+        busqueda = request.GET.get('busqueda')
+        opcion = request.GET.get('opcion')
 
         clientes = Cliente.objects.busqueda_por_campo(busqueda, opcion)
         data = []
 
         for cliente in clientes:
-            data.append({
-                "id": cliente.id,
-                "nombre": cliente.nombre,
-                "giro": cliente.giro,
-                "rut": cliente.rut,
-                "telefono": cliente.telefono,
-                "direccion": cliente.direccion,
-                "situacion_comercial": cliente.situacion_comercial.__unicode__()
-            })
+            cliente_obj = self._get_cliente(cliente)
+            data.append(cliente_obj)
 
         return JsonResponse(data, safe=False)
 
