@@ -119,7 +119,6 @@ class ReportesManager(models.Manager):
         return resultado
 
     def get_kilos_vendidos_trabajor(self, fecha_inicio=None, fecha_termino=None):
-
         consulta_sql = """
             SELECT
                 trabajador.id AS trabajador_id,
@@ -135,9 +134,21 @@ class ReportesManager(models.Manager):
             INNER JOIN liquidacion_guiaventa guiaventa ON(guiaventa.liquidacion_id = liquidacion.id)
             INNER JOIN liquidacion_detalleguiaventa detalle ON(detalle.guia_venta_id = guiaventa.id)
             INNER JOIN bodega_producto producto ON(detalle.producto_id = producto.id)
+            WHERE :condiciones
             GROUP BY trabajador_id, producto_codigo
             ORDER BY producto_peso DESC
         """
+
+        condiciones = ["1 = 1"]
+
+        if fecha_inicio is not None and fecha_termino is not None:
+            condiciones.append("liquidacion.fecha BETWEEN '%s' AND '%s'" % (fecha_inicio, fecha_termino))
+        elif fecha_inicio is not None:
+            condiciones.append("liquidacion.fecha >= '%s'" % (fecha_inicio,))
+        elif fecha_termino is not None:
+            condiciones.append("liquidacion.fecha <= '%s'" % (fecha_termino,))
+
+        consulta_sql = consulta_sql.replace(":condiciones", " AND ".join(condiciones))
 
         cursor = connection.cursor()
         cursor.execute(consulta_sql)
@@ -145,8 +156,20 @@ class ReportesManager(models.Manager):
 
         resultado = []
 
-        for res in resultado:
-            pass
+        for res in data:
+            rs = {
+                'trabajador': {
+                    'id': res['trabajador_id'],
+                    'apellido': res['trabajador_apellido'],
+                    'nombre': res['trabajador_nombre']
+                },
+                'producto': {
+                    'codigo': res['producto_codigo'],
+                    'peso': res['producto_peso'],
+                    'cantidad': res['detalle_cantidad']
+                }
+            }
+            resultado.append(rs)
 
         return resultado
 

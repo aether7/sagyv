@@ -6,7 +6,7 @@
 
 {% block reporte_content %}
 
-<section ng-controller="KilosController as kilosCtrl">
+<section ng-controller="KilosVendidosController as kilosCtrl">
 
 <aside>
     <label for="desde">Desde</label>
@@ -15,7 +15,7 @@
     <label for="hasta">Hasta</label>
     <input id="hasta" type="date" ng-model="kilosCtrl.hasta" />
 
-    <a href="{% url 'reportes:kilos_vendidos' %}" class="btn btn-primary" ng-click="kilosCtrl.filtrar()">Filtrar</a>
+    <a href class="btn btn-primary" ng-click="kilosCtrl.filtrar()">Filtrar</a>
     <a href class="btn btn-primary" ng-click="kilosCtrl.exportar()">Exportar a excel</a>
     <a href class="btn btn-primary" ng-click="kilosCtrl.graficar()">Ver gráfico</a>
 </aside>
