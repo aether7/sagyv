@@ -23,6 +23,7 @@ app.factory('mantieneRestanteService', mantieneRestanteService);
 app.factory('calculaRestanteService', function(){
     return {
         calculaRestante: function(producto){
+            producto.llenos = producto.llenos.replace(/\D+/g, '');
             var aux = parseInt(producto.cantidad) - parseInt(producto.llenos);
 
             if(isNaN(aux) || aux < 0){

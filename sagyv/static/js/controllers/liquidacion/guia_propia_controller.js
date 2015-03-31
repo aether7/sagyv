@@ -63,7 +63,6 @@ GuiaPropiaController.mixin({
     },
 
     esValidoProducto: function(){
-        var obj;
         this.mensajes = {};
 
         if(!this.producto.tipo){
@@ -72,7 +71,8 @@ GuiaPropiaController.mixin({
         }
 
         this.scope.productos = this.calcularRestanteService.calculaRestantes(this.scope.productos);
-        obj = JSON.parse(this.producto.tipo);
+        this.producto.cantidad = this.producto.cantidad.replace(/\D+/g, '');
+        var obj = JSON.parse(this.producto.tipo);
 
         if(!this.producto.cantidad || parseInt(this.producto.cantidad) < 1){
             this.mensajes.producto = 'Se debe ingresar una cantidad de producto';
