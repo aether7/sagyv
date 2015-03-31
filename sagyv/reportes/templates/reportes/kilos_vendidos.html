@@ -1,4 +1,5 @@
 {% extends "reportes/base_reportes.html" %}
+{% load static from staticfiles %}
 
 {% block titulo_reporte %}
 <h1 class="center">Kilos vendidos por chofer</h1>
@@ -6,7 +7,7 @@
 
 {% block reporte_content %}
 
-<section ng-controller="KilosVendidosController as kilosCtrl">
+<section ng-app="kilosVendidosApp" ng-controller="KilosVendidosController as kilosCtrl">
 
 <aside>
     <label for="desde">Desde</label>
@@ -35,13 +36,17 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>TIPO DE CLIENTE</th>
-                    <th>NOMBRE</th>
-                    <th>FORMATO CONSUMIDO</th>
-                    <th>MONTO(descuento)</th>
+                    <th>TRABAJADOR</th>
+                    <th>PRODUCTO</th>
+                    <th>CANTIDAD</th>
                 </tr>
             </thead>
             <tbody>
+                <tr ng-repeat="kilo in kilosCtrl.kilos">
+                    <td ng-bind="kilo.trabajador.getNombreCompleto()"></td>
+                    <td ng-bind="kilo.producto.codigo"></td>
+                    <td ng-bind="kilo.producto.cantidad"></td>
+                </tr>
             </tbody>
         </table>
     </div>
@@ -53,4 +58,11 @@
 
 </section>
 
+{% endblock %}
+
+{% block js_reportes %}
+<script src="{% static 'js/bundles/reportes/kilos_vendidos.bundle.js' %}"></script>
+<script>
+    App.urls.set("reportes:obtener_kilos_vendidos", "{% url 'reportes:obtener_kilos_vendidos' %}");
+</script>
 {% endblock %}

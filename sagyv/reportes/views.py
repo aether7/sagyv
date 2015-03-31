@@ -26,14 +26,12 @@ class ComprasGas(View):
         return JsonResponse(data, safe=False)
 
 
-class KilosVendidos(TemplateView):
-    template_name = "reportes/kilos_vendidos.html"
-
+class KilosVendidos(View):
     def get(self, req):
         fecha_inicio = req.GET.get('fechaInicio', None)
         fecha_termino = req.GET.get('fechaTermino', None)
-
-        return render(req, self.template_name, context_instance=RequestContext(req))
+        data = []
+        return JsonResponse(data, safe=False)
 
 
 class Creditos(TemplateView):
@@ -58,6 +56,8 @@ obtener_consumo = ConsumoClientes.as_view()
 compras_gas = TemplateView.as_view(template_name="reportes/compras_gas.html")
 obtener_gas = ComprasGas.as_view()
 
-kilos_vendidos = KilosVendidos.as_view()
+kilos_vendidos = TemplateView.as_view(template_name="reportes/kilos_vendidos.html")
+obtener_kilos_vendidos = KilosVendidos.as_view()
+
 creditos = Creditos.as_view()
 venta_masa = VentaMasa.as_view()

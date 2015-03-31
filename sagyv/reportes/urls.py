@@ -9,4 +9,5 @@ urlpatterns = patterns("reportes.views",
     url(r"^venta\-masa/$", "venta_masa", name="venta_masa"),
     url(r"^obtener\-consumo/$", "obtener_consumo", name="obtener_consumo"),
     url(r"^obtener\-gas/$", "obtener_gas", name="obtener_gas"),
+    url(r"^obtener\-kilos\-vendidos/$", "obtener_kilos_vendidos", name="obtener_kilos_vendidos"),
 )

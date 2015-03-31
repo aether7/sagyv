@@ -9,13 +9,11 @@ function consumoService($http){
     services = {
         findAll: function(callback){
             var url = App.urls.get('reportes:obtener_consumo');
-
             get(url, callback);
         },
 
         filtrar: function(fechaInicio, fechaTermino, callback){
             var url = App.urls.get('reportes:obtener_consumo');
-
             get(url,{ fechaInicio : fechaInicio, fechaTermino : fechaTermino }, callback);
         }
     };
