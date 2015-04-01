@@ -23,6 +23,7 @@ GuiaPropiaController.mixin({
         this.idCliente = null;
         this.descripcionDescuento = '';
         this.venta = new VentaPropia();
+        this.producto = {};
     },
 
     buscarCliente: function(){

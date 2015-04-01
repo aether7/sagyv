@@ -12,6 +12,7 @@ GuiaLipigasController.mixin(GuiaPropiaController, {
     resetearGuia: function(){
         this.idCliente = null;
         this.descripcionDescuento = 'nada';
+        this.producto = {};
         this.venta = new VentaLipigas();
     },
 
