@@ -245,7 +245,7 @@ class BuscarBoleta(LoginRequiredMixin, View):
 
         data = {'boletaActual': 0, 'boletaInicial': 0, 'boletaFinal': 0}
 
-        if not(boleta is None):
+        if boleta is not None:
             data['boletaActual'] = boleta.actual
             data['boletaInicial'] = boleta.boleta_inicial
             data['boletaFinal'] = boleta.boleta_final

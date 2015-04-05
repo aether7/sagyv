@@ -27,7 +27,7 @@ class SistemaSalud(models.Model):
         return self.nombre
 
     class Meta:
-        verbose_name_plural = "sistemas salud"
+        verbose_name_plural = 'sistemas salud'
 
 
 class EstadoCivil(models.Model):
@@ -51,7 +51,7 @@ class EstadoVacacion(models.Model):
         return self.nombre
 
     class Meta:
-        verbose_name_plural = "estados de vacaciones"
+        verbose_name_plural = 'estados de vacaciones'
 
 
 class Trabajador(models.Model):
@@ -69,26 +69,26 @@ class Trabajador(models.Model):
     estado_civil = models.ForeignKey(EstadoCivil, null=True, blank=True)
 
     def get_nombre_completo(self):
-        return self.nombre + " " + self.apellido
+        return self.nombre + ' ' + self.apellido
 
     def get_json(self):
         data = {
-            "id": self.id,
-            "nombre": self.nombre,
-            "apellido": self.apellido,
-            "rut": self.rut,
-            "dv": self.dv
+            'id': self.id,
+            'nombre': self.nombre,
+            'apellido': self.apellido,
+            'rut': self.rut,
+            'dv': self.dv
         }
 
         return json.dumps(data)
 
     def get_vacacion(self):
-        ultima_vacacion = self.vacacion_set.order_by("-id")[0]
+        ultima_vacacion = self.vacacion_set.order_by('-id')[0]
 
         return ultima_vacacion.__unicode__()
 
     def get_id_vacacion(self):
-        ultima_vacacion = self.vacacion_set.order_by("-id")[0]
+        ultima_vacacion = self.vacacion_set.order_by('-id')[0]
 
         return ultima_vacacion.estado_vacacion.id
 
@@ -96,7 +96,7 @@ class Trabajador(models.Model):
         return self.nombre + ' ' + self.apellido
 
     class Meta:
-        verbose_name_plural = "trabajadores"
+        verbose_name_plural = 'trabajadores'
 
 
 class Vacacion(models.Model):
