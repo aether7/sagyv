@@ -204,7 +204,7 @@ class ReasignarTerminal(View):
             historico.estado = False
             historico.save()
 
-            terms = Terminal.objects.filter(vehiculo = historico.vehiculo)
+            terms = Terminal.objects.filter(vehiculo=historico.vehiculo)
 
             for t in terms:
                 t.vehiculo = None
@@ -250,7 +250,7 @@ class ReturnMaintenance(View):
 
     def post(self, req):
         id_term = req.POST.get('id')
-        state = EstadoTerminal.objects.get(pk=int(1))
+        state = EstadoTerminal.objects.get(pk=EstadoTerminal.ACTIVO)
 
         term = Terminal.objects.get(pk=int(id_term))
         term.estado = state

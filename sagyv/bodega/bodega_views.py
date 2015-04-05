@@ -38,7 +38,6 @@ class GuardarFactura(LoginRequiredMixin, View):
     def post(self, req):
         self.productosActualizados = []
         factura = req.POST.get('factura')
-        fecha = req.POST.get('fecha')
         precio = req.POST.get('valor')
         productos = req.POST.get('productos')
         garantias = req.POST.get('garantias')
@@ -186,8 +185,7 @@ class ObtenerProductos(LoginRequiredMixin, View):
                 "colorAlerta": producto.get_clase_nivel_alerta()
             })
 
-        response = json.dumps(response, cls=DjangoJSONEncoder)
-        return HttpResponse(response, content_type="application/json")
+        return JsonResponse(response, safe=False)
 
 
 class ObtenerProductosTransito(LoginRequiredMixin, View):

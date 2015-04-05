@@ -23,7 +23,7 @@ class IndexList(LoginRequiredMixin, ListView):
     context_object_name = 'trabajadores'
     template_name = 'trabajador/index.html'
 
-    def get_context_data(self,*args,**kwargs):
+    def get_context_data(self, *args, **kwargs):
         data = super(IndexList, self).get_context_data(*args, **kwargs)
 
         data['lista_afps'] = Afp.objects.order_by('id')
@@ -51,7 +51,7 @@ class TrabajadorMixin(object):
         self.estado_vacacion_id = self.request.POST.get('estadoVacacion')
 
         tipo = self.request.POST.get('tipoTrabajador')
-        self.tipo_trabajador = TipoTrabajador.objects.get(pk = int(tipo))
+        self.tipo_trabajador = TipoTrabajador.objects.get(pk=int(tipo))
 
     def get_trabajador_json(self, worker):
         dato = {
@@ -99,8 +99,8 @@ class TrabajadorMixin(object):
 
     def get_estado_vacacion(self, worker):
         return {
-            'id' : worker.get_id_vacacion(),
-            'nombre' : worker.get_vacacion()
+            'id': worker.get_id_vacacion(),
+            'nombre': worker.get_vacacion()
         }
 
     def get_boleta(self, worker):
@@ -124,6 +124,7 @@ class TrabajadorMixin(object):
             'id': worker.tipo_trabajador.id,
             'nombre': worker.tipo_trabajador.nombre
         }
+
 
 class CrearTrabajadorView(LoginRequiredMixin, View, TrabajadorMixin):
 
@@ -191,7 +192,7 @@ class ModificarTrabajadorView(LoginRequiredMixin, View, TrabajadorMixin):
 
     def _edit_trabajador(self, id_trabajador):
         if self.tipo_trabajador.id == TipoTrabajador.CHOFER:
-            afp = Afp.objects.get(pk = self.afp_id)
+            afp = Afp.objects.get(pk=self.afp_id)
             sistema_salud = SistemaSalud.objects.get(pk=self.sistema_salud_id)
         else:
             afp = None
@@ -228,7 +229,7 @@ class EliminarTrabajadorView(LoginRequiredMixin, View):
 
     def post(self, req):
         id_trabajador = req.POST.get('id')
-        worker = Trabajador.objects.get(pk = id_trabajador)
+        worker = Trabajador.objects.get(pk=id_trabajador)
         worker.delete()
 
         dato = {'status': 'ok'}

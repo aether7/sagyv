@@ -48,8 +48,8 @@ class ConsumoClientesComerciales(object):
         self.wb = Workbook(encoding="utf-8")
         self.matriz = {}
 
-    def set_productos(self,productos):
-        self.productos   = productos
+    def set_productos(self, productos):
+        self.productos = productos
 
     def set_clientes(self, clientes):
         self.clientes = (c.nombre for c in clientes)
@@ -70,20 +70,18 @@ class ConsumoClientesComerciales(object):
         cont_fila = 2
 
         for nombre in self.clientes:
-            str_fila = "A"+str(cont_fila)
+            str_fila = "A" + str(cont_fila)
 
             hoja.cell(str_fila).value = nombre
-            hoja.cell
-
             self.matriz[nombre] = str(cont_fila)
             cont_fila += 1
 
         for consumo in datos:
             columna = self.matriz[consumo.id_producto]
             fila = self.matriz[consumo.nombre]
-            hoja.cell(columna+fila).value = str(consumo.suma_monto)
+            hoja.cell(columna + fila).value = str(consumo.suma_monto)
 
-        #Metodo especial hecho para los response django
+        # Metodo especial hecho para los response django
         return save_virtual_workbook(self.wb)
 
 
@@ -100,16 +98,13 @@ class KilosDeVentasPorChofer(object):
         hoja.page_setup.verticalCentered = True
         cont_col = ord("B")
 
-
-
-        #llenado de productos (desde B1 hasta Bn)
+        # llenado de productos (desde B1 hasta Bn)
         for producto in productos:
-            str_col = str(chr(cont_col)+"1").decode("utf-8")
+            str_col = str(chr(cont_col) + "1").decode("utf-8")
 
-            alignment = Alignment(wrap_text=True, horizontal= "center")
+            alignment = Alignment(wrap_text=True, horizontal="center")
             hoja.cell(str_col).style = hoja.cell(str_col).style.copy(alignment=alignment)
-            hoja.cell(str_col).value = (producto.tipo_producto.nombre+"\n"+producto.nombre).encode("utf-8")
-
+            hoja.cell(str_col).value = (producto.tipo_producto.nombre + "\n" + producto.nombre).encode("utf-8")
             hoja.column_dimensions[chr(cont_col)].width = len(hoja.cell(str_col).value) - 1
 
             self.matriz[producto.id] = str(chr(cont_col))
@@ -121,9 +116,9 @@ class KilosDeVentasPorChofer(object):
         nombre_max = 0
 
         for chofer in choferes:
-            str_fila = "A"+str(cont_fila)
+            str_fila = "A" + str(cont_fila)
 
-            alignment = Alignment(horizontal= "center")
+            alignment = Alignment(horizontal="center")
             hoja.cell(str_fila).style = hoja.cell(str_fila).style.copy(alignment=alignment)
             hoja.cell(str_fila).value = chofer.nombre
 
@@ -139,11 +134,10 @@ class KilosDeVentasPorChofer(object):
             columna = self.matriz[kilos_x_chofer.producto_id]
             fila = self.matriz[kilos_x_chofer.trabajador_nombre]
 
-            celda = columna+fila
-            alignment = Alignment(horizontal= "center")
+            celda = columna + fila
+            alignment = Alignment(horizontal="center")
             hoja.cell(celda).style = hoja.cell(celda).style.copy(alignment=alignment)
             hoja.cell(celda).value = str(kilos_x_chofer.suma_kilos)
-
 
         return save_virtual_workbook(self.wb)
 
@@ -153,23 +147,24 @@ class DetalleCuotasCreditos(object):
         self.nombre = "detalle_cuotas_creditos_clientes"
         self.wb = Workbook(encoding="utf-8")
         self.matriz = {}
-        self.nombre_columnas = ("Cliente","Número Tarjeta", "Tipo Cuotas", "Fecha",
-                                "Número Cuotas","Cuotas Pagadas", "Monto Pagado",
-                                "Cuotas Impagas", "Monto Impago")
+        self.nombre_columnas = (
+            "Cliente", "Número Tarjeta", "Tipo Cuotas", "Fecha",
+            "Número Cuotas", "Cuotas Pagadas", "Monto Pagado",
+            "Cuotas Impagas", "Monto Impago"
+        )
 
     def construir_reporte(self, creditos=[]):
-
-        hoja = self.wb.create_sheet(0,u"Créditos")
+        hoja = self.wb.create_sheet(0, u"Créditos")
 
         hoja.page_setup.horizontalCentered = True
         hoja.page_setup.verticalCentered = True
         cont_col = ord("A")
 
-        #llenado de productos (desde B1 hasta Bn)
+        # llenado de productos (desde B1 hasta Bn)
 
         for columna in self.nombre_columnas:
-            str_col = str(chr(cont_col)+"1").decode("utf-8")
-            alignment = Alignment(wrap_text=True, horizontal= "center")
+            str_col = str(chr(cont_col) + "1").decode("utf-8")
+            alignment = Alignment(wrap_text=True, horizontal="center")
             hoja.cell(str_col).style = hoja.cell(str_col).style.copy(alignment=alignment)
             hoja.cell(str_col).value = columna.decode("utf-8")
             hoja.column_dimensions[chr(cont_col)].width = len(hoja.cell(str_col).value) - 1
@@ -181,7 +176,6 @@ class DetalleCuotasCreditos(object):
         nombre_max = 0
 
         for credito in creditos:
-
             self.setear_alinear_celda(hoja.cell(row=cont_fila, column=1), credito.nombre_cliente)
             self.setear_alinear_celda(hoja.cell(row=cont_fila, column=2), credito.numero_tarjeta)
             self.setear_alinear_celda(hoja.cell(row=cont_fila, column=3), credito.tipo_cuotas)

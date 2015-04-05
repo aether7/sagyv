@@ -6,7 +6,7 @@ from bodega.models import Producto
 
 class Region(models.Model):
     nombre = models.CharField(max_length=140)
-    orden = models.IntegerField(null = True)
+    orden = models.IntegerField(null=True)
 
     def __unicode__(self):
         return self.nombre
@@ -36,12 +36,9 @@ class DescuentoCliente(models.Model):
     producto = models.ForeignKey(Producto, null=True)
 
     def es_cliente_sin_descuento(self):
-        return self.tipo_descuento.id == 1
+        return self.tipo_descuento is None
 
     def get_json_string(self):
-        if self.id == 1:
-            return "Sin descuento"
-
         if self.tipo_descuento.id == 1:
             texto = "$ " + str(self.monto_descuento) + " (" + str(self.producto.codigo) + ")"
         else:
@@ -50,14 +47,11 @@ class DescuentoCliente(models.Model):
         return texto
 
     def __unicode__(self):
-        if self.id == 1:
-            return unicode("Sin descuento")
-        else:
-            tipo = self.tipo_descuento.id == 1 and "$" or "%"
-            producto = self.producto.nombre + " " + self.producto.tipo_producto.nombre
-            texto = "%s %s en %s" % (tipo, self.monto_descuento, producto)
+        tipo = self.tipo_descuento.id == 1 and "$" or "%"
+        producto = self.producto.nombre + " " + self.producto.tipo_producto.nombre
+        texto = "%s %s en %s" % (tipo, self.monto_descuento, producto)
 
-            return unicode(texto)
+        return unicode(texto)
 
 
 class Cliente(models.Model):

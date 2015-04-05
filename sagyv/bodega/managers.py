@@ -57,7 +57,8 @@ class VehiculoManager(models.Manager):
 class StockManager(models.Manager):
 
     def get_stock_transito(self):
-        resultados = self.values('producto__id',
+        resultados = self.values(
+            'producto__id',
             'producto__codigo',
             'producto__tipo_producto__nombre').annotate(cantidad=Sum('cantidad'))
 

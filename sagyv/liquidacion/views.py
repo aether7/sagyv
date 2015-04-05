@@ -145,9 +145,7 @@ class BuscarCliente(LoginRequiredMixin, View):
 
     def get_situacion_comercial(self, cliente):
         opciones = {}
-        params = None
         simbolo = None
-        texto = ""
 
         if cliente.situacion_comercial is None:
             texto = "Sin descuento"
@@ -184,8 +182,6 @@ class BuscarCliente(LoginRequiredMixin, View):
 
 class BalanceLiquidacionView(LoginRequiredMixin, View):
     def post(self, req):
-        guia_despacho = req.POST.get('guia_despacho')
-        id_trabajador = req.POST.get('id_trabajador')
         productos_json = req.POST.get('productos')
         productos = json.loads(productos_json)
         valor_total = 0
@@ -279,8 +275,6 @@ class Cerrar(LoginRequiredMixin, View):
             lipigas.numero_cierre = numero_cierre
             lipigas.monto = int(voucher['monto'])
             lipigas.save()
-
-            print lipigas
 
     def _descargar_vehiculo(self):
         id_guia = self.request.POST.get('guia_despacho')

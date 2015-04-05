@@ -1,5 +1,5 @@
-from datetime import date
 import re
+import datetime
 
 
 def convierte_texto_fecha(texto):
@@ -7,7 +7,7 @@ def convierte_texto_fecha(texto):
         texto = re.sub('T\d+:\d+:\d+.+','', texto)
 
     aux = [int(x) for x in texto.split("-")]
-    nueva_fecha = date(aux[0], aux[1], aux[2])
+    nueva_fecha = datetime.date(aux[0], aux[1], aux[2])
     return nueva_fecha
 
 

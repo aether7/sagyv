@@ -18,7 +18,7 @@ class ProductoAdmin(admin.ModelAdmin):
 
 
 class VehiculoAdmin(admin.ModelAdmin):
-    list_display = ("id","patente",)
+    list_display = ("id", "patente",)
     list_editable = ("patente",)
     ordering = ("id",)
 

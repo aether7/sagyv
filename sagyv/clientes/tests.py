@@ -78,7 +78,7 @@ class SituacionComercialTestCase(TestCase):
         response = self.client.post(reverse('clientes:modificar_situacion_comercial'), data)
         self.assertEqual(response.status_code, 200)
 
-        dc = DescuentoCliente.objects.get(pk = 2)
+        dc = DescuentoCliente.objects.get(pk=2)
         self.assertEqual(dc.monto_descuento, 10)
 
     def test_borrar(self):

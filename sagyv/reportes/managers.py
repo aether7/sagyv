@@ -1,20 +1,12 @@
 from django.db import connections, models, connection
-from django.db.models import Q, Sum
+from utils.db import dictfetchall
 
-
-def dictfetchall(cursor):
-    # Returns all rows from a cursor as a dict"
-    desc = cursor.description
-    return [
-        dict(zip([col[0] for col in desc], row))
-        for row in cursor.fetchall()
-    ]
 
 class DetalleCredito(object):
 
     def __init__(self):
         self.venta_id = 0
-        self.numero_serie =0
+        self.numero_serie = 0
         self.monto = 0
         self.fecha = None
         self.cliente_id = 0
@@ -39,7 +31,7 @@ class Stock(object):
 
 
 class ReportesManager(models.Manager):
-    def get_consumos_cliente_producto(self,cliente=None, fecha_inicio=None, fecha_termino=None):
+    def get_consumos_cliente_producto(self, cliente=None, fecha_inicio=None, fecha_termino=None):
         consulta_sql = """
             SELECT
                 cliente.nombre AS cliente_nombre,

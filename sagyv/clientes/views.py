@@ -108,7 +108,7 @@ class CrearCliente(LoginRequiredMixin, View, ClienteMixin):
         cliente.save()
 
         data = self._get_cliente(cliente)
-        return JsonResponse(data, safe = False)
+        return JsonResponse(data, safe=False)
 
 
 class ModificarCliente(LoginRequiredMixin, View, ClienteMixin):
@@ -180,7 +180,7 @@ class ValidarRutCliente(LoginRequiredMixin, View):
     def get(self, request):
         rut = request.GET.get('rut')
         cantidad = Cliente.objects.filter(rut=rut).count()
-        status = cantidad == 0 and True or False
+        status = cantidad == 0
 
         data = {'status': status}
         return JsonResponse(data, safe=False)

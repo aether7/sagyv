@@ -6,6 +6,7 @@ from django.shortcuts import render
 
 from reportes.managers import ReportesManager
 
+
 class ConsumoClientes(View):
     def get(self, req):
         fecha_inicio = req.GET.get('fechaInicio')

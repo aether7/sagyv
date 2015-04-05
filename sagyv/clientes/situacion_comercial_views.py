@@ -37,7 +37,7 @@ class ObtenerSituacionComercial(LoginRequiredMixin, View, SituacionComercialMixi
         id_situacion = request.GET.get('id')
 
         if id_situacion is None:
-            situaciones_comerciales = DescuentoCliente.objects.exclude(pk=1).order_by('id')
+            situaciones_comerciales = DescuentoCliente.objects.order_by('id')
             data = []
 
             for sc in situaciones_comerciales:
