@@ -1,6 +1,7 @@
 from django.db import connections, models, connection
 from django.db.models import Sum
 
+from utils import enums
 
 class Stock(object):
     def __init__(self):
@@ -11,15 +12,13 @@ class Stock(object):
 
 
 class ProductoManager(models.Manager):
-    GARANTIAS = 3
-
     def get_productos_filtrados(self):
-        queryset = self.exclude(tipo_producto_id=ProductoManager.GARANTIAS)
+        queryset = self.exclude(tipo_producto_id=enums.TipoProducto.GARANTIA)
         productos = queryset.exclude(codigo=1515).order_by('orden')
         return productos
 
     def get_garantias(self):
-        garantias = self.filter(tipo_producto_id=ProductoManager.GARANTIAS).order_by('id')
+        garantias = self.filter(tipo_producto_id=enums.TipoProducto.GARANTIA).order_by('id')
         return garantias
 
     def get_garantias_filtradas(self):

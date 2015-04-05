@@ -1,6 +1,8 @@
 from django.db import models, connection
 from django.db.models import Q, Sum
 
+from utils import enums
+
 
 def dictfetchall(cursor):
     # Returns all rows from a cursor as a dict
@@ -135,18 +137,14 @@ class ClienteManager(models.Manager):
 
 
 class TarjetaCreditoManager(models.Manager):
-    TARJETA_CREDITO = 1
-    TARJETA_DEBITO = 2
-    TARJETA_COMERCIAL = 3
-
     def get_tarjetas_comerciales(self):
-        resultados = self.filter(tipo_tarjeta_id=self.TARJETA_COMERCIAL)
+        resultados = self.filter(tipo_tarjeta_id=enums.TipoTarjeta.COMERCIAL)
         return resultados
 
     def get_tarjetas_bancarias(self):
         resultados = self.filter(
-            Q(tipo_tarjeta_id=self.TARJETA_DEBITO) |
-            Q(tipo_tarjeta_id=self.TARJETA_CREDITO)
+            Q(tipo_tarjeta_id=enums.TipoTarjeta.DEBITO) |
+            Q(tipo_tarjeta_id=enums.TipoTarjeta.CREDITO)
         ).order_by("-tipo_tarjeta")
 
         return resultados

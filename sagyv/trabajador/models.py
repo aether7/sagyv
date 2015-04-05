@@ -38,8 +38,6 @@ class EstadoCivil(models.Model):
 
 
 class TipoTrabajador(models.Model):
-    CHOFER = 1
-    FLETE = 2
     nombre = models.CharField(max_length=140)
 
     def __unicode__(self):

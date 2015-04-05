@@ -1,5 +1,6 @@
 from django.db import models
 from trabajador.models import Trabajador
+from utils import enums
 
 from .managers import GuiaDespachoManager
 from .managers import HistorialStockManager
@@ -9,7 +10,6 @@ from .managers import ProductoManager
 
 
 class TipoProducto(models.Model):
-    GARANTIA = 3
     nombre = models.CharField(max_length=140)
 
     def __unicode__(self):
@@ -61,7 +61,7 @@ class Producto(models.Model):
         return clase_alerta
 
     def es_garantia(self):
-        return self.tipo_producto_id == TipoProducto.GARANTIA
+        return self.tipo_producto_id == enums.TipoProducto.GARANTIA
 
 
 class PrecioProducto(models.Model):

@@ -11,11 +11,13 @@ from liquidacion.models import Terminal
 from liquidacion.models import EstadoTerminal
 from liquidacion.models import HistorialEstadoTerminal
 
+from utils import enums
+
 
 def _get_terminales():
     terminales = []
 
-    rs = Terminal.objects.exclude(estado_id=EstadoTerminal.RETIRADO).order_by('-movil')
+    rs = Terminal.objects.exclude(estado_id=enums.EstadoTerminal.RETIRADO).order_by('-movil')
 
     for terminal in rs:
         if terminal.movil is None:
@@ -25,7 +27,7 @@ def _get_terminales():
             id_movil = terminal.movil.id
             numero_movil = terminal.movil.numero
 
-        if terminal.estado.id == EstadoTerminal.MANTENCION:
+        if terminal.estado.id == enums.EstadoTerminal.MANTENCION:
             show_opt = False
         else:
             show_opt = True
@@ -107,7 +109,7 @@ class CrearTerminal(View):
         return JsonResponse(data, safe=False)
 
     def crear_terminal(self, movil_id, codigo):
-        estado = EstadoTerminal.objects.get(pk=EstadoTerminal.ACTIVO)
+        estado = EstadoTerminal.objects.get(pk=enums.EstadoTerminal.ACTIVO)
         movil = Movil.objects.get(pk=movil_id)
 
         terminal = Terminal()
@@ -154,7 +156,7 @@ class RemoverTerminal(View):
     def post(self, req):
 
         id_term = int(req.POST.get('id'))
-        state = EstadoTerminal.objects.get(pk=EstadoTerminal.RETIRADO)
+        state = EstadoTerminal.objects.get(pk=enums.EstadoTerminal.RETIRADO)
 
         terminal = Terminal.objects.get(pk=int(id_term))
         movil = terminal.movil
@@ -216,7 +218,7 @@ class Maintenance(View):
     def post(self, req):
         pass
         # id_term = req.POST.get('id')
-        # state = EstadoTerminal.objects.get(pk = EstadoTerminal.MANTENCION)
+        # state = EstadoTerminal.objects.get(pk = enums.EstadoTerminal.MANTENCION)
 
         # term = Terminal.objects.get( pk = int(id_term))
         # movil = term.vehiculo
@@ -250,7 +252,7 @@ class ReturnMaintenance(View):
 
     def post(self, req):
         id_term = req.POST.get('id')
-        state = EstadoTerminal.objects.get(pk=EstadoTerminal.ACTIVO)
+        state = EstadoTerminal.objects.get(pk=enums.EstadoTerminal.ACTIVO)
 
         term = Terminal.objects.get(pk=int(id_term))
         term.estado = state

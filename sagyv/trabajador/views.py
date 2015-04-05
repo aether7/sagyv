@@ -15,6 +15,7 @@ from trabajador.models import BoletaTrabajador
 from trabajador.models import TipoTrabajador
 
 from utils.views import LoginRequiredMixin
+from utils import enums
 
 
 class IndexList(LoginRequiredMixin, ListView):
@@ -76,7 +77,7 @@ class TrabajadorMixin(object):
     def get_afp(self, worker):
         data = {'id': None, 'nombre': 'No dispone'}
 
-        if worker.tipo_trabajador.id == TipoTrabajador.CHOFER:
+        if worker.tipo_trabajador.id == enums.TipoTrabajador.CHOFER:
             data['id'] = worker.afp.id
             data['nombre'] = worker.afp.nombre
 
@@ -85,7 +86,7 @@ class TrabajadorMixin(object):
     def get_sistema_salud(self, worker):
         data = {'id': None, 'nombre': 'No dispone'}
 
-        if worker.tipo_trabajador.id == TipoTrabajador.CHOFER:
+        if worker.tipo_trabajador.id == enums.TipoTrabajador.CHOFER:
             data['id'] = worker.sistema_salud.id
             data['nombre'] = worker.sistema_salud.nombre
 
@@ -191,7 +192,7 @@ class ModificarTrabajadorView(LoginRequiredMixin, View, TrabajadorMixin):
         return JsonResponse(dato, safe=False)
 
     def _edit_trabajador(self, id_trabajador):
-        if self.tipo_trabajador.id == TipoTrabajador.CHOFER:
+        if self.tipo_trabajador.id == enums.TipoTrabajador.CHOFER:
             afp = Afp.objects.get(pk=self.afp_id)
             sistema_salud = SistemaSalud.objects.get(pk=self.sistema_salud_id)
         else:
