@@ -53,13 +53,9 @@
 
                 <div class="form-group">
                     <label for="sit_comercial_update" class="control-label">Situación comercial</label>
-                    <select id="sit_comercial_update" class="form-control" ng-model="clienteCtrl.cliente.situacionComercialObj">
-                        <option value="">Sin descuento</option>
-                        {% verbatim %}
-                        <option ng-repeat="sc in situacionesComerciales" value="{{ sc }}">
-                            {{ sc.getTipoDescuento() }}
-                        </option>
-                        {% endverbatim %}
+                    <select id="sit_comercial_update" class="form-control"
+                        ng-model="clienteCtrl.cliente.situacionComercialObj.id"
+                        ng-options="sc.id as sc.getTipoDescuento() for sc in situacionesComerciales">
                     </select>
 
                     <span class="text-danger"

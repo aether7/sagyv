@@ -103,7 +103,9 @@ ClienteController.prototype = {
             return;
         }
 
-        var _this = this, ok, fallo;
+        var _this = this;
+        var ok;
+        var fallo;
 
         ok = function(){
             _this.service.create(_this.cliente.toJSON(), _this.procesarCrear.bind(_this));
@@ -141,9 +143,9 @@ ClienteController.prototype = {
     },
 
     validarRut: function(){
-        var okResponse = null,
-            falloResponse = null,
-            _this = this;
+        var okResponse = null;
+        var falloResponse = null;
+        var _this = this;
 
         return {
             ok: function(func){
@@ -342,6 +344,8 @@ Cliente.prototype = {
         this.situacionComercial.monto = situacionComercial.monto;
         this.situacionComercial.producto = situacionComercial.producto;
         this.situacionComercial.tipoDescuento = situacionComercial.tipoDescuento;
+
+        this.situacionComercialObj = situacionComercial;
     },
 
     setStringSituacion: function(){

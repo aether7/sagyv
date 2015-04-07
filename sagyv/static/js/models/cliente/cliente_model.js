@@ -31,6 +31,8 @@ Cliente.prototype = {
         this.situacionComercial.monto = situacionComercial.monto;
         this.situacionComercial.producto = situacionComercial.producto;
         this.situacionComercial.tipoDescuento = situacionComercial.tipoDescuento;
+
+        this.situacionComercialObj = situacionComercial;
     },
 
     setStringSituacion: function(){
