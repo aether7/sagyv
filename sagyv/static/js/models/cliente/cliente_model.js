@@ -94,6 +94,7 @@ Cliente.prototype = {
         valido = this._nombreValido() && valido;
         valido = this._giroValido() && valido;
         valido = this._rutValido() && valido;
+        valido = this._direccionValido() && valido;
         valido = this._telefonoValido() && valido;
 
         return valido;
