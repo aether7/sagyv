@@ -10,8 +10,8 @@ class DetalleCredito(object):
         self.monto = 0
         self.fecha = None
         self.cliente_id = 0
-        self.nombre_cliente = ""
-        self.tipo_cuotas = ""
+        self.nombre_cliente = ''
+        self.tipo_cuotas = ''
         self.numero_tarjeta = 0
         self.numero_operacion = 0
         self.numero_cuotas = 0
@@ -57,7 +57,7 @@ class ReportesManager(models.Manager):
             ORDER BY cliente_nombre ASC, detalle_cantidad DESC
         """
 
-        condiciones = ["1 = 1"]
+        condiciones = ['1 = 1']
 
         if cliente is not None:
             condiciones.append("cliente.id = %s" % cliente.id)
@@ -164,6 +164,24 @@ class ReportesManager(models.Manager):
             resultado.append(rs)
 
         return resultado
+
+    def compras_gas(self, fecha_inicio=None, fecha_termino=None):
+        consulta_sql = """
+            SELECT
+                factura.fecha as factura_fecha,
+                producto.codigo as producto_codigo,
+                SUM(stock.cantidad) as stock_cantidad
+            FROM bodega_factura factura
+            INNER JOIN bodega_historialstock stock ON(stock.factura_id = factura.id)
+            INNER JOIN bodega_producto producto ON(stock.producto_id = producto.id)
+            GROUP BY producto_codigo, factura_fecha
+        """
+
+        cursor = connection.cursor()
+        resultado = cursor.execute(consulta_sql)
+        data = []
+
+        return data
 
     def detalle_cuotas_creditos(self, fecha_inicio=None, fecha_termino=None):
         consulta_sql = ""

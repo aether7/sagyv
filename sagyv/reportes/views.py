@@ -31,7 +31,13 @@ class KilosVendidos(View):
     def get(self, req):
         fecha_inicio = req.GET.get('fechaInicio', None)
         fecha_termino = req.GET.get('fechaTermino', None)
+        kilos_vendidos = ReportesManager().get_kilos_vendidos_trabajor(fecha_inicio=fecha_inicio,
+            fecha_termino=fecha_termino)
         data = []
+
+        for rs in kilos_vendidos:
+            data.append(rs)
+
         return JsonResponse(data, safe=False)
 
 

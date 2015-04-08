@@ -12,7 +12,13 @@ class KilosVendidosController extends ReporteController{
     }
 
     llenarKilos(data){
-        console.log(data);
+        this.kilos = data.map(function(kilo){
+            kilo.trabajador.getNombreCompleto = function(){
+                return this.nombre + ' ' + this.apellido;
+            };
+
+            return kilo;
+        });
     }
 
     filtrar(){

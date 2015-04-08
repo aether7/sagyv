@@ -1,4 +1,4 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/Aether/Proyectos/sagyv/sagyv/static/js/bundles/reportes/kilos_vendidos_bundle.js":[function(require,module,exports){
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/home/sreal/Escritorio/sagyv/sagyv/static/js/bundles/reportes/kilos_vendidos_bundle.js":[function(require,module,exports){
 "use strict";
 
 (function () {
@@ -11,7 +11,7 @@
   app.controller("KilosVendidosController", ["kilosVendidosService", KilosVendidosController]);
 })();
 
-},{"../../controllers/reportes/kilos_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/reportes/kilos_controller.js","../../services/reportes/kilos_vendidos_service.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/reportes/kilos_vendidos_service.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/reportes/kilos_controller.js":[function(require,module,exports){
+},{"../../controllers/reportes/kilos_controller.js":"/home/sreal/Escritorio/sagyv/sagyv/static/js/controllers/reportes/kilos_controller.js","../../services/reportes/kilos_vendidos_service.js":"/home/sreal/Escritorio/sagyv/sagyv/static/js/services/reportes/kilos_vendidos_service.js"}],"/home/sreal/Escritorio/sagyv/sagyv/static/js/controllers/reportes/kilos_controller.js":[function(require,module,exports){
 "use strict";
 
 var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
@@ -45,7 +45,13 @@ var KilosVendidosController = (function (ReporteController) {
         },
         llenarKilos: {
             value: function llenarKilos(data) {
-                console.log(data);
+                this.kilos = data.map(function (kilo) {
+                    kilo.trabajador.getNombreCompleto = function () {
+                        return this.nombre + " " + this.apellido;
+                    };
+
+                    return kilo;
+                });
             },
             writable: true,
             configurable: true
@@ -78,7 +84,7 @@ var KilosVendidosController = (function (ReporteController) {
 
 module.exports = KilosVendidosController;
 
-},{"./reporte_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/reportes/reporte_controller.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/reportes/reporte_controller.js":[function(require,module,exports){
+},{"./reporte_controller.js":"/home/sreal/Escritorio/sagyv/sagyv/static/js/controllers/reportes/reporte_controller.js"}],"/home/sreal/Escritorio/sagyv/sagyv/static/js/controllers/reportes/reporte_controller.js":[function(require,module,exports){
 "use strict";
 
 var _prototypeProperties = function (child, staticProps, instanceProps) { if (staticProps) Object.defineProperties(child, staticProps); if (instanceProps) Object.defineProperties(child.prototype, instanceProps); };
@@ -123,7 +129,7 @@ var ReporteController = (function () {
 
 module.exports = ReporteController;
 
-},{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/reportes/kilos_vendidos_service.js":[function(require,module,exports){
+},{}],"/home/sreal/Escritorio/sagyv/sagyv/static/js/services/reportes/kilos_vendidos_service.js":[function(require,module,exports){
 "use strict";
 
 var serviceUtil = require("../service_util.js");
@@ -148,7 +154,7 @@ function kilosVendidosService($http) {
 
 module.exports = kilosVendidosService;
 
-},{"../service_util.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/service_util.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/service_util.js":[function(require,module,exports){
+},{"../service_util.js":"/home/sreal/Escritorio/sagyv/sagyv/static/js/services/service_util.js"}],"/home/sreal/Escritorio/sagyv/sagyv/static/js/services/service_util.js":[function(require,module,exports){
 "use strict";
 
 function noop() {}
@@ -212,4 +218,4 @@ exports.postMaker = function ($http) {
     };
 };
 
-},{}]},{},["/Users/Aether/Proyectos/sagyv/sagyv/static/js/bundles/reportes/kilos_vendidos_bundle.js"]);
+},{}]},{},["/home/sreal/Escritorio/sagyv/sagyv/static/js/bundles/reportes/kilos_vendidos_bundle.js"]);
