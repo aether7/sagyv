@@ -139,7 +139,9 @@ class ModificarCliente(LoginRequiredMixin, View, ClienteMixin):
         cliente.propio = propio
         cliente.observacion = observacion
 
-        if sit_comercial_id is not None and sit_comercial_id != 'null':
+        #import pdb;pdb.set_trace();
+
+        if sit_comercial_id is not None and sit_comercial_id != 'null' and sit_comercial_id != '':
             cliente.situacion_comercial = DescuentoCliente.objects.get(pk=int(sit_comercial_id))
 
         cliente.save()

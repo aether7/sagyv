@@ -353,7 +353,14 @@ Cliente.prototype = {
             return;
         }
 
-        var obj = JSON.parse(this.situacionComercialObj);
+        var obj;
+
+        if(typeof this.situacionComercialObj === 'string'){
+            obj = JSON.parse(this.situacionComercialObj);
+        }else{
+            obj = this.situacionComercialObj;
+        }
+
         this.situacionComercial = new SituacionComercial();
         this.situacionComercial.id = obj.id;
         this.situacionComercial.monto = obj.monto;
