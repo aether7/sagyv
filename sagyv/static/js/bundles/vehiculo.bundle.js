@@ -1,4 +1,4 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/home/worker8/proyectos/sagyv/sagyv/static/js/bundles/vehiculo_bundle.js":[function(require,module,exports){
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/home/sreal/Escritorio/sagyv/sagyv/static/js/bundles/vehiculo_bundle.js":[function(require,module,exports){
 (function(){
 'use strict';
 
@@ -11,7 +11,7 @@ app.controller('VehiculoController', ['vehiculoService', VehiculoController]);
 
 })();
 
-},{"../controllers/vehiculo/vehiculo_controller.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/vehiculo/vehiculo_controller.js","../services/vehiculo_service.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/services/vehiculo_service.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/controllers/vehiculo/vehiculo_controller.js":[function(require,module,exports){
+},{"../controllers/vehiculo/vehiculo_controller.js":"/home/sreal/Escritorio/sagyv/sagyv/static/js/controllers/vehiculo/vehiculo_controller.js","../services/vehiculo_service.js":"/home/sreal/Escritorio/sagyv/sagyv/static/js/services/vehiculo_service.js"}],"/home/sreal/Escritorio/sagyv/sagyv/static/js/controllers/vehiculo/vehiculo_controller.js":[function(require,module,exports){
 var Vehiculo = require('../../models/vehiculo/vehiculo_model.js');
 
 function VehiculoController(service){
@@ -144,13 +144,13 @@ VehiculoController.mixin({
 
         $("#modal_anexar").modal('hide');
         common.agregarMensaje('El vehículo fue anexado con trabajador exitosamente');
-    },
+    }
 
 });
 
 module.exports = VehiculoController;
 
-},{"../../models/vehiculo/vehiculo_model.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/models/vehiculo/vehiculo_model.js"}],"/home/worker8/proyectos/sagyv/sagyv/static/js/models/vehiculo/vehiculo_model.js":[function(require,module,exports){
+},{"../../models/vehiculo/vehiculo_model.js":"/home/sreal/Escritorio/sagyv/sagyv/static/js/models/vehiculo/vehiculo_model.js"}],"/home/sreal/Escritorio/sagyv/sagyv/static/js/models/vehiculo/vehiculo_model.js":[function(require,module,exports){
 function Vehiculo(){
     this.id = null;
     this.numero = null;
@@ -164,7 +164,9 @@ function Vehiculo(){
     this.mensaje = {};
 }
 
-Vehiculo.mixin({
+Vehiculo.prototype = {
+    constructor: Vehiculo,
+
     addData: function(data){
         this.id = data.id;
         this.numero = data.movil.numero;
@@ -263,11 +265,11 @@ Vehiculo.mixin({
 
         return json;
     }
-});
+};
 
 module.exports = Vehiculo;
 
-},{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/services/service_util.js":[function(require,module,exports){
+},{}],"/home/sreal/Escritorio/sagyv/sagyv/static/js/services/service_util.js":[function(require,module,exports){
 function noop(){}
 
 function standardError(data){
@@ -329,7 +331,7 @@ exports.postMaker = function($http){
     };
 };
 
-},{}],"/home/worker8/proyectos/sagyv/sagyv/static/js/services/vehiculo_service.js":[function(require,module,exports){
+},{}],"/home/sreal/Escritorio/sagyv/sagyv/static/js/services/vehiculo_service.js":[function(require,module,exports){
 var serviceUtil = require('./service_util.js');
 
 function vehiculoService($http){
@@ -365,4 +367,4 @@ function vehiculoService($http){
 
 module.exports = vehiculoService;
 
-},{"./service_util.js":"/home/worker8/proyectos/sagyv/sagyv/static/js/services/service_util.js"}]},{},["/home/worker8/proyectos/sagyv/sagyv/static/js/bundles/vehiculo_bundle.js"]);
+},{"./service_util.js":"/home/sreal/Escritorio/sagyv/sagyv/static/js/services/service_util.js"}]},{},["/home/sreal/Escritorio/sagyv/sagyv/static/js/bundles/vehiculo_bundle.js"]);

@@ -7,7 +7,9 @@ function Terminal(){
     this.mensajes = {};
 }
 
-Terminal.mixin({
+Terminal.prototype = {
+    constructor: Terminal,
+
     addData: function(terminal){
         this.id = terminal.id;
         this.codigo = terminal.codigo;
@@ -68,6 +70,6 @@ Terminal.mixin({
             numero: null
         };
     }
-});
+};
 
 module.exports = Terminal;

@@ -6,7 +6,9 @@ function Venta(tipo){
     this.productos = [];
 }
 
-Venta.mixin({
+Venta.prototype = {
+    constructor: Venta,
+
     addProducto: function(producto){
         this.productos.push(producto);
         this._calcularTotal();
@@ -26,6 +28,6 @@ Venta.mixin({
 
         this.total = total;
     }
-});
+};
 
 module.exports = Venta;

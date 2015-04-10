@@ -1,11 +1,12 @@
-var Otro = function(){
+function Otro(){
     this.concepto = null;
     this.monto = null;
-
     this.mensajes={};
-};
+}
 
-Otro.mixin({
+Otro.prototype = {
+    constructor: Otro,
+
     getJSON: function(){
         var json = {
             concepto : this.concepto,
@@ -56,6 +57,6 @@ Otro.mixin({
         return this._esNumeroValido("monto");
     }
 
-});
+};
 
 module.exports = Otro;

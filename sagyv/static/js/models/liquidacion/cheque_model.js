@@ -1,4 +1,4 @@
-var Cheque = function(){
+function Cheque(){
     this.banco = null;
     this.nombreBanco = null;
     this.numero = null;
@@ -7,9 +7,11 @@ var Cheque = function(){
 
     this.cheques = [];
     this.mensajes = {};
-};
+}
 
-Cheque.mixin({
+Cheque.prototype = {
+    constructor: Cheque,
+
     getJSON: function(){
         var json = {
             banco: {
@@ -100,6 +102,6 @@ Cheque.mixin({
         this.monto = null;
         this.fecha = null;
     }
-});
+};
 
 module.exports = Cheque;

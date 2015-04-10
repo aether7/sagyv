@@ -9,7 +9,9 @@ function Factura(){
     this.mensajes = {};
 };
 
-Factura.mixin({
+Factura.prototype = {
+    constructor: Factura,
+
     esValida: function(){
         var valido = true;
 
@@ -120,6 +122,6 @@ Factura.mixin({
 
         return json;
     }
-});
+};
 
 module.exports = Factura;

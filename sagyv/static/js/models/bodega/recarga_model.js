@@ -11,7 +11,9 @@ function Recarga(){
     this.mensajes = {};
 };
 
-Recarga.mixin({
+Recarga.prototype = {
+    constructor: Recarga,
+
     agregarProductoDescuento: function(producto){
         var fn,
             valido = true;
@@ -86,6 +88,6 @@ Recarga.mixin({
 
         return json;
     }
-});
+};
 
 module.exports = Recarga;

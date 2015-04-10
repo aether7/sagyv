@@ -3,7 +3,7 @@ var constantes = {
     FLETERO : 2
 };
 
-var Trabajador = function(){
+function Trabajador(){
     this.id = null;
     this.nombre = null;
     this.apellido = null;
@@ -20,7 +20,7 @@ var Trabajador = function(){
     this.boleta = {};
 
     this.mensajes = {};
-};
+}
 
 Trabajador.prototype = {
     constructor: Trabajador,
@@ -124,7 +124,6 @@ Trabajador.prototype = {
 
     getJSON: function(){
         var rut = this.rut, json;
-
         rut = rut.replace(/\./g, '');
 
         json = {

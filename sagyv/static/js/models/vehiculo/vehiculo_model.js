@@ -11,7 +11,9 @@ function Vehiculo(){
     this.mensaje = {};
 }
 
-Vehiculo.mixin({
+Vehiculo.prototype = {
+    constructor: Vehiculo,
+
     addData: function(data){
         this.id = data.id;
         this.numero = data.movil.numero;
@@ -110,6 +112,6 @@ Vehiculo.mixin({
 
         return json;
     }
-});
+};
 
 module.exports = Vehiculo;

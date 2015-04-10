@@ -7,7 +7,9 @@ function Boleta(){
     this.mensajes = {};
 };
 
-Boleta.mixin({
+Boleta.prototype = {
+    constructor: Boleta,
+
     esValidaBoletaInicial: function(){
         var valido = true;
 
@@ -63,6 +65,6 @@ Boleta.mixin({
 
         return json;
     }
-});
+};
 
 module.exports = Boleta;
