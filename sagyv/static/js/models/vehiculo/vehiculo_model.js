@@ -11,7 +11,9 @@ function Vehiculo(){
     this.mensaje = {};
 }
 
-Vehiculo.mixin({
+Vehiculo.prototype = {
+    constructor: Vehiculo,
+
     addData: function(data){
         this.id = data.id;
         this.numero = data.movil.numero;
@@ -60,7 +62,7 @@ Vehiculo.mixin({
     },
 
     esFechaValida: function(){
-        if(this.fechaRevision === null){
+        if(!this.fechaRevision){
             this.mensaje.fechaRevision = 'Fecha obligatoria';
             return false;
         }
@@ -110,6 +112,6 @@ Vehiculo.mixin({
 
         return json;
     }
-});
+};
 
 module.exports = Vehiculo;

@@ -20,7 +20,8 @@
 
                 <div class="form-group">
                     <label for="patente_vehiculo_nuevo " class="control-label">Patente:</label>
-                    <input id="patente_vehiculo_nuevo" class="form-control" type="text" ng-model="vc.vehiculo.patente" />
+                    <input id="patente_vehiculo_nuevo" class="form-control" type="text"
+                        ng-model="vc.vehiculo.patente" />
 
                     <span class="text-danger"
                         ng-bind="vc.vehiculo.mensaje.patente"
@@ -29,7 +30,18 @@
 
                 <div class="form-group">
                     <label for="revision_tecnica_vehiculo_nuevo" class="control-label">Fecha revisión técnica:</label>
-                    <input id="revision_tecnica_vehiculo_nuevo" type="date" class="form-control" ng-model="vc.vehiculo.fechaRevision" />
+
+                    <select id="dia_vehiculo_nuevo"
+                        ng-model="vc.vehiculo.fechaRevision.dia"
+                        ng-options="dia for dia in vc.dias"></select>
+
+                    <select id="mes_vehiculo_nuevo"
+                        ng-model="vc.vehiculo.fechaRevision.mes"
+                        ng-options="mes for mes in vc.meses"></select>
+
+                    <select id="anio_vehiculo_nuevo"
+                        ng-model="vc.vehiculo.fechaRevision.anio"
+                        ng-options="anio for anio in vc.anios"></select>
 
                     <span class="text-danger"
                         ng-bind="vc.vehiculo.mensaje.fechaRevision"

@@ -34,7 +34,7 @@
 <tr>
 	<td>type</td>
 	<td>id=revision_tecnica_vehiculo_nuevo</td>
-	<td>22-3-2015</td>
+	<td>22-03-2015</td>
 </tr>
 <tr>
 	<td>click</td>
@@ -61,7 +61,6 @@
 	<td>id=btn_guardar_nuevo_vehiculo</td>
 	<td></td>
 </tr>
-
 </tbody></table>
 </body>
 </html>

@@ -5,12 +5,31 @@ function VehiculoController(service){
     this.vehiculos = [];
     this.vehiculo = null;
     this.index = null;
+    this.anios = [];
+    this.meses = [];
+    this.dias = [];
 
     this.init();
 }
 
-VehiculoController.mixin({
+VehiculoController.prototype = {
+    constructor: VehiculoController,
+
     init: function(){
+        var anio, mes, dia;
+
+        for(anio = 2000; anio <= 2020; anio++){
+            this.anios.push(anio);
+        }
+
+        for(mes = 1; mes <= 12; mes++){
+            this.meses.push(mes < 10 ? '0' + mes : mes);
+        }
+
+        for(dia = 1; dia <= 31; dia++){
+            this.dias.push(dia < 10 ? '0' + dia : dia);
+        }
+
         this.service.findAll(this.cargarLista.bind(this));
     },
 
@@ -52,7 +71,6 @@ VehiculoController.mixin({
         }
 
         if(!this.validarNumeroPatente()){
-            console.log('NOP');
             return;
         }
 
@@ -61,7 +79,6 @@ VehiculoController.mixin({
         }
 
         var json = this.vehiculo.toJSON();
-
         this.service.crearVehiculo(json, this.processAgregarVehiculo.bind(this));
     },
 
@@ -132,6 +149,6 @@ VehiculoController.mixin({
         common.agregarMensaje('El vehículo fue anexado con trabajador exitosamente');
     },
 
-});
+};
 
 module.exports = VehiculoController;
