@@ -1,4 +1,4 @@
-var CuponPrepago = function(){
+function CuponPrepago(){
     this.numero = null;
     this.clienteId = null;
     this.clienteNombre = null;
@@ -7,9 +7,11 @@ var CuponPrepago = function(){
     this.descuento = null;
 
     this.mensajes = {};
-};
+}
 
-CuponPrepago.mixin({
+CuponPrepago.prototype = {
+    constructor: CuponPrepago,
+
     getJSON: function(){
         var json = {
             cliente: {
@@ -95,6 +97,6 @@ CuponPrepago.mixin({
         this.descuento = null;
     }
 
-});
+};
 
 module.exports = CuponPrepago;

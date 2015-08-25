@@ -11,7 +11,9 @@ function Guia(){
     this.mensajes = {};
 };
 
-Guia.mixin({
+Guia.prototype = {
+    constructor: Guia,
+
     agregarProductoDescuento: function(producto){
         var fn,
             valido = true;
@@ -130,6 +132,6 @@ Guia.mixin({
 
         return json;
     }
-});
+};
 
 module.exports = Guia;

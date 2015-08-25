@@ -4,7 +4,9 @@ function Voucher(tipo){
     this.total = 0;
 }
 
-Voucher.mixin({
+Voucher.prototype = {
+    constructor: Voucher,
+
     addTarjeta: function(tarjeta){
         this.tarjetas.push(tarjeta);
         this._calcularTotal();
@@ -18,6 +20,6 @@ Voucher.mixin({
     _calcularTotal: function(){
         throw new Error('Método no implementado: _calcularTotal');
     }
-});
+};
 
 module.exports = Voucher;

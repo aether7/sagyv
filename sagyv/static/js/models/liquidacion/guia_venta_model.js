@@ -10,7 +10,9 @@ function GuiaVenta(){
     };
 }
 
-GuiaVenta.mixin({
+GuiaVenta.prototype = {
+    constructor: GuiaVenta,
+
     addGuia: function(guia){
         if(guia.tipo !== 'propia' && guia.tipo !== 'lipigas'){
             throw TypeError('La guia ingresada no es ni lipigas ni es propia, es ' + guia.tipo);
@@ -36,6 +38,6 @@ GuiaVenta.mixin({
     _addRowspan: function(tipo, guia){
         this[tipo].rowspan += guia.productos.length;
     }
-});
+};
 
 module.exports = GuiaVenta;

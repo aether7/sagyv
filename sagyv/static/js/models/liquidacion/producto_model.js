@@ -13,7 +13,9 @@ function Producto(){
     this.mensajes = {};
 }
 
-Producto.mixin({
+Producto.prototype = {
+    constructor: Producto,
+
     calcularTotal: function(){
         var subtotal = parseInt(this.precio) * parseInt(this.cantidad);
         this.total = this.calcularDescuento(subtotal);
@@ -57,6 +59,6 @@ Producto.mixin({
 
         return monto;
     }
-});
+};
 
 module.exports = Producto;

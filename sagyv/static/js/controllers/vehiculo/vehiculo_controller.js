@@ -147,7 +147,7 @@ VehiculoController.prototype = {
 
         $("#modal_anexar").modal('hide');
         common.agregarMensaje('El vehículo fue anexado con trabajador exitosamente');
-    },
+    }
 
 };
 

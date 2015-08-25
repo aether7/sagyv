@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/Aether/Proyectos/sagyv/sagyv/static/js/bundles/vehiculo_bundle.js":[function(require,module,exports){
+=======
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/home/sreal/Escritorio/sagyv/sagyv/static/js/bundles/vehiculo_bundle.js":[function(require,module,exports){
+>>>>>>> origin/master
 (function(){
 'use strict';
 
@@ -11,7 +15,11 @@ app.controller('VehiculoController', ['vehiculoService', VehiculoController]);
 
 })();
 
+<<<<<<< HEAD
 },{"../controllers/vehiculo/vehiculo_controller.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/vehiculo/vehiculo_controller.js","../services/vehiculo_service.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/vehiculo_service.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/controllers/vehiculo/vehiculo_controller.js":[function(require,module,exports){
+=======
+},{"../controllers/vehiculo/vehiculo_controller.js":"/home/sreal/Escritorio/sagyv/sagyv/static/js/controllers/vehiculo/vehiculo_controller.js","../services/vehiculo_service.js":"/home/sreal/Escritorio/sagyv/sagyv/static/js/services/vehiculo_service.js"}],"/home/sreal/Escritorio/sagyv/sagyv/static/js/controllers/vehiculo/vehiculo_controller.js":[function(require,module,exports){
+>>>>>>> origin/master
 var Vehiculo = require('../../models/vehiculo/vehiculo_model.js');
 
 function VehiculoController(service){
@@ -161,13 +169,17 @@ VehiculoController.prototype = {
 
         $("#modal_anexar").modal('hide');
         common.agregarMensaje('El vehículo fue anexado con trabajador exitosamente');
-    },
+    }
 
 };
 
 module.exports = VehiculoController;
 
+<<<<<<< HEAD
 },{"../../models/vehiculo/vehiculo_model.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/vehiculo/vehiculo_model.js"}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/models/vehiculo/vehiculo_model.js":[function(require,module,exports){
+=======
+},{"../../models/vehiculo/vehiculo_model.js":"/home/sreal/Escritorio/sagyv/sagyv/static/js/models/vehiculo/vehiculo_model.js"}],"/home/sreal/Escritorio/sagyv/sagyv/static/js/models/vehiculo/vehiculo_model.js":[function(require,module,exports){
+>>>>>>> origin/master
 function Vehiculo(){
     this.id = null;
     this.numero = null;
@@ -286,7 +298,11 @@ Vehiculo.prototype = {
 
 module.exports = Vehiculo;
 
+<<<<<<< HEAD
 },{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/service_util.js":[function(require,module,exports){
+=======
+},{}],"/home/sreal/Escritorio/sagyv/sagyv/static/js/services/service_util.js":[function(require,module,exports){
+>>>>>>> origin/master
 function noop(){}
 
 function standardError(data){
@@ -348,7 +364,11 @@ exports.postMaker = function($http){
     };
 };
 
+<<<<<<< HEAD
 },{}],"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/vehiculo_service.js":[function(require,module,exports){
+=======
+},{}],"/home/sreal/Escritorio/sagyv/sagyv/static/js/services/vehiculo_service.js":[function(require,module,exports){
+>>>>>>> origin/master
 var serviceUtil = require('./service_util.js');
 
 function vehiculoService($http){
@@ -384,4 +404,8 @@ function vehiculoService($http){
 
 module.exports = vehiculoService;
 
+<<<<<<< HEAD
 },{"./service_util.js":"/Users/Aether/Proyectos/sagyv/sagyv/static/js/services/service_util.js"}]},{},["/Users/Aether/Proyectos/sagyv/sagyv/static/js/bundles/vehiculo_bundle.js"]);
+=======
+},{"./service_util.js":"/home/sreal/Escritorio/sagyv/sagyv/static/js/services/service_util.js"}]},{},["/home/sreal/Escritorio/sagyv/sagyv/static/js/bundles/vehiculo_bundle.js"]);
+>>>>>>> origin/master
